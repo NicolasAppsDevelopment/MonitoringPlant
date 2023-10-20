@@ -2,8 +2,8 @@
 
 SET default_storage_engine= InnoDB;
 SET SQL_SAFE_UPDATES=0;
-drop table if exists CampagneMesure;
 drop table if exists Mesure;
+drop table if exists CampagneMesure;
 drop table if exists Parametre;
 
 /*==============================================================*/
@@ -12,6 +12,7 @@ drop table if exists Parametre;
 create table CampagneMesure(
    idCampagne          	int not null auto_increment,
    nom               	varchar(25),
+   DateDebut			datetime,
    capteurTemperature  	boolean,
    capteurCO2			boolean,
    capteurO2			boolean,
