@@ -1,0 +1,39 @@
+@startuml
+
+title Classes - Class Diagram
+
+
+class CampagneMesure{
+**[PK] int : idCampagne**
+string : Nom
+date : Date de début relève
+bool : capteur température
+bool : capteur CO2
+bool : capteur O2
+bool : capteur luminosité
+bool : capteur humidité
+time : intervalle de relève
+float : volume
+int : Durée en seconde
+}
+
+class "Mesure"{
+//[FK] int : idCampagne//
+float : humidité
+float : luminosité
+float : CO2
+float : O2
+float : Température
+datetime : Date et heure de releve
+
+}
+
+Class "parametre"{
+int Intervalle en jour avant suppression donnée
+}
+
+CampagneMesure *-- "0..*" Mesure
+
+
+
+@enduml
