@@ -1,0 +1,331 @@
+/* THEMES */
+body.main_theme {
+    --background-color: #f7fffa;
+    --menu-background-color: #f7f7f7;
+    --border-menu-color: #f2f2f2;
+    --unselected-font-color: #00b359;
+    --unselected-background-color: #ffffff;
+    --selected-font-color: #ffffff;
+    --selected-background-color: #00b359;
+    --font-color:rgb(15, 15, 15);
+    --input_border_color: #dbdbdb;
+    --placeholder_color: #b9b9b9;
+    --input_color: #f7f7f7;
+
+
+    --destructive-color: #ff453a;
+    --destructive-color-darker: #a8241d;
+    --default-color: #04ac58;
+    --default-color-darker: #0e914f;
+}
+
+html {
+    font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* HEADER CSS PART */
+header nav a {
+    text-decoration: none;
+}
+
+header nav {
+    background-color: var(--menu-background-color);
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0px .125rem var(--border-menu-color);
+    width: 100%;
+    z-index: 100;
+}
+nav a div g {
+    fill: var(--unselected-font-color);
+}
+header nav * {
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.div_top_nav {
+    display: flex;
+    flex-direction: row;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.div_top_nav * {
+    margin: auto;
+    display: flex;
+}
+.top_nav_logo {
+    height: 54px;
+    width: auto;
+    padding-right: 16px;
+}
+.top_nav_ico {
+    margin: auto;
+    width: 21px;
+    height: 21px;
+    margin-right: 8px;
+}
+.top_nav_text {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* selected effect css */
+nav a div.selected {
+    border: 1px solid var(--selected-background-color);
+    background-color: var(--selected-background-color) !important;
+}
+nav a div.selected g {
+    fill: white;
+}
+nav a div.selected .top_nav_text {
+    color: var(--selected-font-color);
+}
+/* end of effect part */
+
+nav a div {
+    border: 1px solid var(--unselected-font-color);
+}
+nav a div:hover {
+    border: 1px solid var(--selected-background-color);
+    background-color: var(--selected-background-color);
+}
+nav a div p {
+    color: var(--unselected-font-color);
+    margin-left: 4px !important;
+}
+.info_ico_container:hover p {
+    color: var(--selected-font-color);
+}
+.info_ico_container:hover g {
+    fill: var(--selected-font-color);
+}
+.info_ico_container {
+    background-color: var(--unselected-background-color);
+    display: flex;
+    flex-direction: row;
+    border-radius: 100px;
+    overflow: hidden;
+    padding: 6px 12px;
+    margin: auto 4px;
+    cursor: pointer;
+    transition: all 0.15s ease-out;
+}
+.info_ico_container * {
+    transition: all 0.15s ease-out;
+}
+
+@media screen and (max-width: 640px) {
+    .top_nav_text {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .info_ico_container svg {
+        width: 22px;
+        height: 22px;
+    }
+    header nav {
+        height: 66px;
+    }
+}
+/* END HEADER CSS PART */
+
+
+/* arrière plan */
+.bg {
+    background-color: var(--background-color);
+}
+
+/* SQUARED BUTTON CSS STYLE */
+.square_btn {
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+    transition: all 0.15s ease-out;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+}
+.square_btn:hover {
+    transform: scale(1.1);
+}
+
+/* ROUNDED BUTTON CSS STYLE */
+.round_btn {
+    display: inline-block;
+    border-radius: 1000px;
+    padding: 12px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+    transition: all 0.15s ease-out;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+.round_btn:hover {
+    transform: scale(1.1);
+}
+.round_btn.floating {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    width: 32px;
+    height: 32px;
+}
+
+.btn_container {
+    display: block;
+    margin: 0;
+    padding: 0;
+    padding-left: 8px;
+    width: 50px;
+    height: 50px;
+}
+
+/* ICON BTN */
+.round_btn.add::after {
+    content: "";
+    position: absolute;
+    background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0,0,256,256"><g fill="white" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M23,9v14h-14v4h14v14h4v-14h14v-4h-14v-14z"></path></g></g></svg>');
+    height: 32px;
+    width: 32px;
+}
+.round_btn.filter::after {
+    content: "";
+    position: absolute;
+    background: url('data:image/svg+xml;utf8,<svg width="24px" height="24px" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.2 0C14.1512 0 13.3 0.8512 13.3 1.9V3.8H0V7.6H13.3V9.5C13.3 10.5488 14.1512 11.4 15.2 11.4H17.1C18.1488 11.4 19 10.5488 19 9.5V1.9C19 0.8512 18.1488 0 17.1 0H15.2ZM22.8 3.8V7.6H38V3.8H22.8ZM24.7 13.3C23.6512 13.3 22.8 14.1512 22.8 15.2V17.1H0V20.9H22.8V22.8C22.8 23.8488 23.6512 24.7 24.7 24.7H26.6C27.6488 24.7 28.5 23.8488 28.5 22.8V15.2C28.5 14.1512 27.6488 13.3 26.6 13.3H24.7ZM32.3 17.1V20.9H38V17.1H32.3ZM5.7 26.6C4.6512 26.6 3.8 27.4512 3.8 28.5V30.4H0V34.2H3.8V36.1C3.8 37.1488 4.6512 38 5.7 38H7.6C8.6488 38 9.5 37.1488 9.5 36.1V28.5C9.5 27.4512 8.6488 26.6 7.6 26.6H5.7ZM13.3 30.4V34.2H38V30.4H13.3Z" fill="white"/></svg>');
+    height: 24px;
+    width: 24px;
+}
+
+/* BUTTON THEME */
+.destructive:hover {
+    background-color: var(--destructive-color-darker);
+}
+.destructive {
+    background-color: var(--destructive-color);
+    border-color: var(--destructive-color-darker);
+}
+.default:hover {
+    background-color: var(--default-color-darker);
+}
+.default {
+    background-color: var(--default-color);
+    border-color: var(--default-color-darker);
+}
+
+/* TOP MENU (NOT HEADER) */
+.top_action_menu {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid var(--border-menu-color);
+    margin: 18px;
+    padding-bottom: 14px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* CUSTOM SEARCH BAR */
+input[type="text"].custom_search_bar::placeholder {
+    color: var(--placeholder_color);
+}
+input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar:hover {
+    outline: 0;
+}
+input[type="text"].custom_search_bar {
+    border: 2px solid var(--input_border_color);
+    padding: 8px;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 100px;
+    padding-left: 44px !important;
+    background: url("../img/search_gray.svg");
+    background-position: 12px 10px;
+    background-repeat: no-repeat;
+    background-color: var(--input_color);
+    color: var(--font-color);
+    width: 100%;
+    height: 30px;
+}
+input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar:active {
+    border: 2px solid var(--default-color);
+}
+
+
+
+
+
+
+h2{
+    text-align: center;
+    color:black;
+}
+
+#activerSuppr{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+input[type=checkbox]{
+    -moz-transform: scale(2);
+    -webkit-transform: scale(2);
+    -o-transform: scale(2);
+    margin: 20px;
+}
+
+.checkmark {
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+
+input:checked ~ .checkmark{
+    background-color: var(--unselected-font-color);
+}
+
+p.Parametre{
+    color:black;
+    margin: 10px;
+}
+
+
+#listeCMindex{
+    display: flex;
+    flex-direction: column;
+    border:solid 1px black;
+    border-radius: 5px;
+    margin-inline: 2%;
+}
+.accederCM{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.accedertitreCM{
+    display: flex;
+    width:65%;
+    justify-content: center;
+    align-items: center;
+    padding:3px;
+}
+
+
+.IconAccederCM{
+    width:20%;
+    background-image: url();
+}
