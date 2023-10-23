@@ -28,15 +28,29 @@
         </header>
         <main>
             <h2>Suppression des données</h2>
-
-            <div id="activerSuppr">
-                <div id="checkbox">
-                    <input type="checkbox"/>
-                    <span class="checkmark"></span>
-                </div>
-                <p class="Parametre">Supprimer automatiquement les campagnes de mesures au bout d'un certains temps</p>
-            </div>
-            <p>Durée de conservation d'une campagne</p>
+            <div class="checkbox">
+                <label for="cbk1-65">
+                  <input type="checkbox" id="cbk1-65">
+                  <span class="cbx">
+                    <svg width="12px" height="11px" viewBox="0 0 12 11">
+                      <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                    </svg>
+                  </span>
+                  <span>Supprimer automatiquement les campagnes de mesures au bout d'un certains temps</span>
+                </label>
+              </div>
+              
+              <div id="fréquence">
+                <p>Durée de conservation d'une campagne</p>
+                <div id="choix_f">
+                    <span>Mois : </span>
+                    <input type="text" placeholder="0"  id="mois">
+                    <span>Jour(s) : </span>
+                    <input type="text" placeholder="0"  id="jour"> 
+                </div>         
+              </div>
+ 
+              <input class="rect_round_btn" type="button" value="Effacer les données" />
         </main>
     </body>
 </html>

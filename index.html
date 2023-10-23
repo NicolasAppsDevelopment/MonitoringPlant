@@ -8,8 +8,6 @@
         <title>Accueil</title>
     </head>
     <body class="bg main_theme">
-        <span class="floating round_btn default add" onclick=""></span>
-
         <header>
             <nav>
                 <ul class="div_top_nav">
@@ -49,5 +47,75 @@
             
 
         </main>
+
+        <!-- Add popup & btn -->
+        <label for="add-popup" class="floating round_btn default add"></label>
+        <input type="checkbox" id="add-popup">
+        <div class="popup">
+            <div class="popup-inner">
+                <div class="popup-title">
+                    <p>Démarrer une campagne</p>
+                    <label for="add-popup" class="round_btn transparent small close"></label>
+                </div>
+                <div class="popup-content">
+                    <div class="grid_section">
+                        <label class="icon-checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <span class="checkbox-tile">
+                            <span class="checkbox-icon">
+                                <img src="./img/CO2.svg">
+                            </span>
+                            <span class="checkbox-label">CO2</span>
+                            </span>
+                        </label>
+                        <label class="icon-checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <span class="checkbox-tile">
+                                <span class="checkbox-icon">
+                                <img src="./img/O2.svg">
+                                </span>
+                                <span class="checkbox-label">O2</span>
+                            </span>
+                        </label>
+                        <label class="icon-checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <span class="checkbox-tile">
+                                <span class="checkbox-icon">
+                                <img src="./img/tempeture.svg">
+                                </span>
+                                <span class="checkbox-label">Température</span>
+                            </span>
+                        </label>
+                        <label class="icon-checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <span class="checkbox-tile">
+                                <span class="checkbox-icon">
+                                <img src="./img/humidity.svg">
+                                </span>
+                                <span class="checkbox-label">Humidité</span>
+                            </span>
+                        </label>
+                        <label class="icon-checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <span class="checkbox-tile">
+                                <span class="checkbox-icon">
+                                <img src="./img/luminosity.svg">
+                                </span>
+                                <span class="checkbox-label">Luminosité</span>
+                            </span>
+                        </label>     
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="subject">Durée de la campagne de mesure</label>
+                        <input class="input_field clock" id="subject" name="subject" type="text" placeholder="Durée" required>
+                    </div>
+                    <div class="label_img_input">
+                        <label class="label_field" for="subject">Intervalle de la campagne de mesure</label>
+                        <input class="input_field timer" id="subject" name="subject" type="text" placeholder="Durée" required>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
