@@ -41,11 +41,15 @@
                     <a href="" class="IconAccederCM">Icone accéder CM</a>
                 </article>
 
-            </div>
+                <article class="accederCM">
+                    <p class="accedertitreCM">Ce texte un peu long a pour but de tester la beauté en cas de long titre</p>
+                    <div class="square_btn destructive">
+                        <img src="/img/remove.svg" alt="Supprimer">
+                    </div>
+                    <a href="" class="IconAccederCM">Icone accéder CM</a>
+                </article>
 
-            <p>Bouton créer TP avec le pop up</p>
-            
-
+            </div>         
         </main>
 
         <!-- Add popup & btn -->
@@ -105,15 +109,79 @@
                             </span>
                         </label>     
                     </div>
+                    
+                    
+                    <div class="label_img_input">
+                        <label class="label_field" for="duration">Durée de la campagne de mesure</label>
+                        <div class="row_fields">
+                            <input class="input_field clock" id="duration" name="duration" type="number" placeholder="Durée" min="0" required>
+                            <select class="combo_box">
+                                <option selected value="s">s</option>
+                                <option value="min">min</option>
+                                <option value="h">h</option>
+                                <option value="j">j</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="label_img_input">
+                        <label class="label_field" for="interval">Intervalle de la campagne de mesure</label>
+                        <div class="row_fields">
+                            <input class="input_field timer" id="interval" name="interval" type="number" placeholder="Intervalle" min="0" required>
+                            <select class="combo_box">
+                                <option selected value="s">s</option>
+                                <option value="min">min</option>
+                                <option value="h">h</option>
+                                <option value="j">j</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="label_img_input">
-                        <label class="label_field" for="subject">Durée de la campagne de mesure</label>
-                        <input class="input_field clock" id="subject" name="subject" type="text" placeholder="Durée" required>
+                        <div class="row">
+                            <label class="label_field" for="volume">Volume du contenant</label>
+                            <div class="annotation">Champs optionnel</div>
+                        </div>
+                        
+                        <div class="row_fields">
+                            <input class="input_field volume" id="volume" name="volume" type="number" placeholder="Volume" min="0">
+                            <select class="combo_box">
+                                <option selected value="mL">mL</option>
+                                <option value="cL">cL</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div class="label_img_input">
-                        <label class="label_field" for="subject">Intervalle de la campagne de mesure</label>
-                        <input class="input_field timer" id="subject" name="subject" type="text" placeholder="Durée" required>
+                        <label class="label_field" for="name">Nom de la campagne de mesure</label>
+                        <input class="input_field edit" id="name" name="name" type="text" placeholder="Nom" required>
                     </div>
+
+                    <div class="section">
+                        <div class="row_center">
+                            <div class="warning">Cette campagne va nécessiter un espace de stockage important (7%).</div>
+                        </div>
+                        <div class="row">
+                            <p class="device_name">Cellule</p>
+                            <p class="storage_txt">60% utilisé(s) • 45h restantes</p>
+                        </div>
+                        <div class="storage_bar_container">
+                            <div class="used_storage_bar"></div>
+                            <div class="use_storage_bar"></div>
+                        </div>
+                        <div class="row_no_space">
+                            <div class="legend">
+                                <div class="dot_legend_used"></div>
+                                <p class="legend_name">Espace utilisé</p>
+                            </div>
+                            <div class="legend">
+                                <div class="dot_legend_use"></div>
+                                <p class="legend_name">Espace estimé de la mesure</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="rect_round_btn gray" type="submit">Démarrer</button>
                 </div>
             </div>
         </div>

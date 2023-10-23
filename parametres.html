@@ -26,31 +26,31 @@
                 </ul>
             </nav>
         </header>
-        <main>
+        <main id="main_paramètre">
             <h2>Suppression des données</h2>
             <div class="checkbox">
                 <label for="cbk1-65">
-                  <input type="checkbox" id="cbk1-65">
-                  <span class="cbx">
+                <input type="checkbox" id="cbk1-65">
+                <span class="cbx">
                     <svg width="12px" height="11px" viewBox="0 0 12 11">
-                      <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
                     </svg>
-                  </span>
-                  <span>Supprimer automatiquement les campagnes de mesures au bout d'un certains temps</span>
+                </span>
+                <span>Supprimer automatiquement les campagnes de mesures au bout d'un certains temps</span>
                 </label>
-              </div>
-              
-              <div id="fréquence">
-                <p>Durée de conservation d'une campagne</p>
-                <div id="choix_f">
-                    <span>Mois : </span>
-                    <input type="text" placeholder="0"  id="mois">
-                    <span>Jour(s) : </span>
-                    <input type="text" placeholder="0"  id="jour"> 
-                </div>         
-              </div>
- 
-              <input class="rect_round_btn" type="button" value="Effacer les données" />
+            </div>
+            <div class="label_img_input">
+                <label class="label_field" for="conserv">Durée de conservation d'une campagne</label>
+                <div class="row_fields">
+                    <input class="input_field clock" id="conserv" name="conserv" type="number" placeholder="Durée" min="0" required>
+                    <select class="combo_box">
+                        <option selected value="h">h</option>
+                        <option value="j">j</option>
+                        <option value="mois">mois</option>
+                    </select>
+                </div>
+            </div>        
+            <button class="rect_round_btn destructive" type="submit">Effacer les données</button>
         </main>
     </body>
 </html>
