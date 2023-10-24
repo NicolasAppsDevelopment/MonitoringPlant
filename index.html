@@ -29,32 +29,46 @@
         <main>
             <div class="top_action_menu">
                 <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="custom_search_bar" onchange="">
-                <div class="btn_container"><span class="round_btn default filter" onclick=""></span></div>
+
+                <!-- Filter popup & btn -->
+                <div class="btn_container"><label for="filter-popup" class="round_btn default filter"></label></div>
+                <input type="checkbox" id="filter-popup" class="open_close-popup">
+                <div class="popup">
+                    <div class="popup-inner">
+                        <div class="popup-title">
+                            <p>Filtrer une campagne</p>
+                            <label for="filter-popup" class="round_btn transparent small close"></label>
+                        </div>
+                        <div class="popup-content">
+                            <div class="label_img_input">
+                                <label class="label_field" for="interval">Date de la campagne de mesure</label>
+                                <div class="row_fields gap">
+                                    <input class="input_field calendar" id="interval" name="interval" type="date" placeholder="Intervalle" required>
+                                    <input class="input_field clock" id="interval" name="interval" type="time" placeholder="Intervalle" required>
+                                </div>
+                            </div>
+
+                            <button class="rect_round_btn gray" type="submit">Filtrer</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="listeCMindex">
-                <article class="accederCM">
-                    <p class="accedertitreCM">Ce texte un peu long a pour but de tester la beauté en cas de long titre</p>
-                    <div class="square_btn destructive">
-                        <img src="/img/remove.svg" alt="Supprimer">
+            <div class="liste_CM">
+                <a href="/voirReleve.html" class="CM">
+                    <div class="title_detail_CM">
+                        <p class="titre_CM">Test emballage carrote numéro 1</p>
+                        <p class="detail_CM">Créée il y a 3 semaines</p>
                     </div>
-                    <a href="" class="IconAccederCM">Icone accéder CM</a>
-                </article>
 
-                <article class="accederCM">
-                    <p class="accedertitreCM">Ce texte un peu long a pour but de tester la beauté en cas de long titre</p>
-                    <div class="square_btn destructive">
-                        <img src="/img/remove.svg" alt="Supprimer">
-                    </div>
-                    <a href="" class="IconAccederCM">Icone accéder CM</a>
-                </article>
-
+                    <button class="square_btn destructive remove small"></button>
+                </a>
             </div>         
         </main>
 
         <!-- Add popup & btn -->
         <label for="add-popup" class="floating round_btn default add"></label>
-        <input type="checkbox" id="add-popup">
+        <input type="checkbox" id="add-popup" class="open_close-popup">
         <div class="popup">
             <div class="popup-inner">
                 <div class="popup-title">
