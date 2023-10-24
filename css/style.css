@@ -171,6 +171,8 @@ nav a div p {
 /* SQUARED BUTTON CSS STYLE */
 .square_btn.small {
     margin: 0px;
+    padding: 5px;
+
 }
 .square_btn {
     border-radius: 5px;
@@ -180,8 +182,8 @@ nav a div p {
     border: 1px solid black;
     transition: all 0.15s ease-out;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
 }
 .square_btn:hover {
     transform: scale(1.1);
@@ -189,6 +191,7 @@ nav a div p {
 
 /* RECTANGLE ROUNDED BUTTON AND A CSS STYLE */
 .rect_round_btn {
+    position: relative;
     color: var(--font-color);
     background-color: #EDEEF0;
     font-family: Inter_SemiBold;
@@ -207,9 +210,8 @@ nav a div p {
 
 div.rect_round_btn{
     display: flex;
-    flex-direction: inline-block;;
+    justify-content: center;
     align-items: center;
-    
 }
 
 /* ROUNDED BUTTON CSS STYLE */
@@ -258,6 +260,14 @@ div.rect_round_btn{
     background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0,0,256,256"><g fill="white" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M23,9v14h-14v4h14v14h4v-14h14v-4h-14v-14z"></path></g></g></svg>');
     height: 32px;
     width: 32px;
+}
+.square_btn.remove::after {
+    content: "";
+    position: relative;
+    background: url('../img/remove.svg');
+    height: 24px;
+    width: 24px;
+    display: block;
 }
 .round_btn.filter::after {
     content: "";
@@ -464,7 +474,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     border-style: none;
 }
 
-.main_démarrage div:nth-child(2){
+#démarrage_contenu{
     padding: 30px;
     max-height: 400px;  
 
@@ -472,15 +482,42 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     border-radius: 10px;
 }
 
-.main_démarrage h2,
-.main_démarrage button{
+.main_démarrage h2{
     margin-top: 10px;
     margin-bottom: 10px;
+    font-family: Inter_Bold;
+    font-weight: normal;
 }
 
-.main_démarrage a{
-    vertical-align: middle;
+.loading_msg {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-family: Inter_SemiBold;
+    font-weight: normal;
+    font-size: 18px
 }
+
+.two_buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 10px;
+}
+.two_buttons > a > div {
+    width: 100%;
+}
+.two_buttons > a p {
+    text-align: center;
+}
+
+.two_buttons * {
+    width: 50%;
+}
+
+#page2 .progression_bar{
+    width: 66%;
+}
+
 
 /* Checkbox */
 
@@ -544,7 +581,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     flex-direction: column;
 }
 
-a.CM{
+.liste_CM > .CM{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -560,17 +597,36 @@ a.CM{
     cursor: pointer;
     transition: all .2s;
     text-decoration: none;
+
+    position: relative;
 }
-a.CM:hover {
+
+.liste_CM > .CM.processing {
+    border: solid 2px var(--default-color);
+	background: linear-gradient(-45deg, rgba(0, 225, 255, 0.25),rgba(0, 255, 94, 0.25), rgba(0, 225, 255, 0.25));
+	background-size: 200%;
+	animation: gradient 5s linear infinite;
+}
+@keyframes gradient {
+    0%   { background-position:  100%; }
+    100% { background-position: -100%; }
+}
+.liste_CM > .CM.processing > .title_detail_CM > .detail_CM {
+    color: var(--default-color);
+    font-family: Inter_Bold;
+    font-weight: normal;
+}
+
+.liste_CM > .CM:hover {
     background-color: var(--input_border_color);
 }
-a.CM::after {
+.liste_CM > .CM::after {
     content: "";
     position: absolute;
     background: url('../img/right-arrow.svg');
     height: 16px;
     width: 16px;
-    right: 24px;
+    right: 14px;
 }
 
 .title_detail_CM .titre_CM{
@@ -863,7 +919,7 @@ a.CM::after {
 .progression_bar {
     width: 33%;
     height: 100%;
-    background-color: var(--placeholder_color);
+    background: #7ffc6e;
 }
 
 /* STORAGE INFO PART */
@@ -950,11 +1006,6 @@ a.CM::after {
         radial-gradient(farthest-corner at bottom right, rgba(154, 212, 99, 0.75),transparent) #64e3a1;
 }
 
-
-#mainVoirReleve{
-    margin:2%;
-}
-
 #infoCampagneContainer{
     border:1px solid var(--border-menu-color);
     border-radius: 30px;
@@ -992,4 +1043,123 @@ a.CM::after {
 }
 #infoParametreCampagne{
     margin-left: 5%;
+}
+
+.loading_popup {
+    padding: 26px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Loading CSS svg */
+.pure-material-progress-circular {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 50%;
+    padding: 0.25em;
+    width: 3em;
+    height: 3em;
+    color: var(--default-color);
+    background-color: transparent;
+    font-size: 16px;
+    overflow: hidden;
+}
+.pure-material-progress-circular::-webkit-progress-bar {
+    background-color: transparent;
+}
+/* Indeterminate */
+.pure-material-progress-circular:indeterminate {
+    -webkit-mask-image: linear-gradient(transparent 50%, black 50%), linear-gradient(to right, transparent 50%, black 50%);
+    mask-image: linear-gradient(transparent 50%, black 50%), linear-gradient(to right, transparent 50%, black 50%);
+    animation: pure-material-progress-circular 6s infinite cubic-bezier(0.3, 0.6, 1, 1);
+}
+:-ms-lang(x), .pure-material-progress-circular:indeterminate {
+    animation: none;
+}
+.pure-material-progress-circular:indeterminate::before,
+.pure-material-progress-circular:indeterminate::-webkit-progress-value {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 0.25em;
+    border: solid 0.25em transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    width: 100% !important;
+    height: 100%;
+    background-color: transparent;
+    animation: pure-material-progress-circular-pseudo 0.75s infinite linear alternate;
+}
+.pure-material-progress-circular:indeterminate::-moz-progress-bar {
+    box-sizing: border-box;
+    border: solid 0.25em transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    animation: pure-material-progress-circular-pseudo 0.75s infinite linear alternate;
+}
+.pure-material-progress-circular:indeterminate::-ms-fill {
+    animation-name: -ms-ring;
+}
+@keyframes pure-material-progress-circular {
+    0% {
+        transform: rotate(0deg);
+    }
+    12.5% {
+        transform: rotate(180deg);
+        animation-timing-function: linear;
+    }
+    25% {
+        transform: rotate(630deg);
+    }
+    37.5% {
+        transform: rotate(810deg);
+        animation-timing-function: linear;
+    }
+    50% {
+        transform: rotate(1260deg);
+    }
+    62.5% {
+        transform: rotate(1440deg);
+        animation-timing-function: linear;
+    }
+    75% {
+        transform: rotate(1890deg);
+    }
+    87.5% {
+        transform: rotate(2070deg);
+        animation-timing-function: linear;
+    }
+    100% {
+        transform: rotate(2520deg);
+    }
+}
+@keyframes pure-material-progress-circular-pseudo {
+    0% {
+        transform: rotate(-30deg);
+    }
+    29.4% {
+        border-left-color: transparent;
+    }
+    29.41% {
+        border-left-color: currentColor;
+    }
+    64.7% {
+        border-bottom-color: transparent;
+    }
+    64.71% {
+        border-bottom-color: currentColor;
+    }
+    100% {
+        border-left-color: currentColor;
+        border-bottom-color: currentColor;
+        transform: rotate(225deg);
+    }
 }

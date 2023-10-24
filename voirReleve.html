@@ -29,45 +29,60 @@
                 </ul>
             </nav>
         </header>
-        <main id="mainVoirReleve">
+        <main>
             <h1>Etat de la relève</h1>
             <p>releve finit dans 3h</p>
             <button>Arreter</button>
-            <div class="swiffy-slider slider-item-reveal slider-nav-dark slider-nav-visible slider-nav-autohide ">
-                <div class="slider-container">
-                    <div id="infoCampagne">
-                        <h2>Configuration de la campagne de mesure</h2>
-                        <div id="infoCampagneContainer">
-                            <h3>Test température dans embalage de chips carrefour</h3>
-                            <div id="listeEtatCapteur">
-                                <p class="etatCapteur">C°</p>
-                                <p class="etatCapteur">CO2</p>
-                                <p class="etatCapteur">O2</p>
-                                <p class="etatCapteur">H</p>
-                                <p class="etatCapteur">Lux</p>
-                            </div>
 
-                            <div id="infoParametreCampagne">
-                                <p>Durée</p>
-                                <p>Intervalle</p>
-                                <p>Volume</p>
+            <div class="swiffy-slider slider-item-reveal slider-nav-dark slider-indicators-dark slider-indicators-outside">
+                <ul class="slider-container">
+                    <li>
+                        <div id="slide1" class="section">
+                            <div id="infoCampagne">
+                                <h2>Configuration de la campagne de mesure</h2>
+                                <div id="infoCampagneContainer">
+                                    <h3>Test température dans embalage de chips carrefour</h3>
+                                    <div id="listeEtatCapteur">
+                                        <p class="etatCapteur">C°</p>
+                                        <p class="etatCapteur">CO2</p>
+                                        <p class="etatCapteur">O2</p>
+                                        <p class="etatCapteur">H</p>
+                                        <p class="etatCapteur">Lux</p>
+                                    </div>
+        
+                                    <div id="infoParametreCampagne">
+                                        <p>Durée</p>
+                                        <p>Intervalle</p>
+                                        <p>Volume</p>
+                                    </div>
+        
+                                </div>
                             </div>
-
                         </div>
-                    </div>
-                    <div><p>Feur<p></div>
-                    <div><p>Nanméouïe<p></div>
-                </div>
+                    </li>
+                    <li>
+                        <div id="slide2" class="section">
+                            <p>Feur</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="slide3" class="section">
+                            <p>Nanméouïe</p>
+                        </div>
+                    </li>
+                </ul>
             
                 <button type="button" class="slider-nav"></button>
                 <button type="button" class="slider-nav slider-nav-next"></button>
             
-                <div class="slider-indicators-dark slider-indicators-highlight">
-                    <button class="active"></button>
-                    <button></button>
-                    <button></button>
-                </div>
+                <ul class="slider-indicators">
+                    <li class=""></li>
+                    <li class="active"></li>
+                    <li></li>
+                </ul>
             </div>
+
+
 
             <button>Telecharger au format CSV</button>
         </main>

@@ -41,10 +41,10 @@
                         </div>
                         <div class="popup-content">
                             <div class="label_img_input">
-                                <label class="label_field" for="interval">Date de la campagne de mesure</label>
+                                <label class="label_field" for="datetime">Date de la campagne de mesure</label>
                                 <div class="row_fields gap">
-                                    <input class="input_field calendar" id="interval" name="interval" type="date" placeholder="Intervalle" required>
-                                    <input class="input_field clock" id="interval" name="interval" type="time" placeholder="Intervalle" required>
+                                    <input class="input_field calendar" id="datetime" name="date" type="date" placeholder="Date">
+                                    <input class="input_field clock" id="datetime" name="time" type="time" placeholder="Heure">
                                 </div>
                             </div>
 
@@ -55,13 +55,19 @@
             </div>
 
             <div class="liste_CM">
+                <a href="/voirReleve.html" class="CM processing">
+                    <div class="title_detail_CM">
+                        <p class="titre_CM">Test emballage carrote numéro 1</p>
+                        <p class="detail_CM">En cours...</p>
+                    </div>
+                </a>
                 <a href="/voirReleve.html" class="CM">
                     <div class="title_detail_CM">
                         <p class="titre_CM">Test emballage carrote numéro 1</p>
                         <p class="detail_CM">Créée il y a 3 semaines</p>
                     </div>
 
-                    <button class="square_btn destructive remove small"></button>
+                    <button class="square_btn destructive remove small" onclick='event.preventDefault();'></button>
                 </a>
             </div>         
         </main>

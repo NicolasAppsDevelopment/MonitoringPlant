@@ -10,23 +10,33 @@
     <body class="bg_animated main_theme">
         <main class="main_démarrage">
             <div>
-                <div class="progression_bar_container">
+                <div class="progression_bar_container" id="page2">
                     <div class="progression_bar"></div>
                 </div>
-                <div>
+                <div id="démarrage_contenu">
                     <h2>Quelle heure est-il ?</h2>
                     <p>
                         À present, nous avons besoins de savoir la date et l’heure qu’il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été feur démarré.
                     </p>
-                    <div class="label_img_input">
-                        <label class="label_field" for="interval">Date & heure actuelle</label>
-                        <div class="row_fields gap">
-                            <input class="input_field calendar" id="interval" name="interval" type="date" placeholder="Intervalle" required>
-                            <input class="input_field clock" id="interval" name="interval" type="time" placeholder="Intervalle" required>
+                    <form action="la où on envoie les info.php" enctype="multipart/form-data" method="post">
+                        <div class="label_img_input">
+                            <label class="label_field" for="interval">Date & heure actuelle</label>
+                            <div class="row_fields gap">
+                                <input class="input_field calendar" id="interval" name="interval" type="date" placeholder="Intervalle" required>
+                                <input class="input_field clock" id="interval" name="interval" type="time" placeholder="Intervalle" required>
+                            </div>
                         </div>
-                    </div>
-                    <button class="rect_round_btn" type="submit">Continuer</button>
-                    <a class="rect_round_btn" href="demarrage1.html">Retour</a>
+                        <div class="two_buttons">
+                            <a href="demarrage1.html">
+                                <div class="rect_round_btn">
+                                    <p>Retour</p>
+                                </div>
+                            </a>
+
+
+                            <button class="rect_round_btn" type="submit">Continuer</button>
+                        </div> 
+                    </form>
                 </div>
             </div>
         </main>
