@@ -8,6 +8,33 @@
         <link href="./css/slider.css" rel="stylesheet">
 
         <script src="./js/function.js"></script>
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+            ['Year', 'Sales', 'Expenses'],
+            ['2004',  1000,      400],
+            ['2005',  1170,      460],
+            ['2006',  660,       1120],
+            ['2007',  1030,      540]
+            ]);
+
+            var options = {
+            title: 'Company Performance',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart.draw(data, options);
+        }
+        </script>
+
         <title>Voir Releve</title>
     </head>
     <body class="bg main_theme">
@@ -30,44 +57,224 @@
             </nav>
         </header>
         <main>
-            <h1>Etat de la relève</h1>
-            <p>releve finit dans 3h</p>
-            <button>Arreter</button>
+            <div id="enTetePageReleve">
+                <h1>Etat de la relève</h1>
+                <button>Arreter</button>
+            </div>
+            <p id="pReleveFinie">releve finit dans 3h</p>
 
-            <div class="swiffy-slider slider-item-reveal slider-nav-dark slider-indicators-dark slider-indicators-outside">
+
+            <div class="swiffy-slider slider-item-reveal slider-nav-dark slider-indicators-dark slider-nav-sm slider-nav-touch slider-nav-autohide">
                 <ul class="slider-container">
                     <li>
                         <div id="slide1" class="section">
-                            <div id="infoCampagne">
-                                <h2>Configuration de la campagne de mesure</h2>
-                                <div id="infoCampagneContainer">
-                                    <h3>Test température dans embalage de chips carrefour</h3>
-                                    <div id="listeEtatCapteur">
-                                        <p class="etatCapteur">C°</p>
-                                        <p class="etatCapteur">CO2</p>
-                                        <p class="etatCapteur">O2</p>
-                                        <p class="etatCapteur">H</p>
-                                        <p class="etatCapteur">Lux</p>
-                                    </div>
-        
-                                    <div id="infoParametreCampagne">
-                                        <p>Durée</p>
-                                        <p>Intervalle</p>
-                                        <p>Volume</p>
-                                    </div>
-        
+                            <h2>Configuration de la campagne de mesure</h2>
+                            <div id="infoCampagneContainer">
+                                <h3>Test température dans embalage de chips carrefour</h3>
+                                <div class="grid_section">
+                                    <label class="icon-checkbox-wrapper ok status">
+                                        <span class="checkbox-tile">
+                                        <span class="checkbox-icon">
+                                            <img src="./img/CO2.svg">
+                                        </span>
+                                        <span class="checkbox-label">CO2</span>
+                                        </span>
+                                    </label>
+                                    <label class="icon-checkbox-wrapper error status">
+                                        <span class="checkbox-tile">
+                                            <span class="checkbox-icon">
+                                            <img src="./img/O2.svg">
+                                            </span>
+                                            <span class="checkbox-label">O2</span>
+                                        </span>
+                                    </label>
+                                    <label class="icon-checkbox-wrapper unselected status">
+                                        <span class="checkbox-tile">
+                                            <span class="checkbox-icon">
+                                            <img src="./img/tempeture.svg">
+                                            </span>
+                                            <span class="checkbox-label">Température</span>
+                                        </span>
+                                    </label>
+                                    <label class="icon-checkbox-wrapper unselected status">
+                                        <span class="checkbox-tile">
+                                            <span class="checkbox-icon">
+                                            <img src="./img/humidity.svg">
+                                            </span>
+                                            <span class="checkbox-label">Humidité</span>
+                                        </span>
+                                    </label>
+                                    <label class="icon-checkbox-wrapper unselected status">
+                                        <span class="checkbox-tile">
+                                            <span class="checkbox-icon">
+                                            <img src="./img/luminosity.svg">
+                                            </span>
+                                            <span class="checkbox-label">Luminosité</span>
+                                        </span>
+                                    </label>     
                                 </div>
+    
+                                <div id="infoParametreCampagne">
+                                    <p>Durée</p>
+                                    <p>Intervalle</p>
+                                    <p>Volume</p>
+                                </div>
+    
                             </div>
                         </div>
                     </li>
                     <li>
                         <div id="slide2" class="section">
                             <p>Feur</p>
+
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Lum</th>
+                                            <th>O2</th>
+                                            <th>CO2</th>
+                                            <th>Temp</th>
+                                            <th>Humid</th>
+                                            <th>Date</th>
+                                            <th>Heure</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10.90</td>
+                                            <td>0.12121</td>
+                                            <td>0.212</td>
+                                            <td>12.5°C</td>
+                                            <td>0.212</td>
+                                            <td>1/1/2001</td>
+                                            <td>20h20</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </li>
                     <li>
                         <div id="slide3" class="section">
-                            <p>Nanméouïe</p>
+                            <div id="curve_chart" style="width: 900px; height: 500px"></div>
                         </div>
                     </li>
                 </ul>
@@ -82,9 +289,123 @@
                 </ul>
             </div>
 
+            <!-- download popup & btn -->
+            <label for="filter-popup">
+                <div class="rect_round_btn gray">Télécharger la campagne</div>
+            </label>
+            <input type="checkbox" id="filter-popup" class="open_close-popup">
+            <div class="popup">
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Télécharger la campagne</p>
+                        <label for="filter-popup" class="round_btn transparent small close"></label>
+                    </div>
+                    <div class="popup-content">
+
+                        <p class="label_field">Sélectionnez les capteurs à télécharger</p>
+                        <div class="grid_section">
+                            <label class="icon-checkbox-wrapper">
+                                <input type="checkbox" class="checkbox-input" hidden/>
+                                <span class="checkbox-tile">
+                                <span class="checkbox-icon">
+                                    <img src="./img/CO2.svg">
+                                </span>
+                                <span class="checkbox-label">CO2</span>
+                                </span>
+                            </label>
+                            <label class="icon-checkbox-wrapper">
+                                <input type="checkbox" class="checkbox-input" hidden/>
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                    <img src="./img/O2.svg">
+                                    </span>
+                                    <span class="checkbox-label">O2</span>
+                                </span>
+                            </label>
+                            <label class="icon-checkbox-wrapper">
+                                <input type="checkbox" class="checkbox-input" hidden/>
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                    <img src="./img/tempeture.svg">
+                                    </span>
+                                    <span class="checkbox-label">Température</span>
+                                </span>
+                            </label>
+                            <label class="icon-checkbox-wrapper">
+                                <input type="checkbox" class="checkbox-input" hidden/>
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                    <img src="./img/humidity.svg">
+                                    </span>
+                                    <span class="checkbox-label">Humidité</span>
+                                </span>
+                            </label>
+                            <label class="icon-checkbox-wrapper">
+                                <input type="checkbox" class="checkbox-input" hidden/>
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                    <img src="./img/luminosity.svg">
+                                    </span>
+                                    <span class="checkbox-label">Luminosité</span>
+                                </span>
+                            </label>     
+                        </div>
 
 
-            <button>Telecharger au format CSV</button>
+                        <div class="label_img_input no_bottom_gap">
+                            <label class="label_field" for="interval">Redéfinir l'intervalle de la campagne de mesure</label>
+                            <div class="row_fields">
+                                <input class="input_field timer" id="interval" name="interval" type="number" placeholder="Intervalle" min="0" required>
+                                <select class="combo_box">
+                                    <option selected value="s">s</option>
+                                    <option value="min">min</option>
+                                    <option value="h">h</option>
+                                    <option value="j">j</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label for="moyennage">
+                            <input type="checkbox" id="moyennage">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Redéfinir par moyennage</span>
+                            </label>
+                        </div>
+
+                        <div class="label_img_input">
+                            <label class="label_field" for="datetime">Redéfinir la durée de la campagne de mesure</label>
+                            <div class="row_fields gap with_subtitle">
+                                <p>De :</p>
+                                <input class="input_field calendar" id="datetime" name="date" type="date" placeholder="Date">
+                                <input class="input_field clock" id="datetime" name="time" type="time" placeholder="Heure">
+                            </div>
+                            <div class="row_fields gap with_subtitle">
+                                <p>À :</p>
+                                <input class="input_field calendar" id="datetime" name="date" type="date" placeholder="Date">
+                                <input class="input_field clock" id="datetime" name="time" type="time" placeholder="Heure">
+                            </div>
+                        </div>
+
+                        <div class="checkbox bottom_gap">
+                            <label for="volume">
+                            <input type="checkbox" id="volume">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Traiter les données en fonction du volume</span>
+                            </label>
+                        </div>
+
+                        <button class="rect_round_btn gray" type="submit">Télécharger</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </body>
 </html>
