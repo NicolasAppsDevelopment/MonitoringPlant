@@ -187,7 +187,7 @@
     padding: 0;
     border: .4rem solid transparent;
     cursor: pointer;
-    background-color: #fff;
+    background-color: rgb(124, 124, 124);
     background-clip: padding-box;
     opacity: .5;
     transition: opacity .4s ease;
@@ -247,7 +247,7 @@
     content: "";
     mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'></path></svg>");
     mask-size: cover;
-    background-color: var(--swiffy-slider-nav-light);
+    background-color: rgb(77, 77, 77);
     background-origin: content-box;
     width: 3rem;
     height: 3rem;
@@ -319,7 +319,7 @@
 }
 
 .slider-nav-dark .slider-nav::after {
-    background-color: var(--swiffy-slider-nav-dark);
+    background-color: rgb(124, 124, 124);
 }
 
 .slider-nav-dark.slider-nav-round .slider-nav::before,
@@ -509,7 +509,26 @@
     }
 }
 
+.slider-container > li > div {
+    height: 70vh;
+    margin-bottom: 36px;
+}
+.slider-container > li {
+    margin-left: 14px;
+    margin-right: 14px;
+}
+
 @media (max-width: 62rem) {
+    .swiffy-slider {
+        --swiffy-slider-item-gap: 0.5rem;
+    }
+    .slider-container > li {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+    .slider-container > li > div {
+        margin-bottom: 28px;
+    }
     .swiffy-slider {
         --swiffy-slider-track-height: 0rem;
         --swiffy-slider-item-reveal: 0rem;
@@ -520,7 +539,7 @@
         --swiffy-slider-item-count: 2;
     }
     .slider-item-reveal {
-        --swiffy-slider-item-reveal: 1.5rem;
+        --swiffy-slider-item-reveal: 28px;
     }
     .slider-item-snapstart.slider-item-reveal {
         --swiffy-slider-item-reveal: 2rem;
@@ -579,11 +598,6 @@
     }
     .slider-nav-scrollbar .slider-indicators {
         margin-bottom: 0rem;
-    }
-    .slider-indicators>* {
-        width: 1rem;
-        height: 0.125rem;
-        border-width: .25rem;
     }
     .slider-indicators-sm .slider-indicators,
     .slider-indicators-sm.slider-indicators {

@@ -4,37 +4,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
-        <script src="./js/slider.js" rel=""></script>
+        <script src="./js/slider.js"></script>
         <link href="./css/slider.css" rel="stylesheet">
-
+        <script src="./js/chart.js"></script>
         <script src="./js/function.js"></script>
-
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-            ['Year', 'Sales', 'Expenses'],
-            ['2004',  1000,      400],
-            ['2005',  1170,      460],
-            ['2006',  660,       1120],
-            ['2007',  1030,      540]
-            ]);
-
-            var options = {
-            title: 'Company Performance',
-            curveType: 'function',
-            legend: { position: 'bottom' }
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-            chart.draw(data, options);
-        }
-        </script>
-
         <title>Voir Releve</title>
     </head>
     <body class="bg main_theme">
@@ -57,18 +30,31 @@
             </nav>
         </header>
         <main>
-            <div id="enTetePageReleve">
-                <h1>Etat de la relève</h1>
-                <button>Arreter</button>
+            <div class="top_action_menu">
+                <div class="back_title">
+                    <a href="./index.html" class="row_center"><div class="back_btn"><p>Retour</p></div></a>
+                    <p class="title">Test emballage carrote numéro 1</p>
+                </div>
             </div>
-            <p id="pReleveFinie">releve finit dans 3h</p>
+            <div id="enTetePageVoirReleve">
+                <div id="TitreReleve">
+                    <h1>Etat</h1>
+                    <div class="btn_container">
+                        <button class="round_btn destructive stop"></button>
+                    </div>  
+                </div>
+                <div id="ComplementTitreReleve">
+                    <p id="pReleveFinie">En cours :</p>
+                    <p id="pReleveFinie">3 heures restantes</p>
+                </div>
+            </div>
 
 
-            <div class="swiffy-slider slider-item-reveal slider-nav-dark slider-indicators-dark slider-nav-sm slider-nav-touch slider-nav-autohide">
+            <div class="swiffy-slider slider-item-reveal slider-nav-sm slider-nav-touch slider-nav-autohide">
                 <ul class="slider-container">
                     <li>
                         <div id="slide1" class="section">
-                            <h2>Configuration de la campagne de mesure</h2>
+                            <h2 class="titreSectionVoirReleve">Configuration de la campagne de mesure</h2>
                             <div id="infoCampagneContainer">
                                 <h3>Test température dans embalage de chips carrefour</h3>
                                 <div class="grid_section">
@@ -125,30 +111,54 @@
                     </li>
                     <li>
                         <div id="slide2" class="section">
-                            <p>Feur</p>
-
+                            <h2 class="titreSectionVoirReleve">Tableau des données </h2>
                             <div class="table-container">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Lum</th>
-                                            <th>O2</th>
-                                            <th>CO2</th>
-                                            <th>Temp</th>
-                                            <th>Humid</th>
-                                            <th>Date</th>
-                                            <th>Heure</th>
+                                            <th>
+                                                <div>
+                                                    <img class="iconTableau" src="./img/luminosity.svg" alt="icone lumière" >
+                                                    <p>Luminosité</p>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div>
+                                                    <img class="iconTableau" src="./img/humidity.svg" alt="icone lumière" >
+                                                    <p>Humidité</p>
+                                                </div>
+                                            </th>                                            <th>
+                                                <div>
+                                                    <img class="iconTableau"src="./img/tempeture.svg" alt="icone lumière" >
+                                                    <p>Température</p>
+                                                </div>
+                                            </th>                                            <th>
+                                                <div>
+                                                    <img class="iconTableau" src="./img/O2.svg" alt="icone lumière" >
+                                                    <p>O2</p>
+                                                </div>
+                                            </th>                                            <th>
+                                                <div>
+                                                    <img class="iconTableau" src="./img/CO2.svg" alt="icone lumière" >
+                                                    <p>CO2</p>
+                                                </div>
+                                            </th>                                            
+                                            <th>
+                                                <div>
+                                                    <img class="iconTableau" src="./img/clock.svg" alt="icone lumière" >
+                                                    <p>Date</p>
+                                                </div>
+                                            </th>                                            
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
+                                            <td>10.9912918291820</td>
+                                            <td>0.122372187121</td>
+                                            <td>0.2371801212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -156,8 +166,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -165,8 +174,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -174,8 +182,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -183,8 +190,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -192,8 +198,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -201,8 +206,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -210,8 +214,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -219,8 +222,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -228,8 +230,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -237,8 +238,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -246,8 +246,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -255,8 +254,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                         <tr>
                                             <td>10.90</td>
@@ -264,8 +262,7 @@
                                             <td>0.212</td>
                                             <td>12.5°C</td>
                                             <td>0.212</td>
-                                            <td>1/1/2001</td>
-                                            <td>20h20</td>
+                                            <td>1/1/2001 10h30</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -274,7 +271,10 @@
                     </li>
                     <li>
                         <div id="slide3" class="section">
-                            <div id="curve_chart" style="width: 900px; height: 500px"></div>
+                            <h2 class="titreSectionVoirReleve">I like trains</h2>
+                            <div id="ChartContainer">
+                                <canvas id="ChartCanvas"></canvas>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -290,9 +290,11 @@
             </div>
 
             <!-- download popup & btn -->
-            <label for="filter-popup">
-                <div class="rect_round_btn gray">Télécharger la campagne</div>
-            </label>
+            <div id="boutonTelechargerCampagne">
+                <label for="filter-popup">
+                    <div class="rect_round_btn gray">Télécharger la campagne</div>
+                </label>
+            </div>
             <input type="checkbox" id="filter-popup" class="open_close-popup">
             <div class="popup">
                 <div class="popup-inner">
