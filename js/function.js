@@ -5,10 +5,14 @@ async function lineChart() {
   new Chart(myChart, {
     type: 'line',
     data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: ['Février', 'Mars', 'Avril', 'Mai', 'Juin','Juillet'],
       datasets: [{
-        label: '# of Votes',
+        label: 'CO2',
         data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      },{
+        label: 'O2',
+        data: [5, 2, 7],
         borderWidth: 1
       }]
     },
@@ -18,7 +22,7 @@ async function lineChart() {
           beginAtZero: true
         }
       }
-    }
+    },
   });
 };
 
