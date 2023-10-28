@@ -471,8 +471,13 @@
 }
 
 .slider-container > li > div {
-    height: 70vh;
+    height: 85vh;
     margin-bottom: 36px;
+}
+@media (max-height: 768px) {
+    .slider-container > li > div {
+        height: 95vh;
+    }
 }
 .slider-container > li {
     margin-left: 14px;
