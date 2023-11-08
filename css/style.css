@@ -1492,14 +1492,11 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 95%;
-    width: 95%;
+    height: 100%;
+    width: 100%;
 }
 
 #ChartCanvas{
-    position: relative; 
-    height:100vh; 
-    width:100vw;
     background-color:white;
 }
 
@@ -1633,4 +1630,66 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 }
 .status-icon {
     margin-right: 0.5rem;
+}
+
+
+
+
+.tooltipChart_container {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 3px;
+    color: white;
+    opacity: 1;
+    pointer-events: none;
+    position: absolute;
+    transition: all .1s ease 0s;
+    padding: 6px;
+}
+.tooltipChart_container table * {
+    border-width: 0;
+}
+.tooltipChart_container th {
+    font-family: Inter_Bold;
+    font-weight: normal;
+}
+.tooltipChart_container tr td:first-child {
+    font-family: Inter_Medium;
+    font-weight: normal;
+    font-size: 14px;
+    color: white;
+    text-align: left;
+    padding-right: 6px;
+}
+.tooltipChart_container tr td:last-child {
+    font-family: Inter;
+    font-size: 13px;
+    color: #d1d1d1;
+    text-align: right;
+}
+.tooltipChart_container tbody span {
+    margin-right: 8px;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+.tooltipChart_container thead {
+    font-size: 15px;
+}
+
+@media (max-height: 700px) {
+    .tooltipChart_container thead {
+        font-size: 13px;
+    }
+    .tooltipChart_container tr td:first-child {
+        font-size: 13px;
+    }
+    .tooltipChart_container tr td:last-child {
+        font-size: 12px;
+    }
+    .tooltipChart_container tbody span {
+        margin-right: 6px;
+        height: 8px;
+        width: 8px;
+    }
 }
