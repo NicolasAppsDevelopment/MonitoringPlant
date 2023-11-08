@@ -21,7 +21,7 @@
                         Avant de commencer à pouvoir l’utiliser, nous devons d’abord vous demander quelques informations.
                     </p>
 
-                    <a href="demarrage2.html">
+                    <a href="demarrage2.php">
                         <div class="rect_round_btn">
                             <p>Continuer</p>
                         </div>

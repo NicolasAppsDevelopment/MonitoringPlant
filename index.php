@@ -9,22 +9,25 @@
     </head>
     <body class="bg main_theme">
         <header>
-            <nav>
-                <ul class="div_top_nav">
-                    <li><a href="/index.html">
-                        <div class="info_ico_container selected">
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0,0,256,256"><g fill="#ffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M3,3v16c0,1.09306 0.90694,2 2,2h16v-2h-16v-16zM19.32031,6.31445l-4.33203,4.29102l-2.99414,-2.86328l-5.69141,5.54102l1.39453,1.43359l4.30859,-4.19531l3.00586,2.87305l5.7168,-5.66016z"></path></g></g></svg>
-                            <p class="top_nav_text">Campagnes de mesure</p>
-                        </div>
-                    </a></li>
-                    <li><a href="/parametres.html">
-                        <div class="info_ico_container">
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M10.49023,2c-0.479,0 -0.88847,0.33859 -0.98047,0.80859l-0.33398,1.71484c-0.82076,0.31036 -1.57968,0.74397 -2.24609,1.29102l-1.64453,-0.56641c-0.453,-0.156 -0.95141,0.03131 -1.19141,0.44531l-1.50781,2.61328c-0.239,0.415 -0.15202,0.94186 0.20898,1.25586l1.31836,1.14648c-0.06856,0.42135 -0.11328,0.8503 -0.11328,1.29102c0,0.44072 0.04472,0.86966 0.11328,1.29102l-1.31836,1.14648c-0.361,0.314 -0.44798,0.84086 -0.20898,1.25586l1.50781,2.61328c0.239,0.415 0.73841,0.60227 1.19141,0.44727l1.64453,-0.56641c0.6662,0.54671 1.42571,0.97884 2.24609,1.28906l0.33398,1.71484c0.092,0.47 0.50147,0.80859 0.98047,0.80859h3.01953c0.479,0 0.88847,-0.33859 0.98047,-0.80859l0.33399,-1.71484c0.82076,-0.31036 1.57968,-0.74397 2.24609,-1.29102l1.64453,0.56641c0.453,0.156 0.95141,-0.03031 1.19141,-0.44531l1.50781,-2.61523c0.239,-0.415 0.15202,-0.93991 -0.20898,-1.25391l-1.31836,-1.14648c0.06856,-0.42135 0.11328,-0.8503 0.11328,-1.29102c0,-0.44072 -0.04472,-0.86966 -0.11328,-1.29102l1.31836,-1.14648c0.361,-0.314 0.44798,-0.84086 0.20898,-1.25586l-1.50781,-2.61328c-0.239,-0.415 -0.73841,-0.60227 -1.19141,-0.44727l-1.64453,0.56641c-0.6662,-0.54671 -1.42571,-0.97884 -2.24609,-1.28906l-0.33399,-1.71484c-0.092,-0.47 -0.50147,-0.80859 -0.98047,-0.80859zM12,8c2.209,0 4,1.791 4,4c0,2.209 -1.791,4 -4,4c-2.209,0 -4,-1.791 -4,-4c0,-2.209 1.791,-4 4,-4z"></path></g></g></svg>
-                            <p class="top_nav_text">Paramètres</p>
-                        </div>
-                    </a></li>
-                </ul>
-            </nav>
+            <?php include "modules/nav.php";?>
+            <table>
+				<tbody>
+                    <tr><th>date</th><td><p><?= $_POST['date'] ?></p></td></tr>
+					<tr><th>heure</th><td><p><?= $_POST['heure'] ?></p></td></tr>
+					<tr><th>CO2</th><td><p><?= isset($_POST['CO2']) ?></p></td></tr>
+					<tr><th>O2</th><td><p><?= isset($_POST['O2']) ?></p></td></tr>
+					<tr><th>temperature</th><td><p><?= isset($_POST['temperature']) ?></p></td></tr>
+					<tr><th>humidity</th><td><p><?= isset($_POST['humidity']) ?></p></td></tr>
+					<tr><th>luminosity</th><td><p><?= isset($_POST['luminosity']) ?></p></td></tr>
+					<tr><th>duration</th><td><p><?= $_POST['duration'] ?></p></td></tr>
+					<tr><th>duration_untity</th><td><p><?= $_POST['duration_untity'] ?></p></td></tr>
+					<tr><th>interval</th><td><p><?= $_POST['interval'] ?></p></td></tr>
+					<tr><th>interval_untity</th><td><p><?= $_POST['interval_untity'] ?></p></td></tr>
+					<tr><th>volume</th><td><p><?= $_POST['volume'] ?></p></td></tr>
+					<tr><th>volume_untity</th><td><p><?= $_POST['volume_untity'] ?></p></td></tr>
+                    <tr><th>name</th><td><p><?= $_POST['name'] ?></p></td></tr>
+				</tbody>
+			</table>
         </header>
         <main>
             <div class="top_action_menu">
@@ -55,13 +58,13 @@
             </div>
 
             <div class="liste_CM">
-                <a href="/voirReleve.html" class="CM processing">
+                <a href="/voirReleve.php" class="CM processing">
                     <div class="title_detail_CM">
                         <p class="titre_CM">Test emballage carrote numéro 1</p>
                         <p class="detail_CM">En cours...</p>
                     </div>
                 </a>
-                <a href="/voirReleve.html" class="CM">
+                <a href="/voirReleve.php" class="CM">
                     <div class="title_detail_CM">
                         <p class="titre_CM">Test emballage carrote numéro 1</p>
                         <p class="detail_CM">Créée il y a 3 semaines</p>
@@ -81,10 +84,10 @@
                     <p>Démarrer une campagne</p>
                     <label for="add-popup" class="round_btn transparent small close"></label>
                 </div>
-                <div class="popup-content">
+                <form class="popup-content" method="post" enctype="multipart/form-data" action="index.php">
                     <div class="grid_section">
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <input name="CO2" type="checkbox" class="checkbox-input" hidden/>
                             <span class="checkbox-tile">
                             <span class="checkbox-icon">
                                 <img src="./img/CO2.svg">
@@ -93,7 +96,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <input name="O2" type="checkbox" class="checkbox-input" hidden/>
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                 <img src="./img/O2.svg">
@@ -102,7 +105,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <input name="temperature" type="checkbox" class="checkbox-input" hidden/>
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                 <img src="./img/tempeture.svg">
@@ -111,7 +114,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <input name="humidity" type="checkbox" class="checkbox-input" hidden/>
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                 <img src="./img/humidity.svg">
@@ -120,7 +123,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden/>
+                            <input name="luminosity" type="checkbox" class="checkbox-input" hidden/>
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                 <img src="./img/luminosity.svg">
@@ -135,7 +138,7 @@
                         <label class="label_field" for="duration">Durée de la campagne de mesure</label>
                         <div class="row_fields">
                             <input class="input_field clock" id="duration" name="duration" type="number" placeholder="Durée" min="0" required>
-                            <select class="combo_box">
+                            <select name="duration_untity" class="combo_box">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>
                                 <option value="h">h</option>
@@ -148,7 +151,7 @@
                         <label class="label_field" for="interval">Intervalle de la campagne de mesure</label>
                         <div class="row_fields">
                             <input class="input_field timer" id="interval" name="interval" type="number" placeholder="Intervalle" min="0" required>
-                            <select class="combo_box">
+                            <select name="interval_untity" class="combo_box">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>
                                 <option value="h">h</option>
@@ -165,7 +168,7 @@
                         
                         <div class="row_fields">
                             <input class="input_field volume" id="volume" name="volume" type="number" placeholder="Volume" min="0">
-                            <select class="combo_box">
+                            <select name="volume_untity" class="combo_box">
                                 <option selected value="mL">mL</option>
                                 <option value="cL">cL</option>
                             </select>
@@ -202,7 +205,7 @@
                     </div>
 
                     <button class="rect_round_btn gray" type="submit">Démarrer</button>
-                </div>
+                </form>
             </div>
         </div>
     </body>

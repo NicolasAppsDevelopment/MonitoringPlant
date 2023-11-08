@@ -18,16 +18,16 @@
                     <p>
                         À present, nous avons besoins de savoir la date et l’heure qu’il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été feur démarré.
                     </p>
-                    <form action="la où on envoie les info.php" enctype="multipart/form-data" method="post">
+                    <form action="index.php" enctype="multipart/form-data" method="post">
                         <div class="label_img_input">
                             <label class="label_field" for="interval">Date & heure actuelle</label>
                             <div class="row_fields gap">
-                                <input class="input_field calendar" id="interval" name="interval" type="date" placeholder="Intervalle" required>
-                                <input class="input_field clock" id="interval" name="interval" type="time" placeholder="Intervalle" required>
+                                <input class="input_field calendar" id="date" name="date" type="date" placeholder="Intervalle" required>
+                                <input class="input_field clock" id="heure" name="heure" type="time" placeholder="Intervalle" required>
                             </div>
                         </div>
                         <div class="two_buttons">
-                            <a href="demarrage1.html">
+                            <a href="demarrage1.php">
                                 <div class="rect_round_btn">
                                     <p>Retour</p>
                                 </div>
