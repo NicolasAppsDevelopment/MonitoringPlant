@@ -459,6 +459,11 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     overflow-y: auto;
     max-width: 600px;
 }
+.popup .inner-error-popup {
+    transform: scale(0.95);
+    transition: 250ms all;
+    width: 40%;
+}
 .popup .popup-inner .popup-title {
     display: flex;
     justify-content: space-between;
@@ -483,10 +488,32 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     opacity: 1;
     transform: scale(1);
 }
+@media screen and (max-width: 1500px) {
+    .popup .inner-error-popup {
+        width: 50%;
+        max-height: 50%;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .popup .inner-error-popup {
+        width: 65%;
+        max-height: 65%;
+    }
+}
 @media screen and (max-width: 640px) {
     .popup .popup-inner {
         padding: 20px;
         width: 85%;
+    }
+    .popup .inner-error-popup {
+        width: 75%;
+        max-height: 75%;
+    }
+}
+@media screen and (max-width: 500px) {
+    .popup .inner-error-popup {
+        width: 85%;
+        max-height: 85%;
     }
 }
 @media screen and (max-height: 400px) {
