@@ -4,31 +4,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
-        <script src="./js/function.js"></script>
+        <script src="./js/functions.js"></script>
+        <script src="./js/index.js"></script>
         <title>Accueil</title>
     </head>
     <body class="bg main_theme">
-        <header>
-            <?php include "modules/nav.php";?>
-            <table>
-				<tbody>
-                    <tr><th>date</th><td><p><?= $_POST['date'] ?></p></td></tr>
-					<tr><th>heure</th><td><p><?= $_POST['heure'] ?></p></td></tr>
-					<tr><th>CO2</th><td><p><?= isset($_POST['CO2']) ?></p></td></tr>
-					<tr><th>O2</th><td><p><?= isset($_POST['O2']) ?></p></td></tr>
-					<tr><th>temperature</th><td><p><?= isset($_POST['temperature']) ?></p></td></tr>
-					<tr><th>humidity</th><td><p><?= isset($_POST['humidity']) ?></p></td></tr>
-					<tr><th>luminosity</th><td><p><?= isset($_POST['luminosity']) ?></p></td></tr>
-					<tr><th>duration</th><td><p><?= $_POST['duration'] ?></p></td></tr>
-					<tr><th>duration_untity</th><td><p><?= $_POST['duration_untity'] ?></p></td></tr>
-					<tr><th>interval</th><td><p><?= $_POST['interval'] ?></p></td></tr>
-					<tr><th>interval_untity</th><td><p><?= $_POST['interval_untity'] ?></p></td></tr>
-					<tr><th>volume</th><td><p><?= $_POST['volume'] ?></p></td></tr>
-					<tr><th>volume_untity</th><td><p><?= $_POST['volume_untity'] ?></p></td></tr>
-                    <tr><th>name</th><td><p><?= $_POST['name'] ?></p></td></tr>
-				</tbody>
-			</table>
-        </header>
+        <?php include "modules/header.php";?>
         <main>
             <div class="top_action_menu">
                 <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="custom_search_bar" onchange="">
@@ -58,7 +39,14 @@
             </div>
 
             <div class="liste_CM">
-                <a href="/voirReleve.php" class="CM processing">
+                <div class="loading_popup" id="loading_div">
+                    <progress class="pure-material-progress-circular"></progress>
+                    <p class="loading_msg">Récupération des campagnes...</p>
+                </div>
+
+
+
+                <!-- <a href="/voirReleve.php" class="CM processing">
                     <div class="title_detail_CM">
                         <p class="titre_CM">Test emballage carrote numéro 1</p>
                         <p class="detail_CM">En cours...</p>
@@ -71,8 +59,8 @@
                     </div>
 
                     <button class="square_btn destructive remove small" onclick='event.preventDefault();'></button>
-                </a>
-            </div>         
+                </a> -->
+            </div>     
         </main>
 
         <!-- Add popup & btn -->
@@ -208,5 +196,8 @@
                 </form>
             </div>
         </div>
+
+        <!-- error popup -->
+        <?php include "modules/error_popup.php";?>
     </body>
 </html>

@@ -609,7 +609,8 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     margin-bottom: 0;
     font-family: Inter_SemiBold;
     font-weight: normal;
-    font-size: 18px
+    font-size: 18px;
+    text-align: center;
 }
 
 .two_buttons {

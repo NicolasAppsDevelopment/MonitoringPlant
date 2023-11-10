@@ -16,7 +16,46 @@ async function hideError() {
     popup_container.removeAttribute("style");
 }
 
+async function post(url, data) {
+    try {
+        const response = await fetch("http://localhost:1880" + url, {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        var res = await response.json();
+        if (response.status === 200) {
+            return res;
+        } else {
+            displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
+        }
+    } catch (e) {
+        displayError("Erreur d'émission de la requête", "La requête à vers l'adresse \"" + url + "\" n'a pas pu être émise correctement... " + e.toString());
+    }
 
-document.addEventListener("DOMContentLoaded", () => {
-    displayError("Impossible de récupérer les données", "xxxxxxx xxxxxxx xxxx xxxxx x xxxxxxxxx x xxxxxxxx xxxx. xxxxxxxxxxxx xxxxxxx xxxxxxx xxx xxx xxxxxxxxxx. Une erreur s'est produite et à empêché l'application de récupérer les informations relatives à cette campagne... \nDétails : SQLNOTFOUND table campagnes missing");
-});
+    return null;
+}
+async function get(url) {
+    try {
+        const response = await fetch("http://localhost:1880" + url, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        var res = await response.json();
+        if (response.status === 200) {
+            return res;
+        } else {
+            displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
+        }
+    } catch (e) {
+        displayError("Erreur d'émission de la requête", "La requête à vers l'adresse \"" + url + "\" n'a pas pu être émise correctement... " + e.toString());
+    }
+
+    return null;
+}
