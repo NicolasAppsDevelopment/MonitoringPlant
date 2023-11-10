@@ -246,13 +246,13 @@ nav a div p {
     transform: scale(1.025);
 }
 
-div.rect_round_btn{
+div.rect_round_btn {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#boutonTelechargerCampagne{
+#boutonTelechargerCampagne {
     margin-inline:18px;
     padding-bottom:20px;
 
@@ -538,7 +538,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     max-width: 600px;
     border-style: none;
 }
-.main_popup_container{
+.main_popup_container {
     margin: 0;
     padding-left: 5%;
     padding-right: 5%;
@@ -548,14 +548,14 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     align-items: center;
     height: 100%;
 }
-.popup_contenu{
+.popup_contenu {
     padding: 30px;
     max-height: 400px;  
 
     border-style: none;
     border-radius: 10px;
 }
-.main_popup h2{
+.main_popup h2 {
     margin-top: 10px;
     margin-bottom: 10px;
     font-family: Inter_Bold;
@@ -564,20 +564,20 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
 /* Page paramétrage */
 
-#main_paramètre h2{
+#main_paramètre h2 {
     text-decoration: underline;
     text-align: left; 
     color:black;
 }
 
-#fréquence input{
+#fréquence input {
     width: 20px;
     text-align:center;
     background-color:var(--placeholder_color);
     border: none;
 }
 
-#choix_f{
+#choix_f {
 
     padding: 5px;
 
@@ -589,7 +589,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     width: fit-content;
 }
 
-#main_paramètre{
+#main_paramètre {
     padding-left: 5%;
     padding-right: 5%;
 
@@ -629,7 +629,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     width: 50%;
 }
 
-#page2 .progression_bar{
+#page2 .progression_bar {
     width: 66%;
 }
 
@@ -691,12 +691,12 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
 /*  */
 
-.liste_CM{
+.liste_CM {
     display: flex;
     flex-direction: column;
 }
 
-.liste_CM > .CM{
+.liste_CM > .CM {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -744,7 +744,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     right: 14px;
 }
 
-.title_detail_CM .titre_CM{
+.title_detail_CM .titre_CM {
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: Inter_Bold;
@@ -753,7 +753,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     font-size: 16px;
     color: var(--font-color);
 }
-.title_detail_CM .detail_CM{
+.title_detail_CM .detail_CM {
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: Inter_Medium;
@@ -763,7 +763,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     font-size: 14px;
 }
 
-.IconAccederCM{
+.IconAccederCM {
     width:20%;
     background-image: url();
 }
@@ -1239,13 +1239,13 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
         radial-gradient(farthest-corner at bottom right, rgba(154, 212, 99, 0.75),transparent) #64e3a1;
 }
 
-#infoCampagneContainer{
+#infoCampagneContainer {
     border:1px solid var(--border-menu-color);
     border-radius: 30px;
     background-color: var(--input_color);
 }
 
-#infoCampagne{
+#infoCampagne {
     display: flex;
     align-content: center;
     flex-direction: column;
@@ -1254,36 +1254,36 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     background-color: var(--background-color);
 }
 
-#infoCampagne h3{
+#infoCampagne h3 {
     text-align: center;
     font-family: Inter_Bold;
     font-weight: normal;
 }
 
-#infoParametreCampagne{
+#infoParametreCampagne {
     margin-left: 5%;
     border-collapse: collapse;
 }
 
-#infoParametreCampagne p{
+#infoParametreCampagne p {
     margin: 10px;
     margin-left: 0px;
 }
 
-#infoParametreCampagne th{
+#infoParametreCampagne th {
     display:flex;
     flex-direction: row;
     align-items: center;
 }
 
-#infoParametreCampagne .title_param{
+#infoParametreCampagne .title_param {
     font-size: 18px;
     font-family: Inter_Medium;
     font-weight: normal;
     color: #707070;
 }
 
-#infoParametreCampagne th img{
+#infoParametreCampagne th img {
     margin-right: 12px;
     width:30px;
     height:30px;
@@ -1409,7 +1409,9 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 }
 
 /* TABLE PART */
-.table-container table  { border-collapse: collapse; width: 100%; }
+.table-container table  {
+    border-collapse: collapse; width: 100%;
+}
 .table-container td { 
     padding: 12px 16px;
     color: #424761;
@@ -1449,10 +1451,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     justify-content: left;
     align-items: center;
 }
-.table-container th div p{
+.table-container th div p {
     margin: 0;
 }
-.iconTableau{
+.iconTableau {
     width:30px;
     filter:brightness(800%);
     margin-right: 5px;
@@ -1465,7 +1467,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
         padding: 10px;
         font-size: 15px;
     }
-    .iconTableau{
+    .iconTableau {
         width:24px;
     }
     .table-container td { 
@@ -1504,7 +1506,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
 
 
-.titreSectionVoirReleve{
+.titreSectionVoirReleve {
     font-family: Inter_Bold;
     font-weight: normal;
     margin: 12px 0px;
@@ -1515,7 +1517,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
 
 /* CHART PART */
-#ChartContainer{
+#ChartContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1523,7 +1525,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     width: 100%;
 }
 
-#ChartCanvas{
+#ChartCanvas {
     background-color:white;
 }
 
