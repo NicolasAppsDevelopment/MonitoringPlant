@@ -11,7 +11,7 @@ drop table if exists Parametre;
 /*==============================================================*/
 create table CampagneMesure(
    idCampagne          	int not null auto_increment,
-   nom               	varchar(25),
+   nom               	varchar(50),
    DateDebut			datetime,
    capteurTemperature  	boolean,
    capteurCO2			boolean,
@@ -21,6 +21,7 @@ create table CampagneMesure(
    intervalReleve		int,
    volume 				float,
    duree				int,
+   etat       int,
    primary key (idCampagne)
 );
 
@@ -44,6 +45,18 @@ create table Mesure(
 /*==============================================================*/
 create table Parametre(
    IntervalSuppression  int
+);
+
+/*==============================================================*/
+/* Table : Log                                              */
+/*==============================================================*/
+create table Log(
+   idCampagne       int,
+   titre            varchar(50),
+   messsage         varchar(1000),
+   dateApparition   datetime,
+   constraint FK_Log_CampagneMesure foreign key (idCampagne)
+   references CampagneMesure (idCampagne) on delete restrict on update restrict
 );
 
 
@@ -155,11 +168,11 @@ end if;
 
 set @requete=concat(requete,"DateHeure from Mesure where idCampagne=",id," and DateHeure<",fin," and DateHeure>",debut,";");
 
-prepare exportation from @requete;
+/*prepare exportation from @requete;
 execute exportation;
 deallocate prepare exportation;
 
-/*select Temperature,CO2,O2,Lumiere,Humidite from Mesure where idCampagne=id and DateHeure<fin and DateHeure>debut; 
+select Temperature,CO2,O2,Lumiere,Humidite from Mesure where idCampagne=id and DateHeure<fin and DateHeure>debut; 
 select @requete;*/
 END $
 DELIMITER ;
