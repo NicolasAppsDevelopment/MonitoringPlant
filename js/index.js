@@ -4,27 +4,40 @@ async function getCampagnes(filter = null) {
     const campagnesContainer = document.getElementById("CM_container");
     campagnesContainer.innerHTML = `
     <div class="loading_popup" id="loading_div">
-        <progress class="pure-material-progress-circular"></progress>
+        <svg class="spinner" viewBox="0 0 50 50">
+            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+        </svg>
         <p class="loading_msg">Récupération des campagnes...</p>
     </div>
     `;
 
     let data = null;
     if (filter != null) {
-        data = await post("/campagnes", filter);
+        data = await PHP_post("/PHP_API/get_campaigns.php", filter);
     } else {
-        data = await get("/campagnes");
+        data = await PHP_get("/PHP_API/get_campaigns.php");
     }
 
     if (data != null){
         const campagnesContainer = document.getElementById("CM_container");
         campagnesContainer.innerHTML = "";
 
-        data["campagnes"].forEach(campagne => {
-            const state = "";
-            switch (campagne["state"]) {
-                case "processing":
+        data["data"].forEach(campagne => {
+            let state = "";
+            let state_desc = "";
+            let dateFin = new Date(campagne["dateDebut"]);
+            dateFin.setSeconds(dateFin.getSeconds() + campagne["duree"]);
+            
+
+            switch (campagne["etat"]) {
+                case 0: // En cours
                     state = "processing";
+                    state_desc = "En cours (reste " + dateToReamingString(dateFin) + ")...";
+                    break;
+
+                case 1: // Terminé
+                    state = "";
+                    state_desc = "Terminé le " + dateToString(dateFin) + ".";
                     break;
                 
                 default:
@@ -32,14 +45,14 @@ async function getCampagnes(filter = null) {
             }
 
             campagnesContainer.innerHTML += `
-                <form method="post" action="/voirReleve.php" class="CM ` + state + `" id="campagne_` + campagne["id"] + `" onclick="document.getElementById('campagne_` + campagne["id"] + `').submit();">
+                <form method="post" action="/voirReleve.php" class="CM ` + state + `" id="campagne_` + campagne["idCampagne"] + `" onclick="document.getElementById('campagne_` + campagne["idCampagne"] + `').submit();">
                     <input type="hidden" name="id" value="1">
                     <div class="title_detail_CM">
-                        <p class="titre_CM">` + campagne["title"] + `</p>
-                        <p class="detail_CM">` + campagne["state_desc"] + `</p>
+                        <p class="titre_CM">` + campagne["nom"] + `</p>
+                        <p class="detail_CM">` + state_desc + `</p>
                     </div>
 
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne('` + campagne["id"] + `');"></button>
+                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne('` + campagne["idCampagne"] + `');"></button>
                 </form>
             `;
         });
@@ -65,7 +78,7 @@ async function getStorageCapacity() {
     storageCapacity.innerHTML = "Calcul...";
     storageBar.style.width = "0%";
 
-    let data = await get("/storage");
+    let data = await NODERED_get("/storage");
 
     if (data != null){
         capacityPercent = data["used_percent"];
@@ -84,7 +97,7 @@ async function addCampagne() {
     const temperature_enabled = document.getElementById("temperature_checkbox").checked;
     const luminosity_enabled = document.getElementById("luminosity_checkbox").checked;
     const humidity_enabled = document.getElementById("humidity_checkbox").checked;
-    const duration = parseFloat(document.getElementById("duration_input").value);
+    let duration = parseInt(document.getElementById("duration_input").value);
     const duration_unit = document.getElementById("duration_unit_combo_box").value;
     switch (duration_unit) {
         case "min":
@@ -100,7 +113,7 @@ async function addCampagne() {
             break;
     }
 
-    const interval = parseFloat(document.getElementById("interval_input").value);
+    let interval = parseInt(document.getElementById("interval_input").value);
     const interval_unit = document.getElementById("interval_unit_combo_box").value;
     switch (interval_unit) {
         case "min":
@@ -116,7 +129,7 @@ async function addCampagne() {
             break;
     }
 
-    const volume = parseFloat(document.getElementById("volume_input").value);
+    let volume = parseFloat(document.getElementById("volume_input").value);
     const volume_unit = document.getElementById("volume_unit_combo_box").value;
     switch (volume_unit) {
         case "cL":
@@ -126,19 +139,16 @@ async function addCampagne() {
             break;
     }
 
-    const data = await post("/addCampaign", {
+    const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title,
         "CO2_enabled": CO2_enabled,
         "O2_enabled": O2_enabled,
         "temperature_enabled": temperature_enabled,
         "luminosity_enabled": luminosity_enabled,
         "humidity_enabled": humidity_enabled,
-        "duration": duration,
-        "duration_unit": duration_unit, // "s", "min", "h", "j"
-        "interval": interval,
-        "interval_unit": interval_unit, // "s", "min", "h", "j"
-        "volume": volume,
-        "volume_unit": volume_unit // "mL", "cL"
+        "duration": duration, // s
+        "interval": interval, // s
+        "volume": volume, // cL
     });
 
     if (data != null) {
@@ -152,7 +162,7 @@ async function addCampagne() {
 async function removeCampagne(id) {
     event.stopPropagation();
     document.getElementById("campagne_" + id).remove();
-    post("/removeCampaign", {"id": id});
+    PHP_post("/removeCampaign", {"id": id});
 }
 
 document.addEventListener("DOMContentLoaded", () => {

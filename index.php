@@ -69,7 +69,7 @@
                     <label for="add-popup" class="round_btn transparent small close"></label>
                 </div>
                 <form id="add_popup_form" class="popup-content" method="post" action="voirReleve.php">
-                    <input type="hidden" name="id" value="-1">
+                    <input id="id_added_campaign" type="hidden" name="id" value="-1">
 
                     <div class="grid_section">
                         <label class="icon-checkbox-wrapper">
