@@ -53,23 +53,9 @@ async function displayLoading(msg = "Chargement...") {
     popup_container.style.opacity = 1;
     popup_container.style.visibility = "inherit";
 }
-async function displayLoadingWithoutAnim(msg = "Chargement...") {
-    const popup_container = document.getElementById("loading_popup_container");
-    const popup = document.getElementById("loading_popup");
-    popup.classList.add("no_transition");
-    popup.style.transform = "scale(1)";
-
-    document.getElementById("loading_msg").innerHTML = msg.replace("\n", "<br>");
-    
-    popup_container.classList.add("no_transition");
-    popup_container.style.opacity = 1;
-    popup_container.style.visibility = "inherit";
-
-    popup.classList.remove("no_transition");
-    popup_container.classList.remove("no_transition");
-}
 async function hideLoading() {
     const popup_container = document.getElementById("loading_popup_container");
+    popup_container.classList.remove("displayed");
     const popup = document.getElementById("loading_popup");
     popup.removeAttribute("style");
     popup_container.removeAttribute("style");
@@ -139,13 +125,13 @@ async function NODERED_get(url) {
     return await get("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url);
 } 
 
-function dateToString(date) {
+function dateToString(date, str_separator_date_time = true, display_seconds = false) {
     let d = date.getDate();
     let m = date.getMonth() + 1; //Month from 0 to 11
     let y = date.getFullYear();
     let h = date.getHours();
     let min = date.getMinutes();
-    return '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y + " à " + (h<=9 ? '0' + h : h) + ":" + (min<=9 ? '0' + min : min);
+    return '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y + " " + (str_separator_date_time ? "à " : "") + (h<=9 ? '0' + h : h) + ":" + (min<=9 ? '0' + min : min) + (display_seconds ? ":" + (date.getSeconds()<=9 ? '0' + date.getSeconds() : date.getSeconds()) : "");
 }
 
 function dateToReamingString(date) {

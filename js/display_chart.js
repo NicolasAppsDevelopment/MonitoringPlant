@@ -1,4 +1,4 @@
-async function lineChart() {
+async function lineChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) {
   const myChart = document.getElementById('ChartCanvas');
 
   const tooltipLine =  {
@@ -146,10 +146,10 @@ async function lineChart() {
   new Chart(myChart, {
     type: 'line',
     data: {
-      labels: ["00:00:00", "00:00:15", "00:00:30", "00:00:45", "00:01:00", "00:01:15"],
+      labels: date_array,
       datasets: [{
         label: 'CO2',
-        data: [12, 19, 3, 5, 2, 3],
+        data: co2_array,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -158,7 +158,7 @@ async function lineChart() {
         backgroundColor: "gray",
       },{
         label: 'O2',
-        data: [5, 2, 7],
+        data: o2_array,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -167,7 +167,7 @@ async function lineChart() {
         backgroundColor: "#eb1e4b",
       },{
         label: 'Température',
-        data: [5,9,3,4,2,3],
+        data: temp_array,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -176,7 +176,7 @@ async function lineChart() {
         backgroundColor: "#f06937",
       },{
         label: 'Humidité',
-        data: [14,16,11, ,15,12],
+        data: hum_array,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -185,7 +185,7 @@ async function lineChart() {
         backgroundColor: "#2d969b",
       },{
         label: 'Luminosité',
-        data: [7,5,3,4,9,0],
+        data: lum_array,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -218,8 +218,3 @@ async function lineChart() {
     plugins: [tooltipLine],
   });
 };
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  lineChart();
-});

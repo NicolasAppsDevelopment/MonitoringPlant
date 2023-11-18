@@ -198,118 +198,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tableContent">
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
-                                        </tr>
+                                        <!-- ... -->
                                     </tbody>
                                 </table>
                             </div>
@@ -465,8 +354,8 @@
         </div>
     </main>
 
-    <!-- loading popup -->
-    <?php include "modules/loading_popup.php";?>
+    <!-- loading popup displayed with the page -->
+    <?php include "modules/loading_popup_displayed.php";?>
 </body>
 
 </html>

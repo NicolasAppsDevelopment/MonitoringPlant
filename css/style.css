@@ -465,7 +465,14 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     transition: 250ms all;
     width: 40%;
 }
-.no_transition {
+.popup.displayed {
+    visibility: inherit;
+    opacity: 1;
+}
+.popup.displayed .inner-error-popup {
+    transform: scale(1);
+}
+.no_transition, .no_transition * {
     transition: none !important;
 }
 .popup.open_anim {
@@ -1427,6 +1434,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     overscroll-behavior: none;
     border-radius: 10px;
     height: 100%;
+    cursor: default;
 }
 .table-container thead th {
     position: sticky;
