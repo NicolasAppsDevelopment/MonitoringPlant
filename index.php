@@ -197,8 +197,5 @@
 
         <!-- loading popup -->
         <?php include "modules/loading_popup.php";?>
-
-        <!-- error popup -->
-        <?php include "modules/error_popup.php";?>
     </body>
 </html>

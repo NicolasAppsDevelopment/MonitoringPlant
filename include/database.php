@@ -1,5 +1,7 @@
 <?php
 
+include_once __DIR__ . "/../include/reply.php";
+
 function init_db() : PDO | null 
 {
     $dsn = "mysql:dbname=p2201232;host=iutbg-lamp.univ-lyon1.fr";
@@ -9,7 +11,7 @@ function init_db() : PDO | null
     try {
         return new PDO($dsn, $user, $password);
     } catch (PDOException $e) {
-        //print($th);
+        replyError("Impossible de se connecter à la base de données", $e->getMessage());
         return null;
     }
 }
@@ -106,36 +108,36 @@ function addCampaign(string $nom,bool $capteurTemperature,bool $capteurCO2,bool 
         $statement->fetchAll();
 
         return getIdCampagne($nom);
+    } catch (\Throwable $th) {
+        replyError("Impossible d'ajouter la campagne", $th->getMessage());
+    }
 
-        } catch (\Throwable $th) {
-            replyError("Impossible d'ajouter la campagne", $th->getMessage());
-        }
-
-        return null;
+    return null;
 }
 
 function supprCampagne (int $id) : bool
 {
     if (!PDO){
-        replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
+        replyError("Impossible de supprimer la campagne", "La connexion à la base de donnée a échoué.");
         return false;
     }
 
+    // Suppression des mesures
     try {
         $statement = PDO->prepare("DELETE from Mesure where idCampagne = :id");
         $statement->execute(
             [
                 'id' => $id
-                
             ]
         );
-
-        if ($statement->rowCount() >= 0){
-            return true;
-        }
     } catch (\Throwable $th) {
-        //print($th);
+        replyError("Impossible de supprimer les mesures de la campagne", $th->getMessage());
     }
+
+    // Suppression des logs
+    // ...
+
+    // Suppression de la campagne
     try {
         $statement = PDO->prepare("DELETE from CampagneMesure where idCampagne=:id");
         $statement->execute(
@@ -146,9 +148,11 @@ function supprCampagne (int $id) : bool
 
         if ($statement->rowCount() == 1){
             return true;
+        } else {
+            throw new Exception("Campagne introuvable.");
         }
     } catch (\Throwable $th) {
-        replyError("Campagne non trouvable", $th->getMessage());
+        replyError("Impossible de supprimer la campagne", $th->getMessage());
     }
     return false;
 }

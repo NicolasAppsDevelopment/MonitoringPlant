@@ -52,7 +52,7 @@ async function getCampagnes(filter = null) {
                         <p class="detail_CM">` + state_desc + `</p>
                     </div>
 
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne('` + campagne["idCampagne"] + `');"></button>
+                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(` + campagne["idCampagne"] + `);"></button>
                 </form>
             `;
         });
@@ -162,7 +162,9 @@ async function addCampagne() {
 async function removeCampagne(id) {
     event.stopPropagation();
     document.getElementById("campagne_" + id).remove();
-    PHP_post("/removeCampaign", {"id": id});
+    PHP_post("/PHP_API/remove_campaign.php", {
+        "id": id
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {

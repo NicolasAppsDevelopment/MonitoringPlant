@@ -459,11 +459,58 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     overflow-y: auto;
     max-width: 600px;
 }
+/* ~~~~ ERROR POPUP ANIM ~~~~ */
 .popup .inner-error-popup {
     transform: scale(0.95);
     transition: 250ms all;
     width: 40%;
 }
+.popup.open_anim {
+    visibility: inherit;
+    animation: show_up 250ms forwards;
+}
+@keyframes show_up {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }  
+}
+.popup.close_anim {
+    animation: hide_ 250ms forwards;
+}
+@keyframes hide_ {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }  
+}
+.popup.open_anim .inner-error-popup {
+    animation: scale_up 250ms forwards;
+}
+@keyframes scale_up {
+    0% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }  
+}
+.popup.close_anim .inner-error-popup {
+    animation: scale_down 250ms forwards;
+}
+@keyframes scale_down {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0.95);
+    }  
+}
+/* ~~~~ END ERROR POPUP ANIM CSS PART ~~~~ */
 .popup .popup-inner .popup-title {
     display: flex;
     justify-content: space-between;
