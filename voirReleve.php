@@ -1,3 +1,9 @@
+<?php
+    if (!isset($_POST['id']) || empty($_POST['id']) || !is_numeric($_POST['id'])){
+        header("Location: /");
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -10,11 +16,15 @@
     <script src="./js/chart.js"></script>
     <script src="./js/display_chart.js"></script>
     <script src="./js/functions.js"></script>
+    <script src="./js/voirReleve.js"></script>
     <title>Voir Releve</title>
 </head>
 
 <body class="bg main_theme">
     <?php include "modules/header.php";?>
+    
+    <input type="hidden" id="id_campagne" value="<?= $_POST['id'] ?>">
+
     <main>
         <div class="top_action_menu">
             <div class="back_title">
@@ -23,7 +33,7 @@
                         <p>Retour</p>
                     </div>
                 </a>
-                <p class="title">Test emballage carrote numéro 1</p>
+                <p class="title" id="titleCampaign"></p>
             </div>
         </div>
 
@@ -46,7 +56,7 @@
                         Erreur avec le capteur d'O2
                     </div>
                     <span class="status-message">
-                        La campagne de mesure est toujours en cours, cependant à 12:35:24 le 12/12/2022 le capteur d'O2 a rencontré une erreur irrécupérable.<br>
+                        La campagne de mesure est <span> </span>, cependant à 12:35:24 le 12/12/2022 le capteur d'O2 a rencontré une erreur irrécupérable.<br>
                         Fin de la campagne de mesure dans 3 heures.
                     </span>
                 </div>
@@ -113,7 +123,7 @@
                                             <p class="title_param">Durée : </p>
                                         </th>
                                         <td>
-                                            <p>10 minutes</p>
+                                            <p></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -122,7 +132,7 @@
                                             <p class="title_param">Intervalle : </p>
                                         </th>
                                         <td>
-                                            <p>30 secondes</p>
+                                            <p></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -131,7 +141,7 @@
                                             <p class="title_param">Volume : </p>
                                         </th>
                                         <td>
-                                            <p>50 ml</p>
+                                            <p></p>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -187,22 +197,22 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tableContent">
                                         <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.9912</td>
-                                            <td>0.1223</td>
-                                            <td>0.2371</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>01/02/2001 10:30:12</td>
-                                            <td>10.90</td>
-                                            <td>0.12121</td>
-                                            <td>0.212</td>
-                                            <td>12.5°C</td>
-                                            <td>0.212</td>
+                                            <td></td>
+                                            <td>></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td>01/02/2001 10:30:12</td>
@@ -453,10 +463,10 @@
                 </div>
             </div>
         </div>
-
-        <!-- error popup -->
-        <?php include "modules/error_popup.php";?>
     </main>
+
+    <!-- loading popup -->
+    <?php include "modules/loading_popup.php";?>
 </body>
 
 </html>

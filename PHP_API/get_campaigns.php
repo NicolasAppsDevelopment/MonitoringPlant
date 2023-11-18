@@ -1,5 +1,5 @@
 <?php 
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=utf-8");
 
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
@@ -7,13 +7,13 @@ include_once __DIR__ . "/../include/reply.php";
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // handle GET request
     reply(array(
-        "data" => getCampaign()
+        "data" => getListCampaign()
     ));
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
     if (isset($_POST["filter"]) && !empty($_POST["filter"])){
         reply(array(
-            "data" => getCampaign($_POST["filter"])
+            "data" => getListCampaign($_POST["filter"])
         ));
     }
 } else {

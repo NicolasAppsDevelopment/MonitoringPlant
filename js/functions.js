@@ -53,6 +53,21 @@ async function displayLoading(msg = "Chargement...") {
     popup_container.style.opacity = 1;
     popup_container.style.visibility = "inherit";
 }
+async function displayLoadingWithoutAnim(msg = "Chargement...") {
+    const popup_container = document.getElementById("loading_popup_container");
+    const popup = document.getElementById("loading_popup");
+    popup.classList.add("no_transition");
+    popup.style.transform = "scale(1)";
+
+    document.getElementById("loading_msg").innerHTML = msg.replace("\n", "<br>");
+    
+    popup_container.classList.add("no_transition");
+    popup_container.style.opacity = 1;
+    popup_container.style.visibility = "inherit";
+
+    popup.classList.remove("no_transition");
+    popup_container.classList.remove("no_transition");
+}
 async function hideLoading() {
     const popup_container = document.getElementById("loading_popup_container");
     const popup = document.getElementById("loading_popup");
@@ -60,8 +75,8 @@ async function hideLoading() {
     popup_container.removeAttribute("style");
 }
 
-const API_IP_ADDRESS = "localhost";
-const PHP_API_PORT = "3000";
+const API_IP_ADDRESS = "91.160.147.139";
+const PHP_API_PORT = "35000";
 const NODERED_API_PORT = "1880"; 
 
 async function post(url, data) {

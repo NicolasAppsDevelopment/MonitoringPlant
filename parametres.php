@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/function.js"></script>
+        <script src="./js/parametre.js"></script>
         <title>Accueil</title>
     </head>
     <body class="bg main_theme">
@@ -13,7 +14,9 @@
             <h2>Suppression des données</h2>
             <div class="checkbox">
                 <label for="auto_suppr">
-                <input type="checkbox" id="auto_suppr">
+                <input type="checkbox" id="auto_suppr" name="activateAutoSuppr">
+
+
                 <span class="cbx">
                     <svg width="12px" height="11px" viewBox="0 0 12 11">
                     <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
@@ -25,7 +28,7 @@
             <div class="label_img_input">
                 <label class="label_field" for="conserv">Durée de conservation d'une campagne</label>
                 <div class="row_fields">
-                    <input class="input_field clock" id="conserv" name="conserv" type="number" placeholder="Durée" min="0" required>
+                    <input class="input_field clock" id="conserv" name="conserv" type="number" placeholder="Durée" min="0" value="" required>
                     <select class="combo_box">
                         <option selected value="h">h</option>
                         <option value="j">j</option>

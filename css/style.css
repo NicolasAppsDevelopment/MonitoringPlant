@@ -465,6 +465,9 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     transition: 250ms all;
     width: 40%;
 }
+.no_transition {
+    transition: none !important;
+}
 .popup.open_anim {
     visibility: inherit;
     animation: show_up 250ms forwards;

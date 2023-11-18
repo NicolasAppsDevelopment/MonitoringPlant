@@ -46,7 +46,7 @@ async function getCampagnes(filter = null) {
 
             campagnesContainer.innerHTML += `
                 <form method="post" action="/voirReleve.php" class="CM ` + state + `" id="campagne_` + campagne["idCampagne"] + `" onclick="document.getElementById('campagne_` + campagne["idCampagne"] + `').submit();">
-                    <input type="hidden" name="id" value="1">
+                    <input type="hidden" name="id" value="` + campagne["idCampagne"] + `">
                     <div class="title_detail_CM">
                         <p class="titre_CM">` + campagne["nom"] + `</p>
                         <p class="detail_CM">` + state_desc + `</p>

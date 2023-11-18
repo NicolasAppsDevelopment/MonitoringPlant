@@ -18,7 +18,7 @@ function init_db() : PDO | null
 
 define("PDO", init_db());
 
-function getCampaign(array $filter = null) : array | null
+function getListCampaign(array $filter = null) : array | null
 {
     if (!PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
@@ -160,7 +160,7 @@ function supprCampagne (int $id) : bool
 function exportCampaign(int $id,bool $capteurTemperature,bool $capteurCO2,bool $capteurO2,bool $capteurLumiere,bool $capteurHumidite,datetime $debut,datetime $fin) : array | null
 {
     if (!PDO){
-        replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
+        replyError("Impossible de récupérer la campagne", "La connexion à la base de donnée a échoué.");
         return null;
     }
 
@@ -203,4 +203,63 @@ function exportCampaign(int $id,bool $capteurTemperature,bool $capteurCO2,bool $
     }
     return null;
 }
-?>
+
+function getCampaign(int $id) : array | null {
+    if (!PDO){
+        replyError("Impossible de récupérer les mesures de la campagne", "La connexion à la base de donnée a échoué.");
+        return null;
+    }
+    try {
+        $statement = PDO->prepare("SELECT * FROM CampagneMesure where idCampagne=:id");
+        $statement->execute(
+            [
+                'id' => $id,    
+            ]
+        );
+
+        $data = $statement->fetch();
+        return array(
+            "campaignInfo" => $data,
+            "measurements" => getMeasurements($id)
+        );
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
+    }
+    return null;
+}
+
+function getMeasurements(int $id) : array | null {
+    if (!PDO){
+        replyError("Impossible de récupérer les mesures de la campagne", "La connexion à la base de donnée a échoué.");
+        return null;
+    }
+    try {
+        $statement = PDO->prepare("SELECT * FROM Mesure where idCampagne=:id ORDER BY DateHeure ASC");
+        $statement->execute(
+            [
+                'id' => $id,    
+            ]
+        );
+
+        $data = $statement->fetchAll();
+        return $data;
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
+    }
+    return null;
+}
+
+function getParametre() : array | null
+{
+    if (!PDO){
+        replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
+        return null;
+    }
+
+    $statement = PDO->prepare("select * from Parametre");
+    $statement->execute();
+
+    $testValeur=$statement->fetchAll();
+    return $testValeur;
+
+}
