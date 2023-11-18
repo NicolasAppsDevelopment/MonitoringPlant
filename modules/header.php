@@ -30,7 +30,7 @@
                                 </g>
                             </g>
                         </svg>
-                        <p class="top_nav_text">Campagnes de mesure</p>
+                        <p class="top_nav_text">Campagnes</p>
                     </div>
                 </a></li>
             <li><a href="/parametres.php">

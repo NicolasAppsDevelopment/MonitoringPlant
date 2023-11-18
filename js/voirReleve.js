@@ -18,7 +18,115 @@ async function getCampagne() {
         console.log(data);
 
         const titleCampaign = document.getElementById("titleCampaign");
+        const startDate = document.getElementById("start_date");
+        const reamingDuration = document.getElementById("reaming_duration");
+        const duration = document.getElementById("duration");
+        const interval = document.getElementById("interval");
+        const volume = document.getElementById("volume");
+
         titleCampaign.innerHTML = campaignInfo["nom"];
+        startDate.innerHTML = dateToString(new Date(campaignInfo["dateDebut"]), true, true);
+
+        let dateFin = new Date(campaignInfo["dateDebut"]);
+        dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duree"]);
+
+        reamingDuration.innerHTML = dateToReamingString(dateFin);
+        duration.innerHTML = campaignInfo["duree"] + " s";
+        interval.innerHTML = campaignInfo["intervalReleve"] + " s";
+        if (campaignInfo["volume"] != null) {
+            volume.innerHTML = campaignInfo["volume"] + " mL";
+        } else {
+            volume.innerHTML = "N/A";
+        }
+
+
+
+
+        const CO2_state = document.getElementById("state_CO2");
+        const O2_state = document.getElementById("state_O2");
+        const temp_state = document.getElementById("state_temp");
+        const hum_state = document.getElementById("state_hum");
+        const lum_state = document.getElementById("state_lum");
+        
+        switch (campaignInfo["capteurCO2"]) {
+            case 0:
+                CO2_state.classList.add("unselected");
+                break;
+            case 1:
+                CO2_state.classList.add("ok");
+                break;
+
+            case 2:
+                CO2_state.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+
+        switch (campaignInfo["capteurO2"]) {
+            case 0:
+                O2_state.classList.add("unselected");
+                break;
+            case 1:
+                O2_state.classList.add("ok");
+                break;
+
+            case 2:
+                O2_state.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+
+        switch (campaignInfo["capteurTemperature"]) {
+            case 0:
+                temp_state.classList.add("unselected");
+                break;
+            case 1:
+                temp_state.classList.add("ok");
+                break;
+
+            case 2:
+                temp_state.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+
+        switch (campaignInfo["capteurHumidite"]) {
+            case 0:
+                hum_state.classList.add("unselected");
+                break;
+            case 1:
+                hum_state.classList.add("ok");
+                break;
+
+            case 2:
+                hum_state.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+
+        switch (campaignInfo["capteurLumiere"]) {
+            case 0:
+                lum_state.classList.add("unselected");
+                break;
+            case 1:
+                lum_state.classList.add("ok");
+                break;
+
+            case 2:
+                lum_state.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
     
         const tableContent = document.getElementById("tableContent");
         tableContent.innerHTML = "";

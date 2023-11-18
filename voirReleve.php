@@ -73,7 +73,7 @@
                         </div>
                         <div class="card-body">
                             <div class="grid_section">
-                                <label class="icon-checkbox-wrapper ok status">
+                                <label id="state_CO2" class="icon-checkbox-wrapper status">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img src="./img/CO2.svg">
@@ -81,7 +81,7 @@
                                         <span class="checkbox-label">CO2</span>
                                     </span>
                                 </label>
-                                <label class="icon-checkbox-wrapper error status">
+                                <label id="state_O2" class="icon-checkbox-wrapper status">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img src="./img/O2.svg">
@@ -89,7 +89,7 @@
                                         <span class="checkbox-label">O2</span>
                                     </span>
                                 </label>
-                                <label class="icon-checkbox-wrapper unselected status">
+                                <label id="state_temp" class="icon-checkbox-wrapper status">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img src="./img/tempeture.svg">
@@ -97,7 +97,7 @@
                                         <span class="checkbox-label">Température</span>
                                     </span>
                                 </label>
-                                <label class="icon-checkbox-wrapper unselected status">
+                                <label id="state_hum" class="icon-checkbox-wrapper status">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img src="./img/humidity.svg">
@@ -105,7 +105,7 @@
                                         <span class="checkbox-label">Humidité</span>
                                     </span>
                                 </label>
-                                <label class="icon-checkbox-wrapper unselected status">
+                                <label id="state_lum" class="icon-checkbox-wrapper status">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img src="./img/luminosity.svg">
@@ -120,10 +120,28 @@
                                     <tr>
                                         <th>
                                             <img src="./img/timer.svg" alt="">
+                                            <p class="title_param">Date de démarrage : </p>
+                                        </th>
+                                        <td>
+                                            <p id="start_date"></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <img src="./img/timer.svg" alt="">
+                                            <p class="title_param">Durée restante : </p>
+                                        </th>
+                                        <td>
+                                            <p id="reaming_duration"></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <img src="./img/timer.svg" alt="">
                                             <p class="title_param">Durée : </p>
                                         </th>
                                         <td>
-                                            <p></p>
+                                            <p id="duration"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -132,7 +150,7 @@
                                             <p class="title_param">Intervalle : </p>
                                         </th>
                                         <td>
-                                            <p></p>
+                                            <p id="interval"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -141,7 +159,7 @@
                                             <p class="title_param">Volume : </p>
                                         </th>
                                         <td>
-                                            <p></p>
+                                            <p id="volume"></p>
                                         </td>
                                     </tr>
                                 </tbody>
