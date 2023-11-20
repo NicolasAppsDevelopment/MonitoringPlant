@@ -168,8 +168,6 @@ async function removeCampagne(id) {
             "id": id
         });
     }
-
-    console.log("answered");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

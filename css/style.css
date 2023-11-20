@@ -446,7 +446,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     transition: 250ms all;
     
 }
-.popup .popup-inner {
+.popup .popup-inner, .popup .msgbox-popup-inner {
     width: 50%;
     padding: 30px;
     background-color: var(--background-color);
@@ -459,12 +459,29 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     max-width: 600px;
 }
 
-.popup-inner.blur {
-    backdrop-filter: blur(15px) brightness(1.25);
-    -webkit-backdrop-filter: blur(15px) brightness(1.25);
 
-    background-color: rgba(251, 255, 253, 0.75);
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+/* slightly transparent fallback */
+.backdrop-color {
+    background-color: rgb(220, 224, 221, 0.95) !important;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2) !important;
+}
+.backdrop-blur {
+    background-color: rgb(220, 224, 221, 0.95) !important;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* if backdrop support: very transparent and blurred */
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .backdrop-blur {
+        background-color: rgba(251, 255, 253, .75) !important;
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2) !important;
+        -webkit-backdrop-filter: blur(15px) brightness(1.15);
+        backdrop-filter: blur(15px) brightness(1.15);
+    }
+}
+
+.shadow_btn {
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
 }
 
 .center {
@@ -475,7 +492,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 }
 
 /* ~~~~ ERROR POPUP ANIM ~~~~ */
-.popup .inner-error-popup {
+.popup .msgbox-popup-inner {
     transform: scale(0.95);
     transition: 250ms all;
     width: 40%;
@@ -484,10 +501,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     visibility: inherit;
     opacity: 1;
 }
-.popup.visible {
-    visibility: inherit;
-}
-.popup.displayed .inner-error-popup {
+.popup.displayed .msgbox-popup-inner {
     transform: scale(1);
 }
 .no_transition, .no_transition * {
@@ -516,7 +530,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
         opacity: 0;
     }  
 }
-.popup.open_anim .inner-error-popup, .popup.open_anim .popup-inner {
+.popup.open_anim .popup-inner, .popup.open_anim .msgbox-popup-inner {
     animation: scale_up 250ms forwards;
 }
 @keyframes scale_up {
@@ -527,7 +541,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
         transform: scale(1);
     }  
 }
-.popup.close_anim .inner-error-popup {
+.popup.close_anim .msgbox-popup-inner {
     animation: scale_down 250ms forwards;
 }
 @keyframes scale_down {
@@ -564,13 +578,13 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     transform: scale(1);
 }
 @media screen and (max-width: 1500px) {
-    .popup .inner-error-popup {
+    .popup .msgbox-popup-inner {
         width: 50%;
         max-height: 50%;
     }
 }
 @media screen and (max-width: 1000px) {
-    .popup .inner-error-popup {
+    .popup .msgbox-popup-inner {
         width: 65%;
         max-height: 65%;
     }
@@ -580,26 +594,26 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
         padding: 20px;
         width: 85%;
     }
-    .popup .inner-error-popup {
+    .popup .msgbox-popup-inner {
         width: 75%;
         max-height: 75%;
     }
 }
 @media screen and (max-width: 500px) {
-    .popup .inner-error-popup {
-        width: 85%;
+    .popup .msgbox-popup-inner {
+        width: 80%;
         max-height: 85%;
     }
 }
 @media screen and (max-height: 400px) {
-    .popup .popup-inner {
+    .popup .popup-inner, .popup .msgbox-popup-inner {
         padding: 20px;
         width: 85%;
         max-height: 85%;
     }
 }
 @media screen and (max-height: 500px) {
-    .popup .popup-inner {
+    .popup .popup-inner, .popup .msgbox-popup-inner {
         max-height: 85%;
     }
 }
