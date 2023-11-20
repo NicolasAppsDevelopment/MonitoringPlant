@@ -18,7 +18,7 @@
 
 /* THEMES */
 body.main_theme {
-    --background-color: #f7fffa;
+    --background-color: rgb(245, 255, 249);
     --menu-background-color: #f7f7f7;
     --border-menu-color: #f2f2f2;
     --unselected-font-color: #00b359;
@@ -29,7 +29,6 @@ body.main_theme {
     --input_border_color: #dbdbdb;
     --placeholder_color: #b9b9b9;
     --input_color: #f7f7f7;
-
 
     --destructive-color: #ff453a;
     --destructive-color-darker: #a8241d;
@@ -459,6 +458,22 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     overflow-y: auto;
     max-width: 600px;
 }
+
+.popup-inner.blur {
+    backdrop-filter: blur(15px) brightness(1.25);
+    -webkit-backdrop-filter: blur(15px) brightness(1.25);
+
+    background-color: rgba(251, 255, 253, 0.75);
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 /* ~~~~ ERROR POPUP ANIM ~~~~ */
 .popup .inner-error-popup {
     transform: scale(0.95);
@@ -498,7 +513,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
         opacity: 0;
     }  
 }
-.popup.open_anim .inner-error-popup {
+.popup.open_anim .inner-error-popup, .popup.open_anim .popup-inner {
     animation: scale_up 250ms forwards;
 }
 @keyframes scale_up {
@@ -1729,4 +1744,36 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     cursor: default;
     filter: grayscale(100%);
     pointer-events: none;
+}
+
+
+
+.ico_msgbox {
+    width: 72px;
+    height: 72px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.1));
+}
+.title_msgbox {
+    font-family: Inter_Bold;
+    font-weight: normal;
+    font-size: 16px;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 15px;
+}
+.msg_msgbox {
+    font-family: Inter;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 25px;
+}
+.actions_msgbox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
 }

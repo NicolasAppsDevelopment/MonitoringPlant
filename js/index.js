@@ -32,12 +32,12 @@ async function getCampagnes(filter = null) {
             switch (campagne["etat"]) {
                 case 0: // En cours
                     state = "processing";
-                    state_desc = "En cours (reste " + dateToReamingString(dateFin) + ")...";
+                    state_desc = `En cours (reste ${dateToReamingString(dateFin)})...`;
                     break;
 
                 case 1: // Terminé
                     state = "";
-                    state_desc = "Terminé le " + dateToString(dateFin) + ".";
+                    state_desc = `Terminé le ${dateToString(dateFin)}.`;
                     break;
                 
                 default:
@@ -45,14 +45,14 @@ async function getCampagnes(filter = null) {
             }
 
             campagnesContainer.innerHTML += `
-                <form method="post" action="/voirReleve.php" class="CM ` + state + `" id="campagne_` + campagne["idCampagne"] + `" onclick="document.getElementById('campagne_` + campagne["idCampagne"] + `').submit();">
-                    <input type="hidden" name="id" value="` + campagne["idCampagne"] + `">
+                <form method="post" action="/voirReleve.php" class="CM ${state}" id="campagne_${campagne["idCampagne"]}" onclick="document.getElementById('campagne_${campagne["idCampagne"]}').submit();">
+                    <input type="hidden" name="id" value="${campagne["idCampagne"]}">
                     <div class="title_detail_CM">
-                        <p class="titre_CM">` + campagne["nom"] + `</p>
-                        <p class="detail_CM">` + state_desc + `</p>
+                        <p class="titre_CM">${campagne["nom"]}</p>
+                        <p class="detail_CM">${state_desc}</p>
                     </div>
 
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(` + campagne["idCampagne"] + `);"></button>
+                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(${campagne["idCampagne"]})"></button>
                 </form>
             `;
         });
@@ -161,10 +161,15 @@ async function addCampagne() {
 
 async function removeCampagne(id) {
     event.stopPropagation();
-    document.getElementById("campagne_" + id).remove();
-    PHP_post("/PHP_API/remove_campaign.php", {
-        "id": id
-    });
+
+    if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
+        document.getElementById("campagne_" + id).remove();
+        PHP_post("/PHP_API/remove_campaign.php", {
+            "id": id
+        });
+    }
+
+    console.log("answered");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -205,3 +205,57 @@ async function getCampagne() {
 
     hideLoading();
 }
+
+async function exportCampagne() {
+    //displayLoading("Export de la campagne...");
+
+    const id = parseInt(document.getElementById("id_campagne").value);
+    const CO2_enabled = document.getElementById("CO2_checkbox").checked;
+    const O2_enabled = document.getElementById("O2_checkbox").checked;
+    const temperature_enabled = document.getElementById("temperature_checkbox").checked;
+    const luminosity_enabled = document.getElementById("luminosity_checkbox").checked;
+    const humidity_enabled = document.getElementById("humidity_checkbox").checked;
+    
+    let interval = parseInt(document.getElementById("interval").value);
+    console.log(interval);
+    const interval_unit = document.getElementById("interval_unit").value;
+    switch (interval_unit) {
+        case "min":
+            interval *= 60;
+            break;
+        case "h":
+            interval *= 3600;
+            break;
+        case "j":
+            interval *= 86400;
+            break;
+        default:
+            break;
+    }  
+
+    const date_debut = document.getElementById("datedebut").value;
+    const heure_debut = document.getElementById("heuredebut").value;
+    const debut = date_debut+" "+heure_debut;
+
+    const date_fin = document.getElementById("datefin").value;
+    const heure_fin = document.getElementById("heurefin").value;
+    const fin = date_fin+" "+heure_fin;
+
+    const data = await PHP_post("/PHP_API/export_campaign.php", {
+        "id": id,
+        "CO2_enabled": CO2_enabled,
+        "O2_enabled": O2_enabled,
+        "temperature_enabled": temperature_enabled,
+        "luminosity_enabled": luminosity_enabled,
+        "humidity_enabled": humidity_enabled,
+        "interval": interval, // s
+        "debut": debut,
+        "fin": fin,
+    });
+    console.log(data);
+    if (data != null) {
+        document.getElementById("btn_dwld").submit();
+    }
+
+    //hideLoading();
+}

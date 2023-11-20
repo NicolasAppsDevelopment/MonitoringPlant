@@ -256,10 +256,15 @@ function getParametre() : array | null
         return null;
     }
 
-    $statement = PDO->prepare("select * from Parametre");
-    $statement->execute();
+    try {
+        $statement = PDO->prepare("select * from Parametre");
+        $statement->execute();
 
-    $testValeur=$statement->fetchAll();
-    return $testValeur;
+        $data = $statement->fetch();
+        return $data;
 
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
+    }
+    return null;
 }

@@ -1,4 +1,59 @@
 let id_error = 0;
+let id_confirm = 0;
+const map1 = new Map();
+
+async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) {
+    const id = id_confirm;
+    id_confirm++;
+
+
+
+    const html_popup = `
+        <div class="popup open_anim" id="confirm_popup_container${id}">
+            <div class="popup-inner blur">
+                <div class="popup-content center">
+                    <img src="./img/warning_ico.svg" class="ico_msgbox">
+                    <p class="title_msgbox">${title}</p>
+                    <p class="msg_msgbox">${msg}</p>
+                    
+                    <div class="actions_msgbox">
+                        <button id="confirm${id}" class="rect_round_btn ${destructive ? "destructive" : "gray"}" type="button">${confirmBtnTitle}</button>
+                        <button id="cancel${id}" class="rect_round_btn gray" type="button">Annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", html_popup);
+
+
+    const promise = new Promise((resolve, reject) => {
+        document.getElementById("confirm" + id).addEventListener('click', resolve)
+        document.getElementById("cancel" + id).addEventListener('click', reject)
+    });
+
+
+    return await promise
+    .then(() => {
+        hideConfirm(id);
+        return true;
+    })
+    .catch(() => {
+        hideConfirm(id);
+        return false;
+    })
+}
+
+async function hideConfirm(id) {
+    const popup_container = document.getElementById("confirm_popup_container" + id);
+    popup_container.classList.remove("open_anim");
+    popup_container.classList.add("close_anim");
+
+    setTimeout(function() {
+        popup_container.remove();
+    }, 500);
+}
 
 async function displayError(title, msg) {
     const id = id_error;
@@ -6,7 +61,7 @@ async function displayError(title, msg) {
 
     const html_popup = `
         <div class="popup open_anim" id="error_popup_container${id}">
-            <div class="card inner-error-popup" id="error_popup${id}">
+            <div class="card inner-error-popup">
                 <div class="card-header">
                     <b class="card-title">Erreur :(</b>
                     <div class="status-actions">
@@ -61,8 +116,8 @@ async function hideLoading() {
     popup_container.removeAttribute("style");
 }
 
-const API_IP_ADDRESS = "91.160.147.139";
-const PHP_API_PORT = "35000";
+const API_IP_ADDRESS = "172.22.69.128";
+const PHP_API_PORT = "8080";
 const NODERED_API_PORT = "1880"; 
 
 async function post(url, data) {

@@ -265,7 +265,7 @@
                     <p class="label_field">Sélectionnez les capteurs à télécharger</p>
                     <div class="grid_section">
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden />
+                            <input id="CO2_checkbox" type="checkbox" class="checkbox-input" hidden />
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                     <img src="./img/CO2.svg">
@@ -274,7 +274,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden />
+                            <input id="O2_checkbox" type="checkbox" class="checkbox-input" hidden />
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                     <img src="./img/O2.svg">
@@ -283,7 +283,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden />
+                            <input id="temperature_checkbox" type="checkbox" class="checkbox-input" hidden />
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                     <img src="./img/tempeture.svg">
@@ -292,7 +292,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden />
+                            <input id="humidity_checkbox" type="checkbox" class="checkbox-input" hidden />
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                     <img src="./img/humidity.svg">
@@ -301,7 +301,7 @@
                             </span>
                         </label>
                         <label class="icon-checkbox-wrapper">
-                            <input type="checkbox" class="checkbox-input" hidden />
+                            <input id="luminosity_checkbox" type="checkbox" class="checkbox-input" hidden />
                             <span class="checkbox-tile">
                                 <span class="checkbox-icon">
                                     <img src="./img/luminosity.svg">
@@ -318,7 +318,7 @@
                         <div class="row_fields">
                             <input class="input_field timer" id="interval" name="interval" type="number"
                                 placeholder="Intervalle" min="0" required>
-                            <select class="combo_box">
+                            <select class="combo_box" id="interval_unit">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>
                                 <option value="h">h</option>
@@ -342,15 +342,15 @@
                         <label class="label_field" for="datetime">Redéfinir la durée de la campagne de mesure</label>
                         <div class="row_fields gap with_subtitle">
                             <p>De :</p>
-                            <input class="input_field calendar" id="datetime" name="date" type="date"
+                            <input class="input_field calendar" id="datedebut" name="date" type="date"
                                 placeholder="Date">
-                            <input class="input_field clock" id="datetime" name="time" type="time" placeholder="Heure">
+                            <input class="input_field clock" id="heuredebut" name="time" type="time" placeholder="Heure">
                         </div>
                         <div class="row_fields gap with_subtitle">
                             <p>À :</p>
-                            <input class="input_field calendar" id="datetime" name="date" type="date"
+                            <input class="input_field calendar" id="datefin" name="date" type="date"
                                 placeholder="Date">
-                            <input class="input_field clock" id="datetime" name="time" type="time" placeholder="Heure">
+                            <input class="input_field clock" id="heurefin" name="time" type="time" placeholder="Heure">
                         </div>
                     </div>
 
@@ -366,7 +366,7 @@
                         </label>
                     </div>
 
-                    <button class="rect_round_btn gray" type="submit">Télécharger</button>
+                    <button id="btn_dwld" class="rect_round_btn gray" type="submit" onclick="exportCampagne()">Télécharger</button>
                 </div>
             </div>
         </div>

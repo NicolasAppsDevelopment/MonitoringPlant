@@ -1,18 +1,18 @@
 async function getParametre()
 {
+    var data = await PHP_get("/PHP_API/get_parametre.php");
 
-    data = await PHP_get("/PHP_API/get_parametre.php");
-
-    if (data['IntervalSuppression']<=0){
-        document.getElementById("auto_suppr")=false;
+    if (data["active"]){
+        document.getElementById("auto_suppr").checked=true;
     }else{
-        document.getElementById("auto_suppr")=true;
-
+        document.getElementById("auto_suppr").checked=false;
     }
-    document.getElementById("conserv").setAttribute('value',data['IntervalSuppression']);
+
+    var valeur=document.getElementById("conserv");
+    valeur.setAttribute('value',data["IntervalSuppression"])
     //Modifier la table Parametre de la BD pour ajouter des valeurs pour : 
     //(heure, jour, mois)
-    //
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
