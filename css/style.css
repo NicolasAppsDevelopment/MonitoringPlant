@@ -484,6 +484,9 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     visibility: inherit;
     opacity: 1;
 }
+.popup.visible {
+    visibility: inherit;
+}
 .popup.displayed .inner-error-popup {
     transform: scale(1);
 }
