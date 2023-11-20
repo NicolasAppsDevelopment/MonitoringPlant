@@ -268,3 +268,20 @@ function getParametre() : array | null
     }
     return null;
 }
+
+function postParametre(int $IntervalSuppression, bool $actif) : array | null
+{
+    if (!PDO){
+        replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
+        return null;
+    }
+
+    try {
+        $statement = PDO->prepare("insert into Parametre value($IntervalSuppression, $actif);");
+        $statement->execute();
+
+    } catch (\Throwable $th) {
+        replyError("Impossible d'insérer les données de la campagnes", $th->getMessage());
+    }
+    return null;
+}

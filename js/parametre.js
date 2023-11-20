@@ -15,8 +15,27 @@ async function getParametre()
 
 }
 
+async function postParametre()
+{
+    var data = await PHP_post("/PHP_API/get_parametre.php");
+    if (document.getElementById("auto_suppr").checked==true){
+        $active=true;
+        $tpSupression=data["IntervalSuppression"];
+    }else{
+        $active=false;
+        $tpSupression=null;
+    }
+
+    //Modifier la table Parametre de la BD pour ajouter des valeurs pour : 
+    //(heure, jour, mois)
+
+}
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
     getParametre();
-
+    postParametre();
 
 });

@@ -9,9 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 }elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
-    if (isset($_POST["filter"]) && !empty($_POST["filter"])){
+    if (isset($_POST["active"]) && isset($_POST["IntervalSuppression"])){
         reply(array(
-            "data" => getListCampaign($_POST["filter"])
+            postParametre($_POST["IntervalSuppression"], $_POST["active"])
         ));
     }
     
