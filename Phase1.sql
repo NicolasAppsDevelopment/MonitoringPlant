@@ -2,7 +2,7 @@
 
 SET default_storage_engine= InnoDB;
 SET SQL_SAFE_UPDATES=0;
-drop table if exists Mesurements;
+drop table if exists Measurements;
 drop table if exists Logs;
 drop table if exists Campaigns;
 drop table if exists Settings;
@@ -27,9 +27,9 @@ create table Campaigns (
 );
 
 /*==============================================================*/
-/* Table : Mesurements                                          */
+/* Table : Measurements                                          */
 /*==============================================================*/
-create table Mesurements (
+create table Measurements (
    idCampaign     int,
    temperature  	float,
    CO2				float,
@@ -37,7 +37,7 @@ create table Mesurements (
    luminosity	  	float,
    humidity			float,
    date           datetime,
-   constraint FK_Mesurements_Campaigns foreign key (idCampaign)
+   constraint FK_Measurements_Campaigns foreign key (idCampaign)
    references Campaigns (idCampaign) on delete restrict on update restrict
 );
 
@@ -96,7 +96,7 @@ create procedure ajoutMesure (
    IN Humidite		float,
    IN DateHeure		datetime)
 begin
-insert into Mesurements values (idCampagne,Temperature,CO2,O2,Lumiere,Humidite,DateHeure); 
+insert into Measurements values (idCampagne,Temperature,CO2,O2,Lumiere,Humidite,DateHeure); 
 END $
 DELIMITER ;
 call ajoutMesure(1,null,62,165,14,158,now());
@@ -110,7 +110,7 @@ drop procedure if exists supprCampagne;
 delimiter $
 create procedure supprCampagne (IN id  int)
 begin
-delete from Mesurements where idCampaign=id;
+delete from Measurements where idCampaign=id;
 delete from Campaigns where idCampaign=id;
 END $
 DELIMITER ;
