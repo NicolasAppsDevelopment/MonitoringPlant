@@ -2,63 +2,63 @@
 
 SET default_storage_engine= InnoDB;
 SET SQL_SAFE_UPDATES=0;
-drop table if exists Mesure;
+drop table if exists Mesurements;
 drop table if exists Logs;
-drop table if exists CampagneMesure;
-drop table if exists Parametre;
+drop table if exists Campaigns;
+drop table if exists Settings;
 
 /*==============================================================*/
-/* Table : CampagneMesure                                       */
+/* Table : Campaigns                                            */
 /*==============================================================*/
-create table CampagneMesure(
-   idCampagne          	int not null auto_increment,
-   nom               	varchar(50),
-   DateDebut			datetime,
-   capteurTemperature  	int(1),
-   capteurCO2			int(1),
-   capteurO2			int(1),
-   capteurLumiere	  	int(1),
-   capteurHumidite		int(1),
-   intervalReleve		int,
+create table Campaigns (
+   idCampaign          	int not null auto_increment,
+   name               	varchar(50),
+   beginDate			datetime,
+   temperatureSensorState  	int(1),
+   CO2SensorState			int(1),
+   O2SensorState			int(1),
+   luminositySensorState	  	int(1),
+   humiditySensorState		int(1),
+   interval_		int,
    volume 				float,
-   duree				int,
-   etat       int,
-   primary key (idCampagne)
+   duration				int,
+   state       int,
+   primary key (idCampaign)
 );
 
 /*==============================================================*/
-/* Table : Mesure                                               */
+/* Table : Mesurements                                          */
 /*==============================================================*/
-create table Mesure(
-   idCampagne     int,
-   Temperature  	float,
+create table Mesurements (
+   idCampaign     int,
+   temperature  	float,
    CO2				float,
    O2				   float,
-   Lumiere	  		float,
-   Humidite			float,
-   DateHeure		datetime,
-   constraint FK_Mesure_CampagneMesure foreign key (idCampagne)
-   references CampagneMesure (idCampagne) on delete restrict on update restrict
+   luminosity	  	float,
+   humidity			float,
+   date           datetime,
+   constraint FK_Mesurements_Campaigns foreign key (idCampaign)
+   references Campaigns (idCampaign) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table : Parametre                                            */
+/* Table : Settings                                             */
 /*==============================================================*/
-create table Parametre(
-   IntervalSuppression  int,
-   AutoSupprEnable      boolean
+create table Settings (
+   removeInterval  int,
+   autoRemove      boolean
 );
 
 /*==============================================================*/
 /* Table : Logs                                                 */
 /*==============================================================*/
 create table Logs(
-   idCampagne       int,
-   titre            varchar(100),
+   idCampaign       int,
+   title            varchar(100),
    messsage         varchar(1000),
-   dateApparition   datetime,
-   constraint FK_Logs_CampagneMesure foreign key (idCampagne)
-   references CampagneMesure (idCampagne) on delete restrict on update restrict
+   occuredDate             datetime,
+   constraint FK_Logs_Campaigns foreign key (idCampaign)
+   references Campaigns (idCampaign) on delete restrict on update restrict
 );
 
 
@@ -75,7 +75,7 @@ create procedure ajoutCampagne (
    IN volume 				float,
    IN duree				    int)
 begin
-insert into CampagneMesure values (0,nom,now(),capteurTemperature,capteurCO2,capteurO2,capteurLumiere,capteurHumidite,intervalReleve,volume,duree,0); 
+insert into Campaigns values (0,nom,now(),capteurTemperature,capteurCO2,capteurO2,capteurLumiere,capteurHumidite,intervalReleve,volume,duree,0); 
 END $
 DELIMITER ;
 call ajoutCampagne("test1",1,0,1,0,1,100,null,5000);
@@ -96,7 +96,7 @@ create procedure ajoutMesure (
    IN Humidite		float,
    IN DateHeure		datetime)
 begin
-insert into Mesure values (idCampagne,Temperature,CO2,O2,Lumiere,Humidite,DateHeure); 
+insert into Mesurements values (idCampagne,Temperature,CO2,O2,Lumiere,Humidite,DateHeure); 
 END $
 DELIMITER ;
 call ajoutMesure(1,null,62,165,14,158,now());
@@ -110,8 +110,8 @@ drop procedure if exists supprCampagne;
 delimiter $
 create procedure supprCampagne (IN id  int)
 begin
-delete from Mesure where idCampagne=id;
-delete from CampagneMesure where idCampagne=id;
+delete from Mesurements where idCampaign=id;
+delete from Campaigns where idCampaign=id;
 END $
 DELIMITER ;
 call supprCampagne(4);
@@ -121,7 +121,7 @@ drop procedure if exists triCampagne;
 delimiter $
 create procedure triCampagne (IN d datetime)
 begin
-Select * from CampagneMesure where DateDebut>=d order by DateDebut asc; 
+Select * from Campaigns where beginDate>=d order by beginDate asc; 
 END $
 DELIMITER ;
 call triCampagne('2023-11-10 11:30:10');
@@ -131,7 +131,7 @@ drop procedure if exists rechercheCampagne;
 delimiter $
 create procedure rechercheCampagne (IN n varchar(25))
 begin
-Select * from CampagneMesure where nom like concat('%',n,'%'); 
+Select * from Campaigns where name like concat('%',n,'%'); 
 END $
 DELIMITER ;
 call rechercheCampagne('1');
