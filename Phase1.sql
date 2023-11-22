@@ -3,12 +3,12 @@
 SET default_storage_engine= InnoDB;
 SET SQL_SAFE_UPDATES=0;
 drop table if exists Mesure;
+drop table if exists Logs;
 drop table if exists CampagneMesure;
 drop table if exists Parametre;
-drop table if exists Logs;
 
 /*==============================================================*/
-/* Table : CampagneMesure                                             */
+/* Table : CampagneMesure                                       */
 /*==============================================================*/
 create table CampagneMesure(
    idCampagne          	int not null auto_increment,
@@ -27,7 +27,7 @@ create table CampagneMesure(
 );
 
 /*==============================================================*/
-/* Table : Mesure                                              */
+/* Table : Mesure                                               */
 /*==============================================================*/
 create table Mesure(
    idCampagne     int,
@@ -42,7 +42,7 @@ create table Mesure(
 );
 
 /*==============================================================*/
-/* Table : Parametre                                              */
+/* Table : Parametre                                            */
 /*==============================================================*/
 create table Parametre(
    IntervalSuppression  int,
@@ -75,7 +75,7 @@ create procedure ajoutCampagne (
    IN volume 				float,
    IN duree				    int)
 begin
-insert into CampagneMesure values (0,nom,now(),capteurTemperature,capteurCO2,capteurO2,capteurLumiere,capteurHumidite,intervalReleve,volume,duree); 
+insert into CampagneMesure values (0,nom,now(),capteurTemperature,capteurCO2,capteurO2,capteurLumiere,capteurHumidite,intervalReleve,volume,duree,0); 
 END $
 DELIMITER ;
 call ajoutCampagne("test1",1,0,1,0,1,100,null,5000);
@@ -179,4 +179,3 @@ select @requete;*/
 END $
 DELIMITER ;
 call exportCampagne(2,1,1,1,0,0,'2023-11-10 11:30:10',now()); 
-
