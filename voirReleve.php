@@ -349,7 +349,7 @@
                             mesure</label>
                         <div class="row_fields">
                             <input class="input_field timer" id="interval_choice" name="interval" type="number"
-                                placeholder="Intervalle" min="0" required>
+                                placeholder="Intervalle" min="0">
                             <select class="combo_box" id="interval_unit">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>

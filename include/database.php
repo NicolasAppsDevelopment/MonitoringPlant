@@ -231,6 +231,11 @@ function getCampaign(int $id) : array | null {
         );
 
         $data = $statement->fetch();
+
+        if ($data == false){
+            throw new Exception("Campagne introuvable.");
+        }
+
         return array(
             "campaignInfo" => $data,
             "measurements" => getMeasurements($id)

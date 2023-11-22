@@ -1797,3 +1797,13 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     gap: 10px;
     width: 100%;
 }
+
+input:invalid {
+    
+    background-color: rgb(255, 240, 240);
+    border-color: var(--destructive-color) !important;
+}
+
+input:invalid::placeholder {
+    color: var(--destructive-color-darker);
+}

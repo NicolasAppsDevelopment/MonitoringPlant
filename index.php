@@ -12,7 +12,7 @@
         <?php include "modules/header.php";?>
         <main>
             <div class="top_action_menu">
-                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="campaign_name_search_bar" onkeydown="handleKeyPressSearchBar(event)">
+                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="custom_search_bar" onchange="">
 
                 <!-- Filter popup & btn -->
                 <div class="btn_container"><label for="filter-popup" class="round_btn default filter"></label></div>
@@ -31,6 +31,7 @@
                                     <input class="input_field clock" id="campaign_time" type="time" placeholder="Heure">
                                 </div>
                             </div>
+                            
                             <div class="checkbox bottom_gap">
                                 <label for="processing">
                                     <input type="checkbox" id="processing">
@@ -153,7 +154,7 @@
                         </div>
                         
                         <div class="row_fields">
-                            <input class="input_field volume" id="volume_input" type="number" placeholder="Volume" min="0">
+                            <input class="input_field volume" id="volume_input" type="number" placeholder="Volume" min="0" step=".01">
                             <select class="combo_box" id="volume_unit_combo_box">
                                 <option selected value="mL">mL</option>
                                 <option value="cL">cL</option>

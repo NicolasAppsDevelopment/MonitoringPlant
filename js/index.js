@@ -92,64 +92,53 @@ async function getStorageCapacity() {
 async function addCampagne() {
     displayLoading("Ajout de la campagne...");
 
-    const title = document.getElementById("name_input").value;
-    const CO2_enabled = document.getElementById("CO2_checkbox").checked;
-    const O2_enabled = document.getElementById("O2_checkbox").checked;
-    const temperature_enabled = document.getElementById("temperature_checkbox").checked;
-    const luminosity_enabled = document.getElementById("luminosity_checkbox").checked;
-    const humidity_enabled = document.getElementById("humidity_checkbox").checked;
-    let duration = parseInt(document.getElementById("duration_input").value);
-    const duration_unit = document.getElementById("duration_unit_combo_box").value;
-    switch (duration_unit) {
-        case "min":
-            duration *= 60;
-            break;
-        case "h":
-            duration *= 3600;
-            break;
-        case "j":
-            duration *= 86400;
-            break;
-        default:
-            break;
-    }
+    const title = document.getElementById("name_input");
+    const CO2_enabled = document.getElementById("CO2_checkbox");
+    const O2_enabled = document.getElementById("O2_checkbox");
+    const temperature_enabled = document.getElementById("temperature_checkbox");
+    const luminosity_enabled = document.getElementById("luminosity_checkbox");
+    const humidity_enabled = document.getElementById("humidity_checkbox");
+    const duration = document.getElementById("duration_input");
+    const duration_unit = document.getElementById("duration_unit_combo_box");
+    const interval = document.getElementById("interval_input");
+    const interval_unit = document.getElementById("interval_unit_combo_box");
+    const volume = document.getElementById("volume_input");
+    const volume_unit = document.getElementById("volume_unit_combo_box");
 
-    let interval = parseInt(document.getElementById("interval_input").value);
-    const interval_unit = document.getElementById("interval_unit_combo_box").value;
-    switch (interval_unit) {
-        case "min":
-            interval *= 60;
-            break;
-        case "h":
-            interval *= 3600;
-            break;
-        case "j":
-            interval *= 86400;
-            break;
-        default:
-            break;
+    if (title.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'ajouter la campagne", "Le titre de la campagne n'a pas été renseigné. Veuillez donner un titre à la campagne puis réessayez.");
+        return;
     }
-
-    let volume = parseFloat(document.getElementById("volume_input").value);
-    const volume_unit = document.getElementById("volume_unit_combo_box").value;
-    switch (volume_unit) {
-        case "cL":
-            volume /= 100;
-            break;
-        default:
-            break;
+    if (duration.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'ajouter la campagne", "La durée de la campagne n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
+        return;
+    }
+    if (interval.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'ajouter la campagne", "L'intervalle de relevé de la campagne n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
+        return;
+    }
+    if (volume.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal positif puis réessayer.");
+        return;
     }
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {
-        "title": title,
-        "CO2_enabled": CO2_enabled,
-        "O2_enabled": O2_enabled,
-        "temperature_enabled": temperature_enabled,
-        "luminosity_enabled": luminosity_enabled,
-        "humidity_enabled": humidity_enabled,
-        "duration": duration, // s
-        "interval": interval, // s
-        "volume": volume, // cL
+        "title": title.value,
+        "CO2_enabled": CO2_enabled.checked,
+        "O2_enabled": O2_enabled.checked,
+        "temperature_enabled": temperature_enabled.checked,
+        "luminosity_enabled": luminosity_enabled.checked,
+        "humidity_enabled": humidity_enabled.checked,
+        "duration": duration.value,
+        "duration_unit": duration_unit.value,
+        "interval": interval.value,
+        "interval_unit": interval_unit.value,
+        "volume": volume.value,
+        "volume_unit": volume_unit.value
     });
 
     if (data != null) {
