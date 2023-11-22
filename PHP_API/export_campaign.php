@@ -26,22 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'exporter la campagne", "Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
     }
 
-    if (!isset($args["interval"]) || !is_int($args["interval"])){
-        replyError("Impossible d'ajouter la campagne", "L'intervalle de relevé de la campagne n'a pas été renseigné ou son format est incorrecte. Veuillez entrer un nombre entier puis réessayer.");
+    if (!is_string($args["start"])){
+        replyError("Impossible d'ajouter la campagne", "Le format de la date de début de la campagne est incorrecte. Veuillez 
+        réessayer.");
     }
 
-    if (!is_float($args["debut"]) && isset($args["debut"])){
-        replyError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal puis réessayer.");
+    if (!is_string($args["end"])){
+        replyError("Impossible d'ajouter la campagne", "Le format de la date de fin volume de la campagne est incorrecte. Veuillez réessayer.");
     }
 
-    if (!is_float($args["fin"]) && isset($args["fin"])){
-        replyError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal puis réessayer.");
-    }
+    reply(
+        exportCampaign($args["id"],$args["temperature_enabled"],$args["CO2_enabled"],$args["O2_enabled"],$args["luminosity_enabled"], $args["humidity_enabled"],$args["start"],$args["end"])
+    );
 
-    //$test=exportCampaign($args["id"],$args["temperature_enabled"],$args["CO2_enabled"],$args["O2_enabled"],$args["luminosity_enabled"], $args["humidity_enabled"],$args["debut"],$args["fin"]);
-    //var_dump($test);
-    
-    else {
-        replyError("Impossible d'exporter la campagne", "La méthode de requête est incorrecte.");
-    }
+} else {
+    replyError("Impossible d'exporter la campagne", "La méthode de requête est incorrecte.");
 }
+    
+    

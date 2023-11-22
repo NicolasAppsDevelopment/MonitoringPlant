@@ -25,28 +25,39 @@ function getListCampaign(array $filter = null) : array | null
         return null;
     }
 
-    $query = "SELECT * FROM CampagneMesure ";
+    $query = "SELECT * FROM Campaigns ";
+    $whereClauses = [];
     $params = []; 
 
+
+
     if (isset($filter) && !empty($filter)) {
-        $query .= "WHERE ";
+        if (!empty($filter["name"]) || !empty($filter["time"]) || !empty($filter["date"]) || $filter["processing"] == true) {
 
-        if (isset($filter["processing"]) && !empty($filter["processing"]) && $filter["processing"] == true) {
-            $query .= "etat = 1 ";
-        }
-    
-        if (isset($filter["date"]) && !empty($filter["date"])) {
-            $query .= "DateDebut = DATE(:varDate) ";
-            $params["varDate"] = $filter["date"];
-        }
-    
-        if (isset($filter["time"]) && !empty($filter["time"])) {
-            $query .= "DateDebut = TIME(:varTime) ";
-            $params["varDate"] = $filter["date"];
-        }
-    } 
+            $query .= "WHERE ";
 
-    $query .= "ORDER BY DateDebut DESC";
+            if (!empty($filter["name"])) {
+                array_push($whereClauses, "name LIKE :varName");
+                $params["varName"] = "%" . $filter["name"] . "%";
+            }
+    
+            if ($filter["processing"] == true) {
+                array_push($whereClauses, "state = 0");
+            }
+        
+            if (!empty($filter["date"])) {
+                array_push($whereClauses, "DATE_FORMAT(beginDate, '%Y-%m-%d') = :varDate");
+                $params["varDate"] = $filter["date"];
+            }
+        
+            if (!empty($filter["time"])) {
+                array_push($whereClauses, "DATE_FORMAT(beginDate, '%k:%i') = :varTime");
+                $params["varTime"] = $filter["time"];
+            }
+        }
+    }
+
+    $query .= join(" AND ", $whereClauses) . " ORDER BY beginDate DESC";
 
     try {
         $statement = PDO->prepare($query);
@@ -62,28 +73,28 @@ function getListCampaign(array $filter = null) : array | null
     return null;
 }
 
-function getIdCampagne(string $nom):int{
+function getIdCampagne(string $name):int{
         if (!PDO){
             throw new Exception("La connexion à la base de donnée a échoué.");
         }
         
-        $statement = PDO->prepare("SELECT idCampagne from CampagneMesure where nom=:nom ORDER BY 1 DESC");
+        $statement = PDO->prepare("SELECT idCampaign from Campaigns where name = :varName ORDER BY 1 DESC");
         $statement->execute(
             [
-                'nom' => htmlspecialchars($nom)
+                'varName' => htmlspecialchars($name)
             ]
         );
 
         $res = $statement->fetchAll();
 
         if (count($res) > 0) {
-            return $res[0]["idCampagne"];
+            return $res[0]["idCampaign"];
         } else {
             throw new Exception("Nom introuvable.");
         }
 } 
 
-function addCampaign(string $nom,bool $capteurTemperature,bool $capteurCO2,bool $capteurO2,bool $capteurLumiere,bool $capteurHumidite,int $intervalReleve, float | null $volume,int $duree) : int | null
+function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, float | null $volume, int $duration) : int | null
 {
     if (!PDO){
         replyError("Impossible d'ajouter la campagne", "La connexion à la base de donnée a échoué.");
@@ -91,23 +102,23 @@ function addCampaign(string $nom,bool $capteurTemperature,bool $capteurCO2,bool 
     }
 
     try {
-        $statement = PDO->prepare("INSERT into CampagneMesure values (null,:nom,now(),:capteurTemperature,:capteurCO2,:capteurO2,:capteurLumiere,:capteurHumidite,:intervalReleve,:volume,:duree,0)");
+        $statement = PDO->prepare("INSERT into Campaigns values (null,:varName,now(),:varTemperatureSensor,:varCO2Sensor,:varO2Sensor,:varLuminositySensor,:varHumiditySensor,:varInterval,:varVolume,:varDuration,0)");
         $statement->execute(
             [
-                'nom' => htmlspecialchars($nom),
-                'capteurTemperature' => (int)$capteurTemperature,
-                'capteurCO2' => (int)$capteurCO2,
-                'capteurO2' => (int)$capteurO2,
-                'capteurLumiere' => (int)$capteurLumiere,
-                'capteurHumidite' => (int)$capteurHumidite,
-                'intervalReleve' => $intervalReleve,
-                'volume' => $volume,
-                'duree' => $duree
+                'varName' => htmlspecialchars($name),
+                'varTemperatureSensor' => (int)$temperatureSensor,
+                'varCO2Sensor' => (int)$CO2Sensor,
+                'varO2Sensor' => (int)$O2Sensor,
+                'varLuminositySensor' => (int)$luminositySensor,
+                'varHumiditySensor' => (int)$humiditySensor,
+                'varInterval' => $interval,
+                'varVolume' => $volume,
+                'varDuration' => $duration
             ]
         );
         $statement->fetchAll();
 
-        return getIdCampagne($nom);
+        return getIdCampagne($name);
     } catch (\Throwable $th) {
         replyError("Impossible d'ajouter la campagne", $th->getMessage());
     }
@@ -115,7 +126,7 @@ function addCampaign(string $nom,bool $capteurTemperature,bool $capteurCO2,bool 
     return null;
 }
 
-function supprCampagne (int $id) : bool
+function supprCampagne(int $id) : bool
 {
     if (!PDO){
         replyError("Impossible de supprimer la campagne", "La connexion à la base de donnée a échoué.");
@@ -124,10 +135,10 @@ function supprCampagne (int $id) : bool
 
     // Suppression des mesures
     try {
-        $statement = PDO->prepare("DELETE from Mesure where idCampagne = :id");
+        $statement = PDO->prepare("DELETE from Measurements where idCampaign = :varId");
         $statement->execute(
             [
-                'id' => $id
+                'varId' => $id
             ]
         );
     } catch (\Throwable $th) {
@@ -139,10 +150,10 @@ function supprCampagne (int $id) : bool
 
     // Suppression de la campagne
     try {
-        $statement = PDO->prepare("DELETE from CampagneMesure where idCampagne=:id");
+        $statement = PDO->prepare("DELETE from Campaigns where idCampaign = :varId");
         $statement->execute(
             [
-                'id' => $id
+                'varId' => $id
             ]
         );
 
@@ -157,40 +168,42 @@ function supprCampagne (int $id) : bool
     return false;
 }
 
-function exportCampaign(int $id,bool $capteurTemperature,bool $capteurCO2,bool $capteurO2,bool $capteurLumiere,bool $capteurHumidite,datetime $debut,datetime $fin) : array | null
+function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, datetime $beginDate, datetime $endDate) : array | null
 {
     if (!PDO){
         replyError("Impossible de récupérer la campagne", "La connexion à la base de donnée a échoué.");
         return null;
     }
 
-    $query = "SELECT";
+    $query = "SELECT ";
     
-    if ($capteurTemperature){
-	    $query.="Temperature,";
+    if ($temperatureSensor){
+	    $query.="temperature,";
     }
-    if ($capteurCO2){
+    if ($CO2Sensor){
         $query.="CO2,";
     }
-    if ($capteurO2){
+    if ($O2Sensor){
         $query.="O2,";
     }
-    if ($capteurLumiere){
-        $query.="Lumiere,";
+    if ($luminositySensor){
+        $query.="luminosity,";
     }
-    if ($capteurHumidite){
-        $query.="Humidite,";
+    if ($humiditySensor){
+        $query.="humidity,";
     }
+    
+    $query.="date FROM Measurements WHERE idCampaign = :varId AND beginDate < :varEndDate AND beginDate > :varBeginDate;";
 
-    $query.="DateHeure from Mesure where idCampagne=:id and DateHeure<:fin and DateHeure>:debut;";
-
+    print($query);
+    
     try {
         $statement = PDO->prepare($query);
         $statement->execute(
             [
-                'id' => $id,
-                'fin' => $fin,
-                'debut' => $debut
+                'varId' => $id,
+                'varEndDate' => $endDate,
+                'varBeginDate' => $beginDate
                 
             ]
         );
@@ -210,10 +223,10 @@ function getCampaign(int $id) : array | null {
         return null;
     }
     try {
-        $statement = PDO->prepare("SELECT * FROM CampagneMesure where idCampagne=:id");
+        $statement = PDO->prepare("SELECT * FROM Campaigns WHERE idCampaign = :varId");
         $statement->execute(
             [
-                'id' => $id,    
+                'varId' => $id,    
             ]
         );
 
@@ -234,10 +247,10 @@ function getMeasurements(int $id) : array | null {
         return null;
     }
     try {
-        $statement = PDO->prepare("SELECT * FROM Mesure where idCampagne=:id ORDER BY DateHeure ASC");
+        $statement = PDO->prepare("SELECT * FROM Measurements where idCampaign = :varId ORDER BY date ASC");
         $statement->execute(
             [
-                'id' => $id,    
+                'varId' => $id,    
             ]
         );
 
@@ -257,7 +270,7 @@ function getParametre() : array | null
     }
 
     try {
-        $statement = PDO->prepare("select * from Parametre");
+        $statement = PDO->prepare("SELECT * FROM Settings");
         $statement->execute();
 
         $data = $statement->fetch();
@@ -269,7 +282,7 @@ function getParametre() : array | null
     return null;
 }
 
-function postParametre(int $IntervalSuppression, bool $actif) : array | null
+function postParametre(int $IntervalSuppression, bool $enlabed) : array | null
 {
     if (!PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
@@ -277,11 +290,12 @@ function postParametre(int $IntervalSuppression, bool $actif) : array | null
     }
 
     try {
-        $statement = PDO->prepare("insert into Parametre value($IntervalSuppression, $actif);");
+    
+        $statement = PDO->prepare("INSERT INTO Settings VALUE ($IntervalSuppression, $enlabed");
         $statement->execute();
 
     } catch (\Throwable $th) {
-        replyError("Impossible d'insérer les données de la campagnes", $th->getMessage());
+        replyError("Impossible de modifier les paramètres", $th->getMessage());
     }
     return null;
 }

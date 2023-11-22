@@ -24,15 +24,15 @@ async function getCampagne() {
         const interval = document.getElementById("interval");
         const volume = document.getElementById("volume");
 
-        titleCampaign.innerHTML = campaignInfo["nom"];
-        startDate.innerHTML = dateToString(new Date(campaignInfo["dateDebut"]), true, true);
+        titleCampaign.innerHTML = campaignInfo["name"];
+        startDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
 
-        let dateFin = new Date(campaignInfo["dateDebut"]);
-        dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duree"]);
+        let dateFin = new Date(campaignInfo["beginDate"]);
+        dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
 
         reamingDuration.innerHTML = dateToReamingString(dateFin);
-        duration.innerHTML = campaignInfo["duree"] + " s";
-        interval.innerHTML = campaignInfo["intervalReleve"] + " s";
+        duration.innerHTML = campaignInfo["duration"] + " s";
+        interval.innerHTML = campaignInfo["interval_"] + " s";
         if (campaignInfo["volume"] != null) {
             volume.innerHTML = campaignInfo["volume"] + " mL";
         } else {
@@ -48,7 +48,7 @@ async function getCampagne() {
         const hum_state = document.getElementById("state_hum");
         const lum_state = document.getElementById("state_lum");
         
-        switch (campaignInfo["capteurCO2"]) {
+        switch (campaignInfo["CO2SensorState"]) {
             case 0:
                 CO2_state.classList.add("unselected");
                 break;
@@ -64,7 +64,7 @@ async function getCampagne() {
                 break;
         }
 
-        switch (campaignInfo["capteurO2"]) {
+        switch (campaignInfo["O2SensorState"]) {
             case 0:
                 O2_state.classList.add("unselected");
                 break;
@@ -80,7 +80,7 @@ async function getCampagne() {
                 break;
         }
 
-        switch (campaignInfo["capteurTemperature"]) {
+        switch (campaignInfo["temperatureSensorState"]) {
             case 0:
                 temp_state.classList.add("unselected");
                 break;
@@ -96,7 +96,7 @@ async function getCampagne() {
                 break;
         }
 
-        switch (campaignInfo["capteurHumidite"]) {
+        switch (campaignInfo["humiditySensorState"]) {
             case 0:
                 hum_state.classList.add("unselected");
                 break;
@@ -112,7 +112,7 @@ async function getCampagne() {
                 break;
         }
 
-        switch (campaignInfo["capteurLumiere"]) {
+        switch (campaignInfo["luminositySensorState"]) {
             case 0:
                 lum_state.classList.add("unselected");
                 break;
@@ -139,11 +139,11 @@ async function getCampagne() {
         let co2_array = [];
 
         mesurements.forEach(mesure => {
-            let date = new Date(mesure["DateHeure"]);
+            let date = new Date(mesure["date"]);
             date = dateToString(date, false, true);
             date_array.push(date);
 
-            let lum = mesure["Luminosite"];
+            let lum = mesure["luminosity"];
             if (lum == null || lum == undefined) {
                 lum = "";
                 lum_array.push(null);
@@ -152,7 +152,7 @@ async function getCampagne() {
                 lum_array.push(parseFloat(lum));
             }
 
-            let hum = mesure["Humidite"];
+            let hum = mesure["humidity"];
             if (hum == null || hum == undefined) {
                 hum = "";
                 hum_array.push(null);
@@ -161,7 +161,7 @@ async function getCampagne() {
                 hum_array.push(parseFloat(hum));
             }
 
-            let temp = mesure["Temperature"];
+            let temp = mesure["temperature"];
             if (temp == null || temp == undefined) {
                 temp = "";
                 temp_array.push(null);
@@ -207,7 +207,7 @@ async function getCampagne() {
 }
 
 async function exportCampagne() {
-    //displayLoading("Export de la campagne...");
+    displayLoading("Export de la campagne...");
 
     const id = parseInt(document.getElementById("id_campagne").value);
     const CO2_enabled = document.getElementById("CO2_checkbox").checked;
@@ -216,8 +216,7 @@ async function exportCampagne() {
     const luminosity_enabled = document.getElementById("luminosity_checkbox").checked;
     const humidity_enabled = document.getElementById("humidity_checkbox").checked;
     
-    let interval = parseInt(document.getElementById("interval").value);
-    console.log(interval);
+    let interval = parseInt(document.getElementById("interval_choice").value);
     const interval_unit = document.getElementById("interval_unit").value;
     switch (interval_unit) {
         case "min":
@@ -233,13 +232,15 @@ async function exportCampagne() {
             break;
     }  
 
-    const date_debut = document.getElementById("datedebut").value;
-    const heure_debut = document.getElementById("heuredebut").value;
-    const debut = date_debut+" "+heure_debut;
+    const date_start = document.getElementById("datedebut_choice").value;
+    const hour_start = document.getElementById("heuredebut_choice").value;
+    const start = String(date_start+" "+hour_start);
+    let ms = Date.parse('2012-01-26T13:51:50.417-07:00');
 
-    const date_fin = document.getElementById("datefin").value;
-    const heure_fin = document.getElementById("heurefin").value;
-    const fin = date_fin+" "+heure_fin;
+
+    const date_end = document.getElementById("datefin_choice").value;
+    const hour_end = document.getElementById("heurefin_choice").value;
+    const end = String(date_end+" "+hour_end);
 
     const data = await PHP_post("/PHP_API/export_campaign.php", {
         "id": id,
@@ -248,14 +249,14 @@ async function exportCampagne() {
         "temperature_enabled": temperature_enabled,
         "luminosity_enabled": luminosity_enabled,
         "humidity_enabled": humidity_enabled,
-        "interval": interval, // s
-        "debut": debut,
-        "fin": fin,
+        "start": start,
+        "end": end,
     });
     console.log(data);
     if (data != null) {
+        //close la popup
         document.getElementById("btn_dwld").submit();
     }
 
-    //hideLoading();
+    hideLoading();
 }

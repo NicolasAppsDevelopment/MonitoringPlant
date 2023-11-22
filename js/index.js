@@ -25,11 +25,11 @@ async function getCampagnes(filter = null) {
         data["data"].forEach(campagne => {
             let state = "";
             let state_desc = "";
-            let dateFin = new Date(campagne["dateDebut"]);
-            dateFin.setSeconds(dateFin.getSeconds() + campagne["duree"]);
+            let dateFin = new Date(campagne["beginDate"]);
+            dateFin.setSeconds(dateFin.getSeconds() + campagne["duration"]);
             
 
-            switch (campagne["etat"]) {
+            switch (campagne["state"]) {
                 case 0: // En cours
                     state = "processing";
                     state_desc = `En cours (reste ${dateToReamingString(dateFin)})...`;
@@ -45,14 +45,14 @@ async function getCampagnes(filter = null) {
             }
 
             campagnesContainer.innerHTML += `
-                <form method="post" action="/voirReleve.php" class="CM ${state}" id="campagne_${campagne["idCampagne"]}" onclick="document.getElementById('campagne_${campagne["idCampagne"]}').submit();">
-                    <input type="hidden" name="id" value="${campagne["idCampagne"]}">
+                <form method="post" action="/voirReleve.php" class="CM ${state}" id="campagne_${campagne["idCampaign"]}" onclick="document.getElementById('campagne_${campagne["idCampaign"]}').submit();">
+                    <input type="hidden" name="id" value="${campagne["idCampaign"]}">
                     <div class="title_detail_CM">
-                        <p class="titre_CM">${campagne["nom"]}</p>
+                        <p class="titre_CM">${campagne["name"]}</p>
                         <p class="detail_CM">${state_desc}</p>
                     </div>
 
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(${campagne["idCampagne"]})"></button>
+                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(${campagne["idCampaign"]})"></button>
                 </form>
             `;
         });
@@ -62,13 +62,14 @@ async function getCampagnes(filter = null) {
 }
 
 async function filterCampagnes() {
+    const name = document.getElementById("campaign_name_search_bar").value;
     const date = document.getElementById("campaign_date").value;
     const time = document.getElementById("campaign_time").value;
     const processing = document.getElementById("processing").checked;
 
     document.getElementById("filter-popup").checked = false;
 
-    getCampagnes({"date": date, "time": time, "processing": processing});
+    getCampagnes({"name": name, "date": date, "time": time, "processing": processing});
 }
 
 async function getStorageCapacity() {
@@ -169,6 +170,13 @@ async function removeCampagne(id) {
         });
     }
 }
+
+function handleKeyPressSearchBar(e){
+    var key=e.keyCode || e.which;
+     if (key==13){
+        filterCampagnes();
+     }
+   }
 
 document.addEventListener("DOMContentLoaded", () => {
     getCampagnes();

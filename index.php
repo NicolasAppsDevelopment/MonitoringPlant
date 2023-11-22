@@ -12,7 +12,7 @@
         <?php include "modules/header.php";?>
         <main>
             <div class="top_action_menu">
-                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="custom_search_bar" onchange="">
+                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="campaign_name_search_bar" onkeydown="handleKeyPressSearchBar(event)">
 
                 <!-- Filter popup & btn -->
                 <div class="btn_container"><label for="filter-popup" class="round_btn default filter"></label></div>

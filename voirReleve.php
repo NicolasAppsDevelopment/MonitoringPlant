@@ -50,10 +50,42 @@
                 </div>
             </div>
             <div class="card-body">
+            <div class="status-row">
+                    <div class="status-title">
+                        <img style="width: 16px;" class="status-icon" src="./img/working_status.svg">
+                        En cours de relève...
+                    </div>
+                    <span class="status-message">
+                        Fin de la campagne de mesure dans 3 heures.
+                    </span>
+                </div>
+
                 <div class="status-row">
                     <div class="status-title">
                         <img style="width: 16px;" class="status-icon" src="./img/error_status.svg">
                         Erreur avec le capteur d'O2
+                    </div>
+                    <span class="status-message">
+                        La campagne de mesure est <span> </span>, cependant à 12:35:24 le 12/12/2022 le capteur d'O2 a rencontré une erreur irrécupérable.<br>
+                        Fin de la campagne de mesure dans 3 heures.
+                    </span>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-title">
+                        <img style="width: 16px;" class="status-icon" src="./img/warn_status.svg">
+                        Attention
+                    </div>
+                    <span class="status-message">
+                        La campagne de mesure est <span> </span>, cependant à 12:35:24 le 12/12/2022 le capteur d'O2 a rencontré une erreur irrécupérable.<br>
+                        Fin de la campagne de mesure dans 3 heures.
+                    </span>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-title">
+                        <img style="width: 16px;" class="status-icon" src="./img/success_status.svg">
+                        Terminé
                     </div>
                     <span class="status-message">
                         La campagne de mesure est <span> </span>, cependant à 12:35:24 le 12/12/2022 le capteur d'O2 a rencontré une erreur irrécupérable.<br>
@@ -316,7 +348,7 @@
                         <label class="label_field" for="interval">Redéfinir l'intervalle de la campagne de
                             mesure</label>
                         <div class="row_fields">
-                            <input class="input_field timer" id="interval" name="interval" type="number"
+                            <input class="input_field timer" id="interval_choice" name="interval" type="number"
                                 placeholder="Intervalle" min="0" required>
                             <select class="combo_box" id="interval_unit">
                                 <option selected value="s">s</option>
@@ -342,15 +374,15 @@
                         <label class="label_field" for="datetime">Redéfinir la durée de la campagne de mesure</label>
                         <div class="row_fields gap with_subtitle">
                             <p>De :</p>
-                            <input class="input_field calendar" id="datedebut" name="date" type="date"
+                            <input class="input_field calendar" id="datedebut_choice" name="date" type="date"
                                 placeholder="Date">
-                            <input class="input_field clock" id="heuredebut" name="time" type="time" placeholder="Heure">
+                            <input class="input_field clock" id="heuredebut_choice" name="time" type="time" placeholder="Heure">
                         </div>
                         <div class="row_fields gap with_subtitle">
                             <p>À :</p>
-                            <input class="input_field calendar" id="datefin" name="date" type="date"
+                            <input class="input_field calendar" id="datefin_choice" name="date" type="date"
                                 placeholder="Date">
-                            <input class="input_field clock" id="heurefin" name="time" type="time" placeholder="Heure">
+                            <input class="input_field clock" id="heurefin_choice" name="time" type="time" placeholder="Heure">
                         </div>
                     </div>
 

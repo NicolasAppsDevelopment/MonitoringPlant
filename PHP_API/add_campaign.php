@@ -10,8 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$args = json_decode($data, true);
 
-    if (!isset($args["title"]) || empty($args["title"])){
-        replyError("Impossible d'ajouter la campagne", "Le nom de votre campagne n'a pas été renseigné. Veuillez donner un nom à votre campagne puis réessayer.");
+    if (!isset($args["title"]) || !is_string($args["title"]) || empty($args["title"])){
+        replyError("Impossible d'ajouter la campagne", "Le nom de votre campagne n'a pas été renseigné ou son format est incorrecte. Veuillez donner un nom à votre campagne puis réessayer.");
     }
 
     if (!isset($args["CO2_enabled"], $args["O2_enabled"], $args["temperature_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"])){
@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'ajouter la campagne", "L'intervalle de relevé de la campagne n'a pas été renseigné ou son format est incorrecte. Veuillez entrer un nombre entier puis réessayer.");
     }
 
-    if (!is_float($args["volume"]) && isset($args["volume"])){
-        replyError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal puis réessayer.");
+    if (isset($args["volume"]) && !is_int($args["volume"]) && !is_float($args["volume"])){
+        replyError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre entier ou décimal puis réessayer.");
     }
 
     reply(array(

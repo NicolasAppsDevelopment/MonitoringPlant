@@ -11,11 +11,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     ));
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
-    if (isset($_POST["filter"]) && !empty($_POST["filter"])){
-        reply(array(
-            "data" => getListCampaign($_POST["filter"])
-        ));
+
+    $data = file_get_contents("php://input");
+	$args = json_decode($data, true);
+
+    if (!isset($args["name"]) || !is_string($args["name"])){
+        replyError("Impossible de filtrer la campagne", "Paramètre \"name\" manquant/invalide dans la requête.");
     }
+
+    if (!isset($args["time"]) || !is_string($args["time"])){
+        replyError("Impossible de filtrer la campagne", "Paramètre \"time\" manquant/invalide dans la requête.");
+    }
+
+    if (!isset($args["date"]) || !is_string($args["date"])){
+        replyError("Impossible de filtrer la campagne", "Paramètre \"date\" manquant/invalide dans la requête.");
+    }
+
+    if (!isset($args["processing"]) || !is_bool($args["processing"])){
+        replyError("Impossible de filtrer la campagne", "Paramètre \"processing\" manquant/invalide dans la requête.");
+    }
+    
+    reply(array(
+        "data" => getListCampaign(array(
+            "name"=> $args["name"], 
+            "time"=>$args["time"],
+            "date"=>$args["date"],
+            "processing"=>$args["processing"]
+        ))
+    ));
 } else {
     replyError("Impossible de récupérer les campagnes", "La méthode de requête est incorrecte.");
 }

@@ -1666,6 +1666,9 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     border-bottom: 0;
     flex: 1 1 auto;
     min-height: 1px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 @media (max-width: 925px) {
     .card .card-body.mini-padding {
