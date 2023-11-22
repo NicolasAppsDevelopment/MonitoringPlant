@@ -5,6 +5,7 @@ SET SQL_SAFE_UPDATES=0;
 drop table if exists Mesure;
 drop table if exists CampagneMesure;
 drop table if exists Parametre;
+drop table if exists Logs;
 
 /*==============================================================*/
 /* Table : CampagneMesure                                             */
@@ -13,11 +14,11 @@ create table CampagneMesure(
    idCampagne          	int not null auto_increment,
    nom               	varchar(50),
    DateDebut			datetime,
-   capteurTemperature  	boolean,
-   capteurCO2			boolean,
-   capteurO2			boolean,
-   capteurLumiere	  	boolean,
-   capteurHumidite		boolean,
+   capteurTemperature  	int(1),
+   capteurCO2			int(1),
+   capteurO2			int(1),
+   capteurLumiere	  	int(1),
+   capteurHumidite		int(1),
    intervalReleve		int,
    volume 				float,
    duree				int,
@@ -29,10 +30,10 @@ create table CampagneMesure(
 /* Table : Mesure                                              */
 /*==============================================================*/
 create table Mesure(
-   idCampagne       int,
+   idCampagne     int,
    Temperature  	float,
    CO2				float,
-   O2				float,
+   O2				   float,
    Lumiere	  		float,
    Humidite			float,
    DateHeure		datetime,
@@ -44,18 +45,19 @@ create table Mesure(
 /* Table : Parametre                                              */
 /*==============================================================*/
 create table Parametre(
-   IntervalSuppression  int
+   IntervalSuppression  int,
+   AutoSupprEnable      boolean
 );
 
 /*==============================================================*/
-/* Table : Log                                              */
+/* Table : Logs                                                 */
 /*==============================================================*/
-create table Log(
+create table Logs(
    idCampagne       int,
-   titre            varchar(50),
+   titre            varchar(100),
    messsage         varchar(1000),
    dateApparition   datetime,
-   constraint FK_Log_CampagneMesure foreign key (idCampagne)
+   constraint FK_Logs_CampagneMesure foreign key (idCampagne)
    references CampagneMesure (idCampagne) on delete restrict on update restrict
 );
 
