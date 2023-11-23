@@ -6,16 +6,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
 
     $data = file_get_contents("php://input");
-	$args = json_decode($data, true);
+    $args = json_decode($data, true);
+    var_dump($args);
 
-    if (!isset($args["removeInterval"]) || empty($args["removeInterval"])){
+    if (!isset($args["removeInterval"]) ){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression de votre campagne n'a pas été renseigné. Veuillez le renseignez.");
     }
-    if (!isset($args["autoRemove"]) || empty($args["autoRemove"])){
+    if (!isset($args["autoRemove"])){
         replyError("Impossible de sauvegarder les paramètres", "Une erreur à eu lieu lors de votre décision sur la suppression automatique des données. Veuillez réitérer votre décision.");
     }
 
-    reply(postParametre($args["removeInterval"], $args["autoRemove"]));
+    reply(postParametres($args['removeInterval'], $args['autoRemove']));
 } else {
     replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
 }

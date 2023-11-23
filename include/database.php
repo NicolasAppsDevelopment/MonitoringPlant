@@ -284,23 +284,23 @@ function getParametre() : array | null
     } catch (\Throwable $th) {
         replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
     }
-    return null;
 }
 
-function postParametre(int $IntervalSuppression, bool $enlabed) : array | null
+function postParametres(int $IntervalSuppression, bool $enlabed) : array | null
 {
     if (!PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
         return null;
     }
-
+    $succes=array("succes"=>true);
     try {
-    
-        $statement = PDO->prepare("INSERT INTO Settings VALUE ($IntervalSuppression, $enlabed");
-        $statement->execute();
-
+        $statement = PDO->prepare("INSERT INTO Settings VALUES(:varSuppr, :varEnlabed);");
+        $statement->execute(
+            ['varSuppr' => (int)$IntervalSuppression,
+            'varEnlabed' =>$enlabed]
+        );
+        return $succes;
     } catch (\Throwable $th) {
         replyError("Impossible de modifier les paramètres", $th->getMessage());
     }
-    return null;
 }

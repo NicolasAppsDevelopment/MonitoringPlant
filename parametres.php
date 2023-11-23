@@ -13,7 +13,6 @@
         <main id="main_paramètre">
             <h2>Suppression des données</h2>
             
-            <form>
                 <div class="checkbox">
                     <label for="auto_suppr">
                     <input type="checkbox" id="auto_suppr" name="activateAutoSuppr">
@@ -37,9 +36,8 @@
                     </div>
                 </div>
 
-                <button class="rect_round_btn gray" type="submit" onclick="changeParametre();">Enregistrer</button>
+                <button class="rect_round_btn gray" type="submit" onclick="postParametre();">Enregistrer</button>
 
-            </form>        
             <button class="rect_round_btn destructive" type="submit">Effacer les données</button>
 
         </main>

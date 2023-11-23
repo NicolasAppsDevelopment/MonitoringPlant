@@ -1,16 +1,15 @@
 async function getParametre()
 {
-    var data = await PHP_get("/PHP_API/get_parametre.php");
+    var data = await PHP_get("/PHP_API/get_settings.php");
     if (data != null){
-        if (isset(data["active"])&&data["active"]){
+        if (data["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
         }else{
             document.getElementById("auto_suppr").checked=false;
         }
         
         var valeur=document.getElementById("conserv");
-        valeur.setAttribute('value',data["IntervalSuppression"])
-
+        valeur.setAttribute('value',data["removeInterval"]);
     }
     
     //Modifier la table Parametre de la BD pour ajouter des valeurs pour : 
@@ -20,20 +19,25 @@ async function getParametre()
 
 async function postParametre()
 {
-    var data = await PHP_post("/PHP_API/get_parametre.php");
-    
-    if(data!=null){
 
-    }
 
     if (document.getElementById("auto_suppr").checked==true){
         $active=true;
         $tpSupression=data["removeInterval"];
     }else{
         $active=false;
-        $tpSupression=null;
+        $tpSupression=0;
     }
-    return($tpSupression, $active);
+    
+    var data = await PHP_post("/PHP_API/set_settings.php", {
+        
+        "removeInterval":$tpSupression,
+        "autoRemove":$active,
+    });
+    
+    if(data!=null){
+        return($tpSupression, $active);
+    }
 
     //Modifier la table Parametre de la BD pour ajouter des valeurs pour : 
     //(heure, jour, mois)
@@ -46,5 +50,4 @@ async function postParametre()
 document.addEventListener("DOMContentLoaded", () => {
     getParametre();
     postParametre();
-
 });
