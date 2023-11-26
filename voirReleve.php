@@ -41,10 +41,10 @@
             <div class="card-header">
                 <b class="card-title">État de la campagne</b>
                 <div class="status-actions">
-                    <div class="status-action-container restart">
+                    <div class="status-action-container restart" onclick="restartCampagne()">
                         <svg class="action-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0,0,256,256"><g transform="translate(-11.52,-11.52) scale(1.09,1.09)"><g fill="currentColor" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path transform="scale(10.66667,10.66667)" d="M9,2v7l-2.65039,-2.65039c-1.44913,1.44767 -2.34961,3.4444 -2.34961,5.65039c0,4.411 3.589,8 8,8c4.411,0 8,-3.589 8,-8c0,-4.411 -3.589,-8 -8,-8v-2c5.514,0 10,4.486 10,10c0,5.514 -4.486,10 -10,10c-5.514,0 -10,-4.486 -10,-10c0,-2.75729 1.12627,-5.25179 2.93945,-7.06055l-2.93945,-2.93945z" id="strokeMainSVG" stroke="currentColor" stroke-linejoin="round"></path><g transform="scale(10.66667,10.66667)" stroke="none" stroke-linejoin="miter"><path d="M2,2l2.93945,2.93945c-1.81318,1.80876 -2.93945,4.30325 -2.93945,7.06055c0,5.514 4.486,10 10,10c5.514,0 10,-4.486 10,-10c0,-5.514 -4.486,-10 -10,-10v2c4.411,0 8,3.589 8,8c0,4.411 -3.589,8 -8,8c-4.411,0 -8,-3.589 -8,-8c0,-2.20599 0.90048,-4.20272 2.34961,-5.65039l2.65039,2.65039v-7z"></path></g></g></g></svg>
                     </div>
-                    <div class="status-action-container stop">
+                    <div class="status-action-container stop" onclick="stopCampagne()">
                         <svg class="aciton-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0,0,256,256"><g transform="translate(-48.64,-48.64) scale(1.38,1.38)"><g fill="currentColor" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M8,8v34h34v-34z"></path></g></g></g></svg>
                     </div>
                 </div>
@@ -281,16 +281,16 @@
 
         <!-- download popup & btn -->
         <div id="boutonTelechargerCampagne">
-            <label for="filter-popup">
+            <label for="export-popup">
                 <div class="rect_round_btn gray">Télécharger la campagne</div>
             </label>
         </div>
-        <input type="checkbox" id="filter-popup" class="open_close-popup">
+        <input type="checkbox" id="export-popup" class="open_close-popup">
         <div class="popup">
             <div class="popup-inner">
                 <div class="popup-title">
                     <p>Télécharger la campagne</p>
-                    <label for="filter-popup" class="round_btn transparent small close"></label>
+                    <label for="export-popup" class="round_btn transparent small close"></label>
                 </div>
                 <div class="popup-content">
 
@@ -398,7 +398,7 @@
                         </label>
                     </div>
 
-                    <button id="btn_dwld" class="rect_round_btn gray" type="submit" onclick="exportCampagne()">Télécharger</button>
+                    <button id="btn_dwld" class="rect_round_btn gray" onclick="exportCampagne()">Télécharger</button>
                 </div>
             </div>
         </div>

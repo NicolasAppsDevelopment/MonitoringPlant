@@ -26,21 +26,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'exporter la campagne", "Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
     }
 
-    if (!is_string($args["start"])){
-        replyError("Impossible d'ajouter la campagne", "Le format de la date de début de la campagne est incorrecte. Veuillez 
-        réessayer.");
+    if (isset($args["start_date"]) && !is_string($args["start_date"])){
+        replyError("Impossible d'exporter la campagne", "Le format de la date de début de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
 
-    if (!is_string($args["end"])){
-        replyError("Impossible d'ajouter la campagne", "Le format de la date de fin volume de la campagne est incorrecte. Veuillez réessayer.");
+    if (isset($args["end_date"]) && !is_string($args["end_date"])){
+        replyError("Impossible d'exporter la campagne", "Le format de la date de fin de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
 
-    reply(
-        exportCampaign($args["id"],$args["temperature_enabled"],$args["CO2_enabled"],$args["O2_enabled"],$args["luminosity_enabled"], $args["humidity_enabled"],$args["start"],$args["end"])
-    );
+    if (isset($args["start_time"]) && !is_string($args["start_time"])){
+        replyError("Impossible d'exporter la campagne", "Le format de l'heure de début de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
+    }
 
+    if (isset($args["end_time"]) && !is_string($args["end_time"])){
+        replyError("Impossible d'exporter la campagne", "Le format de l'heure de fin de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
+    }
+
+    if ((isset($args["start_time"]) && $args["end_date"] != "") && (!isset($args["start_date"]) || $args["start_date"] == "")){
+        replyError("Impossible d'exporter la campagne", "Si vous spécifiez l'heure de début de récupération des mesures de la campagne vous devez aussi renseigner sa date. Veuillez réessayer.");
+    }
+
+    if ((isset($args["end_time"]) && $args["end_date"] != "") && (!isset($args["end_date"]) || $args["end_date"] == "")){
+        replyError("Impossible d'exporter la campagne", "Si vous spécifiez la date de début de récupération des mesures de la campagne vous devez aussi renseigner sa date. Veuillez réessayer.");
+    }
+
+    if ((!isset($args["start_time"]) || $args["start_time"] == "") && isset($args["start_date"])){
+        $args["start_time"] = "00:00:00";
+    }
+
+    if ((!isset($args["end_time"]) || $args["end_time"] == "") && isset($args["end_date"])){
+        $args["end_time"] = "23:59:59";
+    }
+
+    $start = "";
+    if (isset($args["start_time"]) && isset($args["start_date"]) && $args["start_date"] != "" && $args["start_time"] != ""){
+        $start = $args["start_date"] . " " . $args["start_time"];
+    }
+
+    $end = "";
+    if (isset($args["end_time"]) && isset($args["end_date"]) && $args["end_date"] != "" && $args["end_time"] != ""){
+        $end = $args["end_date"] . " " . $args["end_time"];
+    }
+
+    $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+
+    header('Content-Type: application/csv');
+    header('Content-Disposition: attachment; filename="mesures_' . $args["id"] . '.csv"');
+
+    // open the "output" stream
+    $f = fopen('php://output', 'w');
+
+    // send the column headers
+    $headers = [];
+    foreach ($measurements[0] as $key => $value) {
+        if (is_string($key)) {
+            array_push($headers, $key);
+        }
+    }
+    fputcsv($f, $headers, ";");
+
+    // output each row of the data
+    foreach ($measurements as $line) {
+        // remove the duplicate keys
+        foreach ($line as $key => $value) {
+            if (is_int($key)) {
+                unset($line[$key]);
+            }
+        }
+
+        fputcsv($f, $line, ";");
+    }
+
+    fclose($f);
 } else {
     replyError("Impossible d'exporter la campagne", "La méthode de requête est incorrecte.");
 }
-    
+
+?>
     

@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $data = file_get_contents("php://input");
     $args = json_decode($data, true);
-    var_dump($args);
+
 
     if (!isset($args["removeInterval"]) ){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression de votre campagne n'a pas été renseigné. Veuillez le renseignez.");

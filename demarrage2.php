@@ -4,7 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
-        <script src="./js/function.js"></script>
+        <script src="./js/functions.js"></script>
+        <script src="./js/demarrage2.js"></script>
         <title>Accueil</title>
     </head>
     <body class="bg_animated main_theme">
@@ -18,12 +19,12 @@
                     <p>
                         À present, nous avons besoins de savoir la date et l’heure qu’il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été feur démarré.
                     </p>
-                    <form action="index.php" enctype="multipart/form-data" method="post">
+                    <form>
                         <div class="label_img_input">
                             <label class="label_field" for="interval">Date & heure actuelle</label>
                             <div class="row_fields gap">
-                                <input class="input_field calendar" id="date" name="date" type="date" placeholder="Intervalle" required>
-                                <input class="input_field clock" id="heure" name="heure" type="time" placeholder="Intervalle" required>
+                                <input class="input_field calendar" id="date" name="date" type="date" placeholder="Date" required>
+                                <input class="input_field clock" id="heure" name="heure" type="time" placeholder="Heure" required>
                             </div>
                         </div>
                         <div class="two_buttons">
@@ -32,13 +33,14 @@
                                     <p>Retour</p>
                                 </div>
                             </a>
-
-
-                            <button class="rect_round_btn" type="submit">Continuer</button>
+                            <button class="rect_round_btn" type="button" onclick="setTime()">Continuer</button>
                         </div> 
                     </form>
                 </div>
             </div>
         </main>
+
+        <!-- loading popup -->
+        <?php include "modules/loading_popup.php";?>
     </body>
 </html>

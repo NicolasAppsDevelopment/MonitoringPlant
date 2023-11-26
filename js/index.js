@@ -25,6 +25,7 @@ async function getCampagnes(filter = null) {
         data["data"].forEach(campagne => {
             let state = "";
             let state_desc = "";
+            let state_ico = "";
             let dateFin = new Date(campagne["beginDate"]);
             dateFin.setSeconds(dateFin.getSeconds() + campagne["duration"]);
             
@@ -33,11 +34,13 @@ async function getCampagnes(filter = null) {
                 case 0: // En cours
                     state = "processing";
                     state_desc = `En cours (reste ${dateToReamingString(dateFin)})...`;
+                    state_ico = "working_status";
                     break;
 
                 case 1: // Terminé
                     state = "";
                     state_desc = `Terminé le ${dateToString(dateFin)}.`;
+                    state_ico = "success_status";
                     break;
                 
                 default:
@@ -49,7 +52,10 @@ async function getCampagnes(filter = null) {
                     <input type="hidden" name="id" value="${campagne["idCampaign"]}">
                     <div class="title_detail_CM">
                         <p class="titre_CM">${campagne["name"]}</p>
-                        <p class="detail_CM">${state_desc}</p>
+                        <p class="detail_CM">
+                            <img class="etat_CM" src="./img/${state_ico}.svg">
+                            ${state_desc}
+                        </p>
                     </div>
 
                     <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(${campagne["idCampaign"]})"></button>
@@ -58,7 +64,10 @@ async function getCampagnes(filter = null) {
         });
     }
 
-    document.getElementById("loading_div").remove();
+    const loading = document.getElementById("loading_div");
+    if (loading != null) {
+        loading.remove();
+    }
 }
 
 async function filterCampagnes() {
@@ -67,9 +76,9 @@ async function filterCampagnes() {
     const time = document.getElementById("campaign_time").value;
     const processing = document.getElementById("processing").checked;
 
-    document.getElementById("filter-popup").checked = false;
+    closePopup("filter-popup");
 
-    getCampagnes({"name": name, "date": date, "time": time, "processing": processing});
+    getCampagnes({"name": name.toLowerCase(), "date": date, "time": time, "processing": processing});
 }
 
 async function getStorageCapacity() {
@@ -125,6 +134,19 @@ async function addCampagne() {
         displayError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal positif puis réessayer.");
         return;
     }
+
+    /*const data_ = await NODERED_post_post("/add_campaign", {
+        "CO2_enabled": CO2_enabled.checked,
+        "O2_enabled": O2_enabled.checked,
+        "temperature_enabled": temperature_enabled.checked,
+        "luminosity_enabled": luminosity_enabled.checked,
+        "humidity_enabled": humidity_enabled.checked,
+        "duration": duration.value,
+        "interval": interval.value,
+    });
+    if (data_ != null) {
+        return;
+    }*/
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,

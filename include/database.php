@@ -37,7 +37,7 @@ function getListCampaign(array $filter = null) : array | null
             $query .= "WHERE ";
 
             if (!empty($filter["name"])) {
-                array_push($whereClauses, "name LIKE :varName");
+                array_push($whereClauses, "LOWER(name) LIKE :varName");
                 $params["varName"] = "%" . $filter["name"] . "%";
             }
     
@@ -168,13 +168,14 @@ function supprCampagne(int $id) : bool
     return false;
 }
 
-function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, datetime $beginDate, datetime $endDate) : array | null
+function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array | null
 {
     if (!PDO){
         replyError("Impossible de récupérer la campagne", "La connexion à la base de donnée a échoué.");
         return null;
     }
 
+    $params = [];
     $query = "SELECT ";
     
     if ($temperatureSensor){
@@ -193,21 +194,21 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
         $query.="humidity,";
     }
     
-    $query.="date FROM Measurements WHERE idCampaign = :varId AND beginDate < :varEndDate AND beginDate > :varBeginDate;";
-
-    print($query);
+    $query.="date FROM Measurements WHERE idCampaign = :varId";
+    $params["varId"] = $id;
     
+    if ($beginDate != "") {
+        $query.= " AND date >= :varBeginDate";
+        $params["varBeginDate"] = $beginDate;
+    }
+    if ($endDate != "") {
+        $query.= " AND date <= :varEndDate";
+        $params["varEndDate"] = $endDate;
+    }
+
     try {
         $statement = PDO->prepare($query);
-        $statement->execute(
-            [
-                'varId' => $id,
-                'varEndDate' => $endDate,
-                'varBeginDate' => $beginDate
-                
-            ]
-        );
-
+        $statement->execute($params);
 
         $data = $statement->fetchAll();
         return $data;
@@ -275,7 +276,7 @@ function getParametre() : array | null
     }
 
     try {
-        $statement = PDO->prepare("SELECT * FROM Settings");
+        $statement = PDO->prepare("SELECT * , NOW() as 'date' FROM Settings");
         $statement->execute();
 
         $data = $statement->fetch();
@@ -286,7 +287,7 @@ function getParametre() : array | null
     }
 }
 
-function postParametres(int $IntervalSuppression, bool $enlabed) : array | null
+function postParametres(int $IntervalSuppression, int $enlabed) : array | null
 {
     if (!PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
@@ -294,10 +295,13 @@ function postParametres(int $IntervalSuppression, bool $enlabed) : array | null
     }
     $succes=array("succes"=>true);
     try {
+        $statement = PDO->prepare("DELETE FROM Settings;");
+        $statement->execute();
+
         $statement = PDO->prepare("INSERT INTO Settings VALUES(:varSuppr, :varEnlabed);");
         $statement->execute(
             ['varSuppr' => (int)$IntervalSuppression,
-            'varEnlabed' =>$enlabed]
+            'varEnlabed' =>(int)$enlabed]
         );
         return $succes;
     } catch (\Throwable $th) {

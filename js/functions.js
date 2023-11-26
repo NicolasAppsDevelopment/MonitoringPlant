@@ -1,5 +1,5 @@
-const API_IP_ADDRESS = "172.22.69.128";
-const PHP_API_PORT = "8080";
+const API_IP_ADDRESS = "91.160.147.139";
+const PHP_API_PORT = "35000";
 const NODERED_API_PORT = "1880"; 
 
 let blurCompatibility = true;
@@ -8,12 +8,11 @@ if (navigator.appVersion.indexOf("Chrome/") != -1) {
     blurCompatibility = false;
 }
 
-let id_error = 0;
-let id_confirm = 0;
+let id_msg = 0;
 
 async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) {
-    const id = id_confirm;
-    id_confirm++;
+    const id = id_msg;
+    id_msg++;
 
     const html_popup = `
         <div class="popup open_anim" id="confirm_popup_container${id}">
@@ -62,8 +61,8 @@ async function hideConfirm(id) {
 }
 
 async function displayError(title, msg) {
-    const id = id_error;
-    id_error++;
+    const id = id_msg;
+    id_msg++;
 
     const html_popup = `
         <div class="popup open_anim" id="error_popup_container${id}">
@@ -105,6 +104,50 @@ async function hideError(id) {
     }, 300);
 }
 
+async function displaySuccess(title, msg) {
+    const id = id_msg;
+    id_msg++;
+
+    const html_popup = `
+        <div class="popup open_anim" id="success_popup_container${id}">
+            <div id="success_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">    
+                <div class="popup-content center">
+                    <img src="./img/success_ico.svg" class="ico_msgbox">
+                    <p class="title_msgbox">${title}</p>
+                    <p class="msg_msgbox">${msg}</p>
+                    
+                    <div class="actions_msgbox">
+                        <button id="close${id}" class="rect_round_btn gray shadow_btn" type="button">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", html_popup);
+
+    const promise = new Promise((resolve) => {
+        document.getElementById("close" + id).addEventListener('click', resolve)
+    });
+
+
+    return await promise
+    .then(() => {
+        hideSuccess(id);
+        return;
+    })
+}
+
+async function hideSuccess(id) {
+    const popup_container = document.getElementById("success_popup_container" + id);
+    popup_container.classList.remove("open_anim");
+    popup_container.classList.add("close_anim");
+
+    setTimeout(function() {
+        popup_container.remove();
+    }, 300);
+}
+
 async function displayLoading(msg = "Chargement...") {
     const popup_container = document.getElementById("loading_popup_container");
     const popup = document.getElementById("loading_popup");
@@ -123,6 +166,10 @@ async function hideLoading() {
     popup_container.removeAttribute("style");
 }
 
+async function closePopup(id) {
+    document.getElementById(id).checked = false;
+}
+
 async function post(url, data) {
     try {
         const response = await fetch(url, {
@@ -133,14 +180,37 @@ async function post(url, data) {
                 'Content-Type': 'application/json'
             }
         });
-        var res = await response.json();
+        let res = await response.json();
         if (response.status === 200) {
             return res;
         } else {
             displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
         }
     } catch (e) {
-        displayError("Erreur d'émission de la requête", "La requête à vers l'adresse \"" + url + "\" n'a pas pu être émise correctement... " + e.toString());
+        displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
+    }
+
+    return null;
+}
+async function postGetFile(url, data) {
+    try {
+        const response = await fetch(url, {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.status !== 200) {
+            let res = await response.json();
+            displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
+        } else {
+            let data = await response.blob();
+            return data;
+        }
+    } catch (e) {
+        displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
     }
 
     return null;
@@ -154,14 +224,14 @@ async function get(url) {
                 'Content-Type': 'application/json'
             }
         });
-        var res = await response.json();
+        let res = await response.json();
         if (response.status === 200) {
             return res;
         } else {
             displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
         }
     } catch (e) {
-        displayError("Erreur d'émission de la requête", "La requête à vers l'adresse \"" + url + "\" n'a pas pu être émise correctement... " + e.toString());
+        displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
     }
 
     return null;
@@ -169,6 +239,10 @@ async function get(url) {
 
 async function PHP_post(url, data) {
     return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, data);
+}
+
+async function PHP_postGetFile(url, data) {
+    return await postGetFile("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, data);
 } 
 
 async function PHP_get(url) { 
@@ -213,4 +287,59 @@ function dateToReamingString(date) {
     } else {
         return "" + Math.floor(minutes / (60 * 24)) + " jours";
     }
+}
+
+function getReadableTime(seconds) {
+    const SECONDS_PER_MINUTE = 60;
+    const SECONDS_PER_HOUR = 3600;
+    const SECONDS_PER_DAY = 86400;
+    const SECONDS_PER_MONTH = 2592000;
+
+    let months = Math.floor(seconds / SECONDS_PER_MONTH);
+    seconds %= SECONDS_PER_MONTH;
+
+    let days = Math.floor(seconds / SECONDS_PER_DAY);
+    seconds %= SECONDS_PER_DAY;
+
+    let hours = Math.floor(seconds / SECONDS_PER_HOUR);
+    seconds %= SECONDS_PER_HOUR;
+
+    let minutes = Math.floor(seconds / SECONDS_PER_MINUTE);
+    seconds %= SECONDS_PER_MINUTE;
+
+    let result = "";
+
+    if (months > 0) {
+        result += months + "mois ";
+    }
+    if (days > 0) {
+        result += days + (days === 1 ? " jour" : " jours") + " ";
+    }
+    if (hours > 0) {
+        result += hours + (hours === 1 ? " heure" : " heures") + " ";
+    }
+    if (minutes > 0) {
+        result += minutes + (minutes === 1 ? " minute" : " minutes") + " ";
+    }
+    if (seconds > 0) {
+        result += seconds + (seconds === 1 ? " seconde" : " secondes") + " ";
+    }
+
+    return result.trim();
+}
+
+function getReadableTimeAndUnit(seconds) {
+    console.log(seconds);
+    let hours = seconds / 3600;
+    
+    let unit = "h";
+    if (hours % 24 === 0) {
+        hours /= 24;
+        unit = "j";
+        if (hours % 30 === 0) {
+            hours /= 30;
+            unit = "mois";
+        }
+    }
+    return { "value": hours, "unit": unit };
 }

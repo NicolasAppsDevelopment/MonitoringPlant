@@ -31,16 +31,13 @@ async function getCampagne() {
         dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
 
         reamingDuration.innerHTML = dateToReamingString(dateFin);
-        duration.innerHTML = campaignInfo["duration"] + " s";
-        interval.innerHTML = campaignInfo["interval_"] + " s";
+        duration.innerHTML = getReadableTime(campaignInfo["duration"]);
+        interval.innerHTML = getReadableTime(campaignInfo["interval_"]);
         if (campaignInfo["volume"] != null) {
             volume.innerHTML = campaignInfo["volume"] + " mL";
         } else {
             volume.innerHTML = "N/A";
         }
-
-
-
 
         const CO2_state = document.getElementById("state_CO2");
         const O2_state = document.getElementById("state_O2");
@@ -233,30 +230,67 @@ async function exportCampagne() {
     }  
 
     const date_start = document.getElementById("datedebut_choice").value;
-    const hour_start = document.getElementById("heuredebut_choice").value;
-    const start = String(date_start+" "+hour_start);
-    let ms = Date.parse('2012-01-26T13:51:50.417-07:00');
-
-
+    const time_start = document.getElementById("heuredebut_choice").value;
     const date_end = document.getElementById("datefin_choice").value;
-    const hour_end = document.getElementById("heurefin_choice").value;
-    const end = String(date_end+" "+hour_end);
+    const time_end = document.getElementById("heurefin_choice").value;
 
-    const data = await PHP_post("/PHP_API/export_campaign.php", {
+    const data = await PHP_postGetFile("/PHP_API/export_campaign.php", {
         "id": id,
         "CO2_enabled": CO2_enabled,
         "O2_enabled": O2_enabled,
         "temperature_enabled": temperature_enabled,
         "luminosity_enabled": luminosity_enabled,
         "humidity_enabled": humidity_enabled,
-        "start": start,
-        "end": end,
+        "interval": interval,
+        "start_date": date_start,
+        "start_time": time_start,
+        "end_date": date_end,
+        "end_time": time_end
     });
+
     console.log(data);
+    
     if (data != null) {
-        //close la popup
-        document.getElementById("btn_dwld").submit();
+        let file = window.URL.createObjectURL(data);
+        window.location.assign(file);
+
+        closePopup("export-popup");
+        displaySuccess("Données de mesure exportées !", "Les données de mesure ont été exportées avec succès. Vous pouvez les retrouver dans le dossier \"Téléchargement\" de votre appareil.");
     }
 
     hideLoading();
+}
+
+async function stopCampagne() {
+    if (await displayConfirm('Voulez-vous vraiment arrêter cette campagne de mesure ?', 'La relève des données sera interrompu définitivement. Cette action est irréversible.', 'Arrêter', true) == true) {
+        displayLoading("Arrêt de la campagne...");
+
+        const id = parseInt(document.getElementById("id_campagne").value);
+        const data = await NODERED_post("/stop_campaign", {
+            "id": id
+        });
+
+        if (data != null) {
+            // TODO
+        }
+
+        hideLoading();
+    }
+}
+
+async function restartCampagne() {
+    if (await displayConfirm('Voulez-vous vraiment redémarrer cette campagne de mesure ?', 'La relève des données sera interrompu et le données déjà enregistrées de cette campagne seront supprimées définitivement. Cette action est irréversible.', 'Redémarrer', true) == true) {
+        displayLoading("Redémarrage de la campagne...");
+
+        const id = parseInt(document.getElementById("id_campagne").value);
+        const data = await NODERED_post("/stop_campaign", {
+            "id": id
+        });
+
+        if (data != null) {
+            // TODO
+        }
+
+        hideLoading();
+    }
 }
