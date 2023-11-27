@@ -248,11 +248,14 @@ async function exportCampagne() {
         "end_time": time_end
     });
 
-    console.log(data);
-    
     if (data != null) {
-        let file = window.URL.createObjectURL(data);
-        window.location.assign(file);
+        const blob = new Blob([data]);
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "mesures" + id + ".csv"; // Provide a default filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
         closePopup("export-popup");
         displaySuccess("Données de mesure exportées !", "Les données de mesure ont été exportées avec succès. Vous pouvez les retrouver dans le dossier \"Téléchargement\" de votre appareil.");
