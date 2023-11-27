@@ -22,7 +22,8 @@ create table Campaigns (
    interval_		int,
    volume 				float,
    duration				int,
-   state       int,
+   finished       boolean,
+   alertLevel     int(1),
    primary key (idCampaign)
 );
 
