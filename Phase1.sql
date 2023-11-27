@@ -54,6 +54,7 @@ create table Settings (
 /*==============================================================*/
 create table Logs(
    idCampaign       int,
+   state			int(1),
    title            varchar(100),
    messsage         varchar(1000),
    occuredDate             datetime,
