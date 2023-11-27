@@ -810,6 +810,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     position: relative;
 }
 
+.liste_CM > .CM.error {
+    border: solid 2px var(--destructive-color);
+	background-color: rgb(255, 240, 240);
+}
 .liste_CM > .CM.processing {
     border: solid 2px var(--default-color);
 	background: linear-gradient(-45deg, rgba(0, 225, 255, 0.25),rgba(0, 255, 94, 0.25), rgba(0, 225, 255, 0.25));
@@ -858,6 +862,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     margin: 0;
     color: #707070;
     font-size: 14px;
+    display: flex;
 }
 
 .IconAccederCM {
@@ -1724,6 +1729,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     font-size: 14px;
     color: #424761;
     font-family: Inter_Medium;
+    font-weight: normal;
+}
+.status-message strong {
+    font-family: Inter_SemiBold;
     font-weight: normal;
 }
 .status-icon {

@@ -29,18 +29,33 @@ async function getCampagnes(filter = null) {
             let dateFin = new Date(campagne["beginDate"]);
             dateFin.setSeconds(dateFin.getSeconds() + campagne["duration"]);
             
+            if (campagne["finished"] == 0) {
+                // la campagne n'est pas fini
+                state = "processing";
+                state_desc = `En cours (reste ${dateToReamingString(dateFin)})...`;
+                state_ico = "working_status";
+            } else {
+                // la campagne est fini
+                state_desc = `Terminé le ${dateToString(dateFin)}.`;
+            }
 
-            switch (campagne["state"]) {
-                case 0: // En cours
-                    state = "processing";
-                    state_desc = `En cours (reste ${dateToReamingString(dateFin)})...`;
-                    state_ico = "working_status";
+            switch (campagne["alertLevel"]) {
+
+                case 0: // Succès
+                    if (campagne["finished"] == 1) {
+                        state_ico = "success_status";
+                    }
                     break;
 
-                case 1: // Terminé
-                    state = "";
-                    state_desc = `Terminé le ${dateToString(dateFin)}.`;
-                    state_ico = "success_status";
+                case 1: // Danger
+                    state_desc += ` Contient un avertissement.`;
+                    state_ico = "warn_status";
+                    break;
+
+                case 2: // Erreur critique
+                    state = "error";
+                    state_desc = `La campagne de mesure à rencontrer une erreur irrécupérable.`;
+                    state_ico = "error_status";
                     break;
                 
                 default:
@@ -144,8 +159,8 @@ async function addCampagne() {
         "duration": duration.value,
         "interval": interval.value,
     });
-    if (data_ != null) {
-        return;
+    if (data_ == null) {
+        console.warn("ATTENTION : NodeRed n'a rien retourné");
     }*/
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {

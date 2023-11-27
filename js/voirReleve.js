@@ -14,9 +14,14 @@ async function getCampagne() {
     if (data != null){
         let campaignInfo = data["campaignInfo"];
         let mesurements = data["measurements"];
+        let logs = data["logs"];
+
+        if (campaignInfo["finished"] == 1) {
+            document.getElementById("stop_btn").remove();
+        }
 
         const titleCampaign = document.getElementById("titleCampaign");
-        const statusRow = document.getElementById("status-row");
+        const logsContainer = document.getElementById("logs_container");
         
         const startDate = document.getElementById("start_date");
         const reamingDuration = document.getElementById("reaming_duration");
@@ -27,63 +32,42 @@ async function getCampagne() {
         titleCampaign.innerHTML = campaignInfo["name"];
         startDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
 
-        let logs = await PHP_post("/PHP_API/get_logs.php", {
-            "id": parseInt(id)
-        });
-    
         if (logs != null){
+            logs.forEach(log => {
+                let icon_name = "";
+                switch (log["state"]) {
+                    case 0: // En cours
+                        icon_name = "working_status";
+                        break;
+                        
+                    case 1: // Terminé
+                        icon_name = "success_status";
+                        break;
 
-            switch(campaignInfo["state"]){
-                case 0: // En cours
-                    statusRow.innerHTML=`
-                        <div class="status-title">
-                            <img style="width: 16px;" class="status-icon" src="./img/working_status.svg">
-                            En cours de relève
-                        </div>
-                        <span class="status-message">
-                            Fin de la campagne de mesure dans ${campaignInfo["beginDate"]+campaignInfo["duration"]}
-                            </br>
-                        </span>`
-                    break;
-                case 1:// Terminé
-                    statusRow.innerHTML=`
-                        <div class="status-title">
-                            <img style="width: 16px;" class="status-icon" src="./img/success_status.svg">
-                            Terminé
-                        </div>
-                        <span class="status-message">
-                            La campagne de mesure est c'est fini le ${logs[logs.lenght]["occuredDate"]}
-                            </br>
-                        </span>`
-                    break;
+                    case 2: // Erreur
+                        icon_name = "error_status";
+                        break;
 
-                case 2:// Arreter
-                    statusRow.innerHTML=`
-                        <div class="status-title">
-                            <img style="width: 16px;" class="status-icon" src="./img/error_status.svg">
-                            Erreur
-                        </div>
-                        <span class="status-message">
-                            La campagne de mesure a été arrêtée suite à une erreur critique
-                            </br>
-                        </span>`
-                    break;
+                    case 3: // Danger
+                        icon_name = "warn_status";
+                        break;
 
-                case 3:// Danger
-                    statusRow.innerHTML=`
-                        <div class="status-title">
-                            <img style="width: 16px;" class="status-icon" src="./img/warn_status.svg">
-                            Attention
-                        </div>
-                        <span class="status-message">
-                            Fin de la campagne de mesure dans ${campaignInfo["beginDate"]+campaignInfo["duration"]}
-                            </br>
-                        </span>`
-                    break;
+                    default:
+                        break;
+                }
 
-                default:
-                    break;
-            }
+                logsContainer.innerHTML += `
+                <div class="status-row">
+                    <div class="status-title">
+                        <img style="width: 16px;" class="status-icon" src="./img/${icon_name}.svg">
+                        ${log["title"]}
+                    </div>
+                    <span class="status-message">
+                        <strong>${log["occuredDate"]}</strong> : ${log["message"]}
+                    </span>
+                </div>
+                `;
+            });
         }
 
         let dateFin = new Date(campaignInfo["beginDate"]);
@@ -287,6 +271,7 @@ async function exportCampagne() {
         default:
             break;
     }  
+    const averaging = document.getElementById("moyennage").checked;
 
     const date_start = document.getElementById("datedebut_choice").value;
     const time_start = document.getElementById("heuredebut_choice").value;
@@ -301,6 +286,7 @@ async function exportCampagne() {
         "luminosity_enabled": luminosity_enabled,
         "humidity_enabled": humidity_enabled,
         "interval": interval,
+        "averaging":averaging,
         "start_date": date_start,
         "start_time": time_start,
         "end_date": date_end,
@@ -331,8 +317,8 @@ async function stopCampagne() {
             "id": id
         });
 
-        if (data != null) {
-            // TODO
+        if (data == null) {
+            console.warn("ATTENTION : NodeRed n'a rien retourné");
         }
 
         hideLoading();
@@ -348,8 +334,8 @@ async function restartCampagne() {
             "id": id
         });
 
-        if (data != null) {
-            // TODO
+        if (data == null) {
+            console.warn("ATTENTION : NodeRed n'a rien retourné");
         }
 
         hideLoading();

@@ -1,5 +1,5 @@
 <?php 
-header("Content-Type: application/json; charset=utf-8");
+/*header("Content-Type: application/json; charset=utf-8");
 
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
@@ -17,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible de récupérer le dernier log", "Le format de l'identifiant de la campagne est incorrect.");
     }
 
-    reply(
-        getLog($args["id"])
-    );
+    reply(array(
+        "data" => getLog($args["id"])
+    ));
 } else {
     replyError("Impossible d'ajouter la campagne", "La méthode de requête est incorrecte.");
-}
+}*/

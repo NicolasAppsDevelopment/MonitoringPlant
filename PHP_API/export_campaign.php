@@ -26,6 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'exporter la campagne", "Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
     }
 
+    if (isset($args["interval"]) && !is_int($args["interval"])){
+        replyError("Impossible d'exporter la campagne", "Le format de l'interval récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
+    }
+
+    if (isset($args["averaging"]) && !is_bool($args["averaging"])){
+        replyError("Impossible d'exporter la campagne", "Le format du bouton 'moyennage' est incorrecte.");
+    }
+
     if (isset($args["start_date"]) && !is_string($args["start_date"])){
         replyError("Impossible d'exporter la campagne", "Le format de la date de début de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
@@ -68,8 +76,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $end = $args["end_date"] . " " . $args["end_time"];
     }
 
-    $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
 
+    $f=0;
+    if (isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==false){
+        $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+        for ($i=0;$i<count($measurements)-1;$i++){
+            if ($args["interval"]<=$measurements[$i][count($measurements[$i])-1]-$measurements[$i+1][count($measurements[$i+1])-1]){
+                $measurementsWithInterval[$f]=$measurements[$i];
+                $f++;
+            }     
+        }
+        $measurements=$measurementsWithInterval;
+    }
+    if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==true){
+        $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+        for ($i=0;$i<count($measurements)-2;$i++){
+            $averageMeasurement=$measurements[$i];
+            if ($args["interval"]<=$measurements[$i][count($measurements[$i])-1]-$measurements[$i+1][count($measurements[$i+1])-1]){
+                $measurementsWithInterval[$f]=$averageMeasurement;
+                $f++;
+            }else{
+                $averageMeasurement=($averageMeasurement+$measurements[$i+1])/2;
+            }   
+        }
+        $measurements=$measurementsWithInterval;
+    }else{
+        $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+    }
+
+    
     header('Content-Type: application/csv');
     header('Content-Disposition: attachment; filename="mesures.csv"');
 

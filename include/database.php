@@ -57,7 +57,7 @@ function getListCampaign(array $filter = null) : array
         }
     }
 
-    $query .= join(" AND ", $whereClauses) . " ORDER BY beginDate DESC";
+    $query .= join(" AND ", $whereClauses) . " ORDER BY finished ASC, beginDate DESC";
 
     try {
         $statement = PDO->prepare($query);
@@ -239,7 +239,8 @@ function getCampaign(int $id) : array {
 
         return array(
             "campaignInfo" => $data,
-            "measurements" => getMeasurements($id)
+            "measurements" => getMeasurements($id),
+            "logs" => getLogs($id)
         );
     } catch (\Throwable $th) {
         replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
@@ -247,7 +248,7 @@ function getCampaign(int $id) : array {
     return null;
 }
 
-function getLog(int $id) : array {
+function getLogs(int $id) : array {
     if (!PDO){
         replyError("Impossible de récupérer les logs", "La connexion à la base de donnée a échoué.");
         return null;
@@ -260,15 +261,8 @@ function getLog(int $id) : array {
             ]
         );
 
-        $data = $statement->fetch();
-
-        if ($data == false){
-            throw new Exception("Log introuvable.");
-        }
-
-        return array(
-            "LogInfo" => $data
-        );
+        $data = $statement->fetchAll();
+        return $data;
     } catch (\Throwable $th) {
         replyError("Impossible de récupérer les données des logs", $th->getMessage());
     }
