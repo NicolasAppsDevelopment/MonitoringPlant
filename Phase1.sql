@@ -56,7 +56,7 @@ create table Logs(
    idCampaign       int,
    state			int(1),
    title            varchar(100),
-   messsage         varchar(1000),
+   message         varchar(1000),
    occuredDate             datetime,
    constraint FK_Logs_Campaigns foreign key (idCampaign)
    references Campaigns (idCampaign) on delete restrict on update restrict
