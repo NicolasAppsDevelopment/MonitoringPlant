@@ -2,7 +2,7 @@
 
 include_once __DIR__ . "/../include/reply.php";
 
-function init_db() : PDO | null 
+function init_db() : PDO
 {
     $dsn = "mysql:dbname=p2201232;host=iutbg-lamp.univ-lyon1.fr";
     $user = "p2201232";
@@ -18,7 +18,7 @@ function init_db() : PDO | null
 
 define("PDO", init_db());
 
-function getListCampaign(array $filter = null) : array | null
+function getListCampaign(array $filter = null) : array
 {
     if (!PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
@@ -73,7 +73,7 @@ function getListCampaign(array $filter = null) : array | null
     return null;
 }
 
-function getIdCampagne(string $name):int{
+function getIdCampagne(string $name): int {
         if (!PDO){
             throw new Exception("La connexion à la base de donnée a échoué.");
         }
@@ -94,7 +94,7 @@ function getIdCampagne(string $name):int{
         }
 } 
 
-function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, float | null $volume, int $duration) : int | null
+function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, float $volume, int $duration) : int
 {
     if (!PDO){
         replyError("Impossible d'ajouter la campagne", "La connexion à la base de donnée a échoué.");
@@ -168,7 +168,7 @@ function supprCampagne(int $id) : bool
     return false;
 }
 
-function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array | null
+function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array
 {
     if (!PDO){
         replyError("Impossible de récupérer la campagne", "La connexion à la base de donnée a échoué.");
@@ -218,7 +218,7 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
     return null;
 }
 
-function getCampaign(int $id) : array | null {
+function getCampaign(int $id) : array {
     if (!PDO){
         replyError("Impossible de récupérer les mesures de la campagne", "La connexion à la base de donnée a échoué.");
         return null;
@@ -247,7 +247,35 @@ function getCampaign(int $id) : array | null {
     return null;
 }
 
-function getMeasurements(int $id) : array | null {
+function getLog(int $id) : array {
+    if (!PDO){
+        replyError("Impossible de récupérer les logs", "La connexion à la base de donnée a échoué.");
+        return null;
+    }
+    try {
+        $statement = PDO->prepare("SELECT * FROM Logs WHERE idCampaign = :varId");
+        $statement->execute(
+            [
+                'varId' => $id,    
+            ]
+        );
+
+        $data = $statement->fetch();
+
+        if ($data == false){
+            throw new Exception("Log introuvable.");
+        }
+
+        return array(
+            "LogInfo" => $data
+        );
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer les données des logs", $th->getMessage());
+    }
+    return null;
+}
+
+function getMeasurements(int $id) : array {
     if (!PDO){
         replyError("Impossible de récupérer les mesures de la campagne", "La connexion à la base de donnée a échoué.");
         return null;
@@ -268,7 +296,7 @@ function getMeasurements(int $id) : array | null {
     return null;
 }
 
-function getParametre() : array | null
+function getParametre() : array
 {
     if (!PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
@@ -287,7 +315,7 @@ function getParametre() : array | null
     }
 }
 
-function postParametres(int $IntervalSuppression, int $enlabed) : array | null
+function postParametres(int $IntervalSuppression, int $enlabed) : array
 {
     if (!PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");

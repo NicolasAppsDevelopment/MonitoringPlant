@@ -15,9 +15,9 @@ async function getCampagne() {
         let campaignInfo = data["campaignInfo"];
         let mesurements = data["measurements"];
 
-        console.log(data);
-
         const titleCampaign = document.getElementById("titleCampaign");
+        const statusRow = document.getElementById("status-row");
+        
         const startDate = document.getElementById("start_date");
         const reamingDuration = document.getElementById("reaming_duration");
         const duration = document.getElementById("duration");
@@ -26,6 +26,65 @@ async function getCampagne() {
 
         titleCampaign.innerHTML = campaignInfo["name"];
         startDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
+
+        let logs = await PHP_post("/PHP_API/get_logs.php", {
+            "id": parseInt(id)
+        });
+    
+        if (logs != null){
+
+            switch(campaignInfo["state"]){
+                case 0: // En cours
+                    statusRow.innerHTML=`
+                        <div class="status-title">
+                            <img style="width: 16px;" class="status-icon" src="./img/working_status.svg">
+                            En cours de relève
+                        </div>
+                        <span class="status-message">
+                            Fin de la campagne de mesure dans ${campaignInfo["beginDate"]+campaignInfo["duration"]}
+                            </br>
+                        </span>`
+                    break;
+                case 1:// Terminé
+                    statusRow.innerHTML=`
+                        <div class="status-title">
+                            <img style="width: 16px;" class="status-icon" src="./img/success_status.svg">
+                            Terminé
+                        </div>
+                        <span class="status-message">
+                            La campagne de mesure est c'est fini le ${logs[logs.lenght]["occuredDate"]}
+                            </br>
+                        </span>`
+                    break;
+
+                case 2:// Arreter
+                    statusRow.innerHTML=`
+                        <div class="status-title">
+                            <img style="width: 16px;" class="status-icon" src="./img/error_status.svg">
+                            Erreur
+                        </div>
+                        <span class="status-message">
+                            La campagne de mesure a été arrêtée suite à une erreur critique
+                            </br>
+                        </span>`
+                    break;
+
+                case 3:// Danger
+                    statusRow.innerHTML=`
+                        <div class="status-title">
+                            <img style="width: 16px;" class="status-icon" src="./img/warn_status.svg">
+                            Attention
+                        </div>
+                        <span class="status-message">
+                            Fin de la campagne de mesure dans ${campaignInfo["beginDate"]+campaignInfo["duration"]}
+                            </br>
+                        </span>`
+                    break;
+
+                default:
+                    break;
+            }
+        }
 
         let dateFin = new Date(campaignInfo["beginDate"]);
         dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
@@ -56,7 +115,7 @@ async function getCampagne() {
             case 2:
                 CO2_state.classList.add("error");
                 break;
-            
+
             default:
                 break;
         }
