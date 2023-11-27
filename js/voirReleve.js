@@ -249,10 +249,9 @@ async function exportCampagne() {
     });
 
     if (data != null) {
-        const blob = new Blob([data]);
         const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "mesures" + id + ".csv"; // Provide a default filename
+        link.href = window.URL.createObjectURL(data);
+        link.download = "mesures_" + id + ".csv"; // Provide filename
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

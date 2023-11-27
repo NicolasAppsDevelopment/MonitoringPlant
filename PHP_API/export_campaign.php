@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
 
     header('Content-Type: application/csv');
-    header('Content-Disposition: attachment; filename="mesures_' . $args["id"] . '.csv"');
+    header('Content-Disposition: attachment; filename="mesures.csv"');
 
     // open the "output" stream
     $f = fopen('php://output', 'w');

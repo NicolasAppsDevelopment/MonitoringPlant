@@ -398,6 +398,13 @@
                         </label>
                     </div>
 
+                    <div class="row_center bottom_gap">
+                        <div class="warning_container">
+                            <div class="warning_ico"><span class="warn_ico"></span></div>
+                            <div class="warning_txt">Veuillez utiliser Safari pour les utilisateurs d'iPhone et d'iPad.</div>
+                        </div>
+                    </div>
+
                     <button id="btn_dwld" class="rect_round_btn gray" onclick="exportCampagne()">Télécharger</button>
                 </div>
             </div>
