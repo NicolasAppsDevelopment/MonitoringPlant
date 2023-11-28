@@ -16,11 +16,15 @@ function init_db() : PDO
     }
 }
 
-define("PDO", init_db());
+global $PDO;
+$PDO = init_db();
+$PDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 function getListCampaign(array $filter = null) : array
 {
-    if (!PDO){
+    global $PDO;
+
+    if (!$PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
         return null;
     }
@@ -60,7 +64,7 @@ function getListCampaign(array $filter = null) : array
     $query .= join(" AND ", $whereClauses) . " ORDER BY finished ASC, beginDate DESC";
 
     try {
-        $statement = PDO->prepare($query);
+        $statement = $PDO->prepare($query);
 
         $statement->execute($params);
 
@@ -74,35 +78,37 @@ function getListCampaign(array $filter = null) : array
 }
 
 function getIdCampagne(string $name): int {
-        if (!PDO){
-            throw new Exception("La connexion à la base de donnée a échoué.");
-        }
-        
-        $statement = PDO->prepare("SELECT idCampaign from Campaigns where name = :varName ORDER BY 1 DESC");
-        $statement->execute(
-            [
-                'varName' => htmlspecialchars($name)
-            ]
-        );
+    global $PDO;
+    if (!$PDO){
+        throw new Exception("La connexion à la base de donnée a échoué.");
+    }
+    
+    $statement = $PDO->prepare("SELECT idCampaign from Campaigns where name = :varName ORDER BY 1 DESC");
+    $statement->execute(
+        [
+            'varName' => htmlspecialchars($name)
+        ]
+    );
 
-        $res = $statement->fetchAll();
+    $res = $statement->fetchAll();
 
-        if (count($res) > 0) {
-            return $res[0]["idCampaign"];
-        } else {
-            throw new Exception("Nom introuvable.");
-        }
+    if (count($res) > 0) {
+        return $res[0]["idCampaign"];
+    } else {
+        throw new Exception("Nom introuvable.");
+    }
 } 
 
 function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, float $volume, int $duration) : int
 {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible d'ajouter la campagne", "La connexion à la base de donnée a échoué.");
         return null;
     }
 
     try {
-        $statement = PDO->prepare("INSERT into Campaigns values (null,:varName,now(),:varTemperatureSensor,:varCO2Sensor,:varO2Sensor,:varLuminositySensor,:varHumiditySensor,:varInterval,:varVolume,:varDuration,0)");
+        $statement = $PDO->prepare("INSERT into Campaigns values (null, :varName, now(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0)");
         $statement->execute(
             [
                 'varName' => htmlspecialchars($name),
@@ -128,14 +134,15 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
 
 function supprCampagne(int $id) : bool
 {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible de supprimer la campagne", "La connexion à la base de donnée a échoué.");
         return false;
     }
 
     // Suppression des mesures
     try {
-        $statement = PDO->prepare("DELETE from Measurements where idCampaign = :varId");
+        $statement = $PDO->prepare("DELETE from Measurements where idCampaign = :varId");
         $statement->execute(
             [
                 'varId' => $id
@@ -150,7 +157,7 @@ function supprCampagne(int $id) : bool
 
     // Suppression de la campagne
     try {
-        $statement = PDO->prepare("DELETE from Campaigns where idCampaign = :varId");
+        $statement = $PDO->prepare("DELETE from Campaigns where idCampaign = :varId");
         $statement->execute(
             [
                 'varId' => $id
@@ -170,7 +177,8 @@ function supprCampagne(int $id) : bool
 
 function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array
 {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible de récupérer la campagne", "La connexion à la base de donnée a échoué.");
         return null;
     }
@@ -207,7 +215,7 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
     }
 
     try {
-        $statement = PDO->prepare($query);
+        $statement = $PDO->prepare($query);
         $statement->execute($params);
 
         $data = $statement->fetchAll();
@@ -219,12 +227,13 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
 }
 
 function getCampaign(int $id) : array {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible de récupérer les mesures de la campagne", "La connexion à la base de donnée a échoué.");
         return null;
     }
     try {
-        $statement = PDO->prepare("SELECT * FROM Campaigns WHERE idCampaign = :varId");
+        $statement = $PDO->prepare("SELECT * FROM Campaigns WHERE idCampaign = :varId");
         $statement->execute(
             [
                 'varId' => $id,    
@@ -249,12 +258,13 @@ function getCampaign(int $id) : array {
 }
 
 function getLogs(int $id) : array {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible de récupérer les logs", "La connexion à la base de donnée a échoué.");
         return null;
     }
     try {
-        $statement = PDO->prepare("SELECT * FROM Logs WHERE idCampaign = :varId");
+        $statement = $PDO->prepare("SELECT * FROM Logs WHERE idCampaign = :varId");
         $statement->execute(
             [
                 'varId' => $id,    
@@ -270,12 +280,13 @@ function getLogs(int $id) : array {
 }
 
 function getMeasurements(int $id) : array {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible de récupérer les mesures de la campagne", "La connexion à la base de donnée a échoué.");
         return null;
     }
     try {
-        $statement = PDO->prepare("SELECT * FROM Measurements where idCampaign = :varId ORDER BY date ASC");
+        $statement = $PDO->prepare("SELECT * FROM Measurements where idCampaign = :varId ORDER BY date ASC");
         $statement->execute(
             [
                 'varId' => $id,    
@@ -292,13 +303,14 @@ function getMeasurements(int $id) : array {
 
 function getParametre() : array
 {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
         return null;
     }
 
     try {
-        $statement = PDO->prepare("SELECT * , NOW() as 'date' FROM Settings");
+        $statement = $PDO->prepare("SELECT * , NOW() as 'date' FROM Settings");
         $statement->execute();
 
         $data = $statement->fetch();
@@ -311,16 +323,17 @@ function getParametre() : array
 
 function postParametres(int $IntervalSuppression, int $enlabed) : array
 {
-    if (!PDO){
+    global $PDO;
+    if (!$PDO){
         replyError("Impossible de récupérer les campagnes", "La connexion à la base de donnée a échoué.");
         return null;
     }
     $succes=array("succes"=>true);
     try {
-        $statement = PDO->prepare("DELETE FROM Settings;");
+        $statement = $PDO->prepare("DELETE FROM Settings;");
         $statement->execute();
 
-        $statement = PDO->prepare("INSERT INTO Settings VALUES(:varSuppr, :varEnlabed);");
+        $statement = $PDO->prepare("INSERT INTO Settings VALUES(:varSuppr, :varEnlabed);");
         $statement->execute(
             ['varSuppr' => (int)$IntervalSuppression,
             'varEnlabed' =>(int)$enlabed]

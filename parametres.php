@@ -40,7 +40,7 @@
             <div class="label_img_input">
                     <label class="label_field" for="campaign_date">Date & heure de la cellule de mesure</label>
                     <div class="row_fields gap">
-                        <input class="input_field calendar" id="dateRasp" type="date" placeholder="Date">
+                        <input class="input_field calendar" id="dateRasp" type="text" placeholder="Date" onfocus="(this.type='date')">
                         <input class="input_field clock" id="timeRasp" type="time" placeholder="Heure">
                     </div>
             </div>

@@ -76,34 +76,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $end = $args["end_date"] . " " . $args["end_time"];
     }
 
-
+    $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+    $nbcolmum=1+(int)$args["temperature_enabled"]+(int)$args["CO2_enabled"]+(int)$args["O2_enabled"]+(int)$args["luminosity_enabled"]+(int)$args["humidity_enabled"];
     $f=0;
-    if (isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==false){
-        $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
-        for ($i=0;$i<count($measurements)-1;$i++){
-            if ($args["interval"]<=$measurements[$i][count($measurements[$i])-1]-$measurements[$i+1][count($measurements[$i+1])-1]){
+    $indexLastAccepted=0;
+    if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==false){
+        $measurementsWithInterval[$f]=$measurements[0];
+        for ($i=1;$i<count($measurements)-1;$i++){
+            if ($args["interval"]<=$measurements[$i][$nbcolmum-1]-$measurements[$indexLastAccepted][$nbcolmum-1]){
                 $measurementsWithInterval[$f]=$measurements[$i];
                 $f++;
+                $indexLastAccepted=$i;
             }     
         }
         $measurements=$measurementsWithInterval;
     }
     if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==true){
-        $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
-        for ($i=0;$i<count($measurements)-2;$i++){
-            $averageMeasurement=$measurements[$i];
-            if ($args["interval"]<=$measurements[$i][count($measurements[$i])-1]-$measurements[$i+1][count($measurements[$i+1])-1]){
-                $measurementsWithInterval[$f]=$averageMeasurement;
+        $notTakenMeasurements=array();
+        $measurementsWithInterval[$f]=$measurements[0];
+        for ($i=1;$i<count($measurements)-1;$i++){
+            if ($args["interval"]<=$measurements[$i][$nbcolmum-1]-$measurements[$indexLastAccepted][$nbcolmum-1]){
+                for ($y=0;$y<$nbcolmum-2;$y++){  
+                    $stnotTakenMeasurementsack[$y]+=$measurements[$i][$y];
+                    $stnotTakenMeasurementsack[$y]/=2;
+                    $measurementsWithInterval[$f][$y]=$stnotTakenMeasurementsack[$y];
+                }
+                $measurementsWithInterval[$f][$nbcolmum-1]=$measurements[$i][$nbcolmum-1];
                 $f++;
+                $indexLastAccepted=$i;
             }else{
-                $averageMeasurement=($averageMeasurement+$measurements[$i+1])/2;
-            }   
+                for ($y=0;$y<$nbcolmum-2;$y++){
+                    $stnotTakenMeasurementsack[$y]+=$measurements[$i][$y];
+                    $stnotTakenMeasurementsack[$y]/=2;
+                }
+            }    
         }
         $measurements=$measurementsWithInterval;
-    }else{
-        $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
     }
-
     
     header('Content-Type: application/csv');
     header('Content-Disposition: attachment; filename="mesures.csv"');

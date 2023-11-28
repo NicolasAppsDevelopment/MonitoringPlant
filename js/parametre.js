@@ -22,15 +22,15 @@ async function getParametre()
         var heure=chaineDate.substring(11,13);
         var minute=chaineDate.substring(14,16);
         var seconde=chaineDate.substring(17);
-        console.log(annee,mois,jour,heure,minute,seconde);
 
-        var formeDate=Date(annee,mois,jour);
+    
+
         //var formeTime=Time(heure,minute,seconde);
 
         var date=document.getElementById('dateRasp');
         var heure=document.getElementById('timeRasp');
-        date.setAttribute('value',formeDate);
-        //heure.setAttribute('value',formeTime);
+        date.setAttribute('value','/');
+        heure.setAttribute('value',': :');
 
         //date.setAttribute();
 
