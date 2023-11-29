@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible de sauvegarder les paramètres", "Une erreur à eu lieu lors de votre décision sur la suppression automatique des données. Veuillez réitérer votre décision.");
     }
 
-    reply(postParametres($args['removeInterval'], $args['autoRemove']));
+    reply(postParametres($args['removeInterval'], $args['autoRemove'],$args['date'],$args['time']));
 } else {
     replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
 }

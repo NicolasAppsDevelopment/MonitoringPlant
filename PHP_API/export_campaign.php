@@ -83,19 +83,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==false){
         $measurementsWithInterval[$f]=$measurements[0];
         for ($i=1;$i<count($measurements)-1;$i++){
-            if ($args["interval"]<=$measurements[$i][$nbcolmum-1]-$measurements[$indexLastAccepted][$nbcolmum-1]){
+            $date1=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$indexLastAccepted][$nbcolmum-1]);
+            $date2=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$i][$nbcolmum-1]);
+            $interval=$date2->diff($date1);
+            $jours = $interval->format('%a');
+            $heures = $interval->format('%h');
+            $minutes = $interval->format('%i');
+            $secondes = $interval->format('%s'); 
+            var_dump($measurements[$i][$nbcolmum-1]);
+            $total = ($jours * 24 * 60 * 60) + ($heures * 60 * 60) + ($minutes * 60) + $secondes;
+            if ($args["interval"]<=$total){
                 $measurementsWithInterval[$f]=$measurements[$i];
                 $f++;
                 $indexLastAccepted=$i;
-            }     
-        }
-        $measurements=$measurementsWithInterval;
+            } 
+        }    
     }
+    $measurements=$measurementsWithInterval;
+
     if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==true){
         $notTakenMeasurements=array();
         $measurementsWithInterval[$f]=$measurements[0];
         for ($i=1;$i<count($measurements)-1;$i++){
-            if ($args["interval"]<=$measurements[$i][$nbcolmum-1]-$measurements[$indexLastAccepted][$nbcolmum-1]){
+            $date1=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$indexLastAccepted][$nbcolmum-1]);
+            $date2=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$i][$nbcolmum-1]);
+            $interval=$date2->diff($date1);
+            $jours = $interval->format('%a');
+            $heures = $interval->format('%h');
+            $minutes = $interval->format('%i');
+            $secondes = $interval->format('%s'); 
+            $total = ($jours * 24 * 60 * 60) + ($heures * 60 * 60) + ($minutes * 60) + $secondes;
+            if ($args["interval"]<=$total){
                 for ($y=0;$y<$nbcolmum-2;$y++){  
                     $stnotTakenMeasurementsack[$y]+=$measurements[$i][$y];
                     $stnotTakenMeasurementsack[$y]/=2;

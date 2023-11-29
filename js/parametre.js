@@ -11,36 +11,23 @@ async function getParametre()
         }
         
         const timeData = getReadableTimeAndUnit(data["removeInterval"]);
-
-        var valeur=document.getElementById("conserv");
+        let valeur = document.getElementById("conserv");
         valeur.setAttribute('value',timeData["value"]);
 
-        var chaineDate=data['date'];
-        var annee=chaineDate.substring(0,4);
-        var mois=chaineDate.substring(5,7);
-        var jour=chaineDate.substring(8,10);
-        var heure=chaineDate.substring(11,13);
-        var minute=chaineDate.substring(14,16);
-        var seconde=chaineDate.substring(17);
+        const datetime = new Date(data['date']);
+        const formattedDate = `${datetime.getFullYear()}-${datetime.getMonth() + 1}-${datetime.getDate()}`;
+        const formattedTime = `${datetime.getHours()}:${datetime.getMinutes()}`;
 
-    
-
-        //var formeTime=Time(heure,minute,seconde);
-
-        var date=document.getElementById('dateRasp');
-        var heure=document.getElementById('timeRasp');
-        date.setAttribute('value','/');
-        heure.setAttribute('value',': :');
-
-        //date.setAttribute();
+        let date = document.getElementById('dateRasp');
+        let time = document.getElementById('timeRasp');
+        date.value = formattedDate;
+        time.value = formattedTime;
 
         var els = document.querySelector('#comboBoxTpsSuppr option[value="' + timeData["unit"] + '"]');
         if(els){
             els.setAttribute('selected','selected');
             //or els.selected = true;
         }
-
-        console.log(timeData);
     }
 
     hideLoading();
@@ -54,6 +41,8 @@ async function postParametre()
         active="1";
         interval=document.getElementById("conserv").value;
         t=document.getElementById("comboBoxTpsSuppr").value;
+
+
             if(t=="h"){
                 interval *= 3600;
             }if(t=="j"){
@@ -65,23 +54,41 @@ async function postParametre()
         active="0";
         interval="0";
     }
-    
+    date=document.getElementById("dateRasp").value;
+    time=document.getElementById("timeRasp").value;
+
     var data = await PHP_post("/PHP_API/set_settings.php", {
         "removeInterval": interval,
         "autoRemove": active,
+        "date":date,
+        "time":time,
     });
     
     if(data != null){
         displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
     }
 
-    document.
+
 
     hideLoading();
 }
 
+async function postDeleteAll()
+{
+    if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, mesures et paramètres seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
+        displayLoading("Suppression des données...");
+    
+        var data = await NODERED_post("/format", {
+            "key": "securityKey"
+        });
+        
+        if(data != null){
+            displaySuccess("Données supprimées !", "Toutes les campagnes, mesures et paramètres ont été supprimées avec succès.");
+        }
 
-
+        hideLoading();
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     getParametre();

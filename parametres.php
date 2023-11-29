@@ -38,23 +38,15 @@
             </div>
 
             <div class="label_img_input">
-                    <label class="label_field" for="campaign_date">Date & heure de la cellule de mesure</label>
-                    <div class="row_fields gap">
-                        <input class="input_field calendar" id="dateRasp" type="text" placeholder="Date" onfocus="(this.type='date')">
-                        <input class="input_field clock" id="timeRasp" type="time" placeholder="Heure">
-                    </div>
+                <label class="label_field" for="campaign_date">Date & heure de la cellule de mesure</label>
+                <div class="row_fields gap">
+                    <input class="input_field calendar" id="dateRasp" type="date" placeholder="Date" autocomplete="off">
+                    <input class="input_field clock" id="timeRasp" type="time" placeholder="Heure" autocomplete="off">
+                </div>
             </div>
 
-
-            <button class="rect_round_btn gray" type="submit" onclick="postParametre();">Enregistrer</button>
-
-            <button class="rect_round_btn destructive" type="submit">Effacer les données</button>
-
-
-
-
-       
-
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre();">Enregistrer</button>
+            <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll();">Effacer les données</button>
         </main>
 
         <!-- loading popup -->
