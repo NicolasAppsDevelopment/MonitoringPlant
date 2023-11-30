@@ -76,7 +76,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $end = $args["end_date"] . " " . $args["end_time"];
     }
 
+    if (isset($args["volume"]) && !is_bool($args["volume"]) ){
+        replyError("Impossible d'exporter la campagne", "Le format du bouton 'volume' est incorrecte.");
+    }
+   
     $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+    $info=getInfoCampaign($args["id"]);
+
+    if (is_null($info["volume"])){
+        replyError("Impossible d'exporter la campagne", "Aucun volume n'a été renseigné lors du démarrage de la campagne");
+    }
+
+    var_dump($info);
     $nbcolmum=1+(int)$args["temperature_enabled"]+(int)$args["CO2_enabled"]+(int)$args["O2_enabled"]+(int)$args["luminosity_enabled"]+(int)$args["humidity_enabled"];
     $f=0;
     $indexLastAccepted=0;
@@ -89,6 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total = ($interval->format('%a') * 24 * 60 * 60) + ($interval->format('%h') * 60 * 60) + ($interval->format('%i') * 60) + $interval->format('%s');
             if ($args["interval"]<=$total){
                 $f++;
+                if ($args["averaging"]==true){
+                    $measurements[$i]*=$info["volume"];
+                }
                 $measurementsWithInterval[$f]=$measurements[$i];
                 $indexLastAccepted=$i;
             } 
@@ -112,6 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 for ($y=0;$y<$nbcolmum-1;$y++){  
                     $notTakenMeasurements[$y]+=$measurements[$i][$y];
                     $notTakenMeasurements[$y]/=$nbNTM+1;
+                    if ($args["averaging"]==true){
+                        $notTakenMeasurements[$y]*=$info["volume"];
+                    }
                     $measurementsWithInterval[$f][$y]=$notTakenMeasurements[$y];
                     
                     $notTakenMeasurements[$y]=0;

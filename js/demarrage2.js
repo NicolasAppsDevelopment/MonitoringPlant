@@ -17,3 +17,11 @@ async function setTime() {
         window.location.href = "index.html";
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const datetime = dateToStandardString(date);
+    const date = datetime["date"];
+    const time = datetime["time"];
+    document.getElementById("heure").value = time;
+    document.getElementById("date").value = date;
+});

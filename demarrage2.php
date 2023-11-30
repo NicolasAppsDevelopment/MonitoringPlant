@@ -1,8 +1,3 @@
-<?php
-var_dump($_SERVER["REQUEST_TIME"]);
-die();
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>

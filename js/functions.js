@@ -266,6 +266,20 @@ function dateToString(date, str_separator_date_time = true, display_seconds = fa
     return '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y + " " + (str_separator_date_time ? "à " : "") + (h<=9 ? '0' + h : h) + ":" + (min<=9 ? '0' + min : min) + (display_seconds ? ":" + (date.getSeconds()<=9 ? '0' + date.getSeconds() : date.getSeconds()) : "");
 }
 
+function dateToStandardString(date) {
+    const datetime = new Date(data['date']);
+    let d = datetime.getDate();
+    let m = datetime.getMonth() + 1; //Month from 0 to 11
+    let y = datetime.getFullYear();
+    let h = datetime.getHours();
+    let min = datetime.getMinutes();
+
+    const formattedDate = `${y}-${m<=9 ? '0' + m : m}-${d <= 9 ? '0' + d : d}`;
+    const formattedTime = `${h<=9 ? '0' + h : h}:${min<=9 ? '0' + min : min}`;
+
+    return {"date": formattedDate, "time": formattedTime};
+}
+
 function dateToReamingString(date) {
     let now = new Date();
 

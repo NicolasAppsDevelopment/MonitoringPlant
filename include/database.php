@@ -181,23 +181,29 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
 
 function getCampaign(int $id) : array {
     try {
+        return array(
+            "campaignInfo" => getInfoCampaign($id),
+            "measurements" => getMeasurements($id),
+            "logs" => getLogs($id)
+        );
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer toutes les données de la campagne", $th->getMessage());
+    }
+}
+
+function getInfoCampaign(int $id) : array {
+    try {
         $res = fetchAll("SELECT * FROM Campaigns WHERE idCampaign = :varId", [
             'varId' => $id
         ]);
 
         if (count($res) > 0) {
-            $data = $res[0];
+            return $res[0];
         } else {
             throw new Exception("La campagne de mesure associé à l'identifiant donné est introuvable.");
         }
-
-        return array(
-            "campaignInfo" => $data,
-            "measurements" => getMeasurements($id),
-            "logs" => getLogs($id)
-        );
     } catch (\Throwable $th) {
-        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
+        replyError("Impossible de récupérer les informations de la campagne", $th->getMessage());
     }
 }
 

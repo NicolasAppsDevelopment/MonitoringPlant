@@ -276,7 +276,7 @@ async function exportCampagne() {
     const time_start = document.getElementById("heuredebut_choice").value;
     const date_end = document.getElementById("datefin_choice").value;
     const time_end = document.getElementById("heurefin_choice").value;
-    const averaging = document.getElementById("volume").checked;
+    const volume = document.getElementById("calc_volume").checked;
 
     const data = await PHP_postGetFile("/PHP_API/export_campaign.php", {
         "id": id,
@@ -290,7 +290,8 @@ async function exportCampagne() {
         "start_date": date_start,
         "start_time": time_start,
         "end_date": date_end,
-        "end_time": time_end
+        "end_time": time_end,
+        "volume": volume
     });
 
     if (data != null) {

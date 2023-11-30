@@ -346,8 +346,8 @@
                     </div>
 
                     <div class="checkbox bottom_gap">
-                        <label for="volume">
-                            <input type="checkbox" id="volume">
+                        <label for="calc_volume">
+                            <input type="checkbox" id="calc_volume">
                             <span class="cbx">
                                 <svg width="12px" height="11px" viewBox="0 0 12 11">
                                     <polyline points="1 6.29411765 4.5 10 11 1"></polyline>

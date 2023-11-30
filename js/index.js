@@ -255,10 +255,10 @@ async function removeCampagne(id) {
 
 function handleKeyPressSearchBar(e){
     var key=e.keyCode || e.which;
-     if (key==13){
-        filterCampagnes();
-     }
-   }
+    if (key==13){
+    filterCampagnes();
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     getCampagnes();
