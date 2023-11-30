@@ -1,5 +1,5 @@
-const API_IP_ADDRESS = "172.22.69.128";
-const PHP_API_PORT = "8080";
+const API_IP_ADDRESS = "91.160.147.139";
+const PHP_API_PORT = "35000";
 const NODERED_API_PORT = "1880"; 
 
 let blurCompatibility = true;
@@ -267,7 +267,7 @@ function dateToString(date, str_separator_date_time = true, display_seconds = fa
 }
 
 function dateToStandardString(date) {
-    const datetime = new Date(data['date']);
+    const datetime = new Date(date);
     let d = datetime.getDate();
     let m = datetime.getMonth() + 1; //Month from 0 to 11
     let y = datetime.getFullYear();

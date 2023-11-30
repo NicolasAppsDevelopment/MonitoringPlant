@@ -23,8 +23,8 @@
                         <div class="label_img_input">
                             <label class="label_field" for="interval">Date & heure actuelle</label>
                             <div class="row_fields gap">
-                                <input class="input_field calendar" id="date" name="date" type="date" placeholder="Date" required>
-                                <input class="input_field clock" id="heure" name="heure" type="time" placeholder="Heure" required>
+                                <input class="input_field calendar" id="date" name="date" type="date" placeholder="Date" required autocomplete="off" oninput="resetSeconds()">
+                                <input class="input_field clock" id="heure" name="heure" type="time" placeholder="Heure" required autocomplete="off" oninput="resetSeconds()">
                             </div>
                         </div>
                         <div class="two_buttons">

@@ -224,14 +224,7 @@ async function addCampagne() {
         document.getElementById("add_popup_form").submit();
 
         /*const data_ = await NODERED_post("/add_campaign", {
-            "id": data["id"],
-            "CO2_enabled": CO2_enabled.checked,
-            "O2_enabled": O2_enabled.checked,
-            "temperature_enabled": temperature_enabled.checked,
-            "luminosity_enabled": luminosity_enabled.checked,
-            "humidity_enabled": humidity_enabled.checked,
-            "duration": duration.value,
-            "interval": interval.value,
+            "id": data["id"]
         });
         if (data_ == null) {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
