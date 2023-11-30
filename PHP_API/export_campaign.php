@@ -140,18 +140,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $measurements=$measurementsWithInterval;
     }
-    var_dump($measurements);
-    if ($args["volume"]==True){
-        for ($i=1;$i<count($measurements)-1;$i++){
-            if (isset($measurements["CO2"])){
-                $measurements[$i]["CO2"]*=($info["volume"]/1000);
+    if (isset($args["volume"]) && $args["volume"]==True){
+        for ($i=0;$i<count($measurements)-1;$i++){
+            if (isset($measurements[$i]["CO2"])){
+                var_dump($measurements[$i]["CO2"]);
+                $measurements[$i]["CO2"]=$measurements[$i]["CO2"]*0.05;
             }
-            if (isset($measurements["O2"])){
+            if (isset($measurements[$i]["O2"])){
                 $measurements[$i]["O2"]*=($info["volume"]/1000);
             }
         }
     }
-    var_dump($measurements);
     
     
     

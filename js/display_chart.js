@@ -195,6 +195,7 @@ async function lineChart(date_array, lum_array, hum_array, temp_array, o2_array,
       }]
     },
     options: {
+      animation: false,
       responsive: true,
       maintainAspectRatio: false,
       interaction: {

@@ -171,6 +171,8 @@ async function getCampagne() {
         const tableContent = document.getElementById("tableContent");
         tableContent.innerHTML = "";
 
+        let tableContentHTML = "";
+
         let date_array = [];
         let lum_array = [];
         let hum_array = [];
@@ -228,7 +230,7 @@ async function getCampagne() {
                 co2_array.push(parseFloat(co2));
             }
 
-            tableContent.innerHTML += `
+            tableContentHTML += `
                 <tr>
                     <td>${date}</td>
                     <td>${lum}</td>
@@ -239,6 +241,8 @@ async function getCampagne() {
                 </tr>
             `;
         });
+
+        tableContent.innerHTML = tableContentHTML;
 
         lineChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
     }
