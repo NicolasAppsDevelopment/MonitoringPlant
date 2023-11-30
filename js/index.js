@@ -20,6 +20,8 @@ async function getCampagnes(filter = null) {
         const campagnesContainer = document.getElementById("CM_container");
         campagnesContainer.innerHTML = "";
 
+        let campagnesContainerHTML = "";
+
         data["data"].forEach(campagne => {
             let state = "";
             let state_desc = "";
@@ -60,7 +62,7 @@ async function getCampagnes(filter = null) {
                     break;
             }
 
-            campagnesContainer.innerHTML += `
+            campagnesContainerHTML += `
                 <form method="post" action="/voirReleve.php" class="CM ${state}" id="campagne_${campagne["idCampaign"]}" onclick="document.getElementById('campagne_${campagne["idCampaign"]}').submit();">
                     <input type="hidden" name="id" value="${campagne["idCampaign"]}">
                     <div class="title_detail_CM">
@@ -75,6 +77,8 @@ async function getCampagnes(filter = null) {
                 </form>
             `;
         });
+
+        campagnesContainer.innerHTML = campagnesContainerHTML;
     }
 
     const loading = document.getElementById("loading_div");
