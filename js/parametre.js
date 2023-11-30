@@ -15,13 +15,20 @@ async function getParametre()
         valeur.setAttribute('value',timeData["value"]);
 
         const datetime = new Date(data['date']);
-        const formattedDate = `${datetime.getFullYear()}-${datetime.getMonth() + 1}-${datetime.getDate()}`;
-        const formattedTime = `${datetime.getHours()}:${datetime.getMinutes()}`;
+        let d = datetime.getDate();
+        let m = datetime.getMonth() + 1; //Month from 0 to 11
+        let y = datetime.getFullYear();
+        let h = datetime.getHours();
+        let min = datetime.getMinutes();
+
+        const formattedDate = `${y}-${m<=9 ? '0' + m : m}-${d <= 9 ? '0' + d : d}`;
+        const formattedTime = `${h<=9 ? '0' + h : h}:${min<=9 ? '0' + min : min}`;
 
         let date = document.getElementById('dateRasp');
         let time = document.getElementById('timeRasp');
         date.value = formattedDate;
         time.value = formattedTime;
+        console.log(formattedTime);
 
         var els = document.querySelector('#comboBoxTpsSuppr option[value="' + timeData["unit"] + '"]');
         if(els){

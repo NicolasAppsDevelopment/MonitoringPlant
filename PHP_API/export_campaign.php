@@ -86,51 +86,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $date1=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$indexLastAccepted][$nbcolmum-1]);
             $date2=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$i][$nbcolmum-1]);
             $interval=$date2->diff($date1);
-            $jours = $interval->format('%a');
-            $heures = $interval->format('%h');
-            $minutes = $interval->format('%i');
-            $secondes = $interval->format('%s'); 
-            var_dump($measurements[$i][$nbcolmum-1]);
-            $total = ($jours * 24 * 60 * 60) + ($heures * 60 * 60) + ($minutes * 60) + $secondes;
+            $total = ($interval->format('%a') * 24 * 60 * 60) + ($interval->format('%h') * 60 * 60) + ($interval->format('%i') * 60) + $interval->format('%s');
             if ($args["interval"]<=$total){
-                $measurementsWithInterval[$f]=$measurements[$i];
                 $f++;
+                $measurementsWithInterval[$f]=$measurements[$i];
                 $indexLastAccepted=$i;
             } 
-        }    
+        }
+        var_dump($measurementsWithInterval);    
     }
-    $measurements=$measurementsWithInterval;
 
     if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==true){
-        $notTakenMeasurements=array();
+        $notTakenMeasurements=array(0,0,0,0,0);
+        $nbNTM=0;
         $measurementsWithInterval[$f]=$measurements[0];
         for ($i=1;$i<count($measurements)-1;$i++){
             $date1=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$indexLastAccepted][$nbcolmum-1]);
             $date2=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$i][$nbcolmum-1]);
             $interval=$date2->diff($date1);
-            $jours = $interval->format('%a');
-            $heures = $interval->format('%h');
-            $minutes = $interval->format('%i');
-            $secondes = $interval->format('%s'); 
-            $total = ($jours * 24 * 60 * 60) + ($heures * 60 * 60) + ($minutes * 60) + $secondes;
+            $total = ($interval->format('%a') * 24 * 60 * 60) + ($interval->format('%h') * 60 * 60) + ($interval->format('%i') * 60) + $interval->format('%s');
             if ($args["interval"]<=$total){
-                for ($y=0;$y<$nbcolmum-2;$y++){  
-                    $stnotTakenMeasurementsack[$y]+=$measurements[$i][$y];
-                    $stnotTakenMeasurementsack[$y]/=2;
-                    $measurementsWithInterval[$f][$y]=$stnotTakenMeasurementsack[$y];
-                }
-                $measurementsWithInterval[$f][$nbcolmum-1]=$measurements[$i][$nbcolmum-1];
                 $f++;
+                for ($y=0;$y<$nbcolmum-1;$y++){  
+                    $notTakenMeasurements[$y]+=$measurements[$i][$y];
+                    $notTakenMeasurements[$y]/=$nbNTM+1;
+                    $measurementsWithInterval[$f][$y]=$notTakenMeasurements[$y];
+                    
+                    $notTakenMeasurements[$y]=0;
+                    
+                }
+                $nbNTM=0;
+                $measurementsWithInterval[$f][$nbcolmum-1]=$measurements[$i][$nbcolmum-1];
                 $indexLastAccepted=$i;
             }else{
-                for ($y=0;$y<$nbcolmum-2;$y++){
-                    $stnotTakenMeasurementsack[$y]+=$measurements[$i][$y];
-                    $stnotTakenMeasurementsack[$y]/=2;
+                for ($y=0;$y<$nbcolmum-1;$y++){
+                    $notTakenMeasurements[$y]+=$measurements[$i][$y];
+                              
                 }
+                $nbNTM++; 
             }    
         }
-        $measurements=$measurementsWithInterval;
+        var_dump($measurementsWithInterval);
     }
+    
+    $measurements=$measurementsWithInterval;
+    
     
     header('Content-Type: application/csv');
     header('Content-Disposition: attachment; filename="mesures.csv"');

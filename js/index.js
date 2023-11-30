@@ -1,5 +1,3 @@
-let capacityPercent = 0;
-
 async function getCampagnes(filter = null) {
     const campagnesContainer = document.getElementById("CM_container");
     campagnesContainer.innerHTML = `
@@ -96,21 +94,77 @@ async function filterCampagnes() {
     getCampagnes({"name": name.toLowerCase(), "date": date, "time": time, "processing": processing});
 }
 
-async function getStorageCapacity() {
-    const storageBar = document.getElementById("used_storage_bar");
-    const storageCapacity = document.getElementById("storage_txt");
+const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
+const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
+let used = 0; // In KB
+let total = 0; // In KB
 
-    storageCapacity.innerHTML = "Calcul...";
-    storageBar.style.width = "0%";
+async function getStorageCapacity() {
+    const usedStorageBar = document.getElementById("used_storage_bar");
+    const storageTxt = document.getElementById("storage_txt");
+
+    storageTxt.innerHTML = "Calcul...";
+    usedStorageBar.style.width = "0%";
 
     let data = await NODERED_get("/storage");
-
     if (data != null){
-        capacityPercent = data["used_percent"];
+        used = data["used"];
+        total = data["total"];
 
-        storageCapacity.innerHTML = capacityPercent + "% utilisé(s) • " + data["reaming_hours"] + "h restantes";
-        storageBar.style.width = capacityPercent + "%";
+        usage_percent = (used / total) * 100;
+        let remaining_hours = (total - used) / MEASUREMENTS_SIZE_PER_HOUR;
+
+        storageTxt.innerHTML = Math.round(usage_percent) + "% utilisé(s) • " + Math.round(remaining_hours) + "h restantes";
+        usedStorageBar.style.width = usage_percent + "%";
     }
+}
+
+async function predictStoreUsage() {
+    const useStorageBar = document.getElementById("use_storage_bar");
+    let duration = document.getElementById("duration_input").value;
+    const duration_unit = document.getElementById("duration_unit_combo_box").value;
+
+    switch (duration_unit) {
+        case "min":
+            duration *= 60;
+            break;
+
+        case "h":
+            duration *= 60*60;
+            break;
+
+        case "j":
+            duration *= 60*60*24;
+            break;
+
+        default:
+            break;
+    }
+
+    let interval = document.getElementById("interval_input").value;
+    const interval_unit = document.getElementById("interval_unit_combo_box").value;
+
+    switch (interval_unit) {
+        case "min":
+            interval *= 60;
+            break;
+
+        case "h":
+            interval *= 60*60;
+            break;
+
+        case "j":
+            interval *= 60*60*24;
+            break;
+            
+        default:
+            break;
+    }
+
+    const lines = Math.round(duration / interval);
+    const size = lines * MEASUREMENTS_SIZE_PER_LINE;
+    const percent = (used + size / total) * 100;
+    useStorageBar.style.width = percent + "%";
 }
 
 async function addCampagne() {
@@ -150,19 +204,6 @@ async function addCampagne() {
         return;
     }
 
-    /*const data_ = await NODERED_post_post("/add_campaign", {
-        "CO2_enabled": CO2_enabled.checked,
-        "O2_enabled": O2_enabled.checked,
-        "temperature_enabled": temperature_enabled.checked,
-        "luminosity_enabled": luminosity_enabled.checked,
-        "humidity_enabled": humidity_enabled.checked,
-        "duration": duration.value,
-        "interval": interval.value,
-    });
-    if (data_ == null) {
-        console.warn("ATTENTION : NodeRed n'a rien retourné");
-    }*/
-
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,
         "CO2_enabled": CO2_enabled.checked,
@@ -181,7 +222,22 @@ async function addCampagne() {
     if (data != null) {
         document.getElementById("id_added_campaign").value = data["id"];
         document.getElementById("add_popup_form").submit();
+
+        /*const data_ = await NODERED_post("/add_campaign", {
+            "id": data["id"],
+            "CO2_enabled": CO2_enabled.checked,
+            "O2_enabled": O2_enabled.checked,
+            "temperature_enabled": temperature_enabled.checked,
+            "luminosity_enabled": luminosity_enabled.checked,
+            "humidity_enabled": humidity_enabled.checked,
+            "duration": duration.value,
+            "interval": interval.value,
+        });
+        if (data_ == null) {
+            console.warn("ATTENTION : NodeRed n'a rien retourné");
+        }*/
     }
+
 
     hideLoading();
 }
