@@ -272,11 +272,11 @@ async function exportCampagne() {
             break;
     }  
     const averaging = document.getElementById("moyennage").checked;
-
     const date_start = document.getElementById("datedebut_choice").value;
     const time_start = document.getElementById("heuredebut_choice").value;
     const date_end = document.getElementById("datefin_choice").value;
     const time_end = document.getElementById("heurefin_choice").value;
+    const averaging = document.getElementById("volume").checked;
 
     const data = await PHP_postGetFile("/PHP_API/export_campaign.php", {
         "id": id,

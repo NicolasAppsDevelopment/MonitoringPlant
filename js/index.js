@@ -163,7 +163,7 @@ async function predictStoreUsage() {
 
     const lines = Math.round(duration / interval);
     const size = lines * MEASUREMENTS_SIZE_PER_LINE;
-    const percent = (used + size / total) * 100;
+    const percent = ((used + size) / total) * 100;
     useStorageBar.style.width = percent + "%";
 }
 

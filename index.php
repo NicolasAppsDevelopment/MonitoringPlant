@@ -124,7 +124,7 @@
                     <div class="label_img_input">
                         <label class="label_field" for="duration_input">Durée de la campagne de mesure</label>
                         <div class="row_fields">
-                            <input class="input_field clock" id="duration_input" type="number" placeholder="Durée" min="0" required onchange="predictStoreUsage()">
+                            <input class="input_field clock" id="duration_input" type="number" placeholder="Durée" min="0" required oninput="predictStoreUsage()">
                             <select class="combo_box" id="duration_unit_combo_box" onchange="predictStoreUsage()">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>
@@ -137,7 +137,7 @@
                     <div class="label_img_input">
                         <label class="label_field" for="interval_input">Intervalle de la campagne de mesure</label>
                         <div class="row_fields">
-                            <input class="input_field timer" id="interval_input" type="number" placeholder="Intervalle" min="0" required onchange="predictStoreUsage()">
+                            <input class="input_field timer" id="interval_input" type="number" placeholder="Intervalle" min="0" required oninput="predictStoreUsage()">
                             <select class="combo_box" id="interval_unit_combo_box" onchange="predictStoreUsage()">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>

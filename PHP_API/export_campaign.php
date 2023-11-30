@@ -92,12 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $measurementsWithInterval[$f]=$measurements[$i];
                 $indexLastAccepted=$i;
             } 
-        }
-        var_dump($measurementsWithInterval);    
+        }   
     }
 
     if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==true){
-        $notTakenMeasurements=array(0,0,0,0,0);
+        $notTakenMeasurements=[];
+        for ($i=0; $i <$nbcolmum-1 ; $i++) { 
+            array_push($notTakenMeasurements, 0);
+        }
         $nbNTM=0;
         $measurementsWithInterval[$f]=$measurements[0];
         for ($i=1;$i<count($measurements)-1;$i++){
@@ -126,9 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $nbNTM++; 
             }    
         }
-        var_dump($measurementsWithInterval);
     }
-    
     $measurements=$measurementsWithInterval;
     
     
@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($measurements as $line) {
         // remove the duplicate keys
         foreach ($line as $key => $value) {
-            if (is_int($key)) {
+            if (is_string($key)) {
                 unset($line[$key]);
             }
         }
