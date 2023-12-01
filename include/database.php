@@ -126,7 +126,13 @@ function supprCampagne(int $id) : bool
     }
 
     // Suppression des logs
-    // ...
+    try {
+        fetchAll("DELETE FROM Logs WHERE idCampaign = :varId", [
+            'varId' => $id
+        ]);
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer les logs de la campagne", $th->getMessage());
+    }
 
     // Suppression de la campagne
     try {

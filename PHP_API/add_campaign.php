@@ -103,6 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 
+    if ($interval > $duration) {
+        replyError("Impossible d'ajouter la campagne", "L'intervalle demandé doit être inférieur ou égale à la durée de la campagne.");
+    } 
+
     reply(array(
         "id" => addCampaign($args["title"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $interval, $volume, $duration)
     ));

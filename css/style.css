@@ -1303,7 +1303,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     position: relative;
 }
 .used_storage_bar {
-    width: 50%;
+    width: 0%;
     background-color: #27BCEB;
     height: 100%;
     position: absolute;
@@ -1311,7 +1311,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     top: 0;
 }
 .use_storage_bar {
-    width: 75%;
+    width: 0%;
     background-color: #FF4439;
     height: 100%;
 }

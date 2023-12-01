@@ -2,7 +2,7 @@ async function getParametre()
 {
     displayLoading("Récupération des paramètres...");
 
-    var data = await PHP_get("/PHP_API/get_settings.php");
+    const data = await PHP_get("/PHP_API/get_settings.php");
     if (data != null){
         if (data["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
@@ -26,6 +26,24 @@ async function getParametre()
             els.setAttribute('selected','selected');
             //or els.selected = true;
         }
+
+        const now = new Date(document.getElementById("dateRasp").value + " " + document.getElementById("timeRasp").value);
+        seconds = now.getSeconds();
+        setInterval(() => {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+
+                const now_ = new Date(document.getElementById("dateRasp").value + " " + document.getElementById("timeRasp").value);
+                now_.setMinutes(now_.getMinutes() + 1);
+
+                const datetime_ = dateToStandardString(now_);
+                const date_ = datetime_["date"];
+                const time_ = datetime_["time"];
+                document.getElementById("heure").value = time_;
+                document.getElementById("date").value = date_;
+            }
+        }, 1000);
     }
 
     hideLoading();
@@ -40,33 +58,37 @@ async function postParametre()
         interval=document.getElementById("conserv").value;
         t=document.getElementById("comboBoxTpsSuppr").value;
 
-
-            if(t=="h"){
-                interval *= 3600;
-            }if(t=="j"){
-                interval *= 86400;
-            }if(t=="mois"){
-                interval *= 2592000;
-            }
+        if(t=="h"){
+            interval *= 3600;
+        }if(t=="j"){
+            interval *= 86400;
+        }if(t=="mois"){
+            interval *= 2592000;
+        }
     } else {
         active="0";
         interval="0";
     }
-    date=document.getElementById("dateRasp").value;
-    time=document.getElementById("timeRasp").value;
 
     var data = await PHP_post("/PHP_API/set_settings.php", {
         "removeInterval": interval,
-        "autoRemove": active,
-        "date":date,
-        "time":time,
+        "autoRemove": active
     });
     
     if(data != null){
+        if (dateChanged) {
+            displayLoading("Mise à jour de l'heure...");
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("heure").value;
+            const datetime = String(date + " " + time);
+        
+            const data_ = await NODERED_post("/set_datetime", {
+                "datetime": datetime,
+            });
+        }
+
         displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
     }
-
-
 
     hideLoading();
 }
@@ -87,6 +109,14 @@ async function postDeleteAll()
         hideLoading();
     }
 }
+
+async function resetSeconds() {
+    seconds = 0;
+    dateChanged = true;
+}
+
+let seconds = 0;
+let dateChanged = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     getParametre();

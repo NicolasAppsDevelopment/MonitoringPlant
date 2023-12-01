@@ -1,11 +1,31 @@
+let id = -1;
+let refresh_delay = 5000;
+
 document.addEventListener("DOMContentLoaded", () => {
     getCampagne();
 });
 
-async function getCampagne() {
-    displayLoading("Récupération de la campagne...");
+async function delay(ms) {
+    // return await for better async stack trace support in case of errors.
+    return await new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-    const id = document.getElementById("id_campagne").value;
+async function subscribeRefresh() {
+    do {
+        getCampagne(true);
+        await delay(refresh_delay);
+    } while (refresh_repeat);
+}
+
+let refresh_repeat = true;
+async function getCampagne(refresh_mode = false) {
+    if (refresh_mode == false){
+        displayLoading("Récupération de la campagne...");
+        id = document.getElementById("id_campagne").value;
+    } else {
+        refresh_repeat = false;
+    }
+
 
     let data = await PHP_post("/PHP_API/get_campaign.php", {
         "id": parseInt(id)
@@ -18,21 +38,46 @@ async function getCampagne() {
 
         if (campaignInfo["finished"] == 1) {
             document.getElementById("stop_btn").remove();
+            if (refresh_mode == true){
+                return;
+            } 
+        } else {
+            if (refresh_mode == false){
+                subscribeRefresh()
+            } 
+        } 
+
+        if (refresh_mode == false){
+            const titleCampaign = document.getElementById("titleCampaign");
+            titleCampaign.innerHTML = campaignInfo["name"];
+
+            const startDate = document.getElementById("start_date");
+            startDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
+
+            const duration = document.getElementById("duration");
+            duration.innerHTML = getReadableTime(campaignInfo["duration"]);
+
+            const interval = document.getElementById("interval");
+            interval.innerHTML = getReadableTime(campaignInfo["interval_"]);
+
+            const volume = document.getElementById("volume");
+            if (campaignInfo["volume"] != null) {
+                volume.innerHTML = campaignInfo["volume"] + " mL";
+            } else {
+                volume.innerHTML = "N/A";
+            }
         }
 
-        const titleCampaign = document.getElementById("titleCampaign");
-        const logsContainer = document.getElementById("logs_container");
-        
-        const startDate = document.getElementById("start_date");
+        let dateFin = new Date(campaignInfo["beginDate"]);
+        dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
+
         const reamingDuration = document.getElementById("reaming_duration");
-        const duration = document.getElementById("duration");
-        const interval = document.getElementById("interval");
-        const volume = document.getElementById("volume");
+        reamingDuration.innerHTML = dateToReamingString(dateFin);
 
-        titleCampaign.innerHTML = campaignInfo["name"];
-        startDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
-
+        const logsContainer = document.getElementById("logs_container");
         if (logs != null){
+            let logsContainerHTML = "";
+
             logs.forEach(log => {
                 let icon_name = "";
                 switch (log["state"]) {
@@ -56,7 +101,7 @@ async function getCampagne() {
                         break;
                 }
 
-                logsContainer.innerHTML += `
+                logsContainerHTML += `
                 <div class="status-row">
                     <div class="status-title">
                         <img style="width: 16px;" class="status-icon" src="./img/${icon_name}.svg">
@@ -68,26 +113,11 @@ async function getCampagne() {
                 </div>
                 `;
             });
+
+            logsContainer.innerHTML = logsContainerHTML;
         }
 
-        let dateFin = new Date(campaignInfo["beginDate"]);
-        dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
-
-        reamingDuration.innerHTML = dateToReamingString(dateFin);
-        duration.innerHTML = getReadableTime(campaignInfo["duration"]);
-        interval.innerHTML = getReadableTime(campaignInfo["interval_"]);
-        if (campaignInfo["volume"] != null) {
-            volume.innerHTML = campaignInfo["volume"] + " mL";
-        } else {
-            volume.innerHTML = "N/A";
-        }
-
-        const CO2_state = document.getElementById("state_CO2");
-        const O2_state = document.getElementById("state_O2");
-        const temp_state = document.getElementById("state_temp");
-        const hum_state = document.getElementById("state_hum");
-        const lum_state = document.getElementById("state_lum");
-        
+        const CO2_state = document.getElementById("state_CO2");        
         switch (campaignInfo["CO2SensorState"]) {
             case 0:
                 CO2_state.classList.add("unselected");
@@ -104,6 +134,7 @@ async function getCampagne() {
                 break;
         }
 
+        const O2_state = document.getElementById("state_O2");
         switch (campaignInfo["O2SensorState"]) {
             case 0:
                 O2_state.classList.add("unselected");
@@ -120,6 +151,7 @@ async function getCampagne() {
                 break;
         }
 
+        const temp_state = document.getElementById("state_temp");
         switch (campaignInfo["temperatureSensorState"]) {
             case 0:
                 temp_state.classList.add("unselected");
@@ -136,6 +168,7 @@ async function getCampagne() {
                 break;
         }
 
+        const hum_state = document.getElementById("state_hum");
         switch (campaignInfo["humiditySensorState"]) {
             case 0:
                 hum_state.classList.add("unselected");
@@ -152,6 +185,7 @@ async function getCampagne() {
                 break;
         }
 
+        const lum_state = document.getElementById("state_lum");
         switch (campaignInfo["luminositySensorState"]) {
             case 0:
                 lum_state.classList.add("unselected");
@@ -168,17 +202,17 @@ async function getCampagne() {
                 break;
         }
     
-        const tableContent = document.getElementById("tableContent");
-        tableContent.innerHTML = "";
-
-        let tableContentHTML = "";
-
         let date_array = [];
         let lum_array = [];
         let hum_array = [];
         let temp_array = [];
         let o2_array = [];
         let co2_array = [];
+
+        refresh_delay = 5000 + mesurements.length;
+
+        const tableContent = document.getElementById("tableContent");
+        let tableContentHTML = "";
 
         mesurements.forEach(mesure => {
             let date = new Date(mesure["date"]);
@@ -242,12 +276,26 @@ async function getCampagne() {
             `;
         });
 
-        tableContent.innerHTML = tableContentHTML;
+        if (refresh_mode == true && mesurements.length > 1000){
+            console.warn("Rafraichissement auto désactivé pour le tableau !");
+        } else {
+            tableContent.innerHTML = tableContentHTML;
+        } 
 
+        
+
+        destroyChart();
         lineChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
-    }
 
-    hideLoading();
+
+        if (refresh_mode == true) {
+            refresh_repeat = true;
+        }
+    }
+    
+    if (refresh_mode == false) {
+        hideLoading();
+    }
 }
 
 async function exportCampagne() {

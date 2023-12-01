@@ -1,3 +1,11 @@
+let chart;
+
+function destroyChart() {
+  if (chart != null || chart != undefined){
+    chart.destroy();
+  }
+}
+
 async function lineChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) {
   const myChart = document.getElementById('ChartCanvas');
 
@@ -143,7 +151,8 @@ async function lineChart(date_array, lum_array, hum_array, temp_array, o2_array,
     tooltipEl.style.font = tooltip.options.bodyFont.string;
   };
 
-  new Chart(myChart, {
+  myChart.innerHTML = "";
+  chart = new Chart(myChart, {
     type: 'line',
     data: {
       labels: date_array,

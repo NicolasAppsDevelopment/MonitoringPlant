@@ -4,6 +4,26 @@ header("Content-Type: application/json; charset=utf-8");
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
 
+
+function getIndexFromKeyName(array $arr, string $keyName) : int {
+    for ($i = 0; $i < count($arr); $i++){
+        if (is_int($arr[$i])){
+            unset($arr[$i]);
+        }
+    }
+
+    $keys = array_keys($arr);
+
+    for ($i = 0; $i < count($keys); $i++){
+        if ($keys[$i] == $keyName){
+            return $i;
+        }
+    }
+
+    return NULL;
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
 
@@ -87,7 +107,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'exporter la campagne", "Aucun volume n'a été renseigné lors du démarrage de la campagne");
     }
 
-    $nbcolmum=1+(int)$args["temperature_enabled"]+(int)$args["CO2_enabled"]+(int)$args["O2_enabled"]+(int)$args["luminosity_enabled"]+(int)$args["humidity_enabled"];
+
+    $nbcolmum = (int)(count($measurements[0]) / 2);
+    $indexC02=getIndexFromKeyName($measurements[0], "CO2");
+    $index02=getIndexFromKeyName($measurements[0], "O2");
+    var_dump($measurements[0]);
+    var_dump($indexC02);
+    var_dump($index02);
+
+    /*if ($args["temperature_enabled"] == true){
+        if ($args["CO2_enabled"] == true){
+            $indexC02=1;
+            $index02=2;
+        }elseif($args["O2_enabled"] == true && $args["CO2_enabled"] == false){
+            $index02=1;
+        }
+    }
+    if ($args["temperature_enabled"] == false){
+        if ($args["CO2_enabled"] == true){
+            $indexC02=0;
+            $index02=1;
+        }elseif($args["O2_enabled"] == true && $args["CO2_enabled"] == false){
+            $index02=0;
+        }
+    }*/
+
+
+    if (isset($args["volume"]) && $args["volume"]==True){
+        for ($i=0;$i<count($measurements)-1;$i++){
+            if (isset($measurements[$i]["CO2"])){
+                $measurements[$i][$indexC02]*=($info["volume"]/1000);     
+            }
+            if (isset($measurements[$i]["O2"])){
+                $measurements[$i][$index02]*=($info["volume"]/1000);
+            }
+        }
+    }
+    
     $f=0;
     $indexLastAccepted=0;
     if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==false){
@@ -140,18 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $measurements=$measurementsWithInterval;
     }
-    if (isset($args["volume"]) && $args["volume"]==True){
-        for ($i=0;$i<count($measurements)-1;$i++){
-            if (isset($measurements[$i]["CO2"])){
-                var_dump($measurements[$i]["CO2"]);
-                $measurements[$i]["CO2"]=$measurements[$i]["CO2"]*0.05;
-            }
-            if (isset($measurements[$i]["O2"])){
-                $measurements[$i]["O2"]*=($info["volume"]/1000);
-            }
-        }
-    }
-    
     
     
     header('Content-Type: application/csv');
@@ -159,7 +203,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // open the "output" stream
     $f = fopen('php://output', 'w');
-
     // send the column headers
     $headers = [];
     foreach ($measurements[0] as $key => $value) {
@@ -168,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     fputcsv($f, $headers, ";");
-
+    
     // output each row of the data
     foreach ($measurements as $line) {
         // remove the duplicate keys
