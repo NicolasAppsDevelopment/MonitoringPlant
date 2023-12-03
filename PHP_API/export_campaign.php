@@ -6,18 +6,20 @@ include_once __DIR__ . "/../include/reply.php";
 
 
 function getIndexFromKeyName(array $arr, string $keyName) : int {
-    for ($i = 0; $i < count($arr); $i++){
-        if (is_int($arr[$i])){
-            unset($arr[$i]);
+    // remove the duplicate keys
+    foreach ($arr as $key => $value) {
+        if (is_int($key)) {
+            unset($arr[$key]);
         }
     }
 
-    $keys = array_keys($arr);
-
-    for ($i = 0; $i < count($keys); $i++){
-        if ($keys[$i] == $keyName){
+    // find index in string keys
+    $i = 0;
+    foreach ($arr as $key => $value) {
+        if ($key == $keyName) {
             return $i;
         }
+        $i++;
     }
 
     return NULL;
@@ -107,31 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'exporter la campagne", "Aucun volume n'a été renseigné lors du démarrage de la campagne");
     }
 
-
     $nbcolmum = (int)(count($measurements[0]) / 2);
     $indexC02=getIndexFromKeyName($measurements[0], "CO2");
     $index02=getIndexFromKeyName($measurements[0], "O2");
-    var_dump($measurements[0]);
-    var_dump($indexC02);
-    var_dump($index02);
-
-    /*if ($args["temperature_enabled"] == true){
-        if ($args["CO2_enabled"] == true){
-            $indexC02=1;
-            $index02=2;
-        }elseif($args["O2_enabled"] == true && $args["CO2_enabled"] == false){
-            $index02=1;
-        }
-    }
-    if ($args["temperature_enabled"] == false){
-        if ($args["CO2_enabled"] == true){
-            $indexC02=0;
-            $index02=1;
-        }elseif($args["O2_enabled"] == true && $args["CO2_enabled"] == false){
-            $index02=0;
-        }
-    }*/
-
 
     if (isset($args["volume"]) && $args["volume"]==True){
         for ($i=0;$i<count($measurements)-1;$i++){

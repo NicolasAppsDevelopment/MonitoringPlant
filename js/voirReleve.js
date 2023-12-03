@@ -1,5 +1,7 @@
 let id = -1;
 let refresh_delay = 5000;
+let last_measure_datetime = null;
+let last_log_datetime = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     getCampagne();
@@ -26,15 +28,23 @@ async function getCampagne(refresh_mode = false) {
         refresh_repeat = false;
     }
 
-
     let data = await PHP_post("/PHP_API/get_campaign.php", {
-        "id": parseInt(id)
+        "id": parseInt(id),
+        "last_log_datetime": last_log_datetime,
+        "last_measure_datetime": last_measure_datetime
     });
 
     if (data != null){
         let campaignInfo = data["campaignInfo"];
         let mesurements = data["measurements"];
         let logs = data["logs"];
+
+        if (last_log_datetime == null || data["last_log_datetime"] != null){
+            last_log_datetime = data["last_log_datetime"];
+        }
+        if (last_measure_datetime == null || data["last_measure_datetime"] != null){
+            last_measure_datetime = data["last_measure_datetime"];
+        }
 
         if (campaignInfo["finished"] == 1) {
             document.getElementById("stop_btn").remove();
@@ -113,8 +123,13 @@ async function getCampagne(refresh_mode = false) {
                 </div>
                 `;
             });
-
-            logsContainer.innerHTML = logsContainerHTML;
+            
+            if (refresh_mode == true) {
+                logsContainer.innerHTML += logsContainerHTML;
+            } else {
+                logsContainer.innerHTML = logsContainerHTML;
+            }
+            
         }
 
         const CO2_state = document.getElementById("state_CO2");        
@@ -276,13 +291,11 @@ async function getCampagne(refresh_mode = false) {
             `;
         });
 
-        if (refresh_mode == true && mesurements.length > 1000){
-            console.warn("Rafraichissement auto désactivé pour le tableau !");
+        if (refresh_mode == true) {
+            tableContent.innerHTML += tableContentHTML;
         } else {
             tableContent.innerHTML = tableContentHTML;
-        } 
-
-        
+        }
 
         destroyChart();
         lineChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);

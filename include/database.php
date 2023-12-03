@@ -185,15 +185,15 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
     }
 }
 
-function getCampaign(int $id) : array {
+function getCampaign(int $id, ?string $log_from_datetime = NULL, ?string $measure_from_datetime = NULL) : array {
     try {
         return array(
             "campaignInfo" => getInfoCampaign($id),
-            "measurements" => getMeasurements($id),
-            "logs" => getLogs($id)
+            "measurements" => getMeasurements($id, $measure_from_datetime),
+            "logs" => getLogs($id, $log_from_datetime)
         );
     } catch (\Throwable $th) {
-        replyError("Impossible de récupérer toutes les données de la campagne", $th->getMessage());
+        replyError("Impossible de récupérer les données de la campagne", $th->getMessage());
     }
 }
 
@@ -213,23 +213,41 @@ function getInfoCampaign(int $id) : array {
     }
 }
 
-function getLogs(int $id) : array {
+function getLogs(int $id, ?string $from_datetime = NULL) : array {
     try {
-        return fetchAll("SELECT * FROM Logs WHERE idCampaign = :varId", [
+        $query = "SELECT * FROM Logs WHERE idCampaign = :varId";
+        $params = [
             'varId' => $id
-        ]);
+        ];
+
+        if ($from_datetime != NULL){
+            $query .= " AND occuredDate > :fromDate";
+            $params["fromDate"] = $from_datetime;
+        }
+
+        return fetchAll($query, $params);
     } catch (\Throwable $th) {
-        replyError("Impossible de récupérer les données des logs", $th->getMessage());
+        replyError("Impossible de récupérer l'historique des évenements de la campagne", $th->getMessage());
     }
 }
 
-function getMeasurements(int $id) : array {
+function getMeasurements(int $id, ?string $from_datetime = NULL) : array {
     try {
-        return fetchAll("SELECT * FROM Measurements WHERE idCampaign = :varId ORDER BY date ASC", [
+        $query = "SELECT * FROM Measurements WHERE idCampaign = :varId";
+        $params = [
             'varId' => $id
-        ]);
+        ];
+
+        if ($from_datetime != NULL){
+            $query .= " AND date > :fromDate";
+            $params["fromDate"] = $from_datetime;
+        }
+
+        $query .= " ORDER BY date ASC";
+
+        return fetchAll($query, $params);
     } catch (\Throwable $th) {
-        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
+        replyError("Impossible de récupérer les données de mesure de la campagnes", $th->getMessage());
     }
 }
 
