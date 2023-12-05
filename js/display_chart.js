@@ -12,30 +12,41 @@ async function addValuesChart(date_array, lum_array, hum_array, temp_array, o2_a
     return;
   } 
 
-  chart.data.labels.push(date_array);
+  date_array.forEach(date => {
+    chart.data.labels.push(date);
+  });
   
   chart.data.datasets.forEach((dataset) => {
-
     switch (dataset.label) {
       case "O2":
-        dataset.data.push(o2_array);
+        o2_array.forEach(o2 => {
+          dataset.data.push(o2);
+        });
         break;
 
       case "CO2":
-        dataset.data.push(co2_array);
+        co2_array.forEach(co2 => {
+          dataset.data.push(co2);
+        });
         break;
 
 
       case "Température":
-        dataset.data.push(temp_array);
+        temp_array.forEach(temp => {
+          dataset.data.push(temp);
+        });
         break;
 
       case "Humidité":
-        dataset.data.push(hum_array);
+        hum_array.forEach(hum => {
+          dataset.data.push(hum);
+        });
         break;
 
       case "Luminosité":
-        dataset.data.push(lum_array);
+        lum_array.forEach(lum => {
+          dataset.data.push(lum);
+        });
         break;
     
       default:
