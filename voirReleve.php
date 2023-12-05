@@ -1,5 +1,10 @@
 <?php
-    if (!isset($_POST['id']) || empty($_POST['id']) || !is_numeric($_POST['id'])){
+    if (!isset($_POST['id']) || empty($_POST['id'])){
+        header("Location: /");
+    }
+
+    $id = filter_var($_POST['id'], FILTER_VALIDATE_INT);
+    if ($id === false) {
         header("Location: /");
     }
 ?>
@@ -9,7 +14,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-widthcampagne, initial-scale=1">
     <link href="./css/style.css" rel="stylesheet">
     <script src="./js/slider.js"></script>
     <link href="./css/slider.css" rel="stylesheet">
@@ -23,7 +28,9 @@
 <body class="bg main_theme">
     <?php include "modules/header.php";?>
     
-    <input type="hidden" id="id_campagne" value="<?= $_POST['id'] ?>">
+    <form action="voirReleve.php" method="post" id="refresh_form">
+        <input type="hidden" name="id" id="id" value="<?= $_POST['id'] ?>">
+    </form>
 
     <main>
         <div class="top_action_menu">
@@ -164,6 +171,13 @@
                             <b class="card-title">Tableau des données</b>
                         </div>
                         <div class="card-body mini-padding">
+                            <div class="row_center hidden" id="refreshTableDisabled">
+                                <div class="warning_container">
+                                    <div class="warning_ico"><span class="warn_ico"></span></div>
+                                    <div class="warning_txt">Le rafraîchissement automatique du tableau à été désactivé pour des raisons de performance.</div>
+                                </div>
+                            </div>
+
                             <div class="table-container">
                                 <table>
                                     <thead>
@@ -304,11 +318,9 @@
 
 
                     <div class="label_img_input no_bottom_gap">
-                        <label class="label_field" for="interval">Redéfinir l'intervalle de la campagne de
-                            mesure</label>
+                        <label class="label_field" for="interval">Redéfinir l'intervalle de la campagne de mesure</label>
                         <div class="row_fields">
-                            <input class="input_field timer" id="interval_choice" name="interval" type="number"
-                                placeholder="Intervalle" min="0">
+                            <input class="input_field timer" id="interval_choice" name="interval_choice" type="number" placeholder="Intervalle" min="0">
                             <select class="combo_box" id="interval_unit">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>

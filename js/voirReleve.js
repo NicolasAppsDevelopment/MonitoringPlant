@@ -2,6 +2,7 @@ let id = -1;
 let refresh_delay = 5000;
 let last_measure_datetime = null;
 let last_log_datetime = null;
+let rows = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
     getCampagne();
@@ -23,13 +24,13 @@ let refresh_repeat = true;
 async function getCampagne(refresh_mode = false) {
     if (refresh_mode == false){
         displayLoading("Récupération de la campagne...");
-        id = document.getElementById("id_campagne").value;
+        id = document.getElementById("id").value;
     } else {
         refresh_repeat = false;
     }
 
     let data = await PHP_post("/PHP_API/get_campaign.php", {
-        "id": parseInt(id),
+        "id": id,
         "last_log_datetime": last_log_datetime,
         "last_measure_datetime": last_measure_datetime
     });
@@ -224,7 +225,8 @@ async function getCampagne(refresh_mode = false) {
         let o2_array = [];
         let co2_array = [];
 
-        refresh_delay = 5000 + mesurements.length;
+        rows += mesurements.length;
+        refresh_delay = 5000 + rows;
 
         const tableContent = document.getElementById("tableContent");
         let tableContentHTML = "";
@@ -292,14 +294,19 @@ async function getCampagne(refresh_mode = false) {
         });
 
         if (refresh_mode == true) {
-            tableContent.innerHTML += tableContentHTML;
+            if (rows <= 1000) {
+                if (tableContentHTML != "") {
+                    tableContent.innerHTML += tableContentHTML;
+                }
+            } else  {
+                document.getElementById("refreshTableDisabled").style.display = "flex";
+            } 
+            
+            addValuesChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
         } else {
             tableContent.innerHTML = tableContentHTML;
-        }
-
-        destroyChart();
-        lineChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
-
+            initChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
+        } 
 
         if (refresh_mode == true) {
             refresh_repeat = true;
@@ -314,34 +321,52 @@ async function getCampagne(refresh_mode = false) {
 async function exportCampagne() {
     displayLoading("Export de la campagne...");
 
-    const id = parseInt(document.getElementById("id_campagne").value);
+    const id = document.getElementById("id").value;
     const CO2_enabled = document.getElementById("CO2_checkbox").checked;
     const O2_enabled = document.getElementById("O2_checkbox").checked;
     const temperature_enabled = document.getElementById("temperature_checkbox").checked;
     const luminosity_enabled = document.getElementById("luminosity_checkbox").checked;
     const humidity_enabled = document.getElementById("humidity_checkbox").checked;
     
-    let interval = parseInt(document.getElementById("interval_choice").value);
+    const interval = document.getElementById("interval_choice");
     const interval_unit = document.getElementById("interval_unit").value;
-    switch (interval_unit) {
-        case "min":
-            interval *= 60;
-            break;
-        case "h":
-            interval *= 3600;
-            break;
-        case "j":
-            interval *= 86400;
-            break;
-        default:
-            break;
-    }  
     const averaging = document.getElementById("moyennage").checked;
-    const date_start = document.getElementById("datedebut_choice").value;
-    const time_start = document.getElementById("heuredebut_choice").value;
-    const date_end = document.getElementById("datefin_choice").value;
-    const time_end = document.getElementById("heurefin_choice").value;
+    const date_start = document.getElementById("datedebut_choice");
+    const time_start = document.getElementById("heuredebut_choice");
+    const date_end = document.getElementById("datefin_choice");
+    const time_end = document.getElementById("heurefin_choice");
     const volume = document.getElementById("calc_volume").checked;
+
+    if (interval.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de l'interval de récupération des mesures de la campagne est incorrecte. Veuillez renseigner un interval puis réessayez.");
+        return;
+    }
+
+    if (date_start.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de la date de début est incorrecte. Veuillez renseigner une date puis réessayez.");
+        return;
+    }
+
+    if (time_start.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de l'heure de début est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        return;
+    }
+
+    if (date_end.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de la date de fin est incorrecte. Veuillez renseigner une date puis réessayez.");
+        return;
+    }
+
+    if (time_end.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de l'heure de fin est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        return;
+    }
+
 
     const data = await PHP_postGetFile("/PHP_API/export_campaign.php", {
         "id": id,
@@ -350,12 +375,13 @@ async function exportCampagne() {
         "temperature_enabled": temperature_enabled,
         "luminosity_enabled": luminosity_enabled,
         "humidity_enabled": humidity_enabled,
-        "interval": interval,
+        "interval": interval.value,
+        "interval_unit": interval_unit,
         "averaging":averaging,
-        "start_date": date_start,
-        "start_time": time_start,
-        "end_date": date_end,
-        "end_time": time_end,
+        "start_date": date_start.value,
+        "start_time": time_start.value,
+        "end_date": date_end.value,
+        "end_time": time_end.value,
         "volume": volume
     });
 
@@ -378,13 +404,15 @@ async function stopCampagne() {
     if (await displayConfirm('Voulez-vous vraiment arrêter cette campagne de mesure ?', 'La relève des données sera interrompu définitivement. Cette action est irréversible.', 'Arrêter', true) == true) {
         displayLoading("Arrêt de la campagne...");
 
-        const id = parseInt(document.getElementById("id_campagne").value);
+        const id = document.getElementById("id").value;
         const data = await NODERED_post("/stop_campaign", {
             "id": id
         });
 
         if (data == null) {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
+        } else {
+            document.getElementById("refresh_form").submit();
         }
 
         hideLoading();
@@ -395,14 +423,16 @@ async function restartCampagne() {
     if (await displayConfirm('Voulez-vous vraiment redémarrer cette campagne de mesure ?', 'La relève des données sera interrompu et le données déjà enregistrées de cette campagne seront supprimées définitivement. Cette action est irréversible.', 'Redémarrer', true) == true) {
         displayLoading("Redémarrage de la campagne...");
 
-        const id = parseInt(document.getElementById("id_campagne").value);
-        const data = await NODERED_post("/stop_campaign", {
+        const id = document.getElementById("id").value;
+        const data = await NODERED_post("/redo_campaign", {
             "id": id
         });
 
         if (data == null) {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
-        }
+        } else {
+            document.getElementById("refresh_form").submit();
+        } 
 
         hideLoading();
     }

@@ -1852,3 +1852,7 @@ input:invalid::placeholder {
     width: 16px;
     margin-right: 4px;
 }
+
+.hidden {
+    display: none;
+} 

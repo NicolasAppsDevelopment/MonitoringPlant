@@ -1,6 +1,6 @@
 const API_IP_ADDRESS = "172.22.69.128";
 const PHP_API_PORT = "8080";
-const NODERED_API_PORT = "1880"; 
+const NODERED_API_PORT = "1880";
 
 let blurCompatibility = true;
 

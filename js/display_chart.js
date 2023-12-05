@@ -6,12 +6,49 @@ function destroyChart() {
   }
 }
 
-async function lineChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) {
+
+async function addValuesChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) {
+  
+  chart.data.labels.push(date_array);
+  
+  chart.data.datasets.forEach((dataset) => {
+
+    switch (dataset.label) {
+      case "O2":
+        dataset.data.push(o2_array);
+        break;
+
+      case "CO2":
+        dataset.data.push(co2_array);
+        break;
+
+
+      case "Température":
+        dataset.data.push(temp_array);
+        break;
+
+      case "Humidité":
+        dataset.data.push(hum_array);
+        break;
+
+      case "Luminosité":
+        dataset.data.push(lum_array);
+        break;
+    
+      default:
+        break;
+    }
+  });
+
+  chart.update('none');
+} 
+
+async function initChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) {
   const myChart = document.getElementById('ChartCanvas');
 
   const tooltipLine =  {
     id: 'tooltipLine',
-    beforeDraw: chart => {
+    afterDraw: chart => {
       if (chart.tooltip._active && chart.tooltip._active.length) {
         const ctx = chart.ctx;
         ctx.save();

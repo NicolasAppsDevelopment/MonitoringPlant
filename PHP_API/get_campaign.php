@@ -10,8 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$args = json_decode($data, true);
 
-    if (!isset($args["id"]) || empty($args["id"]) || !is_int($args["id"])) {
-        replyError("Impossible d'accéder à la campagne", "L'identifiant de votre campagne n'a pas été renseigné ou son format est incorrecte. Veuillez donner l'identifiant de votre campagne puis réessayer.");
+    if (!isset($args["id"])){
+        replyError("Impossible d'accéder à la campagne", "L'identifiant de la campagne n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
+    }
+    $id = filter_var($args["id"], FILTER_VALIDATE_INT);
+    if ($id === false) {
+        replyError("Impossible d'accéder à la campagne", "Le format de l'identifiaant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
     }
 
     if (isset($args["last_log_datetime"]) && !is_string($args["datelast_log_datetime"])){
@@ -30,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $args["last_measure_datetime"] = NULL;
     }
 
-    $data = getCampaign($args["id"], $args["last_log_datetime"], $args["last_measure_datetime"]);
+    $data = getCampaign($id, $args["last_log_datetime"], $args["last_measure_datetime"]);
 
     // get last log datetime
     if (count($data["logs"]) > 0) {

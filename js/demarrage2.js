@@ -11,6 +11,8 @@ async function setTime() {
     if (data != null) {
         window.location.href = "";
     }
+    
+    hideLoading();
 }
 
 async function resetSeconds() {

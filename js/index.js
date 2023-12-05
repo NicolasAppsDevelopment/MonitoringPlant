@@ -89,13 +89,24 @@ async function getCampagnes(filter = null) {
 
 async function filterCampagnes() {
     const name = document.getElementById("campaign_name_search_bar").value;
-    const date = document.getElementById("campaign_date").value;
-    const time = document.getElementById("campaign_time").value;
+    const date = document.getElementById("campaign_date");
+    const time = document.getElementById("campaign_time");
     const processing = document.getElementById("processing").checked;
+
+    if (date.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de trier les campagnes", "La date cible n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une date puis réessayez.");
+        return;
+    }
+    if (time.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de trier les campagnes", "L'heure cible n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        return;
+    }
 
     closePopup("filter-popup");
 
-    getCampagnes({"name": name.toLowerCase(), "date": date, "time": time, "processing": processing});
+    getCampagnes({"name": name.toLowerCase(), "date": date.value, "time": time.value, "processing": processing});
 }
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB

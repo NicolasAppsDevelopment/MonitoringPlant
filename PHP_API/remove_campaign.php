@@ -10,12 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$args = json_decode($data, true);
 
-    if (!isset($args["id"]) || !is_int($args["id"])){
-        replyError("Impossible de supprimer la campagne", "L'identifiant de la campagne n'a pas été renseigné ou son format est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+    if (!isset($args["id"])){
+        replyError("Impossible de supprimer la campagne", "L'identifiant de la campagne n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
+    }
+    $id = filter_var($args["id"], FILTER_VALIDATE_INT);
+    if ($id === false) {
+        replyError("Impossible de supprimer la campagne", "Le format de l'identifiaant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
     }
 
     reply(array(
-        "success" => supprCampagne($args["id"])
+        "success" => supprCampagne($id)
     ));
 } else {
     replyError("Impossible de supprimer la campagne", "La méthode de requête est incorrecte.");

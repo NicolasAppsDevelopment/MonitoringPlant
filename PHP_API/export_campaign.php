@@ -32,9 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$args = json_decode($data, true);
 
-    if (!isset($args["id"]) || !is_int($args["id"])){
-        replyError("Impossible d'exporter la campagne", "L'identifiant de la campagne n'a pas été renseigné ou son format est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+    if (!isset($args["id"])){
+        replyError("Impossible d'exporter la campagne", "L'identifiant de la campagne n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
     }
+    $id = filter_var($args["id"], FILTER_VALIDATE_INT);
+    if ($id === false) {
+        replyError("Impossible d'exporter la campagne", "Le format de l'identifiant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+    }
+
 
     if (!isset($args["CO2_enabled"], $args["O2_enabled"], $args["temperature_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"])){
         replyError("Impossible d'exporter la campagne", "Il manque un ou plusieurs capteurs dans la requête.");
@@ -48,12 +53,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'exporter la campagne", "Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
     }
 
-    if (isset($args["interval"]) && !is_int($args["interval"])){
-        replyError("Impossible d'exporter la campagne", "Le format de l'interval récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
+    if (isset($args["interval_unit"]) && !is_string($args["interval_unit"])){
+        replyError("Impossible d'exporter la campagne", "Le format de l'unité de l'interval de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
+    }
+
+    $interval = null;
+    if (isset($args["interval"]) && !empty($args["interval"])) {
+        $interval = filter_var($args["interval"], FILTER_VALIDATE_INT);
+        if ($interval === false) {
+            replyError("Impossible d'exporter la campagne", "Le format de l'intervalle de récupération de la campagne est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
+        }
+
+
+        switch ($args["interval_unit"]) {
+            case "s":
+                break;
+            case "min":
+                $interval *= 60;
+                break;
+            case "h":
+                $interval *= 3600;
+                break;
+            case "j":
+                $interval *= 86400;
+                break;
+            default:
+                replyError("Impossible d'exporter la campagne", "L'unité de l'intervalle séléctionné est incorrecte.");
+                break;
+        }
     }
 
     if (isset($args["averaging"]) && !is_bool($args["averaging"])){
         replyError("Impossible d'exporter la campagne", "Le format du bouton 'moyennage' est incorrecte.");
+    }
+
+    if ($args["averaging"]==true && !isset($interval)){
+        replyError("Impossible d'exporter la campagne", "Vous avez demandé la moyennage des valeurs sans définir un interval");
     }
 
     if (isset($args["start_date"]) && !is_string($args["start_date"])){
@@ -70,14 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($args["end_time"]) && !is_string($args["end_time"])){
         replyError("Impossible d'exporter la campagne", "Le format de l'heure de fin de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
-    }
-
-    if ((isset($args["start_time"]) && $args["end_date"] != "") && (!isset($args["start_date"]) || $args["start_date"] == "")){
-        replyError("Impossible d'exporter la campagne", "Si vous spécifiez l'heure de début de récupération des mesures de la campagne vous devez aussi renseigner sa date. Veuillez réessayer.");
-    }
-
-    if ((isset($args["end_time"]) && $args["end_date"] != "") && (!isset($args["end_date"]) || $args["end_date"] == "")){
-        replyError("Impossible d'exporter la campagne", "Si vous spécifiez la date de début de récupération des mesures de la campagne vous devez aussi renseigner sa date. Veuillez réessayer.");
     }
 
     if ((!isset($args["start_time"]) || $args["start_time"] == "") && isset($args["start_date"])){
@@ -101,17 +128,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($args["volume"]) && !is_bool($args["volume"]) ){
         replyError("Impossible d'exporter la campagne", "Le format du bouton 'volume' est incorrecte.");
     }
-   
-    $measurements=exportCampaign($args["id"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
-    $info=getInfoCampaign($args["id"]);
 
+   
+    $measurements=exportCampaign($id, $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+    if (count($measurements) == 0){
+        replyError("Impossible d'exporter la campagne", "Aucune mesure ne correspond aux critères que vous avez demandé.");
+    }
+    
+    $info=getInfoCampaign($id);
     if ($args["volume"]==True && is_null($info["volume"])){
         replyError("Impossible d'exporter la campagne", "Aucun volume n'a été renseigné lors du démarrage de la campagne");
     }
 
-    $nbcolmum = (int)(count($measurements[0]) / 2);
-    $indexC02=getIndexFromKeyName($measurements[0], "CO2");
-    $index02=getIndexFromKeyName($measurements[0], "O2");
+    $nbcolmum = $nbcolmum = (int)(count($measurements[0]) / 2);
+    $indexC02=null;
+    $index02=null;
+    if ($args["CO2_enabled"] == true){
+        $indexC02=getIndexFromKeyName($measurements[0], "CO2");
+    }
+    if ($args["O2_enabled"] == true){
+        $index02=getIndexFromKeyName($measurements[0], "O2");
+    }   
 
     if (isset($args["volume"]) && $args["volume"]==True){
         for ($i=0;$i<count($measurements)-1;$i++){
@@ -123,26 +160,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+
+
     
     $f=0;
     $indexLastAccepted=0;
-    if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==false){
+    if(isset($interval) && isset($args["averaging"]) && $args["averaging"]==false){
         $measurementsWithInterval[$f]=$measurements[0];
         for ($i=1;$i<count($measurements)-1;$i++){
             $date1=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$indexLastAccepted][$nbcolmum-1]);
             $date2=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$i][$nbcolmum-1]);
-            $interval=$date2->diff($date1);
-            $total = ($interval->format('%a') * 24 * 60 * 60) + ($interval->format('%h') * 60 * 60) + ($interval->format('%i') * 60) + $interval->format('%s');
-            if ($args["interval"]<=$total){
+            $interval_=$date2->diff($date1);
+            $total = ($interval_->format('%a') * 24 * 60 * 60) + ($interval_->format('%h') * 60 * 60) + ($interval_->format('%i') * 60) + $interval_->format('%s');
+            if ($interval<=$total){
                 $f++;
                 $measurementsWithInterval[$f]=$measurements[$i];
                 $indexLastAccepted=$i;
-            } 
+            }
         } 
         $measurements=$measurementsWithInterval;  
     }
 
-    if(isset($args["interval"]) && isset($args["averaging"]) && $args["averaging"]==true){
+    if(isset($interval) && isset($args["averaging"]) && $args["averaging"]==true){
         $notTakenMeasurements=[];
         for ($i=0; $i <$nbcolmum-1 ; $i++) { 
             array_push($notTakenMeasurements, 0);
@@ -152,9 +191,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         for ($i=1;$i<count($measurements)-1;$i++){
             $date1=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$indexLastAccepted][$nbcolmum-1]);
             $date2=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$i][$nbcolmum-1]);
-            $interval=$date2->diff($date1);
-            $total = ($interval->format('%a') * 24 * 60 * 60) + ($interval->format('%h') * 60 * 60) + ($interval->format('%i') * 60) + $interval->format('%s');
-            if ($args["interval"]<=$total){
+            $interval_=$date2->diff($date1);
+            $total = ($interval_->format('%a') * 24 * 60 * 60) + ($interval_->format('%h') * 60 * 60) + ($interval_->format('%i') * 60) + $interval_->format('%s');
+            if ($interval<=$total){
                 $f++;
                 for ($y=0;$y<$nbcolmum-1;$y++){  
                     $notTakenMeasurements[$y]+=$measurements[$i][$y];

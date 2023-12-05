@@ -16,8 +16,8 @@ async function getParametre()
 
         const datetime = dateToStandardString(data['date']);
 
-        let date = document.getElementById('dateRasp');
-        let time = document.getElementById('timeRasp');
+        const date = document.getElementById("dateRasp");
+        const time = document.getElementById("timeRasp");
         date.value = datetime["date"];
         time.value = datetime["time"];
 
@@ -27,21 +27,21 @@ async function getParametre()
             //or els.selected = true;
         }
 
-        const now = new Date(document.getElementById("dateRasp").value + " " + document.getElementById("timeRasp").value);
+        const now = new Date(date.value + " " + time.value);
         seconds = now.getSeconds();
         setInterval(() => {
             seconds++;
             if (seconds >= 60) {
                 seconds = 0;
 
-                const now_ = new Date(document.getElementById("dateRasp").value + " " + document.getElementById("timeRasp").value);
+                const now_ = new Date(date.value + " " + time.value);
                 now_.setMinutes(now_.getMinutes() + 1);
 
                 const datetime_ = dateToStandardString(now_);
                 const date_ = datetime_["date"];
                 const time_ = datetime_["time"];
-                document.getElementById("heure").value = time_;
-                document.getElementById("date").value = date_;
+                time.value = time_;
+                date.value = date_;
             }
         }, 1000);
     }
@@ -53,34 +53,38 @@ async function postParametre()
 {
     displayLoading("Mise à jour des paramètres...");
 
-    if (document.getElementById("auto_suppr").checked == true){
-        active="1";
-        interval=document.getElementById("conserv").value;
-        t=document.getElementById("comboBoxTpsSuppr").value;
+    const enable_auto_remove = document.getElementById("auto_suppr");
+    const interval = document.getElementById("conserv");
+    const interval_unit = document.getElementById("comboBoxTpsSuppr");
+    const date = document.getElementById("dateRasp");
+    const time = document.getElementById("timeRasp");
 
-        if(t=="h"){
-            interval *= 3600;
-        }if(t=="j"){
-            interval *= 86400;
-        }if(t=="mois"){
-            interval *= 2592000;
-        }
-    } else {
-        active="0";
-        interval="0";
+    if (interval.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de sauvegarder les paramètres", "L'intervalle de relevé de suppression des campagnes n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
+        return;
+    }
+    if (date.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de sauvegarder les paramètres", "La nouvelle date n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une date puis réessayez.");
+        return;
+    }
+    if (time.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de sauvegarder les paramètres", "La nouvelle heure n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        return;
     }
 
     var data = await PHP_post("/PHP_API/set_settings.php", {
-        "removeInterval": interval,
-        "autoRemove": active
+        "autoremove.interval": interval.value,
+        "autoremove.interval_unit": interval_unit.value,
+        "autoremove.enabled": enable_auto_remove.checked
     });
     
     if(data != null){
         if (dateChanged) {
             displayLoading("Mise à jour de l'heure...");
-            const date = document.getElementById("date").value;
-            const time = document.getElementById("heure").value;
-            const datetime = String(date + " " + time);
+            const datetime = String(date.value + " " + time.value);
         
             const data_ = await NODERED_post("/set_datetime", {
                 "datetime": datetime,
