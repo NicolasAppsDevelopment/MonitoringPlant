@@ -298,7 +298,7 @@ async function getCampagne(refresh_mode = false) {
                 if (tableContentHTML != "") {
                     tableContent.innerHTML += tableContentHTML;
                 }
-            } else  {
+            } else {
                 document.getElementById("refreshTableDisabled").style.display = "flex";
             } 
             

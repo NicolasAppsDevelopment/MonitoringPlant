@@ -7,8 +7,11 @@ function destroyChart() {
 }
 
 
-async function addValuesChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) {
-  
+async function addValuesChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) { 
+  if (date_array.length == 0) {
+    return;
+  } 
+
   chart.data.labels.push(date_array);
   
   chart.data.datasets.forEach((dataset) => {

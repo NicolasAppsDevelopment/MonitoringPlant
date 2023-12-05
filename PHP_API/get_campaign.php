@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'accéder à la campagne", "Le format de l'identifiaant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
     }
 
-    if (isset($args["last_log_datetime"]) && !is_string($args["datelast_log_datetime"])){
+    if (isset($args["last_log_datetime"]) && !is_string($args["last_log_datetime"])){
         replyError("Impossible d'accéder à la campagne", "Paramètre \"last_log_datetime\" est invalide dans la requête.");
     }
 
