@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
-        <script src="./js/demarrage2.js"></script>
+        <script src="./js/setup_time.js"></script>
         <title>Accueil</title>
     </head>
     <body class="bg_animated main_theme">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="two_buttons">
-                            <a href="demarrage1.php">
+                            <a href="demarrage.php">
                                 <div class="rect_round_btn">
                                     <p>Retour</p>
                                 </div>

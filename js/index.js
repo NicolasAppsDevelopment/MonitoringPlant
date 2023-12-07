@@ -269,6 +269,7 @@ function handleKeyPressSearchBar(e){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    checkTime();
     getCampagnes();
     getStorageCapacity();
 });

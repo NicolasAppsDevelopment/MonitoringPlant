@@ -37,14 +37,6 @@
                 </div>
             </div>
 
-            <div class="label_img_input">
-                <label class="label_field" for="campaign_date">Date & heure de la cellule de mesure</label>
-                <div class="row_fields gap">
-                    <input class="input_field calendar" id="dateRasp" type="date" placeholder="Date" autocomplete="off" oninput="resetSeconds()">
-                    <input class="input_field clock" id="timeRasp" type="time" placeholder="Heure" autocomplete="off" oninput="resetSeconds()">
-                </div>
-            </div>
-
             <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre();">Enregistrer</button>
             <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll();">Effacer les données</button>
         </main>

@@ -5,6 +5,7 @@ let last_log_datetime = null;
 let rows = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
+    checkTime();
     getCampagne();
 });
 
