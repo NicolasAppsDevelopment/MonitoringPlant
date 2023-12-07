@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(array(
-        "success" => supprCampaign($id)
+        "success" => restartCampaign($id)
     ));
 } else {
-    replyError("Impossible de supprimer la campagne", "La méthode de requête est incorrecte.");
+    replyError("Impossible de supprimer le contenu de la campagne", "La méthode de requête est incorrecte.");
 }

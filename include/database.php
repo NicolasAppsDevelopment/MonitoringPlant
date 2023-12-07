@@ -114,25 +114,40 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
     }
 }
 
-function supprCampagne(int $id) : bool
+function supprMeasurements(int $id) : bool
 {
     // Suppression des mesures
     try {
         fetchAll("DELETE FROM Measurements WHERE idCampaign = :varId", [
             'varId' => $id
         ]);
+        return true;
     } catch (\Throwable $th) {
         replyError("Impossible de supprimer les mesures de la campagne", $th->getMessage());
     }
+}
 
+function supprLogs(int $id) : bool
+{
     // Suppression des logs
     try {
         fetchAll("DELETE FROM Logs WHERE idCampaign = :varId", [
             'varId' => $id
         ]);
+        return true;
     } catch (\Throwable $th) {
         replyError("Impossible de supprimer les logs de la campagne", $th->getMessage());
     }
+} 
+
+
+function supprCampaign(int $id) : bool
+{
+    // Suppression des mesures
+    supprMeasurements($id);
+
+    // Suppression des logs
+    supprLogs($id);
 
     // Suppression de la campagne
     try {
@@ -143,6 +158,17 @@ function supprCampagne(int $id) : bool
     } catch (\Throwable $th) {
         replyError("Impossible de supprimer la campagne", $th->getMessage());
     }
+}
+
+function restartCampaign(int $id) : bool
+{
+    // Suppression des mesures
+    supprMeasurements($id);
+
+    // Suppression des logs
+    supprLogs($id);
+
+    return true;
 }
 
 function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array

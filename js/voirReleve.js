@@ -425,11 +425,18 @@ async function restartCampagne() {
         displayLoading("Redémarrage de la campagne...");
 
         const id = document.getElementById("id").value;
-        const data = await NODERED_post("/redo_campaign", {
+        const data1 = await NODERED_post("/PHP_API/restart_campaign.php", {
             "id": id
         });
+        const data2=null;
+        if (data1 != null){
+            data2 = await NODERED_post("/redo_campaign", {
+                "id": id
+            });
+        }  
 
-        if (data == null) {
+
+        if (data2 == null) {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
         } else {
             document.getElementById("refresh_form").submit();
