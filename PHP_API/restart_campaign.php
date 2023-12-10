@@ -11,16 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$args = json_decode($data, true);
 
     if (!isset($args["id"])){
-        replyError("Impossible de supprimer la campagne", "L'identifiant de la campagne n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
+        replyError("Impossible de redémarrer la campagne", "L'identifiant de la campagne n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
     }
     $id = filter_var($args["id"], FILTER_VALIDATE_INT);
     if ($id === false) {
-        replyError("Impossible de supprimer la campagne", "Le format de l'identifiaant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+        replyError("Impossible de redémarrer la campagne", "Le format de l'identifiaant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
     }
 
     reply(array(
         "success" => restartCampaign($id)
     ));
 } else {
-    replyError("Impossible de supprimer le contenu de la campagne", "La méthode de requête est incorrecte.");
+    replyError("Impossible de redémarrer le contenu de la campagne", "La méthode de requête est incorrecte.");
 }

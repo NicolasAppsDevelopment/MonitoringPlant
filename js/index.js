@@ -113,6 +113,7 @@ const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
 const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
 let used = 0; // In KB
 let total = 0; // In KB
+let will_be_used = 0;// In KB
 
 async function getStorageCapacity() {
     const usedStorageBar = document.getElementById("used_storage_bar");
@@ -178,6 +179,7 @@ async function predictStoreUsage() {
 
     const lines = Math.round(duration / interval);
     const size = lines * MEASUREMENTS_SIZE_PER_LINE;
+    will_be_used = size;
     const percent = ((used + size) / total) * 100;
     useStorageBar.style.width = percent + "%";
 }
@@ -218,6 +220,21 @@ async function addCampagne() {
         displayError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal positif puis réessayer.");
         return;
     }
+
+    if (will_be_used / total >= 0.05){
+        hideLoading();
+        displayError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
+        return;
+    }
+
+    if (will_be_used + used == total){       
+        if (await displayConfirm('Attention', 'La campagne que vous allez lancer prendra beaucoup espace mémoire. Voulez vous continuer ?', 'Continuer', true) == false) {
+            hideLoading();
+            return;
+        }
+    }     
+
+    
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,
