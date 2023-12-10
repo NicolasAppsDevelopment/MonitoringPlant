@@ -287,7 +287,7 @@ function getParametre() : array
             throw new Exception("Les paramètres sont introuvables.");
         }
     } catch (\Throwable $th) {
-        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());
+        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());       
     }
 }
 

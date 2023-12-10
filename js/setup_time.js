@@ -9,7 +9,7 @@ async function setTime() {
         "datetime": datetime,
     });
     if (data != null) {
-        window.location.href = "";
+        window.location.href = "index.php";
     }
     
     hideLoading();
