@@ -133,3 +133,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     replyError("Impossible d'ajouter la campagne", "La méthode de requête est incorrecte.");
 }
+?>
