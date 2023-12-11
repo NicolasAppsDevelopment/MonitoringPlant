@@ -171,6 +171,40 @@ function restartCampaign(int $id) : bool
     return true;
 }
 
+function resetAll() : bool
+{
+    // Suppression des paramètres du Raspbery Pi
+    try {
+        fetchAll("DELETE FROM Settings");
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer les paramètres du Raspbery Pi", $th->getMessage());
+    }
+
+    // Suppression des mesures
+    try {
+        fetchAll("DELETE FROM Measurements");
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer les mesures des campagnes", $th->getMessage());
+    }
+
+    // Suppression les logs
+    try {
+        fetchAll("DELETE FROM Logs");
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer les logs", $th->getMessage());
+    }
+
+    // Suppression les campagnes
+    try {
+        fetchAll("DELETE FROM Campaigns");
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer les campagnes", $th->getMessage());
+    }
+
+    return true;
+}
+
+
 function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array
 {
     $params = [];
@@ -284,10 +318,11 @@ function getParametre() : array
         if (count($data) > 0) {
             return $data[0];
         } else {
-            throw new Exception("Les paramètres sont introuvables.");
+            header("Location: /demarrage.php");
+            return [];
         }
     } catch (\Throwable $th) {
-        replyError("Impossible de récupérer les données de la campagnes", $th->getMessage());       
+        replyError("Impossible de récupérer les paramètres du Raspberry Pi", $th->getMessage());       
     }
 }
 

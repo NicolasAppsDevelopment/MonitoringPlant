@@ -221,20 +221,22 @@ async function addCampagne() {
         return;
     }
 
+    const warning_container = document.getElementById("warning_container");
+    warning_container.innerHTML = ``;
+
     if (will_be_used / total >= 0.05){
         hideLoading();
-        displayError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
+        
+        warning_container.innerHTML = `
+            <div class="warning_ico">
+                <span class="warn_ico"></span>
+            </div>
+            <div class="warning_txt">
+                Cette campagne va nécessiter un espace de stockage important (${(will_be_used / total * 100)}%).
+            </div>
+        `;
         return;
-    }
-
-    if (will_be_used + used == total){       
-        if (await displayConfirm('Attention', 'La campagne que vous allez lancer prendra beaucoup espace mémoire. Voulez vous continuer ?', 'Continuer', true) == false) {
-            hideLoading();
-            return;
-        }
     }     
-
-    
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,
@@ -255,12 +257,12 @@ async function addCampagne() {
         document.getElementById("id_added_campaign").value = data["id"];
         document.getElementById("add_popup_form").submit();
 
-        /*const data_ = await NODERED_post("/add_campaign", {
+        const data_ = await NODERED_post("/add_campaign", {
             "id": data["id"]
         });
         if (data_ == null) {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
-        }*/
+        }
     }
 
 

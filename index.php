@@ -1,3 +1,4 @@
+<?php include "include/checkSetup.php";?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>

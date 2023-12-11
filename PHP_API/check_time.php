@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $server_datetime = time();
-    $timeout = 120-120; // in seconds
+    $timeout = 120; // in seconds
 
     reply([
         "up_to_date" => abs($client_datetime - $server_datetime) < $timeout

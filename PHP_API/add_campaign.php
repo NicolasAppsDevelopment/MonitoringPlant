@@ -105,7 +105,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($interval > $duration) {
         replyError("Impossible d'ajouter la campagne", "L'intervalle demandé doit être inférieur ou égale à la durée de la campagne.");
-    } 
+    }
+    
+    $url = "http://192.168.4.1:1880/storage";
+
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $res = curl_exec($curl);
+    curl_close($curl);
+    $data=json_decode($res);
+
+    if ($data != null){
+        $used = $data["used"];
+        $total = $data["total"];
+    }
+    $will_be_used = ceil($duration / $interval) * 1497.6;
+
+    if ($will_be_used + $used >= $total){
+        replyError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
+    }
 
     reply(array(
         "id" => addCampaign($args["title"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $interval, $volume, $duration)

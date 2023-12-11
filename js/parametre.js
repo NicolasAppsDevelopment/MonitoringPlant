@@ -38,7 +38,7 @@ async function postParametre()
         return;
     } 
 
-    var data = await PHP_post("/PHP_API/set_settings.php", {
+    let data = await PHP_post("/PHP_API/set_settings.php", {
         "autoremove.interval": interval.value,
         "autoremove.interval_unit": interval_unit.value,
         "autoremove.enabled": enable_auto_remove.checked
@@ -56,12 +56,14 @@ async function postDeleteAll()
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, mesures et paramètres seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
     
-        var data = await NODERED_post("/format", {
+        const data1 = await NODERED_post("/format", {
             "key": "securityKey"
         });
+
+        const data = await PHP_get("/PHP_API/reset.php");
         
         if(data != null){
-            displaySuccess("Données supprimées !", "Toutes les campagnes, mesures et paramètres ont été supprimées avec succès.");
+            displaySuccess("Données supprimées !", "Toutes les campagnes, mesures, logs et paramètres ont été supprimées avec succès.");
         }
 
         hideLoading();

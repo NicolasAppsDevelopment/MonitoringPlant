@@ -26,6 +26,9 @@
                             <p>Continuer</p>
                         </div>
                     </a>
+                    <button class="rect_round_btn" type="button" onclick="setParameter()">
+                        Continuer
+                    </button>
 
                 </div>
             </div>

@@ -1,3 +1,4 @@
+<?php include "include/checkSetup.php";?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -27,14 +28,9 @@
                                 <input class="input_field clock" id="heure" name="heure" type="time" placeholder="Heure" required autocomplete="off" oninput="resetSeconds()">
                             </div>
                         </div>
-                        <div class="two_buttons">
-                            <a href="demarrage.php">
-                                <div class="rect_round_btn">
-                                    <p>Retour</p>
-                                </div>
-                            </a>
-                            <button class="rect_round_btn" type="button" onclick="setTime()">Continuer</button>
-                        </div> 
+                        <button class="rect_round_btn" type="button" onclick="setTime()">
+                            Continuer
+                        </button>
                     </form>
                 </div>
             </div>

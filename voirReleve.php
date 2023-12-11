@@ -7,6 +7,8 @@
     if ($id === false) {
         header("Location: /");
     }
+
+    include "include/checkSetup.php";
 ?>
 
 <!DOCTYPE html>

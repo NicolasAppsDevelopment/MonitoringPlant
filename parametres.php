@@ -1,3 +1,4 @@
+<?php include "include/checkSetup.php";?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -22,7 +23,7 @@
                     </svg>
                 </span>
                 <span>Supprimer automatiquement les campagnes de mesures au bout d'un certains temps</span>
-                </label>
+                <<?php include "include/checkSetup.php";?>/label>
             </div>
 
             <div class="label_img_input">
@@ -37,8 +38,8 @@
                 </div>
             </div>
 
-            <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre();">Enregistrer</button>
-            <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll();">Effacer les données</button>
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre()">Enregistrer</button>
+            <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll()">Effacer les données</button>
         </main>
 
         <!-- loading popup -->
