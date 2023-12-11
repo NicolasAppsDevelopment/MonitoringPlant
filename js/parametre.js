@@ -60,10 +60,14 @@ async function postDeleteAll()
             "key": "securityKey"
         });
 
-        const data = await PHP_get("/PHP_API/reset.php");
         
-        if(data != null){
-            displaySuccess("Données supprimées !", "Toutes les campagnes, mesures, logs et paramètres ont été supprimées avec succès.");
+        
+        if(data1 != null){
+            const data = await PHP_get("/PHP_API/reset.php");
+
+            if(data != null){
+                displaySuccess("Données supprimées !", "Toutes les campagnes, mesures, logs et paramètres ont été supprimées avec succès.");
+            }
         }
 
         hideLoading();

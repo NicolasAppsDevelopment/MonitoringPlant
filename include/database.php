@@ -197,11 +197,10 @@ function resetAll() : bool
     // Suppression les campagnes
     try {
         fetchAll("DELETE FROM Campaigns");
+        return true;
     } catch (\Throwable $th) {
         replyError("Impossible de supprimer les campagnes", $th->getMessage());
     }
-
-    return true;
 }
 
 

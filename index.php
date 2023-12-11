@@ -7,7 +7,7 @@
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
         <script src="./js/index.js"></script>
-        <title>Accueil</title>
+        <title>Liste des campagnes</title>
     </head>
     <body class="bg main_theme">
         <?php include "modules/header.php";?>

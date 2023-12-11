@@ -4,8 +4,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
-        <script src="./js/function.js"></script>
-        <title>Accueil</title>
+        <script src="./js/functions.js"></script>
+        <script src="./js/demarrage.js"></script>
+        <title>Bienvenue</title>
     </head>
     <body class="bg_animated main_theme">
         <main class="main_popup_container">
@@ -21,11 +22,6 @@
                         Avant de commencer à pouvoir l’utiliser, nous devons d’abord vous demander quelques informations.
                     </p>
 
-                    <a href="setup_time.php">
-                        <div class="rect_round_btn">
-                            <p>Continuer</p>
-                        </div>
-                    </a>
                     <button class="rect_round_btn" type="button" onclick="setParameter()">
                         Continuer
                     </button>
@@ -33,5 +29,7 @@
                 </div>
             </div>
         </main>
+        <!-- loading popup -->
+        <?php include "modules/loading_popup.php";?>
     </body>
 </html>

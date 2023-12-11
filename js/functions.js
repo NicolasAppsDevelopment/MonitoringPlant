@@ -343,7 +343,6 @@ function getReadableTime(seconds) {
 }
 
 function getReadableTimeAndUnit(seconds) {
-    console.log(seconds);
     let hours = seconds / 3600;
     
     let unit = "h";
