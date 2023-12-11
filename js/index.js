@@ -221,19 +221,17 @@ async function addCampagne() {
         return;
     }
 
-    const warning_container = document.getElementById("warning_container");
-    warning_container.innerHTML = ``;
+    const space_taken_warning = document.getElementById("space_taken_warning");
+    space_taken_warning.innerHTML = "";
 
     if (will_be_used / total >= 0.05){
         hideLoading();
         
-        warning_container.innerHTML = `
-            <div class="warning_ico">
-                <span class="warn_ico"></span>
-            </div>
-            <div class="warning_txt">
-                Cette campagne va nécessiter un espace de stockage important (${(will_be_used / total * 100)}%).
-            </div>
+        space_taken_warning.innerHTML = `
+        <div class="warning_container">
+            <div class="warning_ico"><span class="warn_ico"></span></div>
+            <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${((will_be_used / total) * 100)}%).</div>
+        </div>
         `;
         return;
     }     

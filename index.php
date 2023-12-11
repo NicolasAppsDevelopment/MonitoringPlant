@@ -169,11 +169,8 @@
                     </div>
 
                     <div class="section">
-                        <div class="row_center">
-                            <div class="warning_container">
-                                <div class="warning_ico"><span class="warn_ico"></span></div>
-                                <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (7%).</div>
-                            </div>
+                        <div class="row_center" id="space_taken_warning">
+                            
                         </div>
                         <div class="row">
                             <p class="device_name">Cellule</p>
