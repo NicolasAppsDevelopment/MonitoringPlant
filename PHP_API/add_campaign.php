@@ -117,13 +117,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     curl_close($curl);
     $data=json_decode($res);
 
-    if ($data != null){
-        $used = $data["used"];
-        $total = $data["total"];
+    if (!isset($args["used"]) || !isset($args["total"])) {
+        replyError("Impossible d'ajouter la campagne", "Les caractéristiques actuelles de la mémoire de l'appareil n'ont pas été récupéré");
     }
+    if (!is_int($args["used"]) || !is_int($args["total"])) {
+        replyError("Impossible d'ajouter la campagne", "Le format des caractéristiques actuelles de la mémoire de l'appareil est incorrect");
+    }
+    
     $will_be_used = ceil($duration / $interval) * 1497.6;
 
-    if ($will_be_used + $used >= $total){
+    if ($will_be_used + $args["used"] >= $args["total"]){
         replyError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
     }
 

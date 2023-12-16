@@ -182,6 +182,22 @@ async function predictStoreUsage() {
     will_be_used = size;
     const percent = ((used + size) / total) * 100;
     useStorageBar.style.width = percent + "%";
+
+
+    const space_taken_warning = document.getElementById("space_taken_warning");
+    space_taken_warning.innerHTML = "";
+
+    if (will_be_used / total >= 0.05){
+        hideLoading();
+        
+        space_taken_warning.innerHTML = `
+        <div class="warning_container">
+            <div class="warning_ico"><span class="warn_ico"></span></div>
+            <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${(Math.round(will_be_used / total) * 100)}%).</div>
+        </div>
+        `;
+        return;
+    }  
 }
 
 async function addCampagne() {
@@ -219,22 +235,7 @@ async function addCampagne() {
         hideLoading();
         displayError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal positif puis réessayer.");
         return;
-    }
-
-    const space_taken_warning = document.getElementById("space_taken_warning");
-    space_taken_warning.innerHTML = "";
-
-    if (will_be_used / total >= 0.05){
-        hideLoading();
-        
-        space_taken_warning.innerHTML = `
-        <div class="warning_container">
-            <div class="warning_ico"><span class="warn_ico"></span></div>
-            <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${((will_be_used / total) * 100)}%).</div>
-        </div>
-        `;
-        return;
-    }     
+    }   
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,
@@ -248,7 +249,9 @@ async function addCampagne() {
         "interval": interval.value,
         "interval_unit": interval_unit.value,
         "volume": volume.value,
-        "volume_unit": volume_unit.value
+        "volume_unit": volume_unit.value,
+        "used":used, 
+        "total":total
     });
 
     if (data != null) {
