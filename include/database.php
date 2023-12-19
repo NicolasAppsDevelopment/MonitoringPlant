@@ -4,9 +4,9 @@ include_once __DIR__ . "/../include/reply.php";
 
 function init_db() : PDO
 {
-    $dsn = "mysql:dbname=p2201232;host=iutbg-lamp.univ-lyon1.fr";
-    $user = "p2201232";
-    $password = "12201232";
+    $dsn = "mysql:dbname=phase1;host=localhost";
+    $user = "quentin";
+    $password = "password";
 
     try {
         return new PDO($dsn, $user, $password);

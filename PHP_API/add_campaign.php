@@ -123,10 +123,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_int($args["used"]) || !is_int($args["total"])) {
         replyError("Impossible d'ajouter la campagne", "Le format des caractéristiques actuelles de la mémoire de l'appareil est incorrect");
     }
-    
-    $will_be_used = ceil($duration / $interval) * 1497.6;
+    if (!isset($args["will_be_used"])) {
+        replyError("Impossible d'ajouter la campagne", "La prédiction sur la place que occupera la campagne n'a pas été récupérée");
+    }
+    if (!is_int($args["will_be_used"])) {
+        replyError("Impossible d'ajouter la campagne", "Le format de la prédiction sur la place que occupera la campagne est incorrect");
+    }
 
-    if ($will_be_used + $args["used"] >= $args["total"]){
+    if ($args["will_be_used"] + $args["used"] >= $args["total"]){
         replyError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
     }
 

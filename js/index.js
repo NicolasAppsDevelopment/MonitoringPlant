@@ -187,17 +187,20 @@ async function predictStoreUsage() {
     const space_taken_warning = document.getElementById("space_taken_warning");
     space_taken_warning.innerHTML = "";
 
-    if (will_be_used / total >= 0.05){
+    const percent_used = (will_be_used/total)*100;
+
+    if (interval!=0 && duration!=0 && Math.round(percent_used)>=5){
         hideLoading();
         
         space_taken_warning.innerHTML = `
         <div class="warning_container">
             <div class="warning_ico"><span class="warn_ico"></span></div>
-            <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${(Math.round(will_be_used / total) * 100)}%).</div>
+            <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${(Math.round(percent_used))}%).</div>
         </div>
         `;
         return;
-    }  
+    } 
+ 
 }
 
 async function addCampagne() {
@@ -251,7 +254,8 @@ async function addCampagne() {
         "volume": volume.value,
         "volume_unit": volume_unit.value,
         "used":used, 
-        "total":total
+        "total":total,
+        "will_be_used":will_be_used
     });
 
     if (data != null) {
