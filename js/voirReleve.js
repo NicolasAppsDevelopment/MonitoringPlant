@@ -278,7 +278,7 @@ async function getCampagne(refresh_mode = false) {
                 co2 = "";
                 co2_array.push(null);
             } else {
-                co2 += " g/L";
+                co2 += " vol%";
                 co2_array.push(parseFloat(co2));
             }
 
