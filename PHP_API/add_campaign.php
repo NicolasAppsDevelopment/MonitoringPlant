@@ -4,6 +4,9 @@ header("Content-Type: application/json; charset=utf-8");
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
 
+const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
+const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
 
@@ -116,21 +119,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $res = curl_exec($curl);
     curl_close($curl);
     $data=json_decode($res);
+    
 
-    if (!isset($args["used"]) || !isset($args["total"])) {
+    const lines = round((duration / interval),0,PHP_ROUND_HALF_UP);
+    const size = lines * MEASUREMENTS_SIZE_PER_LINE;
+
+
+    if (!isset($data["used"]) || !isset($data["total"])) {
         replyError("Impossible d'ajouter la campagne", "Les caractéristiques actuelles de la mémoire de l'appareil n'ont pas été récupéré");
     }
-    if (!is_int($args["used"]) || !is_int($args["total"])) {
+    if (!is_int($data["used"]) || !is_int($data["total"])) {
         replyError("Impossible d'ajouter la campagne", "Le format des caractéristiques actuelles de la mémoire de l'appareil est incorrect");
     }
-    if (!isset($args["will_be_used"])) {
-        replyError("Impossible d'ajouter la campagne", "La prédiction sur la place que occupera la campagne n'a pas été récupérée");
+    if (!isset(size)) {
+        replyError("Impossible d'ajouter la campagne", "La prédiction sur la place que occupera la campagne n'a pas été calculée");
     }
-    if (!is_int($args["will_be_used"])) {
+    if (!is_int(size)) {
         replyError("Impossible d'ajouter la campagne", "Le format de la prédiction sur la place que occupera la campagne est incorrect");
     }
 
-    if ($args["will_be_used"] + $args["used"] >= $args["total"]){
+    if (size + $data["used"] >= $data["total"]){
         replyError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
     }
 
