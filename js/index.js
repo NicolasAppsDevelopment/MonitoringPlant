@@ -113,7 +113,6 @@ const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
 const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
 let used = 0; // In KB
 let total = 0; // In KB
-let will_be_used = 0;// In KB
 
 async function getStorageCapacity() {
     const usedStorageBar = document.getElementById("used_storage_bar");
@@ -179,7 +178,6 @@ async function predictStoreUsage() {
 
     const lines = Math.round(duration / interval);
     const size = lines * MEASUREMENTS_SIZE_PER_LINE;
-    will_be_used = size;
     const percent = ((used + size) / total) * 100;
     useStorageBar.style.width = percent + "%";
 
@@ -187,7 +185,7 @@ async function predictStoreUsage() {
     const space_taken_warning = document.getElementById("space_taken_warning");
     space_taken_warning.innerHTML = "";
 
-    const percent_used = (will_be_used/total)*100;
+    const percent_used = (size/total)*100;
 
     if (interval!=0 && duration!=0 && Math.round(percent_used)>=5){
         hideLoading();
@@ -252,10 +250,7 @@ async function addCampagne() {
         "interval": interval.value,
         "interval_unit": interval_unit.value,
         "volume": volume.value,
-        "volume_unit": volume_unit.value,
-        "used":used, 
-        "total":total,
-        "will_be_used":will_be_used
+        "volume_unit": volume_unit.value
     });
 
     if (data != null) {
