@@ -16,7 +16,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-widthcampagne, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/style.css" rel="stylesheet">
     <script src="./js/slider.js"></script>
     <link href="./css/slider.css" rel="stylesheet">
