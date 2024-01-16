@@ -55,12 +55,14 @@ async function postDeleteAll()
 {
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, mesures et paramètres seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
-    
-        const data1 = await NODERED_post("/format", {
-            "key": "securityKey"
-        });
 
         const securityKey="I_do_believe_I_am_fire"
+    
+        const data1 = await NODERED_post("/format", {
+            "key": securityKey
+        });
+
+        
         
         if(data1 != null){
             const data = await PHP_post("/PHP_API/reset.php", {
@@ -73,6 +75,8 @@ async function postDeleteAll()
         }
 
         hideLoading();
+        // redirect
+        window.location = "/setup_time.php"
     }
 }
 
