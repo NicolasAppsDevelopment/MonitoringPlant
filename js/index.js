@@ -238,6 +238,8 @@ async function addCampagne() {
         return;
     }   
 
+    const data_ = await NODERED_get("/check_working_campaign");
+
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,
         "CO2_enabled": CO2_enabled.checked,
