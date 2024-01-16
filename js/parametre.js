@@ -60,10 +60,12 @@ async function postDeleteAll()
             "key": "securityKey"
         });
 
-        
+        const securityKey="I_do_believe_I_am_fire"
         
         if(data1 != null){
-            const data = await PHP_get("/PHP_API/reset.php");
+            const data = await PHP_post("/PHP_API/reset.php", {
+                "key": securityKey
+            });
 
             if(data != null){
                 displaySuccess("Données supprimées !", "Toutes les campagnes, mesures, logs et paramètres ont été supprimées avec succès.");
