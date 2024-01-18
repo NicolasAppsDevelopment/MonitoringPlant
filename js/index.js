@@ -238,7 +238,7 @@ async function addCampagne() {
         return;
     }   
 
-    const data_ = await NODERED_get("/check_working_campaign");
+    const data1 = await NODERED_get("/check_working_campaign");
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,
@@ -289,8 +289,24 @@ function handleKeyPressSearchBar(e){
     }
 }
 
+async function removeOldCampaign(e){
+    data = await PHP_get("/PHP_API/get_settings.php");
+    console.log(data["removeInterval"]);
+
+    if (data["autoRemove"]==true){
+        const data2 = await NODERED_post("/cleaning", {
+            "dayleft": data["removeInterval"]
+        });
+        if (data2 == null) {
+            console.warn("ATTENTION : NodeRed n'a rien retourné");
+        }
+    } 
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
+    removeOldCampaign();
     getCampagnes();
     getStorageCapacity();
+    
 });
