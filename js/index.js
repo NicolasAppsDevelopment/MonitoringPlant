@@ -289,12 +289,12 @@ function handleKeyPressSearchBar(e){
     }
 }
 
-async function removeOldCampaign(e){
-    data = await PHP_get("/PHP_API/get_settings.php");
+function removeOldCampaign(){
+    data =  PHP_get("/PHP_API/get_settings.php");
     console.log(data["removeInterval"]);
 
     if (data["autoRemove"]==true){
-        const data2 = await NODERED_post("/cleaning", {
+        const data2 =  NODERED_post("/cleaning", {
             "dayleft": data["removeInterval"]
         });
         if (data2 == null) {
