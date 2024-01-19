@@ -289,12 +289,12 @@ function handleKeyPressSearchBar(e){
     }
 }
 
-function removeOldCampaign(){
-    const data1 =  PHP_get("/PHP_API/get_settings.php");
+async function removeOldCampaign(){
+    const data1 = await PHP_get("/PHP_API/get_settings.php");
     if (data1 != null){
         if (data1["autoRemove"]==true){
-            const data2 =  NODERED_post("/cleaning", {
-                "dayleft": data1["removeInterval"]
+            const data2 = await NODERED_post("/cleaning", {
+                "timeleft": data1["removeInterval"]
             });
             if (data2 == null) {
                 console.warn("ATTENTION : NodeRed n'a rien retourné");
