@@ -168,6 +168,15 @@ function restartCampaign(int $id) : bool
     // Suppression des logs
     supprLogs($id);
 
+    try {
+        fetchAll("UPDATE Campaigns SET beginDate=NOW() WHERE idCampaign = :varId", [
+            'varId' => $id
+        ]);
+        return true;
+    } catch (\Throwable $th) {
+        replyError("Impossible de modifier la campagne", $th->getMessage());
+    }
+
     return true;
 }
 
