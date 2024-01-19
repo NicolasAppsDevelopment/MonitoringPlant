@@ -290,16 +290,16 @@ function handleKeyPressSearchBar(e){
 }
 
 function removeOldCampaign(){
-    data =  PHP_get("/PHP_API/get_settings.php");
-    console.log(data["removeInterval"]);
-
-    if (data["autoRemove"]==true){
-        const data2 =  NODERED_post("/cleaning", {
-            "dayleft": data["removeInterval"]
-        });
-        if (data2 == null) {
-            console.warn("ATTENTION : NodeRed n'a rien retourné");
-        }
+    const data1 =  PHP_get("/PHP_API/get_settings.php");
+    if (data1 != null){
+        if (data1["autoRemove"]==true){
+            const data2 =  NODERED_post("/cleaning", {
+                "dayleft": data1["removeInterval"]
+            });
+            if (data2 == null) {
+                console.warn("ATTENTION : NodeRed n'a rien retourné");
+            }
+        } 
     } 
 }
 

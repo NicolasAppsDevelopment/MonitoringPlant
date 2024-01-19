@@ -16,14 +16,15 @@
             
             <div class="checkbox">
                 <label for="auto_suppr">
-                <input type="checkbox" id="auto_suppr" name="activateAutoSuppr" autocomplete="off">
-                <span class="cbx">
-                    <svg width="12px" height="11px" viewBox="0 0 12 11">
-                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-                    </svg>
-                </span>
-                <span>Supprimer automatiquement les campagnes de mesures au bout d'un certains temps</span>
-                <<?php include "include/checkSetup.php";?>/label>
+                    <input type="checkbox" id="auto_suppr" name="activateAutoSuppr" autocomplete="off">
+                    <span class="cbx">
+                        <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                        </svg>
+                    </span>
+                    <span>Supprimer automatiquement les campagnes de mesures au bout d'un certains temps</span>
+                    <?php include "include/checkSetup.php";?>
+                </label>
             </div>
 
             <div class="label_img_input">
