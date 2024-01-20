@@ -48,17 +48,6 @@ async function getCampagne(refresh_mode = false) {
             last_measure_datetime = data["last_measure_datetime"];
         }
 
-        if (campaignInfo["finished"] == 1) {
-            document.getElementById("stop_btn").remove();
-            if (refresh_mode == true){
-                return;
-            } 
-        } else {
-            if (refresh_mode == false){
-                subscribeRefresh()
-            } 
-        } 
-
         if (refresh_mode == false){
             const titleCampaign = document.getElementById("titleCampaign");
             titleCampaign.innerHTML = campaignInfo["name"];
@@ -308,6 +297,17 @@ async function getCampagne(refresh_mode = false) {
             tableContent.innerHTML = tableContentHTML;
             initChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
         } 
+
+        if (campaignInfo["finished"] == 1) {
+            document.getElementById("stop_btn").remove();
+            if (refresh_mode == true){
+                return;
+            } 
+        } else {
+            if (refresh_mode == false){
+                subscribeRefresh()
+            } 
+        }
 
         if (refresh_mode == true) {
             refresh_repeat = true;
