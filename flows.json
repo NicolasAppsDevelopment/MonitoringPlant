@@ -1,0 +1,3744 @@
+[
+    {
+        "id": "bb3e76ddae756e10",
+        "type": "tab",
+        "label": "Démmarer campagne",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "279cc9b9bebdc667",
+        "type": "tab",
+        "label": "Commande divers",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "cfddb40943ae0555",
+        "type": "tab",
+        "label": "Capteur",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9fa9e71427451144",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "localhost",
+        "port": "3306",
+        "db": "phase1",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "61de5090.0f5d9",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "276b14c6e78b7856",
+        "type": "serial-port",
+        "serialport": "/dev/ttyUSB0",
+        "serialbaud": "19200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\r",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "1000"
+    },
+    {
+        "id": "202aa279db48a455",
+        "type": "http in",
+        "z": "bb3e76ddae756e10",
+        "name": "Post démarrer campagne",
+        "url": "/add_campaign",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 520,
+        "wires": [
+            [
+                "da4c8bb1504f090b"
+            ]
+        ]
+    },
+    {
+        "id": "bbed68999e76bec0",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 3",
+        "func": "global.set(\"interval\",global.get(\"interval\")*1000);\nmsg.payload='{\"interval\":'+global.get(\"interval\")+',\"tpsCampagne\":'+global.get(\"tempsCampagne\")+', \"curCampaign\":'+global.get(\"currentCampagne\")+'}';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1560,
+        "y": 660,
+        "wires": [
+            [
+                "ba90439ab7785b96",
+                "c7ae23bdabb42378"
+            ]
+        ]
+    },
+    {
+        "id": "ba90439ab7785b96",
+        "type": "http response",
+        "z": "bb3e76ddae756e10",
+        "name": "http Campagne Succès",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1730,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "da4c8bb1504f090b",
+        "type": "switch",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "property": "currentCampagne",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 340,
+        "y": 520,
+        "wires": [
+            [
+                "b24373288d3a2441",
+                "2be9d2d28ec5109c"
+            ],
+            [
+                "65b985823573c7a8"
+            ]
+        ]
+    },
+    {
+        "id": "b24373288d3a2441",
+        "type": "http response",
+        "z": "bb3e76ddae756e10",
+        "name": "Erreur",
+        "statusCode": "500",
+        "headers": {},
+        "x": 590,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "3d62a9f689d9ae38",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Récupère info sur campagne avec id demandé",
+        "x": 640,
+        "y": 660,
+        "wires": [
+            [
+                "4c6502338084d2c6"
+            ]
+        ]
+    },
+    {
+        "id": "4c6502338084d2c6",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Met en place la campagne",
+        "func": "global.set(\"interval\",msg.payload[0][\"interval_\"]);\nglobal.set(\"tempsCampagne\",msg.payload[0][\"duration\"]);\n\nvar capteur='{\"CO2\":'+msg.payload[0][\"CO2SensorState\"];\ncapteur = capteur+',\"O2\":'+msg.payload[0][\"O2SensorState\"];\ncapteur = capteur + ',\"humidite\":' + msg.payload[0][\"humiditySensorState\"];\ncapteur = capteur + ',\"lumiere\":' + msg.payload[0][\"luminositySensorState\"];\ncapteur = capteur + ',\"temperature\":' + msg.payload[0][\"temperatureSensorState\"] + '}';\n\n\nmsg.payload=capteur;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 660,
+        "wires": [
+            [
+                "ea52a0636dbafd8c"
+            ]
+        ]
+    },
+    {
+        "id": "ea52a0636dbafd8c",
+        "type": "json",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 1170,
+        "y": 660,
+        "wires": [
+            [
+                "ba2cced9d2f85986"
+            ]
+        ]
+    },
+    {
+        "id": "ba2cced9d2f85986",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "besoinCapteur",
+        "rules": [
+            {
+                "t": "set",
+                "p": "besoinCapteur",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1360,
+        "y": 660,
+        "wires": [
+            [
+                "bbed68999e76bec0"
+            ]
+        ]
+    },
+    {
+        "id": "6fe29aed70b55c09",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 8",
+        "func": "msg.topic=\"select * from Campaigns where idCampaign=\"+global.get(\"currentCampagne\")+\";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 600,
+        "wires": [
+            [
+                "3d62a9f689d9ae38"
+            ]
+        ]
+    },
+    {
+        "id": "c7ae23bdabb42378",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "logs démarré",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',0,\"Campagne démarrée\", \"La campagne a été démarrée avec succès.\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1520,
+        "y": 740,
+        "wires": [
+            [
+                "4e58e96fdc140da7"
+            ]
+        ]
+    },
+    {
+        "id": "4e58e96fdc140da7",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "logs démarré",
+        "x": 1740,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "19e2bd7b046e1702",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "Démmarage ou Redémmarage",
+        "scope": [
+            "ba90439ab7785b96",
+            "f8b6b0c37f6e5633"
+        ],
+        "uncaught": false,
+        "x": 150,
+        "y": 820,
+        "wires": [
+            [
+                "a57b69a54fc7e3f2"
+            ]
+        ]
+    },
+    {
+        "id": "5edf0aa5ca3f898f",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Init times var",
+        "func": "msg.begin = new Date().valueOf();\nmsg.next_time = msg.begin;\nmsg.interval = global.get(\"interval\");\nmsg.count = global.get(\"tempsCampagne\")/(global.get(\"interval\")/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 900,
+        "wires": [
+            [
+                "15dfd7195cb1f031"
+            ]
+        ]
+    },
+    {
+        "id": "9c58bf74e7219804",
+        "type": "delay",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2880,
+        "y": 1160,
+        "wires": [
+            [
+                "48d756402a9ae55b"
+            ]
+        ]
+    },
+    {
+        "id": "a57b69a54fc7e3f2",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "begin",
+                "pt": "msg",
+                "to": "-1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "interval",
+                "pt": "msg",
+                "to": "-1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "next_time",
+                "pt": "msg",
+                "to": "-1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "-1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "count",
+                "pt": "global",
+                "to": "-1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "count",
+                "pt": "msg",
+                "to": "-1",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "nbReset",
+                "pt": "global",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "tempsDepuisReset",
+                "pt": "global",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 280,
+        "y": 900,
+        "wires": [
+            [
+                "5edf0aa5ca3f898f"
+            ]
+        ]
+    },
+    {
+        "id": "5855f22a8b3c9d31",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Update finished",
+        "x": 1860,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8b36684e8b1d804d",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "insère logs arrêt naturel",
+        "x": 1330,
+        "y": 800,
+        "wires": [
+            [
+                "8eeb5d6cda9c2c4a"
+            ]
+        ]
+    },
+    {
+        "id": "20ecfa634d7f98d2",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs arrêt normal",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',1,\"Arrêt prévu\", \"La campagne s\\'est terminé avec succès.\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 820,
+        "wires": [
+            [
+                "8b36684e8b1d804d"
+            ]
+        ]
+    },
+    {
+        "id": "8eeb5d6cda9c2c4a",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 11",
+        "func": "\n\n\n\nmsg.topic =\"update Campaigns set finished=1, endingDate=NOW() where idCampaign=\"+global.get(\"currentCampagne\");\n    global.set(\"currentCampagne\", -1);\n    return  msg\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1570,
+        "y": 820,
+        "wires": [
+            [
+                "5855f22a8b3c9d31"
+            ]
+        ]
+    },
+    {
+        "id": "48d756402a9ae55b",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Vérifie nombre d'itération du compte",
+        "func": "\n    if (msg.count > 0) {\n        msg.count -= 1;\n        return [null, msg,null];\n\n\n    } else {\n        return [msg, null,null];\n    }\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 960,
+        "wires": [
+            [
+                "20ecfa634d7f98d2"
+            ],
+            [
+                "0bcf257cf9d70466"
+            ]
+        ]
+    },
+    {
+        "id": "b1e79f1b417bf8ee",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Get delay",
+        "func": "let now = new Date();\nmsg.next_time += msg.interval;\nmsg.delay = msg.next_time - now.valueOf();\nif(msg.delay<0){\n    msg.delay=msg.interval;\n}\nmsg.millis = now.getMilliseconds();\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2800,
+        "y": 960,
+        "wires": [
+            [
+                "9c58bf74e7219804"
+            ]
+        ]
+    },
+    {
+        "id": "0bcf257cf9d70466",
+        "type": "switch",
+        "z": "bb3e76ddae756e10",
+        "name": "Campagne toujours en cours",
+        "property": "currentCampagne",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1170,
+        "y": 900,
+        "wires": [
+            [
+                "450e2fcbd9c5d5c5"
+            ]
+        ]
+    },
+    {
+        "id": "e9ca4429dbc1b0bc",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "Change currentCamapagne -1",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "-1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2230,
+        "y": 840,
+        "wires": [
+            [
+                "b6179eb65c88a705"
+            ]
+        ]
+    },
+    {
+        "id": "11677b52c689958b",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Insère donnée",
+        "x": 2580,
+        "y": 960,
+        "wires": [
+            [
+                "b1e79f1b417bf8ee"
+            ]
+        ]
+    },
+    {
+        "id": "2a26c9cd7826e588",
+        "type": "switch",
+        "z": "bb3e76ddae756e10",
+        "name": "si requète vide arrête sinon continue",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "empty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1980,
+        "y": 920,
+        "wires": [
+            [
+                "e9ca4429dbc1b0bc"
+            ],
+            [
+                "12139bf663109c75"
+            ]
+        ]
+    },
+    {
+        "id": "dafdc03c7217808a",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Update finished",
+        "x": 1670,
+        "y": 940,
+        "wires": [
+            [
+                "2a26c9cd7826e588"
+            ]
+        ]
+    },
+    {
+        "id": "450e2fcbd9c5d5c5",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Requète vérifie que campagne existe",
+        "func": "msg.topic = \"select * from Campaigns where idCampaign=\" + global.get(\"currentCampagne\")+\";\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1360,
+        "y": 960,
+        "wires": [
+            [
+                "dafdc03c7217808a"
+            ]
+        ]
+    },
+    {
+        "id": "dd3e2e783b712524",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "TraiteRelève et Renvoie requète",
+        "func": "var id=global.get(\"currentCampagne\");\nvar temperature=global.get(\"temperature\");\nvar co2=global.get(\"co2\");\nvar lumiere=global.get(\"luminosity\");\nvar o2 =global.get(\"o2\");\nvar humidite=global.get(\"humidity\");\nvar date=new Date();\n\n\n\n\nvar y = date.getFullYear();\nvar m = date.getMonth() + 1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\n\n\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic=\"INSERT INTO Measurements value(\"\n+id+\",\"\n+temperature+\",\"\n+co2+\",\"\n+o2+\",\"\n+lumiere+\",\"\n+humidite+\",\"\n+date+\");\";\n\nmsg.delay=global.get(\"interval\");\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2240,
+        "y": 1040,
+        "wires": [
+            [
+                "11677b52c689958b",
+                "f6060c812e219bc6"
+            ]
+        ]
+    },
+    {
+        "id": "15dfd7195cb1f031",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Fire init sensor event",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 840,
+        "wires": [
+            [
+                "48d756402a9ae55b"
+            ]
+        ]
+    },
+    {
+        "id": "18a579fe02867f07",
+        "type": "http in",
+        "z": "bb3e76ddae756e10",
+        "name": "Post arrêter campagne",
+        "url": "/stop_campaign",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 1180,
+        "wires": [
+            [
+                "0a17bd581754c7e1"
+            ]
+        ]
+    },
+    {
+        "id": "24ef8cdcf5d805b6",
+        "type": "http response",
+        "z": "bb3e76ddae756e10",
+        "name": "Campagne arrêter manuellement",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1550,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "5f82b61ca1e9fe53",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "currentCampagne",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "-1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1070,
+        "y": 1180,
+        "wires": [
+            [
+                "78884820311c882b"
+            ]
+        ]
+    },
+    {
+        "id": "ca7e2c196959c4df",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Update finished",
+        "x": 850,
+        "y": 1180,
+        "wires": [
+            [
+                "5f82b61ca1e9fe53"
+            ]
+        ]
+    },
+    {
+        "id": "0a17bd581754c7e1",
+        "type": "switch",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "property": "currentCampagne",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 320,
+        "y": 1180,
+        "wires": [
+            [
+                "10119de8c152bc4e"
+            ]
+        ]
+    },
+    {
+        "id": "2aeb4cc083137cd2",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Finit campagne en cours",
+        "func": "msg.topic = \"update Campaigns set finished=1, endingDate=NOW() where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 1260,
+        "wires": [
+            [
+                "ca7e2c196959c4df"
+            ]
+        ]
+    },
+    {
+        "id": "10119de8c152bc4e",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs arrêt",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',1,\"Arrêt prévu\", \"La campagne a bien été stoppé suite à votre demande.\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 1260,
+        "wires": [
+            [
+                "770ad6379890604a"
+            ]
+        ]
+    },
+    {
+        "id": "770ad6379890604a",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "insère logs arrêt",
+        "x": 540,
+        "y": 1180,
+        "wires": [
+            [
+                "2aeb4cc083137cd2"
+            ]
+        ]
+    },
+    {
+        "id": "78884820311c882b",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"sucess\":true}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1250,
+        "y": 1240,
+        "wires": [
+            [
+                "24ef8cdcf5d805b6"
+            ]
+        ]
+    },
+    {
+        "id": "e371e04e27390c32",
+        "type": "http in",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "url": "/redo_campaign",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 1480,
+        "wires": [
+            [
+                "4f37728591cdca49"
+            ]
+        ]
+    },
+    {
+        "id": "f8b6b0c37f6e5633",
+        "type": "http response",
+        "z": "bb3e76ddae756e10",
+        "name": "Reussite redémarage",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1260,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "260ff80fe57f4819",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "",
+        "x": 860,
+        "y": 1600,
+        "wires": [
+            [
+                "b38e81258ec38b66"
+            ]
+        ]
+    },
+    {
+        "id": "4f37728591cdca49",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "payload.id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tempsCampagne",
+                "pt": "global",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "interval",
+                "pt": "global",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 1560,
+        "wires": [
+            [
+                "1bb005356ad75688"
+            ]
+        ]
+    },
+    {
+        "id": "111c54a6842bab97",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "met à jour état de la campagne",
+        "func": "msg.topic=\"update Campaigns set finished=0 where idCampaign=\"+global.get(\"currentCampagne\");\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1410,
+        "y": 1640,
+        "wires": [
+            [
+                "260ff80fe57f4819"
+            ]
+        ]
+    },
+    {
+        "id": "3293234aa7deef85",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "scope": [
+            "f8b6b0c37f6e5633"
+        ],
+        "uncaught": false,
+        "x": 90,
+        "y": 1760,
+        "wires": [
+            [
+                "5bcead1445ca3cb8"
+            ]
+        ]
+    },
+    {
+        "id": "5bcead1445ca3cb8",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs redémarrage",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',0,\"Campagne redémarrée\", \"La campagne a bien été redémarré suite à votre demande.\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1760,
+        "wires": [
+            [
+                "a19d78cbb3e5a6b8"
+            ]
+        ]
+    },
+    {
+        "id": "a19d78cbb3e5a6b8",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "insère logs redémarrage",
+        "x": 610,
+        "y": 1760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b38e81258ec38b66",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"sucess\":true}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 1520,
+        "wires": [
+            [
+                "f8b6b0c37f6e5633"
+            ]
+        ]
+    },
+    {
+        "id": "07feac30f7b15b88",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "On init sensor event",
+        "scope": [
+            "15dfd7195cb1f031",
+            "92ea177bc7201275"
+        ],
+        "uncaught": false,
+        "x": 140,
+        "y": 1820,
+        "wires": [
+            [
+                "23a88c63bcdd1043"
+            ]
+        ]
+    },
+    {
+        "id": "65e06bc8b02d4cc9",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "On measure event",
+        "scope": [
+            "12139bf663109c75",
+            "a983a12db8f3b70c",
+            "5f5e6b1fd527708c",
+            "eb327508ed144cb3",
+            "cb109235b4167ace"
+        ],
+        "uncaught": false,
+        "x": 130,
+        "y": 1880,
+        "wires": [
+            [
+                "cfcab2dd22315150"
+            ]
+        ]
+    },
+    {
+        "id": "76d230db3f7120db",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "On close sensor event",
+        "scope": [
+            "67a3935db2b73293",
+            "efc15240e47eab0c"
+        ],
+        "uncaught": false,
+        "x": 160,
+        "y": 1920,
+        "wires": [
+            [
+                "5b49febe9a3b1ac5"
+            ]
+        ]
+    },
+    {
+        "id": "7e29c37a5fe0fc58",
+        "type": "tcp request",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "server": "127.0.0.1",
+        "port": "12778",
+        "out": "sit",
+        "ret": "string",
+        "splitc": " ",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 860,
+        "y": 1900,
+        "wires": [
+            [
+                "ce1a59707174a8e0"
+            ]
+        ]
+    },
+    {
+        "id": "23a88c63bcdd1043",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "SET_ALTITUDE",
+        "rules": [
+            {
+                "t": "set",
+                "p": "altitude",
+                "pt": "msg",
+                "to": "238",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "SET_ALTITUDE",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 1820,
+        "wires": [
+            [
+                "c6b7b282fa75ffc0"
+            ]
+        ]
+    },
+    {
+        "id": "5b49febe9a3b1ac5",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "CLOSE",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "CLOSE",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 1920,
+        "wires": [
+            [
+                "222297a34d21e88f"
+            ]
+        ]
+    },
+    {
+        "id": "cfcab2dd22315150",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "GET_MEASURE",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "GET_MEASURE",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 1880,
+        "wires": [
+            [
+                "222297a34d21e88f"
+            ]
+        ]
+    },
+    {
+        "id": "ce1a59707174a8e0",
+        "type": "json",
+        "z": "bb3e76ddae756e10",
+        "name": "convert json",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1030,
+        "y": 1840,
+        "wires": [
+            [
+                "c87bf4d7cf616a0c"
+            ]
+        ]
+    },
+    {
+        "id": "222297a34d21e88f",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "Set command name",
+        "rules": [
+            {
+                "t": "set",
+                "p": "command",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 1900,
+        "wires": [
+            [
+                "7e29c37a5fe0fc58"
+            ]
+        ]
+    },
+    {
+        "id": "c87bf4d7cf616a0c",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "test erreur",
+        "func": "if (msg.payload.success==true){\n    return [msg,null];\n}else if(msg.payload.success==false){\n    return [null,msg]\n}else{\n    return[null,null,msg]\n}\n",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 1840,
+        "wires": [
+            [
+                "68144d53c30585bd"
+            ],
+            [
+                "681b54c761b90611"
+            ],
+            [
+                "a983a12db8f3b70c"
+            ]
+        ]
+    },
+    {
+        "id": "68144d53c30585bd",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Continue si mesure",
+        "func": "//Sortie 1 mesure normal\n// sortie 2 mesure avec des capteurs vide\n// mesure 3 :get errors\nif(msg.command==\"RESET\"){\n    return [null,msg,null];\n}\nif (msg.command == \"GET_MEASURE\") {\n    if (msg.payload.data.CO2==undefined ||msg.payload.data.humidity == undefined||msg.payload.data.temperature==undefined){\n        return [null,msg,null];\n    }\n    global.set(\"tempsDepuisReset\",0);\n    global.set(\"onlyOne\",true);\n\n    global.set(\"pauseReset\",false);\n    global.set(\"nbReset\",0);\n    return [msg,null,null];\n}\nif (msg.command == \"GET_ERRORS\"){\n    return [null,null,msg];\n}\n\nreturn [null,null,null];",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1460,
+        "y": 1780,
+        "wires": [
+            [
+                "83921adf4f7bd952",
+                "2d91617583cb1257"
+            ],
+            [
+                "6bebf0210a7c6226"
+            ],
+            [
+                "5986a0bfe7dae39e"
+            ]
+        ]
+    },
+    {
+        "id": "83921adf4f7bd952",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "mise à jout capteur",
+        "rules": [
+            {
+                "t": "set",
+                "p": "co2",
+                "pt": "global",
+                "to": "payload.data.CO2",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "temperature",
+                "pt": "global",
+                "to": "payload.data.temperature",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "humidity",
+                "pt": "global",
+                "to": "payload.data.humidity",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "o2",
+                "pt": "global",
+                "to": "payload.data.O2",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "luminosity",
+                "pt": "global",
+                "to": "payload.data.luminosity",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1770,
+        "y": 1620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1bb005356ad75688",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 13",
+        "func": "msg.topic=\"select * from Campaigns where idCampaign=\"+global.get(\"currentCampagne\")+\";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1580,
+        "wires": [
+            [
+                "c6b5c30405a9511f"
+            ]
+        ]
+    },
+    {
+        "id": "c6b5c30405a9511f",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Récupère info sur campagne avec id demandé",
+        "x": 320,
+        "y": 1660,
+        "wires": [
+            [
+                "55da42daf260c893"
+            ]
+        ]
+    },
+    {
+        "id": "55da42daf260c893",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Met en place la campagne",
+        "func": "global.set(\"interval\",msg.payload[0][\"interval_\"]);\nglobal.set(\"tempsCampagne\",msg.payload[0][\"duration\"]);\n\nvar capteur='{\"CO2\":'+msg.payload[0][\"CO2SensorState\"];\ncapteur = capteur+',\"O2\":'+msg.payload[0][\"O2SensorState\"];\ncapteur = capteur + ',\"humidite\":' + msg.payload[0][\"humiditySensorState\"];\ncapteur = capteur + ',\"lumiere\":' + msg.payload[0][\"luminositySensorState\"];\ncapteur = capteur + ',\"temperature\":' + msg.payload[0][\"temperatureSensorState\"] + '}';\n\n\nmsg.payload=capteur;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 1660,
+        "wires": [
+            [
+                "3e82743a8b37214f"
+            ]
+        ]
+    },
+    {
+        "id": "3e82743a8b37214f",
+        "type": "json",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 850,
+        "y": 1660,
+        "wires": [
+            [
+                "bc6e9f1344618ce2"
+            ]
+        ]
+    },
+    {
+        "id": "bc6e9f1344618ce2",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "besoinCapteur",
+        "rules": [
+            {
+                "t": "set",
+                "p": "besoinCapteur",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 1660,
+        "wires": [
+            [
+                "c6bf465c6a98d040"
+            ]
+        ]
+    },
+    {
+        "id": "c6bf465c6a98d040",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 14",
+        "func": "global.set(\"interval\",global.get(\"interval\")*1000);\nmsg.payload='{\"interval\":'+global.get(\"interval\")+',\"tpsCampagne\":'+global.get(\"tempsCampagne\")+', \"curCampaign\":'+global.get(\"currentCampagne\")+'}';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
+        "y": 1660,
+        "wires": [
+            [
+                "111c54a6842bab97"
+            ]
+        ]
+    },
+    {
+        "id": "c6b7b282fa75ffc0",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Construit args",
+        "func": "msg.payload += \" \" + msg.altitude;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1820,
+        "wires": [
+            [
+                "222297a34d21e88f"
+            ]
+        ]
+    },
+    {
+        "id": "b6179eb65c88a705",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 33",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2460,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "8e442a576f82a04b",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "scope": [
+            "83921adf4f7bd952"
+        ],
+        "uncaught": false,
+        "x": 1990,
+        "y": 1040,
+        "wires": [
+            [
+                "dd3e2e783b712524"
+            ]
+        ]
+    },
+    {
+        "id": "12139bf663109c75",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "démmare mesure",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2330,
+        "y": 960,
+        "wires": [
+            [
+                "8020ce8b30a9e217"
+            ]
+        ]
+    },
+    {
+        "id": "c0b0191c48bcc394",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Insère logs erreur",
+        "x": 1990,
+        "y": 2020,
+        "wires": [
+            [
+                "9aeaa9ae9c4b5e75"
+            ]
+        ]
+    },
+    {
+        "id": "67a3935db2b73293",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs Erreur critique",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic = 'INSERT INTO Logs values(' + global.get(\"currentCampagne\") + ',2,\"Erreur\",\"' +\"Une erreur critique a eu lieu. Veuillez vérifier l'état de votre matériel.\" +'\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2020,
+        "y": 1960,
+        "wires": [
+            [
+                "c0b0191c48bcc394"
+            ]
+        ]
+    },
+    {
+        "id": "40de52284335d46c",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "GET_ERRORS",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "GET_ERRORS",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 1980,
+        "wires": [
+            [
+                "222297a34d21e88f"
+            ]
+        ]
+    },
+    {
+        "id": "712ea84bd992d759",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "On close sensor event",
+        "scope": [
+            "0e156bafa79219e4"
+        ],
+        "uncaught": false,
+        "x": 140,
+        "y": 1980,
+        "wires": [
+            [
+                "40de52284335d46c"
+            ]
+        ]
+    },
+    {
+        "id": "5a234196440775e3",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "Reset command",
+        "scope": [
+            "0e156bafa79219e4"
+        ],
+        "uncaught": false,
+        "x": 180,
+        "y": 2060,
+        "wires": [
+            [
+                "2a2d7c5e983856fe"
+            ]
+        ]
+    },
+    {
+        "id": "2a2d7c5e983856fe",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "RESET",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "RESET",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 2060,
+        "wires": [
+            [
+                "222297a34d21e88f",
+                "d11614dc20f6ac82"
+            ]
+        ]
+    },
+    {
+        "id": "65b985823573c7a8",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "payload.id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tempsCampagne",
+                "pt": "global",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "interval",
+                "pt": "global",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "pauseReset",
+                "pt": "global",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 540,
+        "y": 540,
+        "wires": [
+            [
+                "6fe29aed70b55c09"
+            ]
+        ]
+    },
+    {
+        "id": "681b54c761b90611",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Erreur d'init, nouvelle critique, ou déjà vu critique ?",
+        "func": "//sortie 1 : erreur d'initialisation\n//Sortie 2 : erreur critique\n//sortie 3 : enc ours d'init\nif (msg.payload.error ==\"Le dispositif de mesure a probablement été intérrompu à la suite d'une erreur. Pour plus d'information, consultez les erreurs avec GET_ERRORS puis tentez de le réinitialiser avec RESET.\"){\n    return [msg,null,null];\n}else if(msg.payload.error==\"Le dispositif de mesure n'a fini de s'initialiser.\"){\n    return [null,null,msg];\n}\nelse{\n    return [null,msg,null];\n}\n\n",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 1900,
+        "wires": [
+            [
+                "9a8840465a84ad58"
+            ],
+            [
+                "67a3935db2b73293"
+            ],
+            [
+                "e92c08f0fba326ca"
+            ]
+        ]
+    },
+    {
+        "id": "9a8840465a84ad58",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Init en cours depuis cb de temps ?",
+        "func": "if (global.get(\"nbReset\") > 1) {\n    return [null, null, msg];\n}\n\nif(msg.reset==true){\n    return [null,null,msg]\n}\nif (global.get(\"tempsDepuisReset\")<30){\n    global.set(\"tempsDepuisReset\", global.get(\"tempsDepuisReset\")+1);\n    return [msg,null,null];\n}\nreturn [null,msg,null];\n\n",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2030,
+        "y": 1900,
+        "wires": [
+            [
+                "2317458cd001a752"
+            ],
+            [
+                "0e156bafa79219e4"
+            ],
+            [
+                "8341adb22112d187"
+            ]
+        ]
+    },
+    {
+        "id": "5986a0bfe7dae39e",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs Avertissement erreur",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\nmsg.payload=msg.payload.errors;\nmsg.payload=msg.payload[0];\nmsg.payload=msg.payload.message;\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',3,\"Erreur du module de mesure\",\"'+msg.payload+'\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1710,
+        "y": 1840,
+        "wires": [
+            [
+                "ff1d1d7b7cba20c4"
+            ]
+        ]
+    },
+    {
+        "id": "ff1d1d7b7cba20c4",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "",
+        "x": 1940,
+        "y": 1820,
+        "wires": [
+            [
+                "259ba9a33ad3613b"
+            ]
+        ]
+    },
+    {
+        "id": "e3e09a42a1ffb1b1",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "Mesure Vide",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2550,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "2be9d2d28ec5109c",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "Cp déjà en cours",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "908e73679902ca01",
+        "type": "http in",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "url": "/check_working_campaign",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 2280,
+        "wires": [
+            [
+                "98345b5c6ea0f131"
+            ]
+        ]
+    },
+    {
+        "id": "dd3f72defe162e6e",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "Reset2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3280,
+        "y": 1920,
+        "wires": []
+    },
+    {
+        "id": "0e156bafa79219e4",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Lance reset 1",
+        "func": "global.set(\"nbReset\", global.get(\"nbReset\")+1);\nreturn msg;    \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2300,
+        "y": 1920,
+        "wires": [
+            [
+                "11e1a2a0636371a7"
+            ]
+        ]
+    },
+    {
+        "id": "ff2352acb7df9a0d",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "Reset",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2950,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "a983a12db8f3b70c",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "relance mesure",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1220,
+        "y": 1940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5f5e6b1fd527708c",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "relance mesure poureset",
+        "func": "return msg;    \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2510,
+        "y": 1840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5eae10028288fde6",
+        "type": "complete",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "scope": [
+            "f40e6915a596263d"
+        ],
+        "uncaught": false,
+        "x": 440,
+        "y": 1000,
+        "wires": [
+            [
+                "48d756402a9ae55b"
+            ]
+        ]
+    },
+    {
+        "id": "e92c08f0fba326ca",
+        "type": "delay",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1480,
+        "y": 2060,
+        "wires": [
+            [
+                "eb327508ed144cb3"
+            ]
+        ]
+    },
+    {
+        "id": "eb327508ed144cb3",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 21",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1650,
+        "y": 2060,
+        "wires": [
+            [
+                "26da94cb86ffca48"
+            ]
+        ]
+    },
+    {
+        "id": "cb109235b4167ace",
+        "type": "delay",
+        "z": "bb3e76ddae756e10",
+        "name": "attend avant de get esure",
+        "pauseType": "delay",
+        "timeout": "40",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2350,
+        "y": 1720,
+        "wires": [
+            [
+                "e3e09a42a1ffb1b1"
+            ]
+        ]
+    },
+    {
+        "id": "26da94cb86ffca48",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 46",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1540,
+        "y": 2120,
+        "wires": []
+    },
+    {
+        "id": "8341adb22112d187",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs arret après reset",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic = 'INSERT INTO Logs values(' + global.get(\"currentCampagne\") + ',2,\"Arrêt imprévu\",\"' +\"La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.\" +'\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2300,
+        "y": 1980,
+        "wires": [
+            [
+                "06f7bcb6278ea163"
+            ]
+        ]
+    },
+    {
+        "id": "06f7bcb6278ea163",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Insère logs arrêt après reset",
+        "x": 2500,
+        "y": 2040,
+        "wires": [
+            [
+                "12ba1b82d2237f50"
+            ]
+        ]
+    },
+    {
+        "id": "b5ebc65268e3d82f",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Finit campagne en cours",
+        "func": "msg.topic = \"update Campaigns set finished=1 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2850,
+        "y": 1980,
+        "wires": [
+            [
+                "a04c608d94e5aa45"
+            ]
+        ]
+    },
+    {
+        "id": "a04c608d94e5aa45",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Update finished",
+        "x": 2900,
+        "y": 1920,
+        "wires": [
+            [
+                "efc15240e47eab0c"
+            ]
+        ]
+    },
+    {
+        "id": "efc15240e47eab0c",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "Close campagne",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "-1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3090,
+        "y": 1920,
+        "wires": [
+            [
+                "dd3f72defe162e6e"
+            ]
+        ]
+    },
+    {
+        "id": "11e1a2a0636371a7",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs reprise imminente",
+        "func": "var date = new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth() + 1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif (m < 10) {\n    m = \"0\" + m;\n}\nif (d < 10) {\n    d = \"0\" + d;\n}\nif (h < 10) {\n    h = \"0\" + h;\n}\nif (min < 10) {\n    min = \"0\" + min;\n}\nif (s < 10) {\n    s = \"0\" + s;\n}\ndate = \"\" + y + m + d + h + min + s;\n\nmsg.topic = 'INSERT INTO Logs values(' + global.get(\"currentCampagne\") + ',0,\"Réinitilisation du module de mesure\",\"' + \"Le module de mesure va être réinitialisé suite à une erreur survenu dans le module de mesure.\" + '\",' + date + ');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2550,
+        "y": 1900,
+        "wires": [
+            [
+                "63824aa5196fa3e6"
+            ]
+        ]
+    },
+    {
+        "id": "63824aa5196fa3e6",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Insère logs erreur",
+        "x": 2790,
+        "y": 1860,
+        "wires": [
+            [
+                "ff2352acb7df9a0d"
+            ]
+        ]
+    },
+    {
+        "id": "6bebf0210a7c6226",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs reprise imminente",
+        "func": "var date = new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth() + 1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif (m < 10) {\n    m = \"0\" + m;\n}\nif (d < 10) {\n    d = \"0\" + d;\n}\nif (h < 10) {\n    h = \"0\" + h;\n}\nif (min < 10) {\n    min = \"0\" + min;\n}\nif (s < 10) {\n    s = \"0\" + s;\n}\ndate = \"\" + y + m + d + h + min + s;\n\nmsg.topic = 'INSERT INTO Logs values(' + global.get(\"currentCampagne\") + ',1,\"Réinitilisation du module de mesure\",\"' + \"Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.\" + '\",' + date + ');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1790,
+        "y": 1740,
+        "wires": [
+            [
+                "bf3feda4bb00c69d"
+            ]
+        ]
+    },
+    {
+        "id": "bf3feda4bb00c69d",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Insère logs erreur",
+        "x": 2130,
+        "y": 1660,
+        "wires": [
+            [
+                "cb109235b4167ace"
+            ]
+        ]
+    },
+    {
+        "id": "12ba1b82d2237f50",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Alert level",
+        "func": "msg.topic = \"update Campaigns set alertLevel=2 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2700,
+        "y": 2100,
+        "wires": [
+            [
+                "19dfb07298482f3a"
+            ]
+        ]
+    },
+    {
+        "id": "19dfb07298482f3a",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Modifie alert level",
+        "x": 2770,
+        "y": 2040,
+        "wires": [
+            [
+                "b5ebc65268e3d82f"
+            ]
+        ]
+    },
+    {
+        "id": "259ba9a33ad3613b",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Alert level",
+        "func": "msg.topic = \"update Campaigns set alertLevel=1 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2100,
+        "y": 1800,
+        "wires": [
+            [
+                "dd17732d8ac5d067"
+            ]
+        ]
+    },
+    {
+        "id": "dd17732d8ac5d067",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Update finished",
+        "x": 2540,
+        "y": 1780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9aeaa9ae9c4b5e75",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Alert level",
+        "func": "msg.topic = \"update Campaigns set alertLevel=2 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2020,
+        "y": 2080,
+        "wires": [
+            [
+                "3f73d239a7b14888"
+            ]
+        ]
+    },
+    {
+        "id": "3f73d239a7b14888",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Modifie alert level",
+        "x": 2250,
+        "y": 2100,
+        "wires": [
+            [
+                "e10463c54ce1c87a"
+            ]
+        ]
+    },
+    {
+        "id": "e10463c54ce1c87a",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Finit campagne en cours",
+        "func": "msg.topic = \"update Campaigns set finished=1 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2510,
+        "y": 2160,
+        "wires": [
+            [
+                "75d55019098bfca7"
+            ]
+        ]
+    },
+    {
+        "id": "75d55019098bfca7",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Update finished",
+        "x": 2760,
+        "y": 2200,
+        "wires": [
+            [
+                "98174fa02d318637"
+            ]
+        ]
+    },
+    {
+        "id": "98174fa02d318637",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "Close campagne bis",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "-1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2980,
+        "y": 2200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f5b3bc2c6b9a0ca6",
+        "type": "catch",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "scope": [
+            "7e29c37a5fe0fc58"
+        ],
+        "uncaught": false,
+        "x": 840,
+        "y": 2120,
+        "wires": [
+            [
+                "068501030be086ee",
+                "a8be6a6092b3185c"
+            ]
+        ]
+    },
+    {
+        "id": "068501030be086ee",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Logs Erreur critique",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic = 'INSERT INTO Logs values(' + global.get(\"currentCampagne\") + ',2,\"Arrêt imprévu\",\"' +\"La campagne a été intérrompu suite à une erreur inattendue. Redémarrez l\\'appareil puis réessayez.\" +'\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 2120,
+        "wires": [
+            [
+                "7a0052c831d85ad2"
+            ]
+        ]
+    },
+    {
+        "id": "7a0052c831d85ad2",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Insère logs erreur",
+        "x": 1090,
+        "y": 2180,
+        "wires": [
+            [
+                "73735932c830faa0"
+            ]
+        ]
+    },
+    {
+        "id": "73735932c830faa0",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Alert level",
+        "func": "msg.topic = \"update Campaigns set alertLevel=2 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 2240,
+        "wires": [
+            [
+                "34ff673deeb84e99"
+            ]
+        ]
+    },
+    {
+        "id": "34ff673deeb84e99",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Modifie alert level",
+        "x": 1290,
+        "y": 2240,
+        "wires": [
+            [
+                "35fd8966eb10939d"
+            ]
+        ]
+    },
+    {
+        "id": "35fd8966eb10939d",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Finit campagne en cours",
+        "func": "msg.topic = \"update Campaigns set finished=1 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 2300,
+        "wires": [
+            [
+                "54131b7676d11d82"
+            ]
+        ]
+    },
+    {
+        "id": "54131b7676d11d82",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Update finished",
+        "x": 1140,
+        "y": 2360,
+        "wires": [
+            [
+                "144598b0caf29199"
+            ]
+        ]
+    },
+    {
+        "id": "144598b0caf29199",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "Erreur Critique",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 2380,
+        "wires": []
+    },
+    {
+        "id": "a8be6a6092b3185c",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 51",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 2060,
+        "wires": []
+    },
+    {
+        "id": "aab9e65c0da52ee8",
+        "type": "inject",
+        "z": "bb3e76ddae756e10",
+        "name": "Vérifie que campagne est déjà en cours au démmarage",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "10",
+        "topic": "update Campaigns set finished=1;",
+        "x": 1090,
+        "y": 240,
+        "wires": [
+            [
+                "e635f1547368a35f"
+            ]
+        ]
+    },
+    {
+        "id": "e635f1547368a35f",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "",
+        "x": 1420,
+        "y": 240,
+        "wires": [
+            [
+                "f6be17dbe8da68f7",
+                "5c5576b1c9a9c81a"
+            ]
+        ]
+    },
+    {
+        "id": "f6be17dbe8da68f7",
+        "type": "switch",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "property": "currentCampagne",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1630,
+        "y": 240,
+        "wires": [
+            [
+                "7b5285f2e49ee158"
+            ],
+            [
+                "12a60b2e8fb15d49"
+            ]
+        ]
+    },
+    {
+        "id": "12a60b2e8fb15d49",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "-1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1850,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7b5285f2e49ee158",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "logs démarré arpès arrêt du raspberry pi",
+        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',2,\"Arrêt imprévu\", \"La campagne à été arrêté après un arrêt non prévu de l\\'appareil de mesure.\",'+date+');';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1890,
+        "y": 200,
+        "wires": [
+            [
+                "b02be1fc44650386"
+            ]
+        ]
+    },
+    {
+        "id": "b02be1fc44650386",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "logs démarré après arrêt",
+        "x": 2190,
+        "y": 200,
+        "wires": [
+            [
+                "464227c07fd6d271"
+            ]
+        ]
+    },
+    {
+        "id": "5c5576b1c9a9c81a",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "Init déploy",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1540,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "7ef506f7e7ec3879",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentCampagne",
+                "pt": "global",
+                "to": "-1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2830,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "464227c07fd6d271",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Alert level",
+        "func": "msg.topic = \"update Campaigns set alertLevel=2 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2390,
+        "y": 200,
+        "wires": [
+            [
+                "a9fcc8e59fe01677"
+            ]
+        ]
+    },
+    {
+        "id": "a9fcc8e59fe01677",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Modifie alert level",
+        "x": 2570,
+        "y": 200,
+        "wires": [
+            [
+                "7ef506f7e7ec3879"
+            ]
+        ]
+    },
+    {
+        "id": "fc49de3b2a894256",
+        "type": "inject",
+        "z": "bb3e76ddae756e10",
+        "name": "current campagne",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "currentCampagne",
+        "payloadType": "global",
+        "x": 890,
+        "y": 380,
+        "wires": [
+            [
+                "3b5e2384d27ab6e6"
+            ]
+        ]
+    },
+    {
+        "id": "3b5e2384d27ab6e6",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 54",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "8020ce8b30a9e217",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 56",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2560,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "f6060c812e219bc6",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 57",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2500,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "2d91617583cb1257",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 58",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1480,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "d11614dc20f6ac82",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 61",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 2060,
+        "wires": []
+    },
+    {
+        "id": "2317458cd001a752",
+        "type": "delay",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2300,
+        "y": 1860,
+        "wires": [
+            [
+                "5f5e6b1fd527708c"
+            ]
+        ]
+    },
+    {
+        "id": "98345b5c6ea0f131",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 23",
+        "func": "var id = global.get(\"currentCampagne\");\nif (id == -1) {\n    id = null;\n}\n\nmsg.payload = \"{\\\"idCurrent\\\": \" + id + \"}\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 2280,
+        "wires": [
+            [
+                "6eb64f8d502b838e"
+            ]
+        ]
+    },
+    {
+        "id": "d4d703ab01a11179",
+        "type": "http response",
+        "z": "bb3e76ddae756e10",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 820,
+        "y": 2340,
+        "wires": []
+    },
+    {
+        "id": "6eb64f8d502b838e",
+        "type": "json",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 610,
+        "y": 2320,
+        "wires": [
+            [
+                "d4d703ab01a11179"
+            ]
+        ]
+    },
+    {
+        "id": "39459af26a177988",
+        "type": "http in",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "url": "/storage",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 160,
+        "wires": [
+            [
+                "a7371d6031cbc1fb"
+            ]
+        ]
+    },
+    {
+        "id": "85d03581110a6937",
+        "type": "http response",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1040,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "a7371d6031cbc1fb",
+        "type": "exec",
+        "z": "279cc9b9bebdc667",
+        "command": "df --block-size=KB --output=size --output=used /root",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 470,
+        "y": 160,
+        "wires": [
+            [
+                "85381a3ef1df1fca"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "85381a3ef1df1fca",
+        "type": "function",
+        "z": "279cc9b9bebdc667",
+        "name": "bit",
+        "func": "var temp=msg.payload.split(\"\\n\");\nvar data = temp[1].split(\" \");\nvar total = parseInt(data[0].replace(\"kB\", \"\"));\nvar used = parseInt(data[1].replace(\"kB\", \"\"));\n\nvar maxHours = ((total - used) / 1497.6);\nvar used_percent = (used / total) * 100.0;\nmaxHours=Math.floor(maxHours);\nmsg.payload = '{\"used\":' + used + ', \"total\": ' + total + '}';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 160,
+        "wires": [
+            [
+                "b21d43a203cd3fd3"
+            ]
+        ]
+    },
+    {
+        "id": "b21d43a203cd3fd3",
+        "type": "json",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 890,
+        "y": 160,
+        "wires": [
+            [
+                "85d03581110a6937"
+            ]
+        ]
+    },
+    {
+        "id": "0f06b4ea366bb1f8",
+        "type": "exec",
+        "z": "279cc9b9bebdc667",
+        "command": "sudo date -s",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 590,
+        "y": 360,
+        "wires": [
+            [
+                "a4012d65e9850ff0"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "0ac5a2ef6c5f2ddc",
+        "type": "http in",
+        "z": "279cc9b9bebdc667",
+        "name": "update heure rasp",
+        "url": "/set_datetime",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 360,
+        "wires": [
+            [
+                "decbd454972f7060"
+            ]
+        ]
+    },
+    {
+        "id": "decbd454972f7060",
+        "type": "function",
+        "z": "279cc9b9bebdc667",
+        "name": "function 10",
+        "func": "var date = \" \\\"\" + msg.payload.datetime + '\"';\n\nmsg.payload=date;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 360,
+        "wires": [
+            [
+                "0f06b4ea366bb1f8",
+                "00d15177f120cfd5"
+            ]
+        ]
+    },
+    {
+        "id": "1c1e38f934cb3acf",
+        "type": "http response",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1000,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "00d15177f120cfd5",
+        "type": "debug",
+        "z": "279cc9b9bebdc667",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "a4012d65e9850ff0",
+        "type": "change",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"success\":true}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 810,
+        "y": 340,
+        "wires": [
+            [
+                "1c1e38f934cb3acf"
+            ]
+        ]
+    },
+    {
+        "id": "07deee6d37e13677",
+        "type": "mysql",
+        "z": "279cc9b9bebdc667",
+        "mydb": "9fa9e71427451144",
+        "name": "Suppression des logs",
+        "x": 1180,
+        "y": 680,
+        "wires": [
+            [
+                "44a27f1e5a6ef49f"
+            ]
+        ]
+    },
+    {
+        "id": "568c8606ae19fefa",
+        "type": "function",
+        "z": "279cc9b9bebdc667",
+        "name": "Suppression des logs",
+        "func": "msg.topic = \"DELETE FROM Logs where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > \" + global.get(\"TL\")+\"); \";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 600,
+        "wires": [
+            [
+                "07deee6d37e13677"
+            ]
+        ]
+    },
+    {
+        "id": "13de5a95f8d4d89a",
+        "type": "mysql",
+        "z": "279cc9b9bebdc667",
+        "mydb": "9fa9e71427451144",
+        "name": "Suppression des mesures",
+        "x": 1470,
+        "y": 680,
+        "wires": [
+            [
+                "ead9c7686b225a4f"
+            ]
+        ]
+    },
+    {
+        "id": "44a27f1e5a6ef49f",
+        "type": "function",
+        "z": "279cc9b9bebdc667",
+        "name": "Suppression des mesures",
+        "func": "msg.topic = \"DELETE FROM Measurements where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > \" + global.get(\"TL\") + \"); \";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 600,
+        "wires": [
+            [
+                "13de5a95f8d4d89a"
+            ]
+        ]
+    },
+    {
+        "id": "a1bd396d2f7e4b3b",
+        "type": "mysql",
+        "z": "279cc9b9bebdc667",
+        "mydb": "9fa9e71427451144",
+        "name": "Suppression des Campagnes",
+        "x": 1790,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ead9c7686b225a4f",
+        "type": "function",
+        "z": "279cc9b9bebdc667",
+        "name": "Suppression des Campagnes",
+        "func": "msg.topic = \"DELETE FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > \" + global.get(\"TL\") + \"; \";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1790,
+        "y": 600,
+        "wires": [
+            [
+                "a1bd396d2f7e4b3b"
+            ]
+        ]
+    },
+    {
+        "id": "082ffda7cb5147fd",
+        "type": "change",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "TL",
+                "pt": "global",
+                "to": "payload[0].removeInterval",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 960,
+        "y": 600,
+        "wires": [
+            [
+                "568c8606ae19fefa"
+            ]
+        ]
+    },
+    {
+        "id": "c19f41ff0c5cc5ba",
+        "type": "inject",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 640,
+        "wires": [
+            [
+                "bd3b08f0a72891ec"
+            ]
+        ]
+    },
+    {
+        "id": "bd3b08f0a72891ec",
+        "type": "function",
+        "z": "279cc9b9bebdc667",
+        "name": "function 22",
+        "func": "msg.topic =\"select * from Settings;\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 640,
+        "wires": [
+            [
+                "98859be66c66cdec"
+            ]
+        ]
+    },
+    {
+        "id": "98859be66c66cdec",
+        "type": "mysql",
+        "z": "279cc9b9bebdc667",
+        "mydb": "9fa9e71427451144",
+        "name": "Récupère les paramètres",
+        "x": 510,
+        "y": 640,
+        "wires": [
+            [
+                "74b0d9316dc9cc12"
+            ]
+        ]
+    },
+    {
+        "id": "74b0d9316dc9cc12",
+        "type": "switch",
+        "z": "279cc9b9bebdc667",
+        "name": "vérifie autoRemove",
+        "property": "payload[0].autoRemove",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 750,
+        "y": 640,
+        "wires": [
+            [
+                "082ffda7cb5147fd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8f6f55179f74ce51",
+        "type": "json",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 990,
+        "y": 780,
+        "wires": [
+            [
+                "191889610495b7bc"
+            ]
+        ]
+    },
+    {
+        "id": "191889610495b7bc",
+        "type": "debug",
+        "z": "cfddb40943ae0555",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "8d9f3b4f379e9635",
+        "type": "tcp request",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "server": "127.0.0.1",
+        "port": "12778",
+        "out": "sit",
+        "ret": "string",
+        "splitc": " ",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 800,
+        "y": 780,
+        "wires": [
+            [
+                "8f6f55179f74ce51"
+            ]
+        ]
+    },
+    {
+        "id": "19d493caee14062b",
+        "type": "inject",
+        "z": "cfddb40943ae0555",
+        "name": "get errors command",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "GET_ERRORS",
+        "payloadType": "str",
+        "x": 510,
+        "y": 680,
+        "wires": [
+            [
+                "8d9f3b4f379e9635"
+            ]
+        ]
+    },
+    {
+        "id": "da2c4f327ed6add8",
+        "type": "inject",
+        "z": "cfddb40943ae0555",
+        "name": "Close",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "CLOSE",
+        "payloadType": "str",
+        "x": 510,
+        "y": 980,
+        "wires": [
+            [
+                "8d9f3b4f379e9635"
+            ]
+        ]
+    },
+    {
+        "id": "6cb070012ea00b30",
+        "type": "inject",
+        "z": "cfddb40943ae0555",
+        "name": "Get measure command",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "GET_MEASURE",
+        "payloadType": "str",
+        "x": 460,
+        "y": 740,
+        "wires": [
+            [
+                "8d9f3b4f379e9635"
+            ]
+        ]
+    },
+    {
+        "id": "ce052ea826063c70",
+        "type": "change",
+        "z": "cfddb40943ae0555",
+        "name": "Init",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "INIT",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 440,
+        "wires": [
+            [
+                "bbc1301685cd895e"
+            ]
+        ]
+    },
+    {
+        "id": "aeeb6aab6ca386e2",
+        "type": "tcp request",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "server": "127.0.0.1",
+        "port": "12778",
+        "out": "sit",
+        "ret": "string",
+        "splitc": " ",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 620,
+        "y": 560,
+        "wires": [
+            [
+                "6a1c5928f0295338",
+                "01a41ba310c4b2ab"
+            ]
+        ]
+    },
+    {
+        "id": "25bea59b05bdb3df",
+        "type": "change",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "CLOSE",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1210,
+        "y": 560,
+        "wires": [
+            [
+                "f2c7583a1104d106"
+            ]
+        ]
+    },
+    {
+        "id": "6a1c5928f0295338",
+        "type": "function",
+        "z": "cfddb40943ae0555",
+        "name": "function 12",
+        "func": "if(msg.success){\n    return [msg, null];\n}else{\n    return [null, msg];\n}\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 480,
+        "wires": [
+            [],
+            [
+                "0b30a73a049b74cc"
+            ]
+        ]
+    },
+    {
+        "id": "0b30a73a049b74cc",
+        "type": "json",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1130,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "01a41ba310c4b2ab",
+        "type": "json",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 830,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bbc1301685cd895e",
+        "type": "change",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "CLOSE",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 500,
+        "wires": [
+            [
+                "aeeb6aab6ca386e2"
+            ]
+        ]
+    },
+    {
+        "id": "f2c7583a1104d106",
+        "type": "delay",
+        "z": "cfddb40943ae0555",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1380,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a8541114ad1083ac",
+        "type": "inject",
+        "z": "cfddb40943ae0555",
+        "name": "Reset",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "RESET",
+        "payloadType": "str",
+        "x": 530,
+        "y": 920,
+        "wires": [
+            [
+                "8d9f3b4f379e9635"
+            ]
+        ]
+    },
+    {
+        "id": "ce71b4e8bcdcf7e5",
+        "type": "function",
+        "z": "cfddb40943ae0555",
+        "name": "Construit args",
+        "func": "msg.payload += \" \" + msg.altitude;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 820,
+        "wires": [
+            [
+                "8d9f3b4f379e9635"
+            ]
+        ]
+    },
+    {
+        "id": "56b2cc7a95dd101a",
+        "type": "inject",
+        "z": "cfddb40943ae0555",
+        "name": "Set altitude command",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "altitude",
+                "v": "238",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "SET_ALTITUDE",
+        "payloadType": "str",
+        "x": 300,
+        "y": 820,
+        "wires": [
+            [
+                "ce71b4e8bcdcf7e5"
+            ]
+        ]
+    }
+]
