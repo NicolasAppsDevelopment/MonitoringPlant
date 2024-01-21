@@ -46,7 +46,7 @@ async function getCampagnes(filter = null) {
                     break;
 
                 case 1: // Danger
-                    state_desc += ` Contient un avertissement.`;
+                    state_desc += ` Contient un/des avertissement(s).`;
                     state_ico = "warn_status";
                     break;
 
