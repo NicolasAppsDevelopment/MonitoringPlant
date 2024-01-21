@@ -14,7 +14,6 @@ create table Campaigns (
    idCampaign          	int not null auto_increment,
    name               	varchar(50),
    beginDate			datetime,
-   endingDate     datetime,
    temperatureSensorState  	int(1),
    CO2SensorState			int(1),
    O2SensorState			int(1),
@@ -25,6 +24,7 @@ create table Campaigns (
    duration				int,
    finished       boolean,
    alertLevel     int(1),
+   endingDate     datetime,
    primary key (idCampaign)
 );
 
