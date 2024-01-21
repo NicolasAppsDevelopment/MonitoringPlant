@@ -26,17 +26,15 @@ async function getCampagnes(filter = null) {
             let state = "";
             let state_desc = "";
             let state_ico = "";
-            let dateFin = new Date(campagne["beginDate"]);
-            dateFin.setSeconds(dateFin.getSeconds() + campagne["duration"]);
             
             if (campagne["finished"] == 0) {
                 // la campagne n'est pas fini
                 state = "processing";
-                state_desc = `En cours (reste ${dateToReamingString(dateFin)})...`;
+                state_desc = `En cours (reste ${dateToReamingString(campagne["endingDate"])})...`;
                 state_ico = "working_status";
             } else {
                 // la campagne est fini
-                state_desc = `Terminé le ${dateToString(dateFin)}.`;
+                state_desc = `Terminé le ${dateToString(campagne["endingDate"])}.`;
             }
 
             switch (campagne["alertLevel"]) {
