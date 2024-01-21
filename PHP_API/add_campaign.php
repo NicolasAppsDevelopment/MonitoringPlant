@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(array(
-        "id" => addCampaign($args["title"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $interval, $volume, $duration)
+        "id" => addCampaign($args["title"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $interval, $volume, $duration,0,0,DATE_ADD(NOW(), INTERVAL $duration SECOND))
     ));
 } else {
     replyError("Impossible d'ajouter la campagne", "La méthode de requête est incorrecte.");
