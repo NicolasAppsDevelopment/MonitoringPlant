@@ -27,14 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
     $res = curl_exec($curl);
-    $info = curl_getinfo($curl);
     curl_close($curl);
+    $data=json_decode($res, true);
 
-    if ($info["http_code"] != 200) {
-        if ($info["http_code"] == 500) {
-            replyError("Impossible de redémarrer la campagne", "Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
-        }
+    if (!isset($data["idCurrent"])) {
         replyError("Impossible de redémarrer la campagne", "Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
+    }
+    if ($data["idCurrent"] != null || $data["idCurrent"] != $id) {
+        replyError("Impossible de redémarrer la campagne", "Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
     }
 
     reply(array(
