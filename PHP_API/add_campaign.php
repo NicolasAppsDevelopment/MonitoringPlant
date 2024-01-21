@@ -110,6 +110,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'ajouter la campagne", "L'intervalle demandé doit être inférieur ou égale à la durée de la campagne.");
     }
     
+    // check if a campaign is already running
+    $url = "http://192.168.4.1:1880/check_working_campaign";
+
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $res = curl_exec($curl);
+    $info = curl_getinfo($curl);
+    curl_close($curl);
+
+    if ($info["http_code"] != 200) {
+        if ($info["http_code"] == 500) {
+            replyError("Impossible d'ajouter la campagne", "Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
+        }
+        replyError("Impossible d'ajouter la campagne", "Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
+    }
+
+    // check if there is enough space on the device
     $url = "http://192.168.4.1:1880/storage";
 
     $curl = curl_init($url);
