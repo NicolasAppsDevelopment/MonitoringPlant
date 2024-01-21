@@ -170,7 +170,7 @@ function restartCampaign(int $id) : bool
     supprLogs($id);
 
     try {
-        fetchAll("UPDATE Campaigns SET beginDate=NOW() WHERE idCampaign = :varId", [
+        fetchAll("UPDATE Campaigns SET beginDate=NOW(), endingDate=DATE_ADD(NOW(),INTERVAL duration SECOND) WHERE idCampaign = :varId", [
             'varId' => $id
         ]);
         return true;
