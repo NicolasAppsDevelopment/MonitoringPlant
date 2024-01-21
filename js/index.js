@@ -30,11 +30,11 @@ async function getCampagnes(filter = null) {
             if (campagne["finished"] == 0) {
                 // la campagne n'est pas fini
                 state = "processing";
-                state_desc = `En cours (reste ${dateToReamingString(campagne["endingDate"])})...`;
+                state_desc = `En cours (reste ${dateToReamingString(new Date(campagne["endingDate"]))})...`;
                 state_ico = "working_status";
             } else {
                 // la campagne est fini
-                state_desc = `Terminé le ${dateToString(campagne["endingDate"])}.`;
+                state_desc = `Terminé le ${dateToString(new Date(campagne["endingDate"]))}.`;
             }
 
             switch (campagne["alertLevel"]) {
