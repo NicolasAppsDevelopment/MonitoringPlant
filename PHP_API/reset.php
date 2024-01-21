@@ -16,6 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_string($args["key"])){
         replyError("Impossible de formater la base de données", "Le format de la clé de vérification est incorrect");
     }
+    if ($args["key"] !== "I_do_believe_I_am_on_fire"){
+        replyError("Impossible de formater la base de données", "La clé de vérification est incorrect");
+    }
 
     reply(array(
         "data" => resetAll()
