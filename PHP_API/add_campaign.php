@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     curl_close($curl);
     $data=json_decode($res, true);
 
-    if (!isset($data["idCurrent"])) {
+    if (!array_key_exists("idCurrent", $data)) {
         replyError("Impossible d'ajouter la campagne", "Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
     }
     if ($data["idCurrent"] != null) {
