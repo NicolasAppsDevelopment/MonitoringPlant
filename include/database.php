@@ -96,7 +96,7 @@ function getIdCampagne(string $name): int {
 function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration) : int
 {
     try {
-        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration SECOND))", [
+        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
             'varName' => htmlspecialchars($name),
             'varTemperatureSensor' => (int)$temperatureSensor,
             'varCO2Sensor' => (int)$CO2Sensor,
@@ -105,7 +105,8 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
             'varHumiditySensor' => (int)$humiditySensor,
             'varInterval' => $interval,
             'varVolume' => $volume,
-            'varDuration' => $duration
+            'varDuration' => $duration,
+            'varDuration2' => $duration,
         ]);
 
         return getIdCampagne($name);
