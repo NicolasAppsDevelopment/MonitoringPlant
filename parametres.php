@@ -7,7 +7,11 @@
         <link href="/css/style.css" rel="stylesheet">
         <script src="/js/functions.js"></script>
         <script src="/js/parametre.js"></script>
+
         <title>Accueil</title>
+
+        <link rel="preload" href="./img/error_ico.svg" as="image"/>
+        <link rel="preload" href="./img/success_ico.svg" as="image"/>
     </head>
     <body class="bg main_theme">
         <?php include "modules/header.php";?>

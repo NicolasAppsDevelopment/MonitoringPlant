@@ -7,7 +7,10 @@
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
         <script src="./js/setup_time.js"></script>
+
         <title>Définition de l'heure et de la date</title>
+
+        <link rel="preload" href="./img/error_ico.svg" as="image"/>
     </head>
     <body class="bg_animated main_theme">
         <main class="main_popup_container">

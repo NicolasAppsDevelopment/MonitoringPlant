@@ -24,7 +24,12 @@
     <script src="./js/display_chart.js"></script>
     <script src="./js/functions.js"></script>
     <script src="./js/voirReleve.js"></script>
+
     <title>Voir Releve</title>
+
+    <link rel="preload" href="./img/error_ico.svg" as="image"/>
+    <link rel="preload" href="./img/warning_ico.svg" as="image"/>
+    <link rel="preload" href="./img/success_ico.svg" as="image"/>
 </head>
 
 <body class="bg main_theme">
