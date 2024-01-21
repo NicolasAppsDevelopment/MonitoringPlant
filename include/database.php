@@ -93,9 +93,29 @@ function getIdCampagne(string $name): int {
     }
 }
 
+function existCampagne(string $name): bool {
+    try {
+        $res = fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
+            'varName' => htmlspecialchars($name)
+        ]);
+    
+        if (count($res) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (\Throwable $th) {
+        replyError("Impossible de vérifier l'existance d'une campagne par son nom.", $th->getMessage());
+    }
+}
+
 function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration) : int
 {
     try {
+        if (existCampagne($name)) {
+            throw new Exception("Une campagne de mesure avec le même nom existe déjà. Veuillez en choisir un autre.");
+        }
+
         fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
             'varName' => htmlspecialchars($name),
             'varTemperatureSensor' => (int)$temperatureSensor,
