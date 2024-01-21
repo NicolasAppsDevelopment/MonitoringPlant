@@ -231,7 +231,7 @@ async function getCampagne(refresh_mode = false) {
                 lum = "";
                 lum_array.push(null);
             } else {
-                lum += " Lm";
+                lum += " %";
                 lum_array.push(parseFloat(lum));
             }
 

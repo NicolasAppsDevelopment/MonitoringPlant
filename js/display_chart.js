@@ -154,7 +154,7 @@ async function initChart(date_array, lum_array, hum_array, temp_array, o2_array,
             data_val += " °C";
             break;
           case "Luminosité":
-            data_val += " Lm";
+            data_val += " %";
             break;
           case "Humidité":
             data_val += " %";
