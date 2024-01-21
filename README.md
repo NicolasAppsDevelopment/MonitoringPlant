@@ -30,4 +30,4 @@ Les fichiers de code se trouvent dans la branche [Website](https://iutbg-gitlab.
 ## La base de données
 
 Hébergé par MariaDB sur le Raspberry Pi, utilisé dans le projet.
-Les fichiers de code SQL et schéma relationnel se trouvent dans la branche [BD](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/BD).
+Les fichiers de code SQL et diagramme de classe se trouvent dans la branche [BD](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/BD).
