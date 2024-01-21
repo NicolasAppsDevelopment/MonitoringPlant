@@ -236,9 +236,7 @@ async function addCampagne() {
         hideLoading();
         displayError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal positif puis réessayer.");
         return;
-    }   
-
-    const data1 = await NODERED_get("/check_working_campaign");
+    }
 
     const data = await PHP_post("/PHP_API/add_campaign.php", {
         "title": title.value,
@@ -266,7 +264,6 @@ async function addCampagne() {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
         }
     }
-
 
     hideLoading();
 }
