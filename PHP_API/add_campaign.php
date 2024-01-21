@@ -3,6 +3,7 @@ header("Content-Type: application/json; charset=utf-8");
 
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
+include_once __DIR__ . "/../include/NodeRED_API.php";
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
 const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
@@ -111,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // check if a campaign is already running
-    $url = "http://192.168.4.1:1880/check_working_campaign";
+    $url = "$NODE_RED_API_URL/check_working_campaign";
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -129,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // check if there is enough space on the device
-    $url = "http://192.168.4.1:1880/storage";
+    $url = "$NODE_RED_API_URL/storage";
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -160,4 +161,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     replyError("Impossible d'ajouter la campagne", "La méthode de requête est incorrecte.");
 }
-?>
