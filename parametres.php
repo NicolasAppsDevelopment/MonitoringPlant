@@ -8,7 +8,7 @@
         <script src="/js/functions.js"></script>
         <script src="/js/parametre.js"></script>
 
-        <title>Accueil</title>
+        <title>Page Paramètre</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
         <link rel="preload" href="./img/success_ico.svg" as="image"/>
@@ -40,6 +40,20 @@
                         <option value="j">j</option>
                         <option value="mois">mois</option>
                     </select>
+                </div>
+            </div>
+
+            <div class="label_img_input">
+                <label class="label_field" for="conserv">Nom du WIFI</label>
+                <div class="row_fields">
+                    <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="label_img_input">
+                <label class="label_field" for="conserv">Mot de passe du WIFI</label>
+                <div class="row_fields">
+                    <input class="input_field key" id="password" name="password" type="password" placeholder="mot de passe" min="0" autocomplete="off">
                 </div>
             </div>
 

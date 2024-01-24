@@ -1113,6 +1113,9 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 .input_field.calendar {
     background-image: url('../img/calendar.svg');
 }
+.input_field.key {
+    background-image: url('../img/key.svg');
+}
 
 
 .input_field::placeholder {

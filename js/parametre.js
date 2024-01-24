@@ -31,12 +31,22 @@ async function postParametre()
     const enable_auto_remove = document.getElementById("auto_suppr");
     const interval = document.getElementById("conserv");
     const interval_unit = document.getElementById("comboBoxTpsSuppr");
+    const network = document.getElementById("network");
+    const password = document.getElementById("password");
 
     if (interval.validity.badInput === true) {
         hideLoading();
         displayError("Impossible de sauvegarder les paramètres", "L'intervalle de relevé de suppression des campagnes n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
         return;
     } 
+
+    const data_ = await NODERED_post("/set_AP", {
+        "network": network.value,
+        "password": password.value
+    });
+    if (data_ == null) {
+        console.warn("ATTENTION : NodeRed n'a rien retourné");
+    }
 
     let data = await PHP_post("/PHP_API/set_settings.php", {
         "autoremove.interval": interval.value,
