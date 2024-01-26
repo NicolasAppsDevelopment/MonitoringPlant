@@ -2,13 +2,17 @@ async function getParametre()
 {
     displayLoading("Récupération des paramètres...");
 
+    const data_ = await NODERED_get("/get_AP");
+    let network = document.getElementById("network");
+    network.value=data_;
+
     const data = await PHP_get("/PHP_API/get_settings.php");
     if (data != null){
         if (data["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
         }else{
             document.getElementById("auto_suppr").checked=false;
-        }
+        }     
         
         const timeData = getReadableTimeAndUnit(data["removeInterval"]);
         let valeur = document.getElementById("conserv");
@@ -32,7 +36,6 @@ async function postParametre()
     const interval = document.getElementById("conserv");
     const interval_unit = document.getElementById("comboBoxTpsSuppr");
     const network = document.getElementById("network");
-    const password = document.getElementById("password");
 
     if (interval.validity.badInput === true) {
         hideLoading();
@@ -40,21 +43,27 @@ async function postParametre()
         return;
     } 
 
-    const data_ = await NODERED_post("/set_AP", {
-        "network": network.value,
-        "password": password.value
-    });
-    if (data_ == null) {
-        console.warn("ATTENTION : NodeRed n'a rien retourné");
-    }
-
-    let data = await PHP_post("/PHP_API/set_settings.php", {
+    
+    let data1 = await PHP_post("/PHP_API/set_settings.php", {
         "autoremove.interval": interval.value,
         "autoremove.interval_unit": interval_unit.value,
         "autoremove.enabled": enable_auto_remove.checked
     });
-    
-    if(data != null){
+
+    const data2 = await NODERED_get("/get_AP");
+
+    if(network.value!=null && network.value!=data2){
+        const data3 = await NODERED_post("/set_AP", {
+            "network": network.value,
+        });
+        if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
+            //restart
+            const data4 = await NODERED_get("/restart");
+        }
+
+    }
+ 
+    if(data1 != null){
         displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
     }
 

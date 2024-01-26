@@ -45,14 +45,7 @@
 
             <div class="label_img_input">
                 <label class="label_field" for="conserv">Nom du WIFI</label>
-                <div class="row_fields">
-                    <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
-                </div>
-            </div>
-
-            <div class="label_img_input">
-                <label class="label_field" for="conserv">Mot de passe du WIFI</label>
-                <input class="input_field key" id="password" name="password" type="password" placeholder="mot de passe" min="0" autocomplete="off">
+                <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
             </div>
 
             <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre()">Enregistrer</button>
