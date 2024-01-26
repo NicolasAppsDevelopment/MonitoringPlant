@@ -52,9 +52,7 @@
 
             <div class="label_img_input">
                 <label class="label_field" for="conserv">Mot de passe du WIFI</label>
-                <div class="row_fields">
-                    <input class="input_field key" id="password" name="password" type="password" placeholder="mot de passe" min="0" autocomplete="off">
-                </div>
+                <input class="input_field key" id="password" name="password" type="password" placeholder="mot de passe" min="0" autocomplete="off">
             </div>
 
             <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre()">Enregistrer</button>
