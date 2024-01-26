@@ -24,6 +24,25 @@
         "env": []
     },
     {
+        "id": "276b14c6e78b7856",
+        "type": "serial-port",
+        "serialport": "/dev/ttyUSB0",
+        "serialbaud": "19200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\r",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "1000"
+    },
+    {
         "id": "9fa9e71427451144",
         "type": "MySQLdatabase",
         "name": "",
@@ -59,25 +78,6 @@
         "willMsg": {},
         "userProps": "",
         "sessionExpiry": ""
-    },
-    {
-        "id": "276b14c6e78b7856",
-        "type": "serial-port",
-        "serialport": "/dev/ttyUSB0",
-        "serialbaud": "19200",
-        "databits": "8",
-        "parity": "none",
-        "stopbits": "1",
-        "waitfor": "",
-        "dtr": "none",
-        "rts": "none",
-        "cts": "none",
-        "dsr": "none",
-        "newline": "\\r",
-        "bin": "false",
-        "out": "char",
-        "addchar": "",
-        "responsetimeout": "1000"
     },
     {
         "id": "202aa279db48a455",
@@ -240,7 +240,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1360,
+        "x": 1420,
         "y": 660,
         "wires": [
             [
@@ -311,7 +311,7 @@
         ],
         "uncaught": false,
         "x": 150,
-        "y": 820,
+        "y": 760,
         "wires": [
             [
                 "a57b69a54fc7e3f2"
@@ -330,11 +330,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
-        "y": 900,
+        "x": 610,
+        "y": 760,
         "wires": [
             [
-                "15dfd7195cb1f031"
+                "4ccf23e96dec59ab"
             ]
         ]
     },
@@ -431,8 +431,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 280,
-        "y": 900,
+        "x": 420,
+        "y": 760,
         "wires": [
             [
                 "5edf0aa5ca3f898f"
@@ -533,18 +533,22 @@
         "type": "function",
         "z": "bb3e76ddae756e10",
         "name": "Get delay",
-        "func": "let now = new Date();\nmsg.next_time += msg.interval;\nmsg.delay = msg.next_time - now.valueOf();\nif(msg.delay<0){\n    msg.delay=msg.interval;\n}\nmsg.millis = now.getMilliseconds();\n\nreturn msg;",
-        "outputs": 1,
+        "func": "let now = new Date();\nmsg.next_time += msg.interval;\nmsg.delay = msg.next_time - now.valueOf();\nif(msg.delay<0){\n    return [null,msg];\n    //msg.delay=msg.interval;\n}\n\nmsg.millis = now.getMilliseconds();\n\nreturn [msg,null];",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2800,
+        "x": 2940,
         "y": 960,
         "wires": [
             [
-                "9c58bf74e7219804"
+                "9c58bf74e7219804",
+                "17ca255df43ecba7"
+            ],
+            [
+                "91043580d13174dd"
             ]
         ]
     },
@@ -606,7 +610,7 @@
         "z": "bb3e76ddae756e10",
         "mydb": "9fa9e71427451144",
         "name": "Insère donnée",
-        "x": 2580,
+        "x": 2700,
         "y": 960,
         "wires": [
             [
@@ -682,19 +686,18 @@
         "type": "function",
         "z": "bb3e76ddae756e10",
         "name": "TraiteRelève et Renvoie requète",
-        "func": "var id=global.get(\"currentCampagne\");\nvar temperature=global.get(\"temperature\");\nvar co2=global.get(\"co2\");\nvar lumiere=global.get(\"luminosity\");\nvar o2 =global.get(\"o2\");\nvar humidite=global.get(\"humidity\");\nvar date=new Date();\n\n\n\n\nvar y = date.getFullYear();\nvar m = date.getMonth() + 1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\n\n\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic=\"INSERT INTO Measurements value(\"\n+id+\",\"\n+temperature+\",\"\n+co2+\",\"\n+o2+\",\"\n+lumiere+\",\"\n+humidite+\",\"\n+date+\");\";\n\nmsg.delay=global.get(\"interval\");\n\nreturn msg;\n",
+        "func": "var id=global.get(\"currentCampagne\");\nvar temperature=null;\nvar co2=null;\nvar lumiere=null;\nvar o2=null;\nvar humidite=null;\n\nif(global.get(\"capteurTemperature\")>0){\nvar temperature=global.get(\"temperature\");\n}\nif(global.get(\"capteurCO2\")>0){\n co2=global.get(\"co2\");\n}\nif(global.get(\"capteurO2\")>0){\n o2=global.get(\"o2\");\n}\nif(global.get(\"capteurHumidite\")>0){\n humidite=global.get(\"humidity\");\n}\nif(global.get(\"capteurLumiere\")>0){\n    lumiere = global.get(\"luminosity\");\n}\n\nvar date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth() + 1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\n\n\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic=\"INSERT INTO Measurements value(\"\n+id+\",\"\n+temperature+\",\"\n+co2+\",\"\n+o2+\",\"\n+lumiere+\",\"\n+humidite+\",\"\n+date+\");\";\n\nmsg.delay=global.get(\"interval\");\nif(msg.begin==msg.next_time){\n    var temperature = null;\n    var co2 = null;\n    var lumiere = null;\n    var o2 = null;\n    var humidite = null;\n}\n\nreturn [msg,null];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2240,
+        "x": 2270,
         "y": 1040,
         "wires": [
             [
-                "11677b52c689958b",
-                "f6060c812e219bc6"
+                "11677b52c689958b"
             ]
         ]
     },
@@ -710,8 +713,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
-        "y": 840,
+        "x": 200,
+        "y": 960,
         "wires": [
             [
                 "48d756402a9ae55b"
@@ -742,8 +745,8 @@
         "name": "Campagne arrêter manuellement",
         "statusCode": "200",
         "headers": {},
-        "x": 1550,
-        "y": 1240,
+        "x": 1720,
+        "y": 1260,
         "wires": []
     },
     {
@@ -765,8 +768,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1070,
-        "y": 1180,
+        "x": 1230,
+        "y": 1260,
         "wires": [
             [
                 "78884820311c882b"
@@ -783,7 +786,7 @@
         "y": 1180,
         "wires": [
             [
-                "5f82b61ca1e9fe53"
+                "97176f7fbbdf6468"
             ]
         ]
     },
@@ -885,8 +888,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1250,
-        "y": 1240,
+        "x": 1440,
+        "y": 1280,
         "wires": [
             [
                 "24ef8cdcf5d805b6"
@@ -917,8 +920,8 @@
         "name": "Reussite redémarage",
         "statusCode": "200",
         "headers": {},
-        "x": 1260,
-        "y": 1500,
+        "x": 1320,
+        "y": 1520,
         "wires": []
     },
     {
@@ -927,11 +930,11 @@
         "z": "bb3e76ddae756e10",
         "mydb": "9fa9e71427451144",
         "name": "",
-        "x": 860,
-        "y": 1600,
+        "x": 1480,
+        "y": 1660,
         "wires": [
             [
-                "b38e81258ec38b66"
+                "28dc52ef3461f638"
             ]
         ]
     },
@@ -988,8 +991,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1410,
-        "y": 1640,
+        "x": 1270,
+        "y": 1660,
         "wires": [
             [
                 "260ff80fe57f4819"
@@ -1064,7 +1067,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 990,
+        "x": 1020,
         "y": 1520,
         "wires": [
             [
@@ -1079,7 +1082,7 @@
         "name": "On init sensor event",
         "scope": [
             "15dfd7195cb1f031",
-            "92ea177bc7201275"
+            "bf3feda4bb00c69d"
         ],
         "uncaught": false,
         "x": 140,
@@ -1324,8 +1327,7 @@
         "y": 1780,
         "wires": [
             [
-                "83921adf4f7bd952",
-                "2d91617583cb1257"
+                "83921adf4f7bd952"
             ],
             [
                 "6bebf0210a7c6226"
@@ -1454,33 +1456,6 @@
         "y": 1660,
         "wires": [
             [
-                "bc6e9f1344618ce2"
-            ]
-        ]
-    },
-    {
-        "id": "bc6e9f1344618ce2",
-        "type": "change",
-        "z": "bb3e76ddae756e10",
-        "name": "besoinCapteur",
-        "rules": [
-            {
-                "t": "set",
-                "p": "besoinCapteur",
-                "pt": "global",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1000,
-        "y": 1660,
-        "wires": [
-            [
                 "c6bf465c6a98d040"
             ]
         ]
@@ -1497,7 +1472,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1190,
+        "x": 1050,
         "y": 1660,
         "wires": [
             [
@@ -1573,9 +1548,7 @@
         "x": 2330,
         "y": 960,
         "wires": [
-            [
-                "8020ce8b30a9e217"
-            ]
+            []
         ]
     },
     {
@@ -1696,8 +1669,7 @@
         "y": 2060,
         "wires": [
             [
-                "222297a34d21e88f",
-                "d11614dc20f6ac82"
+                "baa1f581bcfc9f22"
             ]
         ]
     },
@@ -1848,8 +1820,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2550,
-        "y": 1660,
+        "x": 2570,
+        "y": 1620,
         "wires": []
     },
     {
@@ -2055,7 +2027,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 2350,
+        "x": 2450,
         "y": 1720,
         "wires": [
             [
@@ -2233,12 +2205,12 @@
         "type": "mysql",
         "z": "bb3e76ddae756e10",
         "mydb": "9fa9e71427451144",
-        "name": "Insère logs erreur",
-        "x": 2130,
-        "y": 1660,
+        "name": "Insère logs reprise",
+        "x": 2030,
+        "y": 1680,
         "wires": [
             [
-                "cb109235b4167ace"
+                "7a57b03c1ea53f89"
             ]
         ]
     },
@@ -2569,8 +2541,8 @@
         "crontab": "",
         "once": true,
         "onceDelay": "10",
-        "topic": "update Campaigns set finished=1;",
-        "x": 1090,
+        "topic": "SELECT idCampaign from Campaigns where finished=0",
+        "x": 1130,
         "y": 240,
         "wires": [
             [
@@ -2584,43 +2556,12 @@
         "z": "bb3e76ddae756e10",
         "mydb": "9fa9e71427451144",
         "name": "",
-        "x": 1420,
+        "x": 1500,
         "y": 240,
         "wires": [
             [
-                "f6be17dbe8da68f7",
-                "5c5576b1c9a9c81a"
-            ]
-        ]
-    },
-    {
-        "id": "f6be17dbe8da68f7",
-        "type": "switch",
-        "z": "bb3e76ddae756e10",
-        "name": "",
-        "property": "currentCampagne",
-        "propertyType": "global",
-        "rules": [
-            {
-                "t": "gt",
-                "v": "0",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 1630,
-        "y": 240,
-        "wires": [
-            [
-                "7b5285f2e49ee158"
-            ],
-            [
-                "12a60b2e8fb15d49"
+                "5c5576b1c9a9c81a",
+                "dbed45ae8a3d0095"
             ]
         ]
     },
@@ -2643,8 +2584,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1850,
-        "y": 300,
+        "x": 2040,
+        "y": 240,
         "wires": [
             []
         ]
@@ -2654,18 +2595,19 @@
         "type": "function",
         "z": "bb3e76ddae756e10",
         "name": "logs démarré arpès arrêt du raspberry pi",
-        "func": "var date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',2,\"Arrêt imprévu\", \"La campagne à été arrêté après un arrêt non prévu de l\\'appareil de mesure.\",'+date+');';\nreturn msg;",
+        "func": "global.set(\"currentCampagne\",msg.payload[0].idCampaign);\nvar date=new Date();\n\nvar y = date.getFullYear();\nvar m = date.getMonth()+1;\nvar d = date.getDate();\nvar h = date.getHours();\nvar min = date.getMinutes();\nvar s = date.getSeconds();\nif(m<10){\n    m=\"0\"+m;\n}\nif(d<10){\n    d=\"0\"+d;\n}\nif(h<10){\n    h=\"0\"+h;\n}\nif(min<10){\n    min=\"0\"+min;\n}\nif(s<10){\n    s=\"0\"+s;\n}\ndate=\"\"+y+m+d+h+min+s;\n\n\nmsg.topic='INSERT INTO Logs values('+global.get(\"currentCampagne\")+',2,\"Arrêt imprévu\", \"La campagne à été arrêté après un arrêt non prévu de l\\'appareil de mesure.\",'+date+');';\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1890,
-        "y": 200,
+        "x": 1880,
+        "y": 140,
         "wires": [
             [
-                "b02be1fc44650386"
+                "b02be1fc44650386",
+                "2b44edf54b6b3825"
             ]
         ]
     },
@@ -2675,11 +2617,11 @@
         "z": "bb3e76ddae756e10",
         "mydb": "9fa9e71427451144",
         "name": "logs démarré après arrêt",
-        "x": 2190,
-        "y": 200,
+        "x": 2210,
+        "y": 120,
         "wires": [
             [
-                "464227c07fd6d271"
+                "3196085768f39ae4"
             ]
         ]
     },
@@ -2696,7 +2638,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
+        "x": 1790,
         "y": 300,
         "wires": []
     },
@@ -2719,10 +2661,12 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 2830,
-        "y": 200,
+        "x": 3020,
+        "y": 140,
         "wires": [
-            []
+            [
+                "234f8e72c04c3fd7"
+            ]
         ]
     },
     {
@@ -2737,8 +2681,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2390,
-        "y": 200,
+        "x": 2740,
+        "y": 40,
         "wires": [
             [
                 "a9fcc8e59fe01677"
@@ -2751,8 +2695,8 @@
         "z": "bb3e76ddae756e10",
         "mydb": "9fa9e71427451144",
         "name": "Modifie alert level",
-        "x": 2570,
-        "y": 200,
+        "x": 2950,
+        "y": 60,
         "wires": [
             [
                 "7ef506f7e7ec3879"
@@ -2771,13 +2715,13 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": "0.1",
         "topic": "",
         "payload": "currentCampagne",
         "payloadType": "global",
-        "x": 890,
-        "y": 380,
+        "x": 350,
+        "y": 300,
         "wires": [
             [
                 "3b5e2384d27ab6e6"
@@ -2796,40 +2740,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1140,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "8020ce8b30a9e217",
-        "type": "debug",
-        "z": "bb3e76ddae756e10",
-        "name": "debug 56",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2560,
-        "y": 880,
-        "wires": []
-    },
-    {
-        "id": "f6060c812e219bc6",
-        "type": "debug",
-        "z": "bb3e76ddae756e10",
-        "name": "debug 57",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2500,
-        "y": 1060,
+        "x": 660,
+        "y": 300,
         "wires": []
     },
     {
@@ -2845,25 +2757,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1480,
-        "y": 1720,
-        "wires": []
-    },
-    {
-        "id": "d11614dc20f6ac82",
-        "type": "debug",
-        "z": "bb3e76ddae756e10",
-        "name": "debug 61",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 640,
-        "y": 2060,
+        "x": 1840,
+        "y": 2080,
         "wires": []
     },
     {
@@ -2939,6 +2834,466 @@
                 "d4d703ab01a11179"
             ]
         ]
+    },
+    {
+        "id": "baa1f581bcfc9f22",
+        "type": "delay",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 600,
+        "y": 2000,
+        "wires": [
+            [
+                "222297a34d21e88f"
+            ]
+        ]
+    },
+    {
+        "id": "7a57b03c1ea53f89",
+        "type": "delay",
+        "z": "bb3e76ddae756e10",
+        "name": "Set altitude",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2230,
+        "y": 1700,
+        "wires": [
+            [
+                "cb109235b4167ace"
+            ]
+        ]
+    },
+    {
+        "id": "234f8e72c04c3fd7",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 59",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3260,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "6f70ad29ddc1db4b",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 25",
+        "func": "msg.topic =\"SELECT idCampaign from Campaigns where finished=0;\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1930,
+        "y": 420,
+        "wires": [
+            [
+                "e3a75eae520fcfcf"
+            ]
+        ]
+    },
+    {
+        "id": "e3a75eae520fcfcf",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Campagne courante",
+        "x": 2140,
+        "y": 420,
+        "wires": [
+            [
+                "808d4d989d1f55a2"
+            ]
+        ]
+    },
+    {
+        "id": "2aaa53ce8276956e",
+        "type": "inject",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1760,
+        "y": 420,
+        "wires": [
+            [
+                "6f70ad29ddc1db4b"
+            ]
+        ]
+    },
+    {
+        "id": "808d4d989d1f55a2",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 61",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2320,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "dbed45ae8a3d0095",
+        "type": "switch",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "property": "payload[0].idCampaign",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1650,
+        "y": 220,
+        "wires": [
+            [
+                "7b5285f2e49ee158"
+            ],
+            [
+                "12a60b2e8fb15d49"
+            ]
+        ]
+    },
+    {
+        "id": "16a0746d2d13d9dd",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "Campagne courante",
+        "x": 2540,
+        "y": 40,
+        "wires": [
+            [
+                "464227c07fd6d271"
+            ]
+        ]
+    },
+    {
+        "id": "3196085768f39ae4",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 24",
+        "func": "msg.topic =\"update Campaigns set finished=1;\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2350,
+        "y": 60,
+        "wires": [
+            [
+                "16a0746d2d13d9dd"
+            ]
+        ]
+    },
+    {
+        "id": "2b44edf54b6b3825",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 62",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2120,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "4ccf23e96dec59ab",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "Requète capteur utilisé",
+        "func": "msg.topic=\"SELECT * FROM Campaigns WHERE idCampaign=\"+global.get(\"currentCampagne\")+\";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 880,
+        "wires": [
+            [
+                "e73b783fa67230c2"
+            ]
+        ]
+    },
+    {
+        "id": "020567b62ba1b540",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "capteurTemperature",
+                "pt": "global",
+                "to": "payload[0].temperatureSensorState",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "capteurCO2",
+                "pt": "global",
+                "to": "payload[0].CO2SensorState",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "capteurO2",
+                "pt": "global",
+                "to": "payload[0].O2SensorState",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "capteurHumidite",
+                "pt": "global",
+                "to": "payload[0].humiditySensorState",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "capteurLumiere",
+                "pt": "global",
+                "to": "payload[0].luminositySensorState",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 720,
+        "y": 880,
+        "wires": [
+            [
+                "15dfd7195cb1f031"
+            ]
+        ]
+    },
+    {
+        "id": "e73b783fa67230c2",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "récupère capteur utilisé",
+        "x": 510,
+        "y": 880,
+        "wires": [
+            [
+                "020567b62ba1b540"
+            ]
+        ]
+    },
+    {
+        "id": "97176f7fbbdf6468",
+        "type": "change",
+        "z": "bb3e76ddae756e10",
+        "name": "change capteur utilisé à 0",
+        "rules": [
+            {
+                "t": "set",
+                "p": "capteurTemperature",
+                "pt": "global",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "capteurCO2",
+                "pt": "global",
+                "to": "0",
+                "tot": "num",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "capteurO2",
+                "pt": "global",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "capteurHumidite",
+                "pt": "global",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "capteurLumiere",
+                "pt": "global",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1110,
+        "y": 1180,
+        "wires": [
+            [
+                "5f82b61ca1e9fe53"
+            ]
+        ]
+    },
+    {
+        "id": "28dc52ef3461f638",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "met à jour l'alerte Level de la campagne",
+        "func": "msg.topic = \"update Campaigns set alertLevel=0 where idCampaign=\" +global.get(\"currentCampagne\")+\";\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 1600,
+        "wires": [
+            [
+                "d5464456e6f332b0"
+            ]
+        ]
+    },
+    {
+        "id": "d5464456e6f332b0",
+        "type": "mysql",
+        "z": "bb3e76ddae756e10",
+        "mydb": "9fa9e71427451144",
+        "name": "",
+        "x": 1320,
+        "y": 1600,
+        "wires": [
+            [
+                "b38e81258ec38b66"
+            ]
+        ]
+    },
+    {
+        "id": "17ca255df43ecba7",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 63",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2940,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "91043580d13174dd",
+        "type": "function",
+        "z": "bb3e76ddae756e10",
+        "name": "function 28",
+        "func": "msg.delay+=msg.interval;\nmsg.count--;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3170,
+        "y": 1120,
+        "wires": [
+            [
+                "b1e79f1b417bf8ee",
+                "5ad526f0a5152fb2"
+            ]
+        ]
+    },
+    {
+        "id": "5ad526f0a5152fb2",
+        "type": "debug",
+        "z": "bb3e76ddae756e10",
+        "name": "debug 64",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3440,
+        "y": 980,
+        "wires": []
     },
     {
         "id": "39459af26a177988",
@@ -3147,8 +3502,8 @@
         "z": "279cc9b9bebdc667",
         "mydb": "9fa9e71427451144",
         "name": "Suppression des logs",
-        "x": 1180,
-        "y": 680,
+        "x": 1200,
+        "y": 800,
         "wires": [
             [
                 "44a27f1e5a6ef49f"
@@ -3167,8 +3522,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1180,
-        "y": 600,
+        "x": 1200,
+        "y": 720,
         "wires": [
             [
                 "07deee6d37e13677"
@@ -3181,8 +3536,8 @@
         "z": "279cc9b9bebdc667",
         "mydb": "9fa9e71427451144",
         "name": "Suppression des mesures",
-        "x": 1470,
-        "y": 680,
+        "x": 1490,
+        "y": 800,
         "wires": [
             [
                 "ead9c7686b225a4f"
@@ -3201,8 +3556,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1470,
-        "y": 600,
+        "x": 1490,
+        "y": 720,
         "wires": [
             [
                 "13de5a95f8d4d89a"
@@ -3215,8 +3570,8 @@
         "z": "279cc9b9bebdc667",
         "mydb": "9fa9e71427451144",
         "name": "Suppression des Campagnes",
-        "x": 1790,
-        "y": 680,
+        "x": 1810,
+        "y": 800,
         "wires": [
             []
         ]
@@ -3233,8 +3588,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1790,
-        "y": 600,
+        "x": 1810,
+        "y": 720,
         "wires": [
             [
                 "a1bd396d2f7e4b3b"
@@ -3260,8 +3615,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 960,
-        "y": 600,
+        "x": 980,
+        "y": 720,
         "wires": [
             [
                 "568c8606ae19fefa"
@@ -3289,8 +3644,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 640,
+        "x": 130,
+        "y": 760,
         "wires": [
             [
                 "bd3b08f0a72891ec"
@@ -3309,8 +3664,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 290,
-        "y": 640,
+        "x": 310,
+        "y": 760,
         "wires": [
             [
                 "98859be66c66cdec"
@@ -3323,8 +3678,8 @@
         "z": "279cc9b9bebdc667",
         "mydb": "9fa9e71427451144",
         "name": "Récupère les paramètres",
-        "x": 510,
-        "y": 640,
+        "x": 530,
+        "y": 760,
         "wires": [
             [
                 "74b0d9316dc9cc12"
@@ -3353,13 +3708,164 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 750,
-        "y": 640,
+        "x": 770,
+        "y": 760,
         "wires": [
             [
                 "082ffda7cb5147fd"
             ],
             []
+        ]
+    },
+    {
+        "id": "f3a9a29a2c8eeb0e",
+        "type": "http in",
+        "z": "279cc9b9bebdc667",
+        "name": "update AP rasp",
+        "url": "/set_AP",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 500,
+        "wires": [
+            [
+                "112d31075997803f"
+            ]
+        ]
+    },
+    {
+        "id": "c3ea6bf40cfcd830",
+        "type": "file",
+        "z": "279cc9b9bebdc667",
+        "name": "edit AP file",
+        "filename": "/etc/hostapd/hostapd.conf",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1070,
+        "y": 500,
+        "wires": [
+            [
+                "5b2e9fa8becd62d4"
+            ]
+        ]
+    },
+    {
+        "id": "112d31075997803f",
+        "type": "change",
+        "z": "279cc9b9bebdc667",
+        "name": "Définir global AP parametres",
+        "rules": [
+            {
+                "t": "set",
+                "p": "network",
+                "pt": "global",
+                "to": "payload.network",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 500,
+        "wires": [
+            [
+                "03e6ce23bfdda653"
+            ]
+        ]
+    },
+    {
+        "id": "0d8f74d7e03b0bc2",
+        "type": "function",
+        "z": "279cc9b9bebdc667",
+        "name": "function 26",
+        "func": "var lines = msg.payload.split('\\n');\nlines[2] = \"ssid=\"+ global.get(\"network\");\nmsg.payload = lines.join('\\n');\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 500,
+        "wires": [
+            [
+                "dcfc6b792772fa5f",
+                "c3ea6bf40cfcd830"
+            ]
+        ]
+    },
+    {
+        "id": "5e839fddda351bf2",
+        "type": "file",
+        "z": "279cc9b9bebdc667",
+        "name": "edit test AP file",
+        "filename": "/home/user/Downloads/test.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1080,
+        "y": 560,
+        "wires": [
+            [
+                "5b2e9fa8becd62d4"
+            ]
+        ]
+    },
+    {
+        "id": "5b2e9fa8becd62d4",
+        "type": "http response",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1240,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "dcfc6b792772fa5f",
+        "type": "debug",
+        "z": "279cc9b9bebdc667",
+        "name": "debug 65",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "03e6ce23bfdda653",
+        "type": "file in",
+        "z": "279cc9b9bebdc667",
+        "name": "",
+        "filename": "/etc/hostapd/hostapd.conf",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 670,
+        "y": 500,
+        "wires": [
+            [
+                "0d8f74d7e03b0bc2"
+            ]
         ]
     },
     {
