@@ -53,6 +53,11 @@ async function postParametre()
     const data2 = await NODERED_get("/get_AP");
 
     if(network.value!=null && network.value!=data2){
+        if(!network.value.match(/^[a-zA-Z0-9\s-_]+$/)){
+            
+            displayError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
+        }
+            
         const data3 = await NODERED_post("/set_AP", {
             "network": network.value,
         });
