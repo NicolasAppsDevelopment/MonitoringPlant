@@ -4,7 +4,7 @@ async function getParametre()
 
     const data_ = await NODERED_get("/get_AP");
     let network = document.getElementById("network");
-    network.value=data_;
+    network.value=data_["name"];
 
     const data = await PHP_get("/PHP_API/get_settings.php");
     if (data != null){
