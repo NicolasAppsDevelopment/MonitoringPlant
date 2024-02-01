@@ -53,19 +53,17 @@ async function postParametre()
     const data2 = await NODERED_get("/get_AP");
 
     if(network.value!=null && network.value!=data2){
-        if(!network.value.match(/^[a-zA-Z0-9\s-_]+$/)){
-            
-            displayError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
-        }
-            
-        const data3 = await NODERED_post("/set_AP", {
+        if(network.value.match(/^[a-zA-Z0-9\s-_]+$/)){
+            const data3 = await NODERED_post("/set_AP", {
             "network": network.value,
-        });
-        if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
-            //restart
-            const data4 = await NODERED_get("/restart");
-        }
-
+            });
+            if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
+                //restart
+                const data4 = await NODERED_get("/restart");
+            }    
+        }else{
+            displayError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
+        } 
     }
  
     if(data1 != null){
