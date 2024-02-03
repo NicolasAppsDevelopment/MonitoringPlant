@@ -305,7 +305,7 @@ async function getCampagne(refresh_mode = false) {
             } 
         } else {
             if (refresh_mode == false){
-                subscribeRefresh()
+                subscribeRefresh();
             } 
         }
 

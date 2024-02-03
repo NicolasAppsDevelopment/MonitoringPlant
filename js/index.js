@@ -1,3 +1,25 @@
+document.addEventListener("DOMContentLoaded", () => {
+    checkTime();
+    getCampagnes();
+    getStorageCapacity();
+});
+
+let refresh_delay = 5000;
+let last_measure_datetime = null;
+let refresh_repeat = true;
+
+async function delay(ms) {
+    // return await for better async stack trace support in case of errors.
+    return await new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+async function subscribeRefresh() {
+    do {
+        getCampagnes();
+        await delay(refresh_delay);
+    } while (refresh_repeat);
+}
+
 async function getCampagnes(filter = null) {
     const campagnesContainer = document.getElementById("CM_container");
     campagnesContainer.innerHTML = `
@@ -78,6 +100,8 @@ async function getCampagnes(filter = null) {
 
         campagnesContainer.innerHTML = campagnesContainerHTML;
     }
+
+    subscribeRefresh();
 
     const loading = document.getElementById("loading_div");
     if (loading != null) {
@@ -283,10 +307,3 @@ function handleKeyPressSearchBar(e){
     filterCampagnes();
     }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    checkTime();
-    getCampagnes();
-    getStorageCapacity();
-    
-});
