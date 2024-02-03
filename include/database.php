@@ -2,7 +2,8 @@
 
 include_once __DIR__ . "/../include/reply.php";
 
-function init_db() : PDO
+//Connection à la base de données
+function initDataBase() : PDO
 {
     $dsn = "mysql:dbname=phase1;host=localhost";
     $user = "quentin";
@@ -16,9 +17,11 @@ function init_db() : PDO
 }
 
 global $PDO;
-$PDO = init_db();
+$PDO = initDataBase();
 $PDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
+
+//Préparation et exécution d'une requète SQL
 function fetchAll(string $query, array $params = []) : array {
     global $PDO;
     if (!$PDO){
@@ -36,6 +39,7 @@ function fetchAll(string $query, array $params = []) : array {
     return $statement->fetchAll();
 }
 
+//Récupération des toutes les campagnes de mesures
 function getListCampaign(array $filter = null) : array
 {
     $query = "SELECT * FROM Campaigns ";
@@ -77,6 +81,7 @@ function getListCampaign(array $filter = null) : array
     }
 }
 
+//retourne l'id de la campagne dont le nom rentré en paramètre correspond
 function getIdCampagne(string $name): int {
     try {
         $res = fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
@@ -93,6 +98,7 @@ function getIdCampagne(string $name): int {
     }
 }
 
+//retourne vrai si le nom rentré en paramètre correspond à une campagne existante
 function existCampagne(string $name): bool {
     try {
         $res = fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
@@ -109,6 +115,7 @@ function existCampagne(string $name): bool {
     }
 }
 
+//créer une campagne selon les paramètres rentrés en paramètre
 function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration) : int
 {
     try {
@@ -135,6 +142,7 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
     }
 }
 
+//supprime les mesures de la campagne dont l'id est rentré en paramètre
 function supprMeasurements(int $id) : bool
 {
     // Suppression des mesures
@@ -148,6 +156,7 @@ function supprMeasurements(int $id) : bool
     }
 }
 
+//supprime les logs de la campagne dont l'id est rentré en paramètre
 function supprLogs(int $id) : bool
 {
     // Suppression des logs
@@ -161,7 +170,7 @@ function supprLogs(int $id) : bool
     }
 } 
 
-
+//supprime toutes les données de la campagne dont l'id est rentré en paramètre
 function supprCampaign(int $id) : bool
 {
     // Suppression des mesures
@@ -181,6 +190,7 @@ function supprCampaign(int $id) : bool
     }
 }
 
+//redémarre une campagne dont l'id est rentré en paramètre
 function restartCampaign(int $id) : bool
 {
     // Suppression des mesures
@@ -201,6 +211,7 @@ function restartCampaign(int $id) : bool
     return true;
 }
 
+//supprime toutes les données de la cellule de mesure (remise à zéro de la cellule de mesure)
 function resetAll() : bool
 {
     // Suppression des paramètres du Raspbery Pi
@@ -233,7 +244,7 @@ function resetAll() : bool
     }
 }
 
-
+//export des mesures d'une campagne en fonction des paramètres rentrés en paramètre
 function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array
 {
     $params = [];
@@ -274,6 +285,7 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
     }
 }
 
+//récupération toutes les données de la campagne dont l'id est rentré en paramètre
 function getCampaign(int $id, ?string $log_from_datetime = NULL, ?string $measure_from_datetime = NULL) : array {
     try {
         return array(
@@ -286,6 +298,7 @@ function getCampaign(int $id, ?string $log_from_datetime = NULL, ?string $measur
     }
 }
 
+//récupération les informations général de la campagne dont l'id est rentré en paramètre
 function getInfoCampaign(int $id) : array {
     try {
         $res = fetchAll("SELECT * FROM Campaigns WHERE idCampaign = :varId", [
@@ -302,6 +315,7 @@ function getInfoCampaign(int $id) : array {
     }
 }
 
+//récupération des logs de la campagne dont l'id est rentré en paramètre
 function getLogs(int $id, ?string $from_datetime = NULL) : array {
     try {
         $query = "SELECT * FROM Logs WHERE idCampaign = :varId";
@@ -320,6 +334,7 @@ function getLogs(int $id, ?string $from_datetime = NULL) : array {
     }
 }
 
+//récupération des mesures de la campagne dont l'id est rentré en paramètre
 function getMeasurements(int $id, ?string $from_datetime = NULL) : array {
     try {
         $query = "SELECT * FROM Measurements WHERE idCampaign = :varId";
@@ -340,6 +355,7 @@ function getMeasurements(int $id, ?string $from_datetime = NULL) : array {
     }
 }
 
+//récupération les paramètres de la cellule
 function getParametre() : array
 {
     try {
@@ -355,6 +371,7 @@ function getParametre() : array
     }
 }
 
+//définition de nouveaux paramètres de la cellule
 function postParametres(int $IntervalSuppression, int $enlabed) : array
 {
     try {
