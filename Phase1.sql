@@ -48,7 +48,8 @@ create table Measurements (
 /*==============================================================*/
 create table Settings (
    removeInterval  int,
-   autoRemove      boolean
+   autoRemove      boolean,
+   altitude        int
 );
 
 /*==============================================================*/
