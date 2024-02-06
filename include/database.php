@@ -2,7 +2,12 @@
 
 include_once __DIR__ . "/../include/reply.php";
 
-//Connection to database
+
+/**
+ * Connection to database.
+ * 
+ * @return PDO
+ */
 function initDataBase() : PDO
 {
     $dsn = "mysql:dbname=phase1;host=localhost";
@@ -21,7 +26,13 @@ $PDO = initDataBase();
 $PDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
-//Preparing and executing a SQL query
+/**
+ * Preparing and executing a SQL query.
+ * 
+ * @param string $query Query who need to be execute
+ * @param string $parameters Parameter(s) of the query
+ * @return array
+ */
 function fetchAll(string $query, array $parameters = []) : array {
     global $PDO;
     if (!$PDO){
@@ -39,7 +50,13 @@ function fetchAll(string $query, array $parameters = []) : array {
     return $statement->fetchAll();
 }
 
-//Recovery of all measurement campaigns
+
+/**
+ * Recovery of all measurement campaigns.
+ * 
+ * @param array $filter Influence which campaigns the function recovers
+ * @return array
+ */
 function getListCampaign(array $filter = null) : array
 {
     $query = "SELECT * FROM Campaigns ";
@@ -81,7 +98,13 @@ function getListCampaign(array $filter = null) : array
     }
 }
 
-//Returns the id of the campaign whose name entered in parameter matches
+
+/**
+ * Returns the id of the campaign whose name entered in parameter matches
+ * 
+ * @param string $name Name of a campaign
+ * @return int
+ */
 function getIdCampagne(string $name): int {
     try {
         $results = fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
@@ -98,7 +121,13 @@ function getIdCampagne(string $name): int {
     }
 }
 
-//Returns true if the name entered in parameter corresponds to an existing campaign
+
+/**
+ * Returns true if the name entered in parameter corresponds to an existing campaign.
+ * 
+ * @param string $name Name of a campaign
+ * @return bool
+ */
 function existCampagne(string $name): bool {
     try {
         $results = fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
@@ -115,7 +144,21 @@ function existCampagne(string $name): bool {
     }
 }
 
-//Creates a campaign according to the parameters entered
+
+/**
+ * Creates a campaign according to the parameters entered andd returns the id of the new campaign.
+ * 
+ * @param string $name  Name of the new campaign
+ * @param bool $temperatureSensor  True if the new campaign take the temperature
+ * @param bool $CO2Sensor  True if the new campaign take the CO2
+ * @param bool $O2Sensor  True if the new campaign take the O2
+ * @param bool $luminositySensor  True if the new campaign take the luminosity
+ * @param bool $humiditySensor  True if the new campaign take the humidity
+ * @param int $interval  Interval between each measurements of the new campaign
+ * @param ?float $volume  Volume in wich the new campaign take measurements
+ * @param int $duration  Duration of the new campaign
+ * @return int
+ */
 function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration) : int
 {
     try {
@@ -142,7 +185,14 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
     }
 }
 
-//Deletes measurements from the campaign whose id is entered as a parameter
+
+/**
+ * Deletes measurements from the campaign whose id is entered as a parameter
+ * Returns true if the measurements are deleted.
+ * 
+ * @param int $id Id of the campaign
+ * @return bool
+ */
 function supprMeasurements(int $id) : bool
 {
     //Removal of measurements
@@ -156,7 +206,14 @@ function supprMeasurements(int $id) : bool
     }
 }
 
-//Deletes logs from the campaign whose id is entered as a parameter
+
+/**
+ * Deletes logs from the campaign whose id is entered as a parameter
+ * Returns true if the logs are deleted.
+ * 
+ * @param int $id Id of the campaign
+ * @return bool
+ */
 function supprLogs(int $id) : bool
 {
     //Removal of logs
@@ -170,7 +227,14 @@ function supprLogs(int $id) : bool
     }
 } 
 
-//Deletes all data of the campaign whose id is entered as a parameter
+
+/**
+ * Deletes all data of the campaign whose id is entered as a parameter
+ * Returns true if all data are deleted.
+ * 
+ * @param int $id Id of the campaign
+ * @return bool
+ */
 function supprCampaign(int $id) : bool
 {
     //Removal of measurements
@@ -190,7 +254,14 @@ function supprCampaign(int $id) : bool
     }
 }
 
-//Restarts a campaign whose id is entered as a parameter 
+
+/**
+ * Restarts a campaign whose id is entered as a parameter
+ * Returns true if the campaign is restart.
+ * 
+ * @param int $id Id of the campaign
+ * @return bool
+ */
 function restartCampaign(int $id) : bool
 {
     //Removal of measurements
@@ -212,7 +283,13 @@ function restartCampaign(int $id) : bool
     return true;
 }
 
-//Deletes all data in the measurement cell (reset of the measurement cell)
+
+/**
+ * Deletes all data in the measurement cell (reset of the measurement cell)
+ * Returns true if all raspberry pi data are deleted.
+ * 
+ * @return bool
+ */
 function resetAll() : bool
 {
     //Deleting Raspbery Pi settings
@@ -245,7 +322,20 @@ function resetAll() : bool
     }
 }
 
-//Export of measurements from a campaign according to the parameters entered
+
+/**
+ * Export of measurements from a campaign according to the parameters entered.
+ * 
+ * @param string $id  Id of the new campaign
+ * @param bool $temperatureSensor  True if the export take the temperature recorded by the campaign
+ * @param bool $CO2Sensor  True if the export take the CO2 recorded by the campaign
+ * @param bool $O2Sensor  True if the export take the O2 recorded by the campaign
+ * @param bool $luminositySensor  True if the export take the luminosity recorded by the campaign
+ * @param bool $humiditySensor  True if the export take the humidity recorded by the campaign
+ * @param string $beginDate 
+ * @param string $endDate
+ * @return array
+ */
 function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array
 {
     $parameters = [];
@@ -286,6 +376,13 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
     }
 }
 
+
+/**
+ * Description.
+ * 
+ * @param {string} message
+ * @return {string}
+ */
 //Recovery of all the data of the campaign whose id is entered as a parameter
 function getCampaign(int $id, ?string $logSinceDatetime = NULL, ?string $measureSinceDatetime = NULL) : array {
     try {
@@ -299,6 +396,13 @@ function getCampaign(int $id, ?string $logSinceDatetime = NULL, ?string $measure
     }
 }
 
+
+/**
+ * Description.
+ * 
+ * @param {string} message
+ * @return {string}
+ */
 //Recovery of general information about the campaign whose id is entered as a parameter
 function getInfoCampaign(int $id) : array {
     try {
@@ -316,6 +420,13 @@ function getInfoCampaign(int $id) : array {
     }
 }
 
+
+/**
+ * Description.
+ * 
+ * @param {string} message
+ * @return {string}
+ */
 //Recovery of logs of the campaign whose id is entered as a parameter
 function getLogs(int $id, ?string $sinceDatetime = NULL) : array {
     try {
@@ -335,6 +446,13 @@ function getLogs(int $id, ?string $sinceDatetime = NULL) : array {
     }
 }
 
+
+/**
+ * Description.
+ * 
+ * @param {string} message
+ * @return {string}
+ */
 //Recovery of measurements of the campaign whose id is entered as a parameter
 function getMeasurements(int $id, ?string $sinceDatetime = NULL) : array {
     try {
@@ -356,6 +474,13 @@ function getMeasurements(int $id, ?string $sinceDatetime = NULL) : array {
     }
 }
 
+
+/**
+ * Description.
+ * 
+ * @param {string} message
+ * @return {string}
+ */
 //Recovery of Raspbery Pi settings
 function getParametre() : array
 {
@@ -372,6 +497,13 @@ function getParametre() : array
     }
 }
 
+
+/**
+ * Description.
+ * 
+ * @param {string} message
+ * @return {string}
+ */
 //Defines new Raspbery Pi settings
 function postParametres(int $supprInterval, int $enabled, int $altitude) : array
 {

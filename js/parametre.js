@@ -1,4 +1,6 @@
-//Recovering raspberry pi settings
+/**
+ * Recovering raspberry pi settings.
+ */
 async function getParametre()
 {
     displayLoading("Récupération des paramètres...");
@@ -30,12 +32,10 @@ async function getParametre()
     hideLoading();
 }
 
-/**
- * 
- * @returns 
- */
 
-//Update raspberry pi settings
+/**
+ * Update raspberry pi settings.
+ */
 async function postParametre()
 {
     displayLoading("Mise à jour des paramètres...");
@@ -47,7 +47,7 @@ async function postParametre()
     const altitude = document.getElementById("altitude");
 
 
-    if (interval.validity.badInput === true) {
+    if (timeConservation.validity.badInput === true) {
         hideLoading();
         displayError("Impossible de sauvegarder les paramètres", "L'intervalle de relevé de suppression des campagnes n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
         return;
@@ -84,6 +84,9 @@ async function postParametre()
     hideLoading();
 }
 
+/**
+ * Delete all data of the Raspberry pi
+ */
 async function postDeleteAll()
 {
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, mesures et paramètres seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
