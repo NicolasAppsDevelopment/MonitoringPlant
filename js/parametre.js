@@ -7,35 +7,40 @@ async function getParametre()
     let network = document.getElementById("network");
     network.value=accesPoint["name"];
 
-    const data = await PHP_get("/PHP_API/get_settings.php");
-    if (data != null){
-        if (data["autoRemove"]){
+    const settings = await PHP_get("/PHP_API/get_settings.php");
+    if (settings != null){
+        if (settings["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
         }else{
             document.getElementById("auto_suppr").checked=false;
         }     
         
-        const timeData = getReadableTimeAndUnit(data["removeInterval"]);
-        let valeur = document.getElementById("conserv");
-        valeur.setAttribute('value',timeData["value"]);
+        const timeSettings = getReadableTimeAndUnit(settings["removeInterval"]);
+        let timeConservation = document.getElementById("conserv");
+        timeConservation.setAttribute('value',timeSettings["value"]);
 
-        var els = document.querySelector('#comboBoxTpsSuppr option[value="' + timeData["unit"] + '"]');
-        if(els){
-            els.setAttribute('selected','selected');
+        let timeConservationUnit = document.querySelector('#comboBoxTpsSuppr option[value="' + timeSettings["unit"] + '"]');
+        if(timeConservationUnit){
+            timeConservationUnit.setAttribute('selected','selected');
         }
     }
 
     hideLoading();
 }
 
+/**
+ * 
+ * @returns 
+ */
+
 //Update raspberry pi settings
 async function postParametre()
 {
     displayLoading("Mise à jour des paramètres...");
 
-    const enable_auto_remove = document.getElementById("auto_suppr");
-    const interval = document.getElementById("conserv");
-    const interval_unit = document.getElementById("comboBoxTpsSuppr");
+    const enableAutoRemove = document.getElementById("auto_suppr");
+    const timeConservation = document.getElementById("conserv");
+    const timeConservationUnit = document.getElementById("comboBoxTpsSuppr");
     const network = document.getElementById("network");
 
     if (interval.validity.badInput === true) {
@@ -46,21 +51,21 @@ async function postParametre()
 
     
     let data1 = await PHP_post("/PHP_API/set_settings.php", {
-        "autoremove.interval": interval.value,
-        "autoremove.interval_unit": interval_unit.value,
-        "autoremove.enabled": enable_auto_remove.checked
+        "timeConservation": timeConservation.value,
+        "timeConservationUnit": timeConservationUnit.value,
+        "enableAutoRemove": enableAutoRemove.checked
     });
 
-    const data2 = await NODERED_get("/get_AP");
+    const raspberryNetwork = await NODERED_get("/get_AP");
 
-    if(network.value!=null && network.value!=data2){
+    if(network.value!=null && network.value!=raspberryNetwork){
         if(network.value.match(/^[a-zA-Z0-9\s-_]+$/)){
-            const data3 = await NODERED_post("/set_AP", {
-            "network": network.value,
+            const data2 = await NODERED_post("/set_AP", {
+                "network": network.value,
             });
             if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
                 //restart
-                const data4 = await NODERED_get("/restart");
+                const data3 = await NODERED_get("/restart");
             }    
         }else{
             displayError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
