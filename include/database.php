@@ -373,16 +373,17 @@ function getParametre() : array
 }
 
 //Defines new Raspbery Pi settings
-function postParametres(int $supprInterval, int $enabled) : array
+function postParametres(int $supprInterval, int $enabled, int $altitude) : array
 {
     try {
         fetchAll("DELETE FROM Settings");
-        fetchAll("INSERT INTO Settings VALUES(:varSuppr, :varEnabled);", [
+        fetchAll("INSERT INTO Settings VALUES(:varSuppr, :varEnabled, :varAltitude);", [
             'varSuppr' => (int)$supprInterval,
-            'varEnabled' =>(int)$enabled
+            'varEnabled' =>(int)$enabled,
+            'varAltitude' => (int)$altitude
         ]);
         return array("succes"=>true);
     } catch (\Throwable $th) {
-        replyError("Impossible de modifier les paramètres", $th->getMessage());
+        replyError("Impwossible de modifier les paramètres", $th->getMessage());
     }
 }

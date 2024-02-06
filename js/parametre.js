@@ -6,6 +6,7 @@ async function getParametre()
     let network = document.getElementById("network");
     network.value=data_["name"];
 
+
     const data = await PHP_get("/PHP_API/get_settings.php");
     if (data != null){
         if (data["autoRemove"]){
@@ -17,6 +18,8 @@ async function getParametre()
         const timeData = getReadableTimeAndUnit(data["removeInterval"]);
         let valeur = document.getElementById("conserv");
         valeur.setAttribute('value',timeData["value"]);
+        let altitude = document.getElementById("altitude");
+        altitude.setAttribute('value',data["altitude"]);
 
         var els = document.querySelector('#comboBoxTpsSuppr option[value="' + timeData["unit"] + '"]');
         if(els){
@@ -36,6 +39,8 @@ async function postParametre()
     const interval = document.getElementById("conserv");
     const interval_unit = document.getElementById("comboBoxTpsSuppr");
     const network = document.getElementById("network");
+    const altitude = document.getElementById("altitude");
+
 
     if (interval.validity.badInput === true) {
         hideLoading();
@@ -47,7 +52,8 @@ async function postParametre()
     let data1 = await PHP_post("/PHP_API/set_settings.php", {
         "autoremove.interval": interval.value,
         "autoremove.interval_unit": interval_unit.value,
-        "autoremove.enabled": enable_auto_remove.checked
+        "autoremove.enabled": enable_auto_remove.checked,
+        "altitude":altitude.value
     });
 
     const data2 = await NODERED_get("/get_AP");

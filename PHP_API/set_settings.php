@@ -8,6 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
     $args = json_decode($data, true);
 
+    if(!isset($args["altitude"])){
+        replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini. veuillez la renseignez.");
+    }
+
 
     if (!isset($args["autoremove.interval"]) ){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
@@ -39,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 
-    reply(postParametres($interval, $args["autoremove.enabled"]));
+    reply(postParametres($interval, $args["autoremove.enabled"],$args["altitude"]));
 } else {
     replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
 }

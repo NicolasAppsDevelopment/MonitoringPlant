@@ -48,6 +48,13 @@
                 <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
             </div>
 
+            <div class="label_img_input">
+                <label class="label_field" for="conserv">Altitude</label>
+                <div class="row_fields">
+                    <input class="input_field edit" id="altitude" name="altitude" type="number" placeholder="nombre entier" min="0" autocomplete="off">
+                </div>
+            </div>
+
             <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre()">Enregistrer</button>
             <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll()">Effacer les données</button>
         </main>

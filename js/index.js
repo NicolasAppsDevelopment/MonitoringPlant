@@ -4,21 +4,21 @@ document.addEventListener("DOMContentLoaded", () => {
     getStorageCapacity();
 });
 
-let refresh_delay = 5000;
-let last_measure_datetime = null;
-let refresh_repeat = true;
+// let refresh_delay = 5000;
+// let last_measure_datetime = null;
+// let refresh_repeat = true;
 
-async function delay(ms) {
-    // return await for better async stack trace support in case of errors.
-    return await new Promise(resolve => setTimeout(resolve, ms));
-  }
+// async function delay(ms) {
+//     // return await for better async stack trace support in case of errors.
+//     return await new Promise(resolve => setTimeout(resolve, ms));
+//   }
 
-async function subscribeRefresh() {
-    do {
-        getCampagnes();
-        await delay(refresh_delay);
-    } while (refresh_repeat);
-}
+// async function subscribeRefresh() {
+//     do {
+//         getCampagnes();
+//         await delay(refresh_delay);
+//     } while (refresh_repeat);
+// }
 
 async function getCampagnes(filter = null) {
     const campagnesContainer = document.getElementById("CM_container");
