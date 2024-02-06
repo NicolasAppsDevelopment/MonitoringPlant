@@ -1,10 +1,11 @@
+//Recovering raspberry pi settings
 async function getParametre()
 {
     displayLoading("Récupération des paramètres...");
 
-    const data_ = await NODERED_get("/get_AP");
+    const accesPoint = await NODERED_get("/get_AP");
     let network = document.getElementById("network");
-    network.value=data_["name"];
+    network.value=accesPoint["name"];
 
     const data = await PHP_get("/PHP_API/get_settings.php");
     if (data != null){
@@ -21,13 +22,13 @@ async function getParametre()
         var els = document.querySelector('#comboBoxTpsSuppr option[value="' + timeData["unit"] + '"]');
         if(els){
             els.setAttribute('selected','selected');
-            //or els.selected = true;
         }
     }
 
     hideLoading();
 }
 
+//Update raspberry pi settings
 async function postParametre()
 {
     displayLoading("Mise à jour des paramètres...");

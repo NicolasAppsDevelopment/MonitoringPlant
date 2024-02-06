@@ -12,56 +12,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
 
     $data = file_get_contents("php://input");
-	$args = json_decode($data, true);
+	$arguments = json_decode($data, true);
 
-    if (!isset($args["title"]) || empty($args["title"])){
+    if (!isset($arguments["title"]) || empty($arguments["title"])){
         replyError("Impossible d'ajouter la campagne", "Le nom de votre campagne n'a pas été renseigné. Veuillez donner un nom à votre campagne puis réessayer.");
     }
 
-    if (!isset($args["CO2_enabled"], $args["O2_enabled"], $args["temperature_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"])){
+    if (!isset($arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["temperature_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"])){
         replyError("Impossible d'ajouter la campagne", "Il manque un ou plusieurs capteurs dans la requête.");
     }
 
-    if (!is_bool($args["CO2_enabled"]) || !is_bool($args["O2_enabled"]) || !is_bool($args["temperature_enabled"]) || !is_bool($args["luminosity_enabled"]) || !is_bool($args["humidity_enabled"])){
+    if (!is_bool($arguments["CO2_enabled"]) || !is_bool($arguments["O2_enabled"]) || !is_bool($arguments["temperature_enabled"]) || !is_bool($arguments["luminosity_enabled"]) || !is_bool($arguments["humidity_enabled"])){
         replyError("Impossible d'ajouter la campagne", "Le format de la liste des capteurs séléctionnés est incorrecte.");
     }
 
-    if ($args["CO2_enabled"] == false && $args["O2_enabled"] == false && $args["temperature_enabled"] == false && $args["luminosity_enabled"] == false && $args["humidity_enabled"] == false){
+    if ($arguments["CO2_enabled"] == false && $arguments["O2_enabled"] == false && $arguments["temperature_enabled"] == false && $arguments["luminosity_enabled"] == false && $arguments["humidity_enabled"] == false){
         replyError("Impossible d'ajouter la campagne", "Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
     }
 
     $duration = null;
-    if (!isset($args["duration"]) || empty($args["duration"])){
+    if (!isset($arguments["duration"]) || empty($arguments["duration"])){
         replyError("Impossible d'ajouter la campagne", "La durée de la campagne n'a pas été renseigné. Veuillez entrer un nombre entier positif puis réessayer.");
     }
-    $duration = filter_var($args["duration"], FILTER_VALIDATE_INT);
+    $duration = filter_var($arguments["duration"], FILTER_VALIDATE_INT);
     if ($duration === false) {
         replyError("Impossible d'ajouter la campagne", "Le format de la durée de la campagne est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
     }
 
     $interval = null;
-    if (!isset($args["interval"]) || empty($args["interval"])){
+    if (!isset($arguments["interval"]) || empty($arguments["interval"])){
         replyError("Impossible d'ajouter la campagne", "L'intervalle de relevé de la campagne n'a pas été renseigné. Veuillez entrer un nombre entier positif puis réessayer.");
     }
-    $interval = filter_var($args["interval"], FILTER_VALIDATE_INT);
+    $interval = filter_var($arguments["interval"], FILTER_VALIDATE_INT);
     if ($interval === false) {
         replyError("Impossible d'ajouter la campagne", "Le format de l'intervalle de relève de la campagne est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
     }
 
     $volume = null;
-    if (isset($args["volume"]) && !empty($args["volume"])) {
-        $volume = filter_var($args["volume"], FILTER_VALIDATE_FLOAT);
+    if (isset($arguments["volume"]) && !empty($arguments["volume"])) {
+        $volume = filter_var($arguments["volume"], FILTER_VALIDATE_FLOAT);
         if ($volume === false) {
             replyError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal positif puis réessayer.");
         }
     }
 
-    if (!isset($args["volume_unit"], $args["interval_unit"], $args["duration_unit"]) || !is_string($args["volume_unit"]) || !is_string($args["interval_unit"]) || !is_string($args["duration_unit"])) {
+    if (!isset($arguments["volume_unit"], $arguments["interval_unit"], $arguments["duration_unit"]) || !is_string($arguments["volume_unit"]) || !is_string($arguments["interval_unit"]) || !is_string($arguments["duration_unit"])) {
         replyError("Impossible d'ajouter la campagne", "Le format d'une unité séléctionné est incorrecte ou manquante.");
     }
 
     if ($volume != null) {
-        switch ($args["volume_unit"]) {
+        switch ($arguments["volume_unit"]) {
             case "mL":
                 break;
             case "cL":
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    switch ($args["interval_unit"]) {
+    switch ($arguments["interval_unit"]) {
         case "s":
             break;
         case "min":
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 
-    switch ($args["duration_unit"]) {
+    switch ($arguments["duration_unit"]) {
         case "s":
             break;
         case "min":
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(array(
-        "id" => addCampaign($args["title"], $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $interval, $volume, $duration)
+        "id" => addCampaign($arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration)
     ));
 } else {
     replyError("Impossible d'ajouter la campagne", "La méthode de requête est incorrecte.");

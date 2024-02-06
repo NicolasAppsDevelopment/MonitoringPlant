@@ -33,13 +33,18 @@
 </head>
 
 <body class="bg main_theme">
+    
+    <!-- Navigation -->
     <?php include "modules/header.php";?>
     
+    <!-- Campaign id -->
     <form action="voirReleve.php" method="post" id="refresh_form">
         <input type="hidden" name="id" id="id" value="<?= $_POST['id'] ?>">
     </form>
-
+    
     <main>
+
+        <!-- Navigation -->
         <div class="top_action_menu">
             <div class="back_title">
                 <a href="./index.php" class="row_center">
@@ -51,6 +56,7 @@
             </div>
         </div>
 
+        <!-- Logs display -->
         <div class="card">
             <div class="card-header">
                 <b class="card-title">État de la campagne</b>
@@ -64,14 +70,15 @@
                 </div>
             </div>
             <div class="card-body" id="logs_container">
-                <!-- ... -->
             </div>
         </div>
 
-
+        <!-- Slider zone -->
         <div class="swiffy-slider slider-item-reveal slider-nav-sm slider-nav-touch slider-nav-autohide">
             <ul class="slider-container">
                 <li>
+
+                    <!-- Summary of the campaign -->
                     <div id="slide1" class="card slider-margin">
                         <div class="card-header title-only">
                             <b class="card-title">Configuration de la campagne</b>
@@ -171,8 +178,11 @@
                             </table>
                         </div>
                     </div>
+
                 </li>
                 <li>
+
+                    <!-- Measurement table -->
                     <div id="slide2" class="card slider-margin">
                         <div class="card-header title-only">
                             <b class="card-title">Tableau des données</b>
@@ -234,8 +244,11 @@
                             </div>
                         </div>
                     </div>
+
                 </li>
                 <li>
+
+                    <!-- Measurement chart -->
                     <div id="slide3" class="card slider-margin">
                         <div class="card-header title-only">
                             <b class="card-title">Graphique des données</b>
@@ -246,12 +259,17 @@
                             </div>
                         </div>
                     </div>
+
                 </li>
             </ul>
 
+            <!-- slide to left button -->
             <button type="button" class="slider-nav"></button>
+
+            <!-- slide to right button -->
             <button type="button" class="slider-nav slider-nav-next"></button>
 
+            <!-- position indicator -->
             <ul class="slider-indicators">
                 <li class="active"></li>
                 <li></li>
@@ -259,7 +277,7 @@
             </ul>
         </div>
 
-        <!-- download popup & btn -->
+        <!-- Export measurement popup & button -->
         <div id="boutonTelechargerCampagne">
             <label for="export-popup">
                 <div class="rect_round_btn gray">Télécharger la campagne</div>

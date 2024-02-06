@@ -14,7 +14,10 @@
         <link rel="preload" href="./img/success_ico.svg" as="image"/>
     </head>
     <body class="bg main_theme">
+
+        <!-- Navigation -->
         <?php include "modules/header.php";?>
+        
         <main id="main_paramètre">
             <h2>Suppression des données</h2>
             
