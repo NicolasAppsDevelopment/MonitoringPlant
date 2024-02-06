@@ -13,12 +13,17 @@
         <link rel="preload" href="./img/warning_ico.svg" as="image"/>
     </head>
     <body class="bg main_theme">
+
+        <!-- Navigation -->
         <?php include "modules/header.php";?>
+        
         <main>
             <div class="top_action_menu">
+
+                <!-- Search bar -->
                 <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="campaign_name_search_bar" onkeydown="handleKeyPressSearchBar(event)">
 
-                <!-- Filter popup & btn -->
+                <!-- Filter popup & button -->
                 <div class="btn_container"><label for="filter-popup" class="round_btn default filter"></label></div>
                 <input type="checkbox" id="filter-popup" class="open_close-popup">
                 <div class="popup">
@@ -54,6 +59,7 @@
                 </div>
             </div>
 
+            <!-- List of campaigns -->
             <div class="liste_CM" id="CM_container">
                 <div class="loading_popup" id="loading_div">
                     <svg class="spinner" viewBox="0 0 50 50">
@@ -64,7 +70,7 @@
             </div>
         </main>
 
-        <!-- Add popup & btn -->
+        <!-- Create a campaign popup & button -->
         <label for="add-popup" class="floating round_btn default add"></label>
         <input type="checkbox" id="add-popup" class="open_close-popup">
         <div class="popup">

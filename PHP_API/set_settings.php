@@ -13,22 +13,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-    if (!isset($args["autoremove.interval"]) ){
+    if (!isset($arguments["timeConservation"]) ){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
     }
-    if (!isset($args["autoremove.interval_unit"]) || !is_string($args["autoremove.interval_unit"])){
+    if (!isset($arguments["timeConservationUnit"]) || !is_string($arguments["timeConservationUnit"])){
         replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle de suppression des campagnes n'a pas été renseigné ou son format est incorrecte. Veuillez la renseigner.");
     }
-    if (!isset($args["autoremove.enabled"]) || !is_bool($args["autoremove.enabled"])){
+    if (!isset($arguments["enableAutoRemove"]) || !is_bool($arguments["enableAutoRemove"])){
         replyError("Impossible de sauvegarder les paramètres", "L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrecte. Veuillez la renseigner.");
     }
 
-    $interval = filter_var($args["autoremove.interval"], FILTER_VALIDATE_INT);
+    $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
     if ($interval === false) {
         replyError("Impossible de sauvegarder les paramètres", "Le format de l'intervalle de suppression des campagnes est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
     }
 
-    switch ($args["autoremove.interval_unit"]) {
+    switch ($arguments["timeConservationUnit"]) {
         case "h":
             $interval *= 3600;
             break;
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 
-    reply(postParametres($interval, $args["autoremove.enabled"],$args["altitude"]));
+    reply(postParametres($interval, $arguments["enableAutoRemove"],$args["altitude"]));
 } else {
     replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
 }

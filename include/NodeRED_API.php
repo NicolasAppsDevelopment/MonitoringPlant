@@ -1,5 +1,5 @@
 <?php
-
+//Node-RED access configuration
 global $NODE_RED_API_IP, $NODE_RED_API_PORT, $NODE_RED_API_URL;
 $NODE_RED_API_IP = "192.168.4.1";
 $NODE_RED_API_PORT = "1880";

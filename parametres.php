@@ -14,7 +14,10 @@
         <link rel="preload" href="./img/success_ico.svg" as="image"/>
     </head>
     <body class="bg main_theme">
+
+        <!-- Navigation -->
         <?php include "modules/header.php";?>
+        
         <main id="main_paramètre">
             <h2>Suppression des données</h2>
             
@@ -44,7 +47,7 @@
             </div>
 
             <div class="label_img_input">
-                <label class="label_field" for="conserv">Nom du WIFI</label>
+                <label class="label_field" for="network">Nom du WIFI</label>
                 <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
             </div>
 
