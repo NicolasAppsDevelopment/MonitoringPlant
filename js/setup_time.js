@@ -1,3 +1,7 @@
+/**
+ * Set raspberry pi date and time
+ */
+
 async function setTime() {
     displayLoading("Mise à jour de l'heure...");
 
@@ -8,7 +12,7 @@ async function setTime() {
     const data = await PHP_post("/PHP_API/set_time.php", {
         "datetime": datetime,
     });
-    
+
     if (data != null) {
         window.location.href = "index.php";
     }
