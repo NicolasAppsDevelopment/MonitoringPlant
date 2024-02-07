@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
 //     } while (refresh_repeat);
 // }
 
+
+
+
 async function getCampagnes(filter = null) {
     const campagnesContainer = document.getElementById("CM_container");
     campagnesContainer.innerHTML = `
