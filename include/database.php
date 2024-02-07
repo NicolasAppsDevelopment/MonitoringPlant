@@ -332,8 +332,8 @@ function resetAll() : bool
  * @param bool $O2Sensor  True if the export take the O2 recorded by the campaign
  * @param bool $luminositySensor  True if the export take the luminosity recorded by the campaign
  * @param bool $humiditySensor  True if the export take the humidity recorded by the campaign
- * @param string $beginDate 
- * @param string $endDate
+ * @param string $beginDate     Date of begin of measurements recovery
+ * @param string $endDate   Date of end of measurements recovery
  * @return array
  */
 function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array
@@ -380,8 +380,10 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
 /**
  * Description.
  * 
- * @param {string} message
- * @return {string}
+ * @param int $id
+ * @param ?string $logSinceDatetime
+ * @param ?string $measureSinceDatetime
+ * @return array
  */
 //Recovery of all the data of the campaign whose id is entered as a parameter
 function getCampaign(int $id, ?string $logSinceDatetime = NULL, ?string $measureSinceDatetime = NULL) : array {
