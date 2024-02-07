@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_string($arguments["time"])){
         replyError("Impossible de paramétrer l'heure", "Le format de la date de fin volume de la campagne est incorrecte. Veuillez réessayer.");
     }
-    const data = NodeRedPost("/set_datetime", array($arguments));
+    $data = NodeRedPost("/set_datetime", array($arguments));
 
     reply(
         true
