@@ -5,7 +5,11 @@ $NODE_RED_API_IP = "192.168.4.1";
 $NODE_RED_API_PORT = "1880";
 $NODE_RED_API_URL = "http://$NODE_RED_API_IP:$NODE_RED_API_PORT";
 
-
+/**
+ * This function send a post request to Node Red which reply.
+ * @param  string $name the name of the Node Red request will receive. This string must not contains any special characters.
+ * @param array $array the parameters that you want to transmir to Node Red
+ */
 function NodeRedPost(string $name, array $array)
 {
     $NodeRedUrl = 'http://192.168.4.1:1880';

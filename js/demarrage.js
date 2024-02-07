@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 async function setParameter() {
     displayLoading("Initialisation des paramètres...");
 
