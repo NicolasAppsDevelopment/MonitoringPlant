@@ -1,14 +1,16 @@
 <?php
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
+include_once __DIR__ . "/../include/NodeRED_API.php";
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
 
     $data = file_get_contents("php://input");
-    $args = json_decode($data, true);
+    $arguments = json_decode($data, true);
 
-    if(!isset($args["altitude"])){
+    if(!isset($arguments["altitude"])){
         replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini. veuillez la renseignez.");
     }
 
@@ -42,8 +44,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle séléctionné est incorrecte.");
             break;
     }
+    $url = "$NODE_RED_API_URL/altitude";
 
-    reply(postParametres($interval, $arguments["enableAutoRemove"],$args["altitude"]));
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array('altitude' => $args["altitude"])));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+
+    $res = curl_exec($curl);
+    curl_close($curl);
+
+    reply(postParametres($interval, $arguments["enableAutoRemove"],$arguments["altitude"]));
+    
+
+
 } else {
     replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
 }

@@ -19,7 +19,7 @@ async function getParametre()
         let timeConservation = document.getElementById("conserv");
         timeConservation.setAttribute('value',timeSettings["value"]);
         let altitude = document.getElementById("altitude");
-        altitude.setAttribute('value',data["altitude"]);
+        altitude.setAttribute('value',settings["altitude"]);
 
         let timeConservationUnit = document.querySelector('#comboBoxTpsSuppr option[value="' + timeSettings["unit"] + '"]');
         if(timeConservationUnit){
@@ -47,7 +47,7 @@ async function postParametre()
     const altitude = document.getElementById("altitude");
 
 
-    if (interval.validity.badInput === true) {
+    if (timeConservation.validity.badInput === true && enableAutoRemove) {
         hideLoading();
         displayError("Impossible de sauvegarder les paramètres", "L'intervalle de relevé de suppression des campagnes n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
         return;
