@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array('altitude' => $args["altitude"])));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array('altitude' => $arguments["altitude"])));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 
