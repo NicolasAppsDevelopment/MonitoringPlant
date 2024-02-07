@@ -44,17 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle séléctionné est incorrecte.");
             break;
     }
-    $url = "$NODE_RED_API_URL/altitude";
+    $NodeRedRequestParameters = array('altitude' => $arguments["altitude"]);
+    NodeRedPost("altitude",$NodeRedRequestParameters);
 
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array('altitude' => $arguments["altitude"])));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-
-    $res = curl_exec($curl);
-    curl_close($curl);
 
     reply(postParametres($interval, $arguments["enableAutoRemove"],$arguments["altitude"]));
     
