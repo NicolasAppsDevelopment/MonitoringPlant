@@ -5,10 +5,12 @@ async function getParametre()
 {
     displayLoading("Récupération des paramètres...");
 
+    //Print the wifi name
     const accesPoint = await NODERED_get("/get_AP");
     let network = document.getElementById("network");
     network.value=accesPoint["name"];
 
+    
     const settings = await PHP_get("/PHP_API/get_settings.php");
     if (settings != null){
         if (settings["autoRemove"]){
