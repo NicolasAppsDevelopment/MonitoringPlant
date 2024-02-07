@@ -4,14 +4,12 @@ async function setTime() {
     const date = document.getElementById("date").value;
     const time = document.getElementById("heure").value;
     const datetime = String(date + " " + time);
-    console.log(window.location.href);
 
-    const data = await NODERED_post("/set_datetime", {
+    const data = await PHP_post("/PHP_API/set_time.php", {
         "datetime": datetime,
     });
-    console.log(window.location.href);
+    
     if (data != null) {
-
         window.location.href = "index.php";
     }
     
