@@ -1,5 +1,5 @@
 /**
- * 
+ * Sets default settings
  */
 async function setParameter() {
     displayLoading("Initialisation des paramètres...");
