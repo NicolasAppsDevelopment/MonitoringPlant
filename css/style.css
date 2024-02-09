@@ -312,6 +312,21 @@ button.round_btn {
     height: 32px;
 }
 
+.round_btn.floatingHelp{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 0;
+    width: 32px;
+    height: 32px;
+}
+
+.buttonPopupHelp{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .btn_container {
     display: block;
     margin: 0;
@@ -329,6 +344,15 @@ button.round_btn {
     height: 32px;
     width: 32px;
 }
+
+.round_btn.help::after {
+    content: "";
+    position: absolute;
+    background: var(--selected-background-color);
+    height: 32px;
+    width: 32px;
+}
+
 .square_btn.remove::after {
     content: "";
     position: relative;

@@ -310,3 +310,57 @@ function handleKeyPressSearchBar(e){
     filterCampagnes();
     }
 }
+
+function nextGif(){
+    let id=document.getElementById("idHelpIndex").value;
+    console.log(id);
+    if(id<3){
+        const nb=parseInt(id)+1;
+        document.getElementById("idHelpIndex").value=nb;
+
+        switch (id) {
+            case 1:
+                document.getElementById("HelpGif").src="/img/naméouie.gif";
+                break;
+    
+            case 2:
+                document.getElementById("HelpGif").src="/img/vulpix.gif";
+                break;
+    
+            case 3:
+                document.getElementById("HelpGif").src="/img/eiffel.gif";
+                break;
+                
+            default:
+                break;
+        }
+    }
+
+}
+
+function previousGif(){
+    let id=document.getElementById("idHelpIndex");
+
+    if(id>1){
+        id--;
+        document.getElementById("idHelpIndex").value=id;
+
+        switch (id) {
+            case 1:
+                document.getElementById("HelpGif").src="/img/naméouie.gif";
+                break;
+    
+            case 2:
+                document.getElementById("HelpGif").src="/img/vulpix.gif";
+                break;
+    
+            case 3:
+                document.getElementById("HelpGif").src="/img/eiffel.gif";
+                break;
+                
+            default:
+                break;
+        }
+    }
+
+}

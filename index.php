@@ -69,6 +69,32 @@
                 </div>
             </div>
         </main>
+        
+        <!-- Pop-up Help -->
+
+        <label for="help-popup" class="floatingHelp round_btn default help"></label>
+        <input type="checkbox" id="help-popup" class="open_close-popup">
+        <div class="popup">
+            <div class="popup-inner">
+                <div class="popup-title">
+                    <p>Aide demmarer Campagne</p>
+                    <label for="help-popup" class="round_btn transparent small close"></label>
+                </div>
+                <img id="HelpGif" src="/img/addCampaign.gif" alt="gif de comment ajouter une campagne">
+                <p> Comment créer une campagne de mesure ? </p>
+                <div class="buttonPopupHelp">
+                    <button class="rect_round_btn" type="button" onclick="previousGif()">
+                        Previous
+                    </button>
+                    <input id="idHelpIndex" hidden value="1"></input>
+                    <button class="rect_round_btn" type="button" onclick="nextGif()"> 
+                        Next 
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
 
         <!-- Create a campaign popup & button -->
         <label for="add-popup" class="floating round_btn default add"></label>

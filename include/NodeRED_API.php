@@ -24,5 +24,6 @@ function NodeRedPost(string $name, array $array)
 
     $res = curl_exec($curl);
     curl_close($curl);
+    return $res;
 
 }
