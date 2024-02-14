@@ -112,15 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // check if a campaign is already running
-    $url = "$NODE_RED_API_URL/check_working_campaign";
-
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-    $res = curl_exec($curl);
-    curl_close($curl);
-    $data=json_decode($res, true);
+    $data=NodeRedGet("check_working_campaign");
 
     if (!array_key_exists("idCurrent", $data)) {
         replyError("Impossible d'ajouter la campagne", "Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -130,15 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // check if there is enough space on the device
-    $url = "$NODE_RED_API_URL/storage";
-
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-    $res = curl_exec($curl);
-    curl_close($curl);
-    $storage=json_decode($res, true);
+    $storage=NodeRedGet("storage");
 
     $lines = $duration / $interval;
     $size = $lines * MEASUREMENTS_SIZE_PER_LINE;
