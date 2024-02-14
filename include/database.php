@@ -520,4 +520,6 @@ function postParametres(int $supprInterval, int $enabled, int $altitude) : array
     } catch (\Throwable $th) {
         replyError("Impwossible de modifier les paramètres", $th->getMessage());
     }
+
+    retrun false;
 }
