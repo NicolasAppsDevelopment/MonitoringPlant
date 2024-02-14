@@ -1883,3 +1883,31 @@ input:invalid::placeholder {
 .hidden {
     display: none;
 } 
+
+
+.helpSummary{
+
+    display: flex;
+    flex-direction: column;
+  
+    justify-content: space-between;
+    margin: 10px;
+    padding: 10px;
+      padding-right: 10px;
+    padding-right: 42px;
+    border: solid 1px var(--input_border_color);
+    border-radius: 5px;
+    background-color: var(--input_color);
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    position: relative;
+}
+
+.helpSummary ul {
+    display: none;
+}
+
+.helpSummary: ul {
+    display: block;
+}
