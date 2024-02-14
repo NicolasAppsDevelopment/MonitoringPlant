@@ -40,7 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     NodeRedPost("altitude",array('altitude' => $arguments["altitude"]));
 
-    reply(postParametres($arguments["timeConservation"], $arguments["enableAutoRemove"],$arguments["altitude"]));
+    postParametres($arguments["timeConservation"], $arguments["enableAutoRemove"],$arguments["altitude"]);
+
+    reply("succes" => true);
     
 } else {
     replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
