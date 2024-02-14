@@ -7,16 +7,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $data = file_get_contents("php://input");
 	$arguments = json_decode($data, true);
-    var_dump($arguments);
 
-    if (isset($arguments["time"])){
+    if (!isset($arguments["datetime"])){
         replyError("Impossible de paramétrer l'heure", "La date et/ou l'heure ne sont pas renseignés");
     }
 
-    if (!is_string($arguments["time"])){
+    if (!is_string($arguments["datetime"])){
         replyError("Impossible de paramétrer l'heure", "Le format de la date renseignée est incorrecte. Veuillez réessayer.");
     }
-    $data = NodeRedPost("/set_datetime", array($arguments));
+
+   NodeRedPost("set_datetime", $arguments);
 
     reply(
         true
