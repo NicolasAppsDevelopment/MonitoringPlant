@@ -84,7 +84,7 @@ async function postParametre()
             
     }
  
-    if(data1 != null){
+    if(data2 != null){
         displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
     }
 
