@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . "/../include/reply.php";
+include_once __DIR__ . "/../include/NodeRED_API.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,10 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible de paramétrer l'heure", "Le format de la date renseignée est incorrecte. Veuillez réessayer.");
     }
 
-   NodeRedPost("set_datetime", $arguments);
-
     reply(
-        true
+        NodeRedPost("set_datetime", $arguments);
     );
 
 } else {
