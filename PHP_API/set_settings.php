@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(!isset($arguments["altitude"])){
         replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini. veuillez la renseignez.");
     }
-
     if (!isset($arguments["timeConservation"]) ){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
     }
