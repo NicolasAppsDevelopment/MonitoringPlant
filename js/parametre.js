@@ -74,18 +74,18 @@ async function postParametre()
                 if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
                     //restart
                     const data3 = await NODERED_get("/restart");
-                }
-                if(data2 != null){
-                    displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
-                }    
+                }   
             }else{
                 displayError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
             }    
         }else{
             displayError("Impossible de sauvegarder les paramètres", "Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
-        } 
-            
+        }      
     }
+
+    if(data1 != null){
+        displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
+    } 
 
     hideLoading();
 }
