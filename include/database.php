@@ -516,7 +516,7 @@ function postParametres(int $supprInterval, int $enabled, int $altitude) : array
             'varEnabled' =>(int)$enabled,
             'varAltitude' => (int)$altitude
         ]);
-        return array("succes"=>true);
+        return true;;
     } catch (\Throwable $th) {
         replyError("Impwossible de modifier les paramètres", $th->getMessage());
     }
