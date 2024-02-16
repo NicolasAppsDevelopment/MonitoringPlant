@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($arguments["enableAutoRemove"]) || !is_bool($arguments["enableAutoRemove"])){
         replyError("Impossible de sauvegarder les paramètres", "L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
     }
+    if (!isset($arguments["network"]) || !is_string($arguments["network"])){
+        replyError("Impossible de sauvegarder les paramètres", "Le nom du réseau WIFI n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+    }
 
     $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
     if ($interval === false) {
@@ -46,6 +49,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         default:
             replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle séléctionné est incorrecte.");
             break;
+    }
+
+    if($arguments["network"]!=null && $arguments["network"]!=NodeRedGet("getAccesPoint")){
+        if(strlen($arguments["network"])<=32 && strlen($arguments["network"])>0){
+            if(preg_match($arguments["network"],/^[a-zA-Z0-9\s-_]+$/)){
+                NodeRedPost("setAccesPoint",array('network' => $arguments["network"]));
+            }else{
+                replyError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
+            }    
+        }else{
+            replyError("Impossible de sauvegarder les paramètres", "Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
+        } 
     }
 
     NodeRedPost("altitude",array('altitude' => $arguments["altitude"]));

@@ -8,7 +8,8 @@ async function setParameter() {
         "timeConservation": 1,
         "timeConservationUnit": "mois",
         "enableAutoRemove": false,
-        "altitude":240
+        "altitude":240,
+        "network": "Cellule de mesure"
     });
 
     hideLoading();
