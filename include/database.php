@@ -518,7 +518,7 @@ function postParametres(int $supprInterval, int $enabled, int $altitude) : bool
         ]);
         return true;
     } catch (\Throwable $th) {
-        replyError("Impwossible de modifier les paramètres", $th->getMessage());
+        replyError("Impossible de modifier les paramètres", $th->getMessage());
     }
 
     return false;
