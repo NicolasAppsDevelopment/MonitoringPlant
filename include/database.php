@@ -521,5 +521,5 @@ function postParametres(int $supprInterval, int $enabled, int $altitude) : array
         replyError("Impwossible de modifier les paramètres", $th->getMessage());
     }
 
-    retrun false;
+    return false;
 }

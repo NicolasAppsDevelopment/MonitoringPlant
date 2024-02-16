@@ -17,11 +17,11 @@ function NodeRedPost(string $name, array $array)
 
     $url = "$NODE_RED_API_URL/$name";
 
-    $requestUrl = $NodeRedUrl . "/" . $name;
-    $curl = curl_init($requestUrl);
+    //$requestUrl = $url . "/" . $name;
+    $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_URL, $requestUrl);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($cle));
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($url));
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($array));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

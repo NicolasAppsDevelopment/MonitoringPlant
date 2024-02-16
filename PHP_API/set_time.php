@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . "/../include/reply.php";
+include_once __DIR__ . "/../include/NodeRED_API.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -8,17 +9,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$arguments = json_decode($data, true);
 
-    if (isset($arguments["time"])){
+    if (!isset($arguments["datetime"])){
         replyError("Impossible de paramétrer l'heure", "La date et/ou l'heure ne sont pas renseignés");
     }
 
-    if (!is_string($arguments["time"])){
-        replyError("Impossible de paramétrer l'heure", "Le format de la date de fin volume de la campagne est incorrecte. Veuillez réessayer.");
+    if (!is_string($arguments["datetime"])){
+        replyError("Impossible de paramétrer l'heure", "Le format de la date renseignée est incorrecte. Veuillez réessayer.");
     }
-    $data = NodeRedPost("/set_datetime", array($arguments));
 
     reply(
-        true
+        NodeRedPost("set_datetime", $arguments)
     );
 
 } else {
