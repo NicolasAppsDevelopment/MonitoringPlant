@@ -66,7 +66,7 @@ async function postParametre()
     const raspberryNetwork = await NODERED_get("/get_AP");
 
     if(network.value!=null && network.value!=raspberryNetwork){
-        if(network.value.lenght<=32 && network.value.lenght>0){
+        if(strlen(network.value)<=32 && strlen(network.value)>0){
             if(network.value.match(/^[a-zA-Z0-9\s-_]+$/)){
                 const data2 = await NODERED_post("/set_AP", {
                     "network": network.value,
