@@ -83,11 +83,13 @@ async function postParametre()
         }      
     }
 
+    hideLoading();
+
     if(data1 != null){
         displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
     } 
 
-    hideLoading();
+    
 }
 
 /**
