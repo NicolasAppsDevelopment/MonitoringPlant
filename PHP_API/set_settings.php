@@ -10,11 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
     $arguments = json_decode($data, true);
 
-    if(!isset($arguments["altitude"]) || !is_int($arguments["altitude"])){
-        replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini ou son format est incorrect. Veuillez la renseignez.");
+    if(!isset($arguments["altitude"])){
+        replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini. Veuillez la renseignez.");
     }
-    if (!isset($arguments["timeConservation"]) || !is_int($arguments["timeConservation"])){
-        replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné ou son format est incorrect. Veuillez la renseigner.");
+    if (!isset($arguments["timeConservation"])){
+        replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
     }
     if (!isset($arguments["timeConservationUnit"]) || !is_string($arguments["timeConservationUnit"])){
         replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle de suppression des campagnes n'a pas été renseigné ou son format est incorrect. Veuillez la renseigner.");
@@ -23,15 +23,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible de sauvegarder les paramètres", "L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
     }
 
+    $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
+    if ($interval === false) {
+        replyError("Impossible de sauvegarder les paramètres", "Le format de l'intervalle de suppression des campagnes est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
+    }
+
+    $altitude = filter_var($arguments["altitude"], FILTER_VALIDATE_INT);
+    if ($altitude === false) {
+        replyError("Impossible de sauvegarder les paramètres", "Le format de l'altitude est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
+    }
+
     switch ($arguments["timeConservationUnit"]) {
         case "h":
-            $arguments["timeConservation"] *= 3600;
+            $interval *= 3600;
             break;
         case "j":
-            $arguments["timeConservation"] *= 86400;
+            $interval *= 86400;
             break;
         case "mois":
-            $arguments["timeConservation"] *= 2592000;
+            $interval *= 2592000;
             break;
         default:
             replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle séléctionné est incorrecte.");
@@ -41,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     NodeRedPost("altitude",array('altitude' => $arguments["altitude"]));
 
     reply(array(
-        "success" => postParametres($arguments["timeConservation"], $arguments["enableAutoRemove"],$arguments["altitude"])
+        "success" => postParametres($interval, $arguments["enableAutoRemove"],$altitude)
     ));
     
 } else {
