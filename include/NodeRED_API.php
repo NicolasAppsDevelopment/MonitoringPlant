@@ -13,7 +13,9 @@ $NODE_RED_API_URL = "http://$NODE_RED_API_IP:$NODE_RED_API_PORT";
  */
 function NodeRedPost(string $name, array $array)
 {
-    $NodeRedUrl = 'http://192.168.4.1:1880';
+    global $NODE_RED_API_IP, $NODE_RED_API_PORT, $NODE_RED_API_URL;
+
+    $url = "$NODE_RED_API_URL/$name";
 
     $requestUrl = $NodeRedUrl . "/" . $name;
     $curl = curl_init($requestUrl);
@@ -36,6 +38,8 @@ function NodeRedPost(string $name, array $array)
  * @return values  $res is the data that NodeRed send back, it can be a interger, string, etc... 
  */
 function NodeRedGet(string $name) {
+    global $NODE_RED_API_IP, $NODE_RED_API_PORT, $NODE_RED_API_URL;
+
     $url = "$NODE_RED_API_URL/$name";
 
     $curl = curl_init($url);
