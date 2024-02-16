@@ -1889,18 +1889,14 @@ input:invalid::placeholder {
 
     display: flex;
     flex-direction: column;
-  
     justify-content: space-between;
-    margin: 10px;
-    padding: 10px;
-      padding-right: 10px;
-    padding-right: 42px;
+    align-items: center;
+    margin-inline: 5%;
+    margin-bottom: 1%;
     border: solid 1px var(--input_border_color);
     border-radius: 5px;
     background-color: var(--input_color);
     cursor: pointer;
-    transition: all .2s;
-    text-decoration: none;
     position: relative;
 }
 
@@ -1908,6 +1904,11 @@ input:invalid::placeholder {
     display: none;
 }
 
-.helpSummary: ul {
-    display: block;
+.summaryElement{
+    flex-direction: column;
+}
+.summaryElement li{
+    margin-bottom: 2%;
+    color:#27BCEB;
+    list-style:none;
 }

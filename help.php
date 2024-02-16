@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <title>Liste des campagnes</title>
+        <script src="./js/help.js"></script>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
         <link rel="preload" href="./img/warning_ico.svg" as="image"/>
@@ -27,30 +28,30 @@
             </div>
 
             <ul id="summary">
-                <li class="helpSummary">
+                <li  class="helpSummary" onclick="deroule('helpIndex')">
                     <h4>page Accueil</h4>
-                    <ul>
+                    <ul class="summaryElement" id="helpIndex">
                         <li>Suppression automatique</li>
                         <li>Changer mot de Passe wifi</li>
                     </ul>
                 </li>
-                <li class="helpSummary">
+                <li  class="helpSummary" onclick="deroule('helpSettings')">
                     <h4>page Paramètre</h4>
-                    <ul>
+                    <ul class="summaryElement" id="helpSettings">
                         <li>Suppression automatique</li>
                         <li>Changer mot de Passe wifi</li>
                     </ul>
                 </li>    
-                <li class="helpSummary">
+                <li class="helpSummary" onclick="deroule('helpSeeData')">
                     <h4>page Voir Releve</h4>
-                    <ul>
+                    <ul class="summaryElement" id="helpSeeData" >
                         <li>Suppression automatique</li>
                         <li>Changer mot de Passe wifi</li>
                     </ul>
                 </li>    
-                <li class="helpSummary">
+                <li  class="helpSummary" onclick="deroule('helpCalibrate')">
                     <h4>page Calibration</h4>
-                    <ul>
+                    <ul class="summaryElement" id="helpCalibrate">
                         <li>Suppression automatique</li>
                         <li>Changer mot de Passe wifi</li>
                     </ul>
