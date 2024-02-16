@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if($arguments["network"]!=null && $arguments["network"]!=NodeRedGet("getAccessPoint")){
         if(strlen($arguments["network"])<=32 && strlen($arguments["network"])>0){
-            if(preg_match($arguments["network"],/^[a-zA-Z0-9\s-_]+$/)){
+            if(preg_match(/^[a-zA-Z0-9\s-_]+$/,$arguments["network"])){
                 NodeRedPost("setAccessPoint",array('network' => $arguments["network"]));
             }else{
                 replyError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
