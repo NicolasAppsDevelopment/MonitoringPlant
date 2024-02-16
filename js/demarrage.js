@@ -4,7 +4,7 @@
 async function setParameter() {
     displayLoading("Initialisation des paramètres...");
 
-    const data = await PHP_post("/PHP_API/set_settings.php", {
+    const data = await PHP_post("/PHP_API/setSettings.php", {
         "timeConservation": 1,
         "timeConservationUnit": "mois",
         "enableAutoRemove": false,
@@ -15,6 +15,6 @@ async function setParameter() {
     hideLoading();
 
     if (data != null) {
-        window.location.href = "setup_time.php";
+        window.location.href = "setupTime.php";
     }
 }

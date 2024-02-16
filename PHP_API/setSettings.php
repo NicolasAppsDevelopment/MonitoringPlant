@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     NodeRedPost("altitude",array('altitude' => $arguments["altitude"]));
 
     reply(array(
-        "success" => postParametres($interval, $arguments["enableAutoRemove"],$altitude)
+        "success" => setParametersPHP($interval, $arguments["enableAutoRemove"],$altitude)
     ));
     
 } else {

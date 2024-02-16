@@ -1,7 +1,7 @@
 /**
  * Recovering raspberry pi settings.
  */
-async function getParametre()
+async function getParametersJS()
 {
     displayLoading("Récupération des paramètres...");
 
@@ -38,7 +38,7 @@ async function getParametre()
 /**
  * Update raspberry pi settings.
  */
-async function postParametre()
+async function setParametersJS()
 {
     displayLoading("Mise à jour des paramètres...");
 
@@ -56,7 +56,7 @@ async function postParametre()
     } 
 
     
-    let data1 = await PHP_post("/PHP_API/set_settings.php", {
+    let data1 = await PHP_post("/PHP_API/setSettings.php", {
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
@@ -102,10 +102,10 @@ async function postDeleteAll()
 
         hideLoading();
         // redirect
-        window.location = "/setup_time.php"
+        window.location = "/setupTime.php"
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    getParametre();
+    getParametersJS();
 });

@@ -484,7 +484,7 @@ function getMeasurements(int $id, ?string $sinceDatetime = NULL) : array {
  * @return {string}
  */
 //Recovery of Raspbery Pi settings
-function getParametre() : array
+function getParametersPHP() : array
 {
     try {
         $data = fetchAll("SELECT * , NOW() AS 'date' FROM Settings");
@@ -507,7 +507,7 @@ function getParametre() : array
  * @return {string}
  */
 //Defines new Raspbery Pi settings
-function postParametres(int $supprInterval, int $enabled, int $altitude) : bool
+function setParametersPHP(int $supprInterval, int $enabled, int $altitude) : bool
 {
     try {
         fetchAll("DELETE FROM Settings");

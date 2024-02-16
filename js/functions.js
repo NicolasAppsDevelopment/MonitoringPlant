@@ -367,7 +367,7 @@ async function checkTime() {
     if (data!=null && data["up_to_date"]==false){
         if (await displayConfirm("Potentiel décalage d'heure détécté", "Il semblerait que la date et l'heure de la cellule de mesure soit décalé par rapport à votre appareil. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Changer la date & heure', false) == true) {
             // redirect
-            window.location = "/setup_time.php"
+            window.location = "/setupTime.php"
         }
     }
 }
