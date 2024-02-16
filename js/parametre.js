@@ -6,7 +6,7 @@ async function getParametre()
     displayLoading("Récupération des paramètres...");
 
     //Print the wifi name
-    const accesPoint = await NODERED_get("getAccesPoint");
+    const accesPoint = await NODERED_get("/getAccesPoint");
     let network = document.getElementById("network");
     network.value=accesPoint["name"];
 
@@ -64,7 +64,7 @@ async function postParametre()
         "network": network.value
     });
 
-    const raspberryNetwork = await NODERED_get("getAccesPoint");
+    const raspberryNetwork = await NODERED_get("/getAccesPoint");
 
     if(network.value!=null && network.value!=raspberryNetwork){      
         if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
