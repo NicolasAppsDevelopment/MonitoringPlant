@@ -179,12 +179,10 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="config_input">Configuration</label>
-                        <div class="row_fields">
-                            <select class="combo_box" id="config_combo_box">
-                                <option selected value="0">Config1</option>
-                                <option value="1">Config2</option>
-                            </select>
-                        </div>
+                        <select class="combo_box" id="config_combo_box">
+                            <option selected value="0">Config1</option>
+                            <option value="1">Config2</option>
+                        </select>
                     </div>
 
                     <div class="checkbox">
@@ -200,9 +198,8 @@
                     </div>
 
                     <div class="checkbox">
-                        <div class="annotation">Plus lent mais plus précis</div>
-                        <label for="humid_mode">
-                            <input type="checkbox" id="enable_mode">
+                        <label for="enable_fibox_temp">
+                            <input type="checkbox" id="enable_fibox_temp">
                             <span class="cbx">
                                 <svg width="12px" height="11px" viewBox="0 0 12 11">
                                     <polyline points="1 6.29411765 4.5 10 11 1"></polyline>

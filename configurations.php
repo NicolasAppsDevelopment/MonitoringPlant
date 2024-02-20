@@ -47,6 +47,11 @@
                     <input id="id_added_config" type="hidden" name="id" value="-1">
 
                     <div class="label_img_input">
+                        <label class="label_field" for="name_input">Nom de la configuration</label>
+                        <input class="input_field edit" id="name_input" type="text" placeholder="Nom" required>
+                    </div>
+
+                    <div class="label_img_input">
                         <label class="label_field" for="alt_input">Altitude (en mètre)</label>
                         <input class="input_field edit" id="alt_input" type="number" placeholder="Altitude" required>
                     </div>
@@ -56,35 +61,33 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="f1_input">f1</label>
-                        <input class="input_field edit" id="f1_input" type="number" placeholder="f1" required>
+                        <input class="input_field edit" id="f1_input" type="number" step=".000000001" placeholder="f1" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="m_input">m</label>
-                        <input class="input_field edit" id="m_input" type="number" placeholder="m" required>
+                        <input class="input_field edit" id="m_input" type="number" step=".000000001" placeholder="m" required>
                     </div>
                     
                     <div class="label_img_input">
                         <label class="label_field" for="dphi1_input">dPhi1</label>
-                        <input class="input_field edit" id="dphi1_input" type="number" placeholder="dPhi1" required>
+                        <input class="input_field edit" id="dphi1_input" type="number" step=".000000001" placeholder="dPhi1" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="dphi2_input">dPhi2</label>
-                        <input class="input_field edit" id="dphi2_input" type="number" placeholder="dPhi2" required>
+                        <input class="input_field edit" id="dphi2_input" type="number" step=".000000001" placeholder="dPhi2" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="dksv1_input">dKSV1</label>
-                        <input class="input_field edit" id="dksv1_input" type="number" placeholder="dKsv1" required>
+                        <input class="input_field edit" id="dksv1_input" type="number" step=".000000001" placeholder="dKsv1" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="dksv2_input">dKSV2</label>
-                        <input class="input_field edit" id="dksv2_input" type="number" placeholder="dKsv2" required>
+                        <input class="input_field edit" id="dksv2_input" type="number" step=".000000001" placeholder="dKsv2" required>
                     </div>
-
-                    // Syntax : SET_CONFIG <HUMID_MODE> <ENABLE_FIBOX_TEMP>
                     
                     <p>Données de calibration PreSens</p>
 
@@ -109,12 +112,12 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="cal0_input">Phase (en °)</label>
-                        <input class="input_field edit" id="cal0_input" type="number" placeholder="Phase cal0" required>
+                        <input class="input_field edit" id="cal0_input" type="number" step=".0001" placeholder="Phase cal0" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="t0_input">Température (en °C)</label>
-                        <input class="input_field edit" id="t0_input" type="number" placeholder="Température cal0" required>
+                        <input class="input_field edit" id="t0_input" type="number" step=".01" placeholder="Température cal0" required>
                     </div>
 
                     <p>2e calibration à x% d'air-sat. (cal2nd)</p>
@@ -126,12 +129,12 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="cal2nd_input">Phase (en °)</label>
-                        <input class="input_field edit" id="cal2nd_input" type="number" placeholder="Phase cal2nd" required>
+                        <input class="input_field edit" id="cal2nd_input" type="number"  step=".0001" placeholder="Phase cal2nd" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="t2nd_input">Température (en °C)</label>
-                        <input class="input_field edit" id="t2nd_input" type="number" placeholder="Température cal2nd" required>
+                        <input class="input_field edit" id="t2nd_input" type="number"  step=".01" placeholder="Température cal2nd" required>
                     </div>
 
                     <button class="rect_round_btn gray" type="button" onclick="addConfig();">Ajouter</button>
