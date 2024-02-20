@@ -1,7 +1,7 @@
 /**
  * Recovering raspberry pi settings.
  */
-async function getParametersJS()
+async function getSettings()
 {
     displayLoading("Récupération des paramètres...");
 
@@ -38,7 +38,7 @@ async function getParametersJS()
 /**
  * Update raspberry pi settings.
  */
-async function setParametersJS()
+async function setSettings()
 {
     displayLoading("Mise à jour des paramètres...");
 
@@ -84,7 +84,7 @@ async function setParametersJS()
 /**
  * Delete all data of the Raspberry pi
  */
-async function postDeleteAll()
+async function reset()
 {
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, mesures et paramètres seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
@@ -107,5 +107,5 @@ async function postDeleteAll()
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    getParametersJS();
+    getSettings();
 });

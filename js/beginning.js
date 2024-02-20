@@ -1,7 +1,7 @@
 /**
  * Sets default settings
  */
-async function setParameter() {
+async function setDefaultSettings() {
     displayLoading("Initialisation des paramètres...");
 
     const data = await PHP_post("/PHP_API/setSettings.php", {

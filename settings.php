@@ -58,8 +58,8 @@
                 </div>
             </div>
 
-            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setParametersJSJS()">Enregistrer</button>
-            <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll()">Effacer les données</button>
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Enregistrer</button>
+            <button class="rect_round_btn destructive" type="button" onclick="reset()">Effacer les données</button>
         </main>
 
         <!-- loading popup -->

@@ -25,7 +25,7 @@
                         Avant de commencer à pouvoir l’utiliser, nous devons d’abord vous demander quelques informations.
                     </p>
 
-                    <button class="rect_round_btn" type="button" onclick="setParameter()">
+                    <button class="rect_round_btn" type="button" onclick="setDefaultSettings()">
                         Continuer
                     </button>
 
