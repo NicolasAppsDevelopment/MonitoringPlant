@@ -519,6 +519,4 @@ function setParametersPHP(int $supprInterval, int $enabled) : bool
     } catch (\Throwable $th) {
         replyError("Impossible de modifier les paramètres", $th->getMessage());
     }
-
-    return false;
 }
