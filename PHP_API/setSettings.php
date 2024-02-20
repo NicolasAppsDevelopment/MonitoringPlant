@@ -61,6 +61,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ));
     
 } else {
-    echo $_SERVER['REQUEST_METHOD'];
     replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
 }
