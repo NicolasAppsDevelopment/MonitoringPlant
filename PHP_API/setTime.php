@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(
-        NodeRedPost("set_datetime", $arguments)
+        NodeRedPost("setDatetime", $arguments["datetime"])
     );
 
 } else {
