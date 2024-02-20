@@ -25,7 +25,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
         refresh_repeat = false;
     }
 
-    let data = await PHP_post("/PHP_API/get_campaign.php", {
+    let data = await PHP_post("/PHP_API/getCampaign.php", {
         "id": id,
         "last_log_datetime": last_log_datetime,
         "last_measure_datetime": last_measure_datetime
@@ -364,7 +364,7 @@ async function exportCampagne() {
     }
 
 
-    const data = await PHP_postGetFile("/PHP_API/export_campaign.php", {
+    const data = await PHP_postGetFile("/PHP_API/exportCampaign.php", {
         "id": id,
         "CO2_enabled": CO2_enabled,
         "O2_enabled": O2_enabled,
@@ -420,7 +420,7 @@ async function restartCampagne() {
         displayLoading("Redémarrage de la campagne...");
 
         const id = document.getElementById("id").value;
-        const data1 = await PHP_post("/PHP_API/restart_campaign.php", {
+        const data1 = await PHP_post("/PHP_API/restartCampaign.php", {
             "id": id
         });
 

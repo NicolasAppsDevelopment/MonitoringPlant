@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/css/style.css" rel="stylesheet">
         <script src="/js/functions.js"></script>
-        <script src="/js/parametre.js"></script>
+        <script src="/js/settings.js"></script>
 
         <title>Page Paramètre</title>
 
@@ -63,6 +63,6 @@
         </main>
 
         <!-- loading popup -->
-        <?php include "modules/loading_popup_displayed.php";?>
+        <?php include "modules/loadingPopupDisplayed.php";?>
     </body>
 </html>

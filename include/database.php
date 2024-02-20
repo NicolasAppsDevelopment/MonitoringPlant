@@ -491,7 +491,7 @@ function getParametersPHP() : array
         if (count($data) > 0) {
             return $data[0];
         } else {
-            header("Location: /demarrage.php");
+            header("Location: /beginning.php");
             return [];
         }
     } catch (\Throwable $th) {

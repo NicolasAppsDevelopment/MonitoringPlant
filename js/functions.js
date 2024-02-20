@@ -360,7 +360,7 @@ function getReadableTimeAndUnit(seconds) {
 
 async function checkTime() {
     const client_datetime = new Date();
-    const data = await PHP_post("/PHP_API/check_time.php", {
+    const data = await PHP_post("/PHP_API/checkTime.php", {
         "client_datetime": client_datetime
     });
 

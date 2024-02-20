@@ -11,7 +11,7 @@ async function getParametersJS()
     network.value=accesPoint["name"];
 
     
-    const settings = await PHP_get("/PHP_API/get_settings.php");
+    const settings = await PHP_get("/PHP_API/getSettings.php");
     if (settings != null){
         if (settings["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;

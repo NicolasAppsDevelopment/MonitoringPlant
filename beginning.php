@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
-        <script src="./js/demarrage.js"></script>
+        <script src="./js/beginning.js"></script>
 
         <title>Bienvenue</title>
 
@@ -33,6 +33,6 @@
             </div>
         </main>
         <!-- loading popup -->
-        <?php include "modules/loading_popup.php";?>
+        <?php include "modules/loadingPopup.php";?>
     </body>
 </html>
