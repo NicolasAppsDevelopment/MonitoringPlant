@@ -97,8 +97,8 @@
                     </div>
 
                     <div class="checkbox">
-                        <label for="moyennage">
-                            <input type="checkbox" id="moyennage">
+                        <label for="calib_is_humid">
+                            <input type="checkbox" id="calib_is_humid">
                             <span class="cbx">
                                 <svg width="12px" height="11px" viewBox="0 0 12 11">
                                     <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
