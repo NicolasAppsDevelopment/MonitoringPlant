@@ -26,4 +26,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     replyError("Impossible d'exporter la campagne", "La méthode de requête est incorrecte.");
 }
-?>

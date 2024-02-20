@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
     $arguments = json_decode($data, true);
 
-    
     if (!isset($arguments["timeConservation"])){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
     }
@@ -58,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(array(
-        "success" => setParametersPHP($interval, (bool)$arguments["enableAutoRemove"])
+        "success" => setParametersPHP($interval, $arguments["enableAutoRemove"])
     ));
     
 } else {

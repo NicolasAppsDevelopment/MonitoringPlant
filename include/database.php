@@ -513,7 +513,7 @@ function setParametersPHP(int $supprInterval, bool $enabled) : bool
         fetchAll("DELETE FROM Settings");
         fetchAll("INSERT INTO Settings VALUES (:varSuppr, :varEnabled)", [
             'varSuppr' => $supprInterval,
-            'varEnabled' => $enabled
+            'varEnabled' => (int)$enabled
         ]);
         return true;
     } catch (\Throwable $th) {
