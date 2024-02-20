@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
-        <script src="./js/setup_time.js"></script>
+        <script src="./js/setupTime.js"></script>
 
         <title>Définition de l'heure et de la date</title>
 
