@@ -203,6 +203,41 @@
                         <input class="input_field edit" id="name_input" type="text" placeholder="Nom" required>
                     </div>
 
+                    <div class="label_img_input">
+                        <label class="label_field" for="config_input">Configuration</label>
+                        <div class="row_fields">
+                            <select class="combo_box" id="config_combo_box">
+                                <option selected value="0">Config1</option>
+                                <option value="1">Config2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label for="humid_mode">
+                            <input type="checkbox" id="humid_mode">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Mesure en milieu humide ? (coché = Oui)</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <div class="annotation">Plus lent mais plus précis</div>
+                        <label for="humid_mode">
+                            <input type="checkbox" id="enable_mode">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Activer le capteur de température PreSens ? (coché = Oui)</span>
+                        </label>
+                    </div>
+
                     <div class="section">
                         <div class="row_center" id="space_taken_warning">
                             

@@ -1,0 +1,145 @@
+<?php include "include/checkSetup.php";?>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="./css/style.css" rel="stylesheet">
+        <script src="./js/functions.js"></script>
+        <script src="./js/index.js"></script>
+        <title>Configurations</title>
+
+        <link rel="preload" href="./img/error_ico.svg" as="image"/>
+        <link rel="preload" href="./img/warning_ico.svg" as="image"/>
+    </head>
+    <body class="bg main_theme">
+
+        <!-- Navigation -->
+        <?php include "modules/header.php";?>
+        
+        <main>
+            <div class="top_action_menu">
+                <!-- Search bar -->
+                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="campaign_name_search_bar" onkeydown="handleKeyPressSearchBar(event)">
+            </div>
+
+            <!-- List of configs -->
+            <div class="liste_CM" id="CM_container">
+                <div class="loading_popup" id="loading_div">
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                    </svg>
+                    <p class="loading_msg">Récupération des configurations...</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Create a config popup & button -->
+        <label for="add-popup" class="floating round_btn default add"></label>
+        <input type="checkbox" id="add-popup" class="open_close-popup">
+        <div class="popup">
+            <div class="popup-inner">
+                <div class="popup-title">
+                    <p>Ajouter une configuration</p>
+                    <label for="add-popup" class="round_btn transparent small close"></label>
+                </div>
+                <form id="add_popup_form" class="popup-content" method="post" action="editConfig.php">
+                    <input id="id_added_config" type="hidden" name="id" value="-1">
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="alt_input">Altitude (en mètre)</label>
+                        <input class="input_field edit" id="alt_input" type="number" placeholder="Altitude" required>
+                    </div>
+
+                    <!-- Constants PreSens -->
+                    <p>Constantes PreSens</p>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="f1_input">f1</label>
+                        <input class="input_field edit" id="f1_input" type="number" placeholder="f1" required>
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="m_input">m</label>
+                        <input class="input_field edit" id="m_input" type="number" placeholder="m" required>
+                    </div>
+                    
+                    <div class="label_img_input">
+                        <label class="label_field" for="dphi1_input">dPhi1</label>
+                        <input class="input_field edit" id="dphi1_input" type="number" placeholder="dPhi1" required>
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="dphi2_input">dPhi2</label>
+                        <input class="input_field edit" id="dphi2_input" type="number" placeholder="dPhi2" required>
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="dksv1_input">dKSV1</label>
+                        <input class="input_field edit" id="dksv1_input" type="number" placeholder="dKsv1" required>
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="dksv2_input">dKSV2</label>
+                        <input class="input_field edit" id="dksv2_input" type="number" placeholder="dKsv2" required>
+                    </div>
+
+                    // Syntax : SET_CONFIG <HUMID_MODE> <ENABLE_FIBOX_TEMP>
+                    
+                    <p>Données de calibration PreSens</p>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="pressure_input">Pression atmosphérique (en hPa)</label>
+                        <input class="input_field edit" id="pressure_input" type="number" min="0" placeholder="Pression" required>
+                    </div>
+
+                    <div class="checkbox">
+                        <label for="moyennage">
+                            <input type="checkbox" id="moyennage">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Calibration en milieu humide ? (coché = Oui)</span>
+                        </label>
+                    </div>
+
+                    <p>1ère calibration à 0% d'air-sat. (cal0)</p>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="cal0_input">Phase (en °)</label>
+                        <input class="input_field edit" id="cal0_input" type="number" placeholder="Phase cal0" required>
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="t0_input">Température (en °C)</label>
+                        <input class="input_field edit" id="t0_input" type="number" placeholder="Température cal0" required>
+                    </div>
+
+                    <p>2e calibration à x% d'air-sat. (cal2nd)</p>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="o2cal2nd_input">%air-sat. (en %)</label>
+                        <input class="input_field edit" id="o2cal2nd_input" type="number" min="0" max="100" placeholder="%air-sat." required>
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="cal2nd_input">Phase (en °)</label>
+                        <input class="input_field edit" id="cal2nd_input" type="number" placeholder="Phase cal2nd" required>
+                    </div>
+
+                    <div class="label_img_input">
+                        <label class="label_field" for="t2nd_input">Température (en °C)</label>
+                        <input class="input_field edit" id="t2nd_input" type="number" placeholder="Température cal2nd" required>
+                    </div>
+
+                    <button class="rect_round_btn gray" type="button" onclick="addConfig();">Ajouter</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- loading popup -->
+        <?php include "modules/loading_popup.php";?>
+    </body>
+</html>
