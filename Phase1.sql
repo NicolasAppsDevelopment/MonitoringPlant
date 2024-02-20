@@ -6,40 +6,66 @@ drop table if exists Measurements;
 drop table if exists Logs;
 drop table if exists Campaigns;
 drop table if exists Settings;
+drop table if exists Configurations;
+
+/*==============================================================*/
+/* Table : Configurations                                            */
+/*==============================================================*/
+create table Configurations (
+   idConfig     int not null auto_increment,
+   name         varchar(50) not null,
+   altitude		int not null,
+   f1  			double not null,
+   m			double not null,
+   dPhi1		double not null,
+   dPhi2	  	double not null,
+   dKSV1		double not null,
+   dKSV2	  	double not null,
+   pressure	  	int not null,
+   calibIsHumid	int(1) not null,
+   cal0	  		double not null,
+   cal2nd		double not null,
+   o2cal2nd		double not null,
+   t0			double not null,
+   t2nd			double not null,
+   primary key (idConfig)
+);
 
 /*==============================================================*/
 /* Table : Campaigns                                            */
 /*==============================================================*/
 create table Campaigns (
-   idCampaign          	int not null auto_increment,
-   name               	varchar(50),
-   beginDate			datetime,
-   temperatureSensorState  	int(1),
-   CO2SensorState			int(1),
-   O2SensorState			int(1),
-   luminositySensorState	  	int(1),
-   humiditySensorState		int(1),
-   interval_		int,
-   volume 				float,
-   duration				int,
-   finished       boolean,
-   alertLevel     int(1),
-   endingDate     datetime,
-   altitude        int,
-   primary key (idCampaign)
+   idCampaign          		int not null auto_increment,
+   idConfig					int not null,
+   name               		varchar(50) not null,
+   beginDate				datetime not null,
+   temperatureSensorState  	int(1) not null,
+   CO2SensorState			int(1) not null,
+   O2SensorState			int(1) not null,
+   luminositySensorState	int(1) not null,
+   humiditySensorState		int(1) not null,
+   interval_				int not null,
+   volume 					float,
+   duration					int not null,
+   finished       			boolean not null,
+   alertLevel     			int(1) not null,
+   endingDate     			datetime,
+   primary key (idCampaign),
+   constraint FK_Campaigns_Configurations foreign key (idConfig)
+   references Configurations (idConfig)
 );
 
 /*==============================================================*/
 /* Table : Measurements                                          */
 /*==============================================================*/
 create table Measurements (
-   idCampaign     int,
-   temperature  	float,
-   CO2				float,
-   O2				   float,
-   luminosity	  	float,
-   humidity			float,
-   date           datetime,
+   idCampaign	int not null,
+   temperature  float,
+   CO2			float,
+   O2			float,
+   luminosity	float,
+   humidity		float,
+   date         datetime not null,
    constraint FK_Measurements_Campaigns foreign key (idCampaign)
    references Campaigns (idCampaign) on delete restrict on update restrict
 );
@@ -56,11 +82,11 @@ create table Settings (
 /* Table : Logs                                                 */
 /*==============================================================*/
 create table Logs(
-   idCampaign       int,
-   state			int(1),
-   title            varchar(100),
-   message         varchar(1000),
-   occuredDate             datetime,
+   idCampaign       int not null,
+   state			int(1) not null,
+   title            varchar(100) not null,
+   message          varchar(1000) not null,
+   occuredDate      datetime not null,
    constraint FK_Logs_Campaigns foreign key (idCampaign)
    references Campaigns (idCampaign) on delete restrict on update restrict
 );
