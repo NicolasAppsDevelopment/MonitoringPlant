@@ -14,6 +14,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$arguments = json_decode($data, true);
 
+    if(!isset($arguments["altitude"])){
+        replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini. Veuillez la renseignez.");
+    }
+
+    $altitude = filter_var($arguments["altitude"], FILTER_VALIDATE_INT);
+    if ($altitude === false) {
+        replyError("Impossible de sauvegarder les paramètres", "Le format de l'altitude est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
+    }
+
+    NodeRedPost("altitude",array('altitude' => $altitude));
+
     if (!isset($arguments["title"]) || empty($arguments["title"])){
         replyError("Impossible d'ajouter la campagne", "Le nom de votre campagne n'a pas été renseigné. Veuillez donner un nom à votre campagne puis réessayer.");
     }
@@ -140,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(array(
-        "id" => addCampaign($arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration)
+        "id" => addCampaign($arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration, $altitude)
     ));
 } else {
     replyError("Impossible d'ajouter la campagne", "La méthode de requête est incorrecte.");

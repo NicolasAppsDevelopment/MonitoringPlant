@@ -159,14 +159,14 @@ function existCampagne(string $name): bool {
  * @param int $duration  Duration of the new campaign
  * @return int
  */
-function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration) : int
+function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration, int $altitude) : int
 {
     try {
         if (existCampagne($name)) {
             throw new Exception("Une campagne de mesure avec le même nom existe déjà. Veuillez en choisir un autre.");
         }
 
-        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
+        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration SECOND, :varAltitude))", [
             'varName' => htmlspecialchars($name),
             'varTemperatureSensor' => (int)$temperatureSensor,
             'varCO2Sensor' => (int)$CO2Sensor,
@@ -176,7 +176,7 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
             'varInterval' => $interval,
             'varVolume' => $volume,
             'varDuration' => $duration,
-            'varDuration2' => $duration,
+            'varAltitude' => $altitude 
         ]);
 
         return getIdCampagne($name);
@@ -507,14 +507,13 @@ function getParametersPHP() : array
  * @return {string}
  */
 //Defines new Raspbery Pi settings
-function setParametersPHP(int $supprInterval, int $enabled, int $altitude) : bool
+function setParametersPHP(int $supprInterval, int $enabled) : bool
 {
     try {
         fetchAll("DELETE FROM Settings");
-        fetchAll("INSERT INTO Settings VALUES(:varSuppr, :varEnabled, :varAltitude);", [
+        fetchAll("INSERT INTO Settings VALUES(:varSuppr, :varEnabled);", [
             'varSuppr' => (int)$supprInterval,
-            'varEnabled' =>(int)$enabled,
-            'varAltitude' => (int)$altitude
+            'varEnabled' =>(int)$enabled
         ]);
         return true;
     } catch (\Throwable $th) {

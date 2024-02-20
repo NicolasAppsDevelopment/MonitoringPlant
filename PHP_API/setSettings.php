@@ -10,9 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
     $arguments = json_decode($data, true);
 
-    if(!isset($arguments["altitude"])){
-        replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini. Veuillez la renseignez.");
-    }
+    
     if (!isset($arguments["timeConservation"])){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
     }
@@ -29,11 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
     if ($interval === false) {
         replyError("Impossible de sauvegarder les paramètres", "Le format de l'intervalle de suppression des campagnes est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
-    }
-
-    $altitude = filter_var($arguments["altitude"], FILTER_VALIDATE_INT);
-    if ($altitude === false) {
-        replyError("Impossible de sauvegarder les paramètres", "Le format de l'altitude est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
     }
 
     switch ($arguments["timeConservationUnit"]) {
@@ -63,10 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } 
     }
 
-    NodeRedPost("altitude",array('altitude' => $arguments["altitude"]));
-
     reply(array(
-        "success" => setParametersPHP($interval, $arguments["enableAutoRemove"],$altitude)
+        "success" => setParametersPHP($interval, $arguments["enableAutoRemove"])
     ));
     
 } else {

@@ -44,7 +44,6 @@ async function setSettings()
     const timeConservation = document.getElementById("conserv");
     const timeConservationUnit = document.getElementById("comboBoxTpsSuppr");
     const network = document.getElementById("network");
-    const altitude = document.getElementById("altitude");
 
 
     if (timeConservation.validity.badInput === true) {
@@ -58,7 +57,6 @@ async function setSettings()
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
-        "altitude":altitude.value,
         "network": network.value
     });
 
