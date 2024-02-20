@@ -12,7 +12,7 @@ async function setTime() {
     const data = await PHP_post("/PHP_API/setTime.php", {
         "datetime": datetime,
     });
-
+    
     if (data != null) {
         window.location.href = "index.php";
     }
