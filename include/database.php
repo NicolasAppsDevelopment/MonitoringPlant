@@ -24,7 +24,7 @@ function initDataBase() : PDO
 global $PDO;
 $PDO = initDataBase();
 $PDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
+$PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 /**
  * Preparing and executing a SQL query.

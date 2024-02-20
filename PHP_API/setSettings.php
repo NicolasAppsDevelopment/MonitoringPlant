@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(array(
-        "success" => setParametersPHP($interval, $arguments["enableAutoRemove"])
+        "success" => setParametersPHP($interval, (bool)$arguments["enableAutoRemove"])
     ));
     
 } else {
