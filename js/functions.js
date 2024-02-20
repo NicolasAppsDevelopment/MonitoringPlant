@@ -371,3 +371,13 @@ async function checkTime() {
         }
     }
 }
+
+/**
+ * Set refresh delay
+ * @param milliSeconds Time of delay
+ * @returns 
+ */
+async function delay(milliSeconds) {
+    // return await for better async stack trace support in case of errors.
+    return await new Promise(resolve => setTimeout(resolve, milliSeconds));
+}

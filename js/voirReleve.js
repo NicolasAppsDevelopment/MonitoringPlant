@@ -6,29 +6,18 @@ let rows = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
-    getCampagne();
+    getCampaignMeasurements();
 });
-
-/**
- * Set refresh delay
- * @param milliSeconds Time of delay
- * @returns 
- */
-async function delay(milliSeconds) {
-    // return await for better async stack trace support in case of errors.
-    return await new Promise(resolve => setTimeout(resolve, milliSeconds));
-  }
-
 
 async function subscribeRefresh() {
     do {
-        getCampagne(true);
+        getCampaignMeasurements(true);
         await delay(refresh_delay);
     } while (refresh_repeat);
 }
 
 let refresh_repeat = true;
-async function getCampagne(refresh_mode = false) {
+async function getCampaignMeasurements(refresh_mode = false) {
     if (refresh_mode == false){
         displayLoading("Récupération de la campagne...");
         id = document.getElementById("id").value;

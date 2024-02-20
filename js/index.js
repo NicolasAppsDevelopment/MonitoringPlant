@@ -1,29 +1,21 @@
+let refresh_delay = 5000;
+let last_measure_datetime = null;
+let refresh_repeat = true;
+
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
-    getCampagnes();
+    getListCampaignJS();
     getStorageCapacity();
 });
 
-// let refresh_delay = 5000;
-// let last_measure_datetime = null;
-// let refresh_repeat = true;
+async function subscribeRefresh() {
+    do {
+         //getListCampaignJS();
+        await delay(refresh_delay);
+    } while (refresh_repeat);
+}
 
-// async function delay(ms) {
-//     // return await for better async stack trace support in case of errors.
-//     return await new Promise(resolve => setTimeout(resolve, ms));
-//   }
-
-// async function subscribeRefresh() {
-//     do {
-//         getCampagnes();
-//         await delay(refresh_delay);
-//     } while (refresh_repeat);
-// }
-
-
-
-
-async function getCampagnes(filter = null) {
+async function getListCampaignJS(filter = null) {
     const campagnesContainer = document.getElementById("CM_container");
     campagnesContainer.innerHTML = `
     <div class="loading_popup" id="loading_div">
@@ -131,7 +123,7 @@ async function filterCampagnes() {
 
     closePopup("filter-popup");
 
-    getCampagnes({"name": name.toLowerCase(), "date": date.value, "time": time.value, "processing": processing});
+    getListCampaignJS({"name": name.toLowerCase(), "date": date.value, "time": time.value, "processing": processing});
 }
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
