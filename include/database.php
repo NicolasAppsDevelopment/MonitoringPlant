@@ -507,13 +507,13 @@ function getParametersPHP() : array
  * @return {string}
  */
 //Defines new Raspbery Pi settings
-function setParametersPHP(int $supprInterval, int $enabled) : bool
+function setParametersPHP(int $supprInterval, bool $enabled) : bool
 {
     try {
         fetchAll("DELETE FROM Settings");
-        fetchAll("INSERT INTO Settings VALUES(:varSuppr, :varEnabled);", [
-            'varSuppr' => (int)$supprInterval,
-            'varEnabled' => (bool)$enabled
+        fetchAll("INSERT INTO Settings VALUES (:varSuppr, :varEnabled)", [
+            'varSuppr' => $supprInterval,
+            'varEnabled' => $enabled
         ]);
         return true;
     } catch (\Throwable $th) {
