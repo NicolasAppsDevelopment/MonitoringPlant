@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // check if a campaign is already running
-    $data=NodeRedGet("check_working_campaign");
+    $data = NodeRedGet("check_working_campaign");
 
     if (!array_key_exists("idCurrent", $data)) {
         replyError("Impossible d'ajouter la campagne", "Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
