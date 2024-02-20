@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/css/style.css" rel="stylesheet">
         <script src="/js/functions.js"></script>
-        <script src="/js/parametre.js"></script>
+        <script src="/js/settings.js"></script>
 
         <title>Page Paramètre</title>
 
@@ -51,11 +51,11 @@
                 <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
             </div>
 
-            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setParametersJSJS()">Enregistrer</button>
-            <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll()">Effacer les données</button>
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Enregistrer</button>
+            <button class="rect_round_btn destructive" type="button" onclick="reset()">Effacer les données</button>
         </main>
 
         <!-- loading popup -->
-        <?php include "modules/loading_popup_displayed.php";?>
+        <?php include "modules/loadingPopupDisplayed.php";?>
     </body>
 </html>

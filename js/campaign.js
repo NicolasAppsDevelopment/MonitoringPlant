@@ -6,29 +6,18 @@ let rows = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
-    getCampagne();
+    getCampaignMeasurements();
 });
-
-/**
- * Set refresh delay
- * @param milliSeconds Time of delay
- * @returns 
- */
-async function delay(milliSeconds) {
-    // return await for better async stack trace support in case of errors.
-    return await new Promise(resolve => setTimeout(resolve, milliSeconds));
-  }
-
 
 async function subscribeRefresh() {
     do {
-        getCampagne(true);
+        getCampaignMeasurements(true);
         await delay(refresh_delay);
     } while (refresh_repeat);
 }
 
 let refresh_repeat = true;
-async function getCampagne(refresh_mode = false) {
+async function getCampaignMeasurements(refresh_mode = false) {
     if (refresh_mode == false){
         displayLoading("Récupération de la campagne...");
         id = document.getElementById("id").value;
@@ -36,7 +25,7 @@ async function getCampagne(refresh_mode = false) {
         refresh_repeat = false;
     }
 
-    let data = await PHP_post("/PHP_API/get_campaign.php", {
+    let data = await PHP_post("/PHP_API/getCampaign.php", {
         "id": id,
         "last_log_datetime": last_log_datetime,
         "last_measure_datetime": last_measure_datetime
@@ -375,7 +364,7 @@ async function exportCampagne() {
     }
 
 
-    const data = await PHP_postGetFile("/PHP_API/export_campaign.php", {
+    const data = await PHP_postGetFile("/PHP_API/exportCampaign.php", {
         "id": id,
         "CO2_enabled": CO2_enabled,
         "O2_enabled": O2_enabled,
@@ -431,7 +420,7 @@ async function restartCampagne() {
         displayLoading("Redémarrage de la campagne...");
 
         const id = document.getElementById("id").value;
-        const data1 = await PHP_post("/PHP_API/restart_campaign.php", {
+        const data1 = await PHP_post("/PHP_API/restartCampaign.php", {
             "id": id
         });
 

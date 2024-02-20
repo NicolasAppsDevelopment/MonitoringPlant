@@ -360,7 +360,7 @@ function getReadableTimeAndUnit(seconds) {
 
 async function checkTime() {
     const client_datetime = new Date();
-    const data = await PHP_post("/PHP_API/check_time.php", {
+    const data = await PHP_post("/PHP_API/checkTime.php", {
         "client_datetime": client_datetime
     });
 
@@ -370,4 +370,14 @@ async function checkTime() {
             window.location = "/setupTime.php"
         }
     }
+}
+
+/**
+ * Set refresh delay
+ * @param milliSeconds Time of delay
+ * @returns 
+ */
+async function delay(milliSeconds) {
+    // return await for better async stack trace support in case of errors.
+    return await new Promise(resolve => setTimeout(resolve, milliSeconds));
 }

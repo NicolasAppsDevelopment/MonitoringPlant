@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
-        <script src="./js/demarrage.js"></script>
+        <script src="./js/beginning.js"></script>
 
         <title>Bienvenue</title>
 
@@ -25,7 +25,7 @@
                         Avant de commencer à pouvoir l’utiliser, nous devons d’abord vous demander quelques informations.
                     </p>
 
-                    <button class="rect_round_btn" type="button" onclick="setParameter()">
+                    <button class="rect_round_btn" type="button" onclick="setDefaultSettings()">
                         Continuer
                     </button>
 
@@ -33,6 +33,6 @@
             </div>
         </main>
         <!-- loading popup -->
-        <?php include "modules/loading_popup.php";?>
+        <?php include "modules/loadingPopup.php";?>
     </body>
 </html>

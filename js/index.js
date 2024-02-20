@@ -1,29 +1,21 @@
+let refresh_delay = 5000;
+let last_measure_datetime = null;
+let refresh_repeat = true;
+
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
-    getCampagnes();
+    getListCampaignJS();
     getStorageCapacity();
 });
 
-// let refresh_delay = 5000;
-// let last_measure_datetime = null;
-// let refresh_repeat = true;
+async function subscribeRefresh() {
+    do {
+         //getListCampaignJS();
+        await delay(refresh_delay);
+    } while (refresh_repeat);
+}
 
-// async function delay(ms) {
-//     // return await for better async stack trace support in case of errors.
-//     return await new Promise(resolve => setTimeout(resolve, ms));
-//   }
-
-// async function subscribeRefresh() {
-//     do {
-//         getCampagnes();
-//         await delay(refresh_delay);
-//     } while (refresh_repeat);
-// }
-
-
-
-
-async function getCampagnes(filter = null) {
+async function getListCampaignJS(filter = null) {
     const campagnesContainer = document.getElementById("CM_container");
     campagnesContainer.innerHTML = `
     <div class="loading_popup" id="loading_div">
@@ -36,9 +28,9 @@ async function getCampagnes(filter = null) {
 
     let data = null;
     if (filter != null) {
-        data = await PHP_post("/PHP_API/get_campaigns.php", filter);
+        data = await PHP_post("/PHP_API/getListCampaign.php", filter);
     } else {
-        data = await PHP_get("/PHP_API/get_campaigns.php");
+        data = await PHP_get("/PHP_API/getListCampaign.php");
     }
 
     if (data != null){
@@ -86,7 +78,7 @@ async function getCampagnes(filter = null) {
             }
 
             campagnesContainerHTML += `
-                <form method="post" action="/voirReleve.php" class="CM ${state}" id="campagne_${campagne["idCampaign"]}" onclick="document.getElementById('campagne_${campagne["idCampaign"]}').submit();">
+                <form method="post" action="/campaign.php" class="CM ${state}" id="campagne_${campagne["idCampaign"]}" onclick="document.getElementById('campagne_${campagne["idCampaign"]}').submit();">
                     <input type="hidden" name="id" value="${campagne["idCampaign"]}">
                     <div class="title_detail_CM">
                         <p class="titre_CM">${campagne["name"]}</p>
@@ -131,7 +123,7 @@ async function filterCampagnes() {
 
     closePopup("filter-popup");
 
-    getCampagnes({"name": name.toLowerCase(), "date": date.value, "time": time.value, "processing": processing});
+    getListCampaignJS({"name": name.toLowerCase(), "date": date.value, "time": time.value, "processing": processing});
 }
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
@@ -263,7 +255,7 @@ async function addCampagne() {
         return;
     }
 
-    const data = await PHP_post("/PHP_API/add_campaign.php", {
+    const data = await PHP_post("/PHP_API/createCampaign.php", {
         "title": title.value,
         "CO2_enabled": CO2_enabled.checked,
         "O2_enabled": O2_enabled.checked,
@@ -282,7 +274,7 @@ async function addCampagne() {
         document.getElementById("id_added_campaign").value = data["id"];
         document.getElementById("add_popup_form").submit();
 
-        const data_ = await NODERED_post("/add_campaign", {
+        const data_ = await NODERED_post("/createCampaign", {
             "id": data["id"]
         });
         if (data_ == null) {
@@ -298,7 +290,7 @@ async function removeCampagne(id) {
 
     if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
         document.getElementById("campagne_" + id).remove();
-        PHP_post("/PHP_API/remove_campaign.php", {
+        PHP_post("/PHP_API/removeCampaign.php", {
             "id": id
         });
     }

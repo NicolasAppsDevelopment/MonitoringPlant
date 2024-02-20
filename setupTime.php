@@ -40,6 +40,6 @@
         </main>
 
         <!-- loading popup -->
-        <?php include "modules/loading_popup.php";?>
+        <?php include "modules/loadingPopup.php";?>
     </body>
 </html>

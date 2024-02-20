@@ -15,7 +15,7 @@
     <nav>
         <ul class="div_top_nav">
             <li><a href="/index.php">
-                    <div class="info_ico_container <?= selectedPage(["/index.php", "/voirReleve.php"]) ?>">
+                    <div class="info_ico_container <?= selectedPage(["/index.php", "/campaign.php"]) ?>">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                             viewBox="0,0,256,256">
@@ -33,8 +33,8 @@
                         <p class="top_nav_text">Campagnes</p>
                     </div>
                 </a></li>
-            <li><a href="/parametres.php">
-                    <div class="info_ico_container <?= selectedPage(["/parametres.php"]) ?>">
+            <li><a href="/settings.php">
+                    <div class="info_ico_container <?= selectedPage(["/settings.php"]) ?>">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                             viewBox="0,0,256,256">
