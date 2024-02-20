@@ -22,8 +22,6 @@ async function getSettings()
         const timeSettings = getReadableTimeAndUnit(settings["removeInterval"]);
         let timeConservation = document.getElementById("conserv");
         timeConservation.setAttribute('value',timeSettings["value"]);
-        let altitude = document.getElementById("altitude");
-        altitude.setAttribute('value',settings["altitude"]);
 
         let timeConservationUnit = document.querySelector('#comboBoxTpsSuppr option[value="' + timeSettings["unit"] + '"]');
         if(timeConservationUnit){
