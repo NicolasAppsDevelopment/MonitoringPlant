@@ -25,6 +25,7 @@ create table Campaigns (
    finished       boolean,
    alertLevel     int(1),
    endingDate     datetime,
+   altitude        int,
    primary key (idCampaign)
 );
 
@@ -48,8 +49,7 @@ create table Measurements (
 /*==============================================================*/
 create table Settings (
    removeInterval  int,
-   autoRemove      boolean,
-   altitude        int
+   autoRemove      boolean
 );
 
 /*==============================================================*/
