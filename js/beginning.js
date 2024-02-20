@@ -8,7 +8,6 @@ async function setDefaultSettings() {
         "timeConservation": 1,
         "timeConservationUnit": "mois",
         "enableAutoRemove": false,
-        "altitude":240,
         "network": "Cellule de mesure"
     });
 
