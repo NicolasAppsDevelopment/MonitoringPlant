@@ -179,7 +179,7 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="config_input">Configuration</label>
-                        <select class="combo_box" id="config_combo_box">
+                        <select class="combo_box no-side-margin" id="config_combo_box">
                             <option selected value="0">Config1</option>
                             <option value="1">Config2</option>
                         </select>

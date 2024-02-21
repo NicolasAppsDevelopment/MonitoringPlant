@@ -1237,7 +1237,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     outline: 0;
 }
 
-.combo_box:last-child{
+.no-side-margin {
     margin: 6px 0px;
 }
 
