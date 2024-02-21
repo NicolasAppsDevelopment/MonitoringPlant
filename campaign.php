@@ -23,7 +23,7 @@
     <script src="./js/chart.js"></script>
     <script src="./js/display_chart.js"></script>
     <script src="./js/functions.js"></script>
-    <script src="./js/voirReleve.js"></script>
+    <script src="./js/campaign.js"></script>
 
     <title>Voir Releve</title>
 
@@ -38,7 +38,7 @@
     <?php include "modules/header.php";?>
     
     <!-- Campaign id -->
-    <form action="voirReleve.php" method="post" id="refresh_form">
+    <form action="campaign.php" method="post" id="refresh_form">
         <input type="hidden" name="id" id="id" value="<?= $_POST['id'] ?>">
     </form>
     

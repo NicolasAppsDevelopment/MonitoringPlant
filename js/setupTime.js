@@ -9,10 +9,10 @@ async function setTime() {
     const time = document.getElementById("heure").value;
     const datetime = String(date + " " + time);
 
-    const data = await PHP_post("/PHP_API/set_time.php", {
+    const data = await PHP_post("/PHP_API/setTime.php", {
         "datetime": datetime,
     });
-
+    
     if (data != null) {
         window.location.href = "index.php";
     }

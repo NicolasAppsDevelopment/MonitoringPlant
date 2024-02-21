@@ -24,7 +24,7 @@ function initDataBase() : PDO
 global $PDO;
 $PDO = initDataBase();
 $PDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
+$PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 /**
  * Preparing and executing a SQL query.
@@ -159,14 +159,14 @@ function existCampagne(string $name): bool {
  * @param int $duration  Duration of the new campaign
  * @return int
  */
-function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration) : int
+function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration, int $altitude) : int
 {
     try {
         if (existCampagne($name)) {
             throw new Exception("Une campagne de mesure avec le même nom existe déjà. Veuillez en choisir un autre.");
         }
 
-        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
+        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration SECOND, :varAltitude))", [
             'varName' => htmlspecialchars($name),
             'varTemperatureSensor' => (int)$temperatureSensor,
             'varCO2Sensor' => (int)$CO2Sensor,
@@ -176,7 +176,7 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
             'varInterval' => $interval,
             'varVolume' => $volume,
             'varDuration' => $duration,
-            'varDuration2' => $duration,
+            'varAltitude' => $altitude 
         ]);
 
         return getIdCampagne($name);
@@ -484,14 +484,14 @@ function getMeasurements(int $id, ?string $sinceDatetime = NULL) : array {
  * @return {string}
  */
 //Recovery of Raspbery Pi settings
-function getParametre() : array
+function getParametersPHP() : array
 {
     try {
         $data = fetchAll("SELECT * , NOW() AS 'date' FROM Settings");
         if (count($data) > 0) {
             return $data[0];
         } else {
-            header("Location: /demarrage.php");
+            header("Location: /beginning.php");
             return [];
         }
     } catch (\Throwable $th) {
@@ -507,19 +507,130 @@ function getParametre() : array
  * @return {string}
  */
 //Defines new Raspbery Pi settings
-function postParametres(int $supprInterval, int $enabled, int $altitude) : bool
+function setParametersPHP(int $supprInterval, bool $enabled) : bool
 {
     try {
         fetchAll("DELETE FROM Settings");
-        fetchAll("INSERT INTO Settings VALUES(:varSuppr, :varEnabled, :varAltitude);", [
-            'varSuppr' => (int)$supprInterval,
-            'varEnabled' =>(int)$enabled,
-            'varAltitude' => (int)$altitude
+        fetchAll("INSERT INTO Settings VALUES (:varSuppr, :varEnabled)", [
+            'varSuppr' => $supprInterval,
+            'varEnabled' => (int)$enabled
         ]);
         return true;
     } catch (\Throwable $th) {
         replyError("Impossible de modifier les paramètres", $th->getMessage());
     }
+}
 
-    return false;
+
+/*
+ * PARTIE CONFIG
+ */
+
+/**
+ * Recovery of all configurations.
+ * 
+ * @param array $filter Influence which configuration the function recovers
+ * @return array
+ */
+function getListConfiguration(array $filter = null) : array
+{
+    $query = "SELECT * FROM Configurations  ";
+    $whereClauses = [];
+    $parameters = []; 
+
+    if (isset($filter) && !empty($filter)) {
+        if (!empty($filter["name"])) {
+
+            $query .= "WHERE ";
+
+            if (!empty($filter["name"])) {
+                array_push($whereClauses, "LOWER(name) LIKE :varName");
+                $parameters["varName"] = "%" . htmlspecialchars($filter["name"]) . "%";
+            }
+        }
+    }
+
+    $query .= join(" AND ", $whereClauses) . " ORDER BY finished ASC, beginDate DESC";
+
+    try {
+        return fetchAll($query, $parameters);
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer les campagnes", $th->getMessage());
+    }
+}
+
+/**
+ * Returns the id of the configuration whose name entered in parameter matches
+ * 
+ * @param string $name Name of a configuration
+ * @return int
+ */
+function getIdConfiguration(string $name): int {
+    try {
+        $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
+            'varName' => htmlspecialchars($name)
+        ]);
+    
+        if (count($results) > 0) {
+            return $results[0]["idConfig"];
+        } else {
+            throw new Exception("Le nom de la configuration est introuvable.");
+        }
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer l'identifiant de la configuration", $th->getMessage());
+    }
+}
+
+
+/**
+ * Returns true if the name entered in parameter corresponds to an existing configuration.
+ * 
+ * @param string $name Name of a configuration
+ * @return bool
+ */
+function existConfiguration(string $name): bool {
+    try {
+        $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
+            'varName' => htmlspecialchars($name)
+        ]);
+    
+        if (count($results) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (\Throwable $th) {
+        replyError("Impossible de vérifier l'existance d'une configuration par son nom.", $th->getMessage());
+    }
+}
+
+/**
+ * Deletes all data of the campaign whose id is entered as a parameter
+ * Returns true if all data are deleted.
+ * 
+ * @param int $id Id of the campaign
+ * @return bool
+ */
+function supprConfiguration(int $id) : bool
+{
+    //Update any campaign related
+    try {
+        fetchAll("UPDATE Campaigns SET idConfig = -1 WHERE idConfig = :varId", [
+            'varId' => $id
+        ]);
+        return true;
+    } catch (\Throwable $th) {
+        replyError("Impossible de modifier les campagnes liées à cette configuration", $th->getMessage());
+    }
+
+
+    //Removal of the campaign
+    try {
+        fetchAll("DELETE FROM Configurations WHERE idConfig = :varId", [
+            'varId' => $id
+        ]);
+        return true;
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer la configuration", $th->getMessage());
+    }
 }

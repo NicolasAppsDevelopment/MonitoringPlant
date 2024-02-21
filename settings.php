@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/css/style.css" rel="stylesheet">
         <script src="/js/functions.js"></script>
-        <script src="/js/parametre.js"></script>
+        <script src="/js/settings.js"></script>
 
         <title>Page Paramètre</title>
 
@@ -19,7 +19,9 @@
         <?php include "modules/header.php";?>
         
         <main id="main_paramètre">
-            <h2>Suppression des données</h2>
+            <div class="section_head_container">
+                <h2 class="section_head">Suppression automatique</h2>
+            </div>
             
             <div class="checkbox">
                 <label for="auto_suppr">
@@ -46,23 +48,20 @@
                 </div>
             </div>
 
-            <div class="label_img_input">
+            <div class="section_head_container">
+                <h2 class="section_head">Point d'accès sans fil</h2>
+            </div>
+
+            <div class="label_img_input no-margin-top">
                 <label class="label_field" for="network">Nom du WIFI</label>
                 <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
             </div>
 
-            <div class="label_img_input">
-                <label class="label_field" for="conserv">Altitude</label>
-                <div class="row_fields">
-                    <input class="input_field edit" id="altitude" name="altitude" type="number" placeholder="nombre entier" min="0" autocomplete="off">
-                </div>
-            </div>
-
-            <button class="rect_round_btn gray bottom_gap" type="button" onclick="postParametre()">Enregistrer</button>
-            <button class="rect_round_btn destructive" type="button" onclick="postDeleteAll()">Effacer les données</button>
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Enregistrer</button>
+            <button class="rect_round_btn destructive" type="button" onclick="reset()">Effacer les données</button>
         </main>
 
         <!-- loading popup -->
-        <?php include "modules/loading_popup_displayed.php";?>
+        <?php include "modules/loadingPopupDisplayed.php";?>
     </body>
 </html>

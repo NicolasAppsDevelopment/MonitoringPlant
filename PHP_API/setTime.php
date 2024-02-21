@@ -1,4 +1,6 @@
 <?php
+header("Content-Type: application/json; charset=utf-8");
+
 include_once __DIR__ . "/../include/reply.php";
 include_once __DIR__ . "/../include/NodeRED_API.php";
 
@@ -18,10 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(
-        NodeRedPost("set_datetime", $arguments)
+        NodeRedPost("setDatetime", array('datetime' => $arguments["datetime"]))
     );
 
 } else {
     replyError("Impossible d'exporter la campagne", "La méthode de requête est incorrecte.");
 }
-?>

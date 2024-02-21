@@ -1,17 +1,17 @@
 /**
  * Recovering raspberry pi settings.
  */
-async function getParametre()
+async function getSettings()
 {
     displayLoading("Récupération des paramètres...");
 
     //Print the wifi name
-    const accesPoint = await NODERED_get("/get_AP");
+    const accesPoint = await NODERED_get("/getAccessPoint");
     let network = document.getElementById("network");
     network.value=accesPoint["name"];
 
     
-    const settings = await PHP_get("/PHP_API/get_settings.php");
+    const settings = await PHP_get("/PHP_API/getSettings.php");
     if (settings != null){
         if (settings["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
@@ -22,8 +22,6 @@ async function getParametre()
         const timeSettings = getReadableTimeAndUnit(settings["removeInterval"]);
         let timeConservation = document.getElementById("conserv");
         timeConservation.setAttribute('value',timeSettings["value"]);
-        let altitude = document.getElementById("altitude");
-        altitude.setAttribute('value',settings["altitude"]);
 
         let timeConservationUnit = document.querySelector('#comboBoxTpsSuppr option[value="' + timeSettings["unit"] + '"]');
         if(timeConservationUnit){
@@ -38,7 +36,7 @@ async function getParametre()
 /**
  * Update raspberry pi settings.
  */
-async function postParametre()
+async function setSettings()
 {
     displayLoading("Mise à jour des paramètres...");
 
@@ -46,7 +44,6 @@ async function postParametre()
     const timeConservation = document.getElementById("conserv");
     const timeConservationUnit = document.getElementById("comboBoxTpsSuppr");
     const network = document.getElementById("network");
-    const altitude = document.getElementById("altitude");
 
 
     if (timeConservation.validity.badInput === true) {
@@ -56,31 +53,20 @@ async function postParametre()
     } 
 
     
-    let data1 = await PHP_post("/PHP_API/set_settings.php", {
+    let data1 = await PHP_post("/PHP_API/setSettings.php", {
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
-        "altitude":altitude.value
+        "network": network.value
     });
 
-    const raspberryNetwork = await NODERED_get("/get_AP");
-
-    if(network.value!=null && network.value!=raspberryNetwork){
-        if(strlen(network.value)<=32 && strlen(network.value)>0){
-            if(network.value.match(/^[a-zA-Z0-9\s-_]+$/)){
-                const data2 = await NODERED_post("/set_AP", {
-                    "network": network.value,
-                });
-                if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
-                    //restart
-                    const data3 = await NODERED_get("/restart");
-                }   
-            }else{
-                displayError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
-            }    
-        }else{
-            displayError("Impossible de sauvegarder les paramètres", "Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
-        }      
+    const raspberryNetwork = await NODERED_get("/getAccessPoint");
+    
+    if(network.value!=null && network.value!=raspberryNetwork.name){      
+        if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
+            //restart
+            await NODERED_get("/restart");
+        }            
     }
 
     hideLoading();
@@ -89,13 +75,12 @@ async function postParametre()
         displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
     } 
 
-    
 }
 
 /**
  * Delete all data of the Raspberry pi
  */
-async function postDeleteAll()
+async function reset()
 {
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, mesures et paramètres seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
@@ -113,10 +98,10 @@ async function postDeleteAll()
 
         hideLoading();
         // redirect
-        window.location = "/setup_time.php"
+        window.location = "/setupTime.php"
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    getParametre();
+    getSettings();
 });

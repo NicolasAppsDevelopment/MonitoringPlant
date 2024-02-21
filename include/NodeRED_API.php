@@ -13,23 +13,25 @@ $NODE_RED_API_URL = "http://$NODE_RED_API_IP:$NODE_RED_API_PORT";
  */
 function NodeRedPost(string $name, array $array)
 {
-    global $NODE_RED_API_IP, $NODE_RED_API_PORT, $NODE_RED_API_URL;
-
+    global $NODE_RED_API_URL;
     $url = "$NODE_RED_API_URL/$name";
-
-    //$requestUrl = $url . "/" . $name;
     $curl = curl_init($url);
+
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($url));
-    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_FAILONERROR, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($array));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
     $res = curl_exec($curl);
+    if (curl_errno($curl)) {
+        $error_msg = curl_error($curl);
+        curl_close($curl);
+        replyError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
+    }
+
     curl_close($curl);
     return json_decode($res, true);
-
 }
 
 /**
@@ -37,16 +39,23 @@ function NodeRedPost(string $name, array $array)
  * @param  string $name the name of the Node Red request will receive. This string must not contains any special characters.
  * @return values  $res is the data that NodeRed send back, it can be a interger, string, etc... 
  */
-function NodeRedGet(string $name) {
-    global $NODE_RED_API_IP, $NODE_RED_API_PORT, $NODE_RED_API_URL;
-
+function NodeRedGet(string $name)
+{
+    global $NODE_RED_API_URL;
     $url = "$NODE_RED_API_URL/$name";
-
     $curl = curl_init($url);
+
     curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_FAILONERROR, true);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
     $res = curl_exec($curl);
+    if (curl_errno($curl)) {
+        $error_msg = curl_error($curl);
+        curl_close($curl);
+        replyError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
+    }
+
     curl_close($curl);
     return json_decode($res, true);
 }

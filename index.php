@@ -69,32 +69,6 @@
                 </div>
             </div>
         </main>
-        
-        <!-- Pop-up Help -->
-
-        <label for="help-popup" class="floatingHelp round_btn default help"></label>
-        <input type="checkbox" id="help-popup" class="open_close-popup">
-        <div class="popup">
-            <div class="popup-inner">
-                <div class="popup-title">
-                    <p>Aide demmarer Campagne</p>
-                    <label for="help-popup" class="round_btn transparent small close"></label>
-                </div>
-                <img id="HelpGif" src="/img/addCampaign.gif" alt="gif de comment ajouter une campagne">
-                <p> Comment créer une campagne de mesure ? </p>
-                <div class="buttonPopupHelp">
-                    <button class="rect_round_btn" type="button" onclick="previousGif()">
-                        Previous
-                    </button>
-                    <input id="idHelpIndex" hidden value="1"></input>
-                    <button class="rect_round_btn" type="button" onclick="nextGif()"> 
-                        Next 
-                    </button>
-                </div>
-
-
-            </div>
-        </div>
 
         <!-- Create a campaign popup & button -->
         <label for="add-popup" class="floating round_btn default add"></label>
@@ -105,7 +79,7 @@
                     <p>Démarrer une campagne</p>
                     <label for="add-popup" class="round_btn transparent small close"></label>
                 </div>
-                <form id="add_popup_form" class="popup-content" method="post" action="voirReleve.php">
+                <form id="add_popup_form" class="popup-content" method="post" action="campaign.php">
                     <input id="id_added_campaign" type="hidden" name="id" value="-1">
 
                     <div class="grid_section">
@@ -203,6 +177,38 @@
                         <input class="input_field edit" id="name_input" type="text" placeholder="Nom" required>
                     </div>
 
+                    <div class="label_img_input">
+                        <label class="label_field" for="config_input">Configuration</label>
+                        <select class="combo_box no-side-margin" id="config_combo_box">
+                            <option selected value="0">Config1</option>
+                            <option value="1">Config2</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox">
+                        <label for="humid_mode">
+                            <input type="checkbox" id="humid_mode">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Mesure en milieu humide ? (coché = Oui)</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label for="enable_fibox_temp">
+                            <input type="checkbox" id="enable_fibox_temp">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Activer le capteur de température PreSens ? (coché = Oui)</span>
+                        </label>
+                    </div>
+
                     <div class="section">
                         <div class="row_center" id="space_taken_warning">
                             
@@ -233,6 +239,6 @@
         </div>
 
         <!-- loading popup -->
-        <?php include "modules/loading_popup.php";?>
+        <?php include "modules/loadingPopup.php";?>
     </body>
 </html>

@@ -1,8 +1,9 @@
 <?php
+header("Content-Type: application/json; charset=utf-8");
+
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
 include_once __DIR__ . "/../include/NodeRED_API.php";
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // handle POST request
@@ -10,9 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
     $arguments = json_decode($data, true);
 
-    if(!isset($arguments["altitude"])){
-        replyError("Impossible de sauvegarder les paramètres", "L'altitude n'est pas défini. Veuillez la renseignez.");
-    }
     if (!isset($arguments["timeConservation"])){
         replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
     }
@@ -22,15 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($arguments["enableAutoRemove"]) || !is_bool($arguments["enableAutoRemove"])){
         replyError("Impossible de sauvegarder les paramètres", "L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
     }
+    if (!isset($arguments["network"]) || !is_string($arguments["network"])){
+        replyError("Impossible de sauvegarder les paramètres", "Le nom du réseau WIFI n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+    }
 
     $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
     if ($interval === false) {
         replyError("Impossible de sauvegarder les paramètres", "Le format de l'intervalle de suppression des campagnes est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
-    }
-
-    $altitude = filter_var($arguments["altitude"], FILTER_VALIDATE_INT);
-    if ($altitude === false) {
-        replyError("Impossible de sauvegarder les paramètres", "Le format de l'altitude est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
     }
 
     switch ($arguments["timeConservationUnit"]) {
@@ -48,10 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 
-    NodeRedPost("altitude",array('altitude' => $arguments["altitude"]));
+    if($arguments["network"]!=null && $arguments["network"]!=NodeRedGet("getAccessPoint")){
+        if(strlen($arguments["network"])<=32 && strlen($arguments["network"])>0){
+            if(preg_match('/^[a-zA-Z0-9\s\-_]+$/',$arguments["network"])){
+                NodeRedPost("setAccessPoint",array('network' => $arguments["network"]));
+            }else{
+                replyError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
+            }    
+        }else{
+            replyError("Impossible de sauvegarder les paramètres", "Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
+        } 
+    }
 
     reply(array(
-        "success" => postParametres($interval, $arguments["enableAutoRemove"],$altitude)
+        "success" => setParametersPHP($interval, $arguments["enableAutoRemove"])
     ));
     
 } else {

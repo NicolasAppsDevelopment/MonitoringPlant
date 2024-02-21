@@ -65,7 +65,19 @@ header nav {
     box-shadow: 0px .125rem var(--border-menu-color);
     width: 100%;
     z-index: 100;
+    overflow-x: scroll;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+header nav::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+header nav {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+} 
+
 nav a div g {
     fill: var(--unselected-font-color);
 }
@@ -682,16 +694,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 /* Page paramétrage */
 
 #main_paramètre h2 {
-    text-decoration: underline;
-    text-align: left; 
-    color:black;
-}
-
-#fréquence input {
-    width: 20px;
-    text-align:center;
-    background-color:var(--placeholder_color);
-    border: none;
+    font-size: 22px;
 }
 
 #choix_f {
@@ -712,7 +715,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
     display: flex;
     flex-direction: column;
-    align-items: center;
+}
+
+.no-margin-top {
+    margin-top: 0px !important;
 }
 
 /* Les Pages Démarage */
@@ -805,7 +811,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     transition: all 0.15s ease;
 }
 
-
+#add_popup_form .checkbox{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 /*  */
 
@@ -1103,10 +1112,49 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     margin-bottom: 24px;
 }
 
+
+/* GROUP & SUB-GROUP */
+.section_head_container {
+    border-bottom: 1px solid var(--input_border_color);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    margin-top: 1.7rem;
+}
+.section_head {
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0;
+    font-family: "Inter_SemiBold";
+}
+.sub_section_head {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    font-family: "Inter_SemiBold";
+}
+.sub_section_head_container {
+    padding-bottom: 0.5rem;
+    margin-top: 1.7rem;
+}
+.sub_section_container {
+    border: 1px solid var(--input_border_color);
+    border-radius: 0.375rem;
+    padding: 16px;
+}
+.sub_section_container > div:first-child {
+    margin-top: 0;
+}
+.sub_section_container > div:last-child {
+    margin-bottom: 0;
+}
+
+
+
 /* TEXT INPUT WITH ICON FIELD */
 .label_field {
     font-family: Inter_Medium;
 }
+
 .input_field {
     border: 1px solid var(--input_border_color);
     padding: 6px;
@@ -1187,6 +1235,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 }
 .combo_box:focus, .combo_box:hover {
     outline: 0;
+}
+
+.no-side-margin {
+    margin: 6px 0px;
 }
 
 .row_fields {
