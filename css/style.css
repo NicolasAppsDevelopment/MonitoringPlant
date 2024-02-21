@@ -811,7 +811,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     transition: all 0.15s ease;
 }
 
-
+#add_popup_form .checkbox{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 /*  */
 
@@ -1151,6 +1154,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 .label_field {
     font-family: Inter_Medium;
 }
+
 .input_field {
     border: 1px solid var(--input_border_color);
     padding: 6px;
@@ -1231,6 +1235,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 }
 .combo_box:focus, .combo_box:hover {
     outline: 0;
+}
+
+.combo_box:last-child{
+    margin: 6px 0px;
 }
 
 .row_fields {
