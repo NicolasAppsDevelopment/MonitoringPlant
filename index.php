@@ -79,7 +79,7 @@
                     <p>Démarrer une campagne</p>
                     <label for="add-popup" class="round_btn transparent small close"></label>
                 </div>
-                <form id="add_popup_form" class="popup-content" method="post" action="campaign.php">
+                <form id="add_popup_form" class="popup-content" method="post" action="config.php">
                     <input id="id_added_campaign" type="hidden" name="id" value="-1">
 
                     <div class="grid_section">

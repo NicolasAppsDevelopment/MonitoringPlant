@@ -20,7 +20,7 @@
         <main>
             <div class="top_action_menu">
                 <!-- Search bar -->
-                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="campaign_name_search_bar" onkeydown="handleKeyPressSearchBar(event)">
+                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="config_name_search_bar" onkeydown="handleKeyPressSearchBar(event)">
             </div>
 
             <!-- List of configs -->
@@ -147,7 +147,7 @@
                         </div>
                     </div>
 
-                    <button class="rect_round_btn gray" type="button" onclick="addConfig();">Ajouter</button>
+                    <button class="rect_round_btn gray" type="button" onclick="addConfiguration();">Ajouter</button>
                 </form>
             </div>
         </div>

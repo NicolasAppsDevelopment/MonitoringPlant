@@ -634,3 +634,54 @@ function supprConfiguration(int $id) : bool
         replyError("Impossible de supprimer la configuration", $th->getMessage());
     }
 }
+
+/**
+ * Add a configuration into the database
+ * Returns true if no errors occured
+ * 
+ * @param name Name of the configuration
+ * @param f1 Constant
+ * @param m Constant
+ * @param dPhi1 Constant
+ * @param dPhi2 Constant
+ * @param dKSV1 Constant
+ * @param dKSV2 Constant
+ * @param cal0 Constant
+ * @param cal2nd Constant
+ * @param t0 Constant
+ * @param t2nd Constant
+ * @param pressure Constant
+ * @param o2cal2nd Constant
+ * @param altitude Altitude for the configuration
+ * @param calib_is_humid If calib has been done in humid conditions
+ */
+function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calib_is_humid) : int
+{
+    try {
+        if (existConfiguration($name)) {
+            throw new Exception("Une configuration avec le même nom existe déjà. Veuillez en choisir un autre.");
+        }
+
+        fetchAll("INSERT INTO Configurations VALUES (NULL, :varName, :varAltitude, :varF1, :varM, :varDPhi1, :varDPhi2, :varDKSV1, :varDKSV2, :varPressure, :varCalibIsHumid, :varCal0, :varCal2nd, :varO2Cal2nd, :varT0, :varT2nd)", [
+            'varName' => htmlspecialchars($name),
+            'varF1' => $f1,
+            'varM' => $m,
+            'varDPhi1' => $dPhi1,
+            'varDPhi2' => $dPhi2,
+            'varDKSV1' => $dKSV1,
+            'varDKSV2' => $dKSV2,
+            'varCal0' => $cal0,
+            'varCal2nd' => $cal2nd,
+            'varT0' => $t0,
+            'varT2nd' => $t2nd,
+            'varPressure' => $pressure,
+            'varO2Cal2nd' => $o2cal2nd,
+            'varAltitude' => $altitude,
+            'varCalibIsHumid' => (int)$calib_is_humid
+        ]);
+
+        return getIdCampagne($name);
+    } catch (\Throwable $th) {
+        replyError("Impossible d'ajouter la configuration.", $th->getMessage());
+    }
+}
