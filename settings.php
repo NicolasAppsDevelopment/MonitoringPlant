@@ -19,7 +19,9 @@
         <?php include "modules/header.php";?>
         
         <main id="main_paramètre">
-            <h2>Suppression des données</h2>
+            <div class="section_head_container">
+                <h2 class="section_head">Suppression automatique</h2>
+            </div>
             
             <div class="checkbox">
                 <label for="auto_suppr">
@@ -46,7 +48,11 @@
                 </div>
             </div>
 
-            <div class="label_img_input">
+            <div class="section_head_container">
+                <h2 class="section_head">Point d'accès sans fil</h2>
+            </div>
+
+            <div class="label_img_input no-margin-top">
                 <label class="label_field" for="network">Nom du WIFI</label>
                 <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
             </div>

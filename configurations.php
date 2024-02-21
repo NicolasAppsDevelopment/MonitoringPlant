@@ -57,7 +57,9 @@
                     </div>
 
                     <!-- Constants PreSens -->
-                    <p>Constantes PreSens</p>
+                    <div class="section_head_container">
+                        <h2 class="section_head">Constantes PreSens</h2>
+                    </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="f1_input">f1</label>
@@ -88,8 +90,10 @@
                         <label class="label_field" for="dksv2_input">dKSV2</label>
                         <input class="input_field edit" id="dksv2_input" type="number" step=".000000001" placeholder="dKsv2" required>
                     </div>
-                    
-                    <p>Données de calibration PreSens</p>
+
+                    <div class="section_head_container">
+                        <h2 class="section_head">Données de calibration PreSens</h2>
+                    </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="pressure_input">Pression atmosphérique (en hPa)</label>
@@ -108,33 +112,39 @@
                         </label>
                     </div>
 
-                    <p>1ère calibration à 0% d'air-sat. (cal0)</p>
+                    <div class="sub_section_head_container">
+                        <h2 class="sub_section_head">1ère calibration à 0% d'air-sat. (cal0)</h2>
+                    </div>
+                    <div class="sub_section_container">
+                        <div class="label_img_input">
+                            <label class="label_field" for="cal0_input">Phase (en °)</label>
+                            <input class="input_field edit" id="cal0_input" type="number" step=".0001" placeholder="Phase cal0" required>
+                        </div>
 
-                    <div class="label_img_input">
-                        <label class="label_field" for="cal0_input">Phase (en °)</label>
-                        <input class="input_field edit" id="cal0_input" type="number" step=".0001" placeholder="Phase cal0" required>
+                        <div class="label_img_input">
+                            <label class="label_field" for="t0_input">Température (en °C)</label>
+                            <input class="input_field edit" id="t0_input" type="number" step=".01" placeholder="Température cal0" required>
+                        </div>
                     </div>
 
-                    <div class="label_img_input">
-                        <label class="label_field" for="t0_input">Température (en °C)</label>
-                        <input class="input_field edit" id="t0_input" type="number" step=".01" placeholder="Température cal0" required>
+                    <div class="sub_section_head_container">
+                        <h2 class="sub_section_head">2e calibration à x% d'air-sat. (cal2nd)</h2>
                     </div>
+                    <div class="sub_section_container bottom_gap">
+                        <div class="label_img_input">
+                            <label class="label_field" for="o2cal2nd_input">%air-sat. (en %)</label>
+                            <input class="input_field edit" id="o2cal2nd_input" type="number" min="0" max="100" placeholder="%air-sat." required>
+                        </div>
 
-                    <p>2e calibration à x% d'air-sat. (cal2nd)</p>
+                        <div class="label_img_input">
+                            <label class="label_field" for="cal2nd_input">Phase (en °)</label>
+                            <input class="input_field edit" id="cal2nd_input" type="number"  step=".0001" placeholder="Phase cal2nd" required>
+                        </div>
 
-                    <div class="label_img_input">
-                        <label class="label_field" for="o2cal2nd_input">%air-sat. (en %)</label>
-                        <input class="input_field edit" id="o2cal2nd_input" type="number" min="0" max="100" placeholder="%air-sat." required>
-                    </div>
-
-                    <div class="label_img_input">
-                        <label class="label_field" for="cal2nd_input">Phase (en °)</label>
-                        <input class="input_field edit" id="cal2nd_input" type="number"  step=".0001" placeholder="Phase cal2nd" required>
-                    </div>
-
-                    <div class="label_img_input">
-                        <label class="label_field" for="t2nd_input">Température (en °C)</label>
-                        <input class="input_field edit" id="t2nd_input" type="number"  step=".01" placeholder="Température cal2nd" required>
+                        <div class="label_img_input">
+                            <label class="label_field" for="t2nd_input">Température (en °C)</label>
+                            <input class="input_field edit" id="t2nd_input" type="number"  step=".01" placeholder="Température cal2nd" required>
+                        </div>
                     </div>
 
                     <button class="rect_round_btn gray" type="button" onclick="addConfig();">Ajouter</button>
