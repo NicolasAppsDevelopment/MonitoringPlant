@@ -615,7 +615,7 @@ function supprConfiguration(int $id) : bool
 {
     //Update any campaign related
     try {
-        fetchAll("DELETE FROM Campaigns WHERE idCampaigns = :varId", [
+        fetchAll("UPDATE Campaigns SET idConfig = -1 WHERE idConfig = :varId", [
             'varId' => $id
         ]);
         return true;

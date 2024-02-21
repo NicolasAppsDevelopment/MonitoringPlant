@@ -342,15 +342,13 @@ function previousGif(){
             case 1:
                 document.getElementById("HelpGif").src="/img/naméouie.gif";
                 break;
-    
             case 2:
                 document.getElementById("HelpGif").src="/img/vulpix.gif";
                 break;
-    
             case 3:
                 document.getElementById("HelpGif").src="/img/eiffel.gif";
                 break;
-                
+        
             default:
                 break;
         }

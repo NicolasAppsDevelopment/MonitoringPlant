@@ -128,16 +128,20 @@ async function addConfiguration() {
     hideLoading();
 }
 
-async function filterCampagnes() {
-    const name = document.getElementById("config_name_search_bar").value;
-    closePopup("filter-popup");
-    getListCampaignJS({"name": name.toLowerCase()});
+async function removeConfiguration(id) {
+    event.stopPropagation();
+
+    if (await displayConfirm('Voulez-vous vraiment supprimer cette configuration de mesure ?', 'Cette configuration est supprimée définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
+        document.getElementById("campagne_" + id).remove();
+        PHP_post("/PHP_API/removeConfiguration.php", {
+            "id": id
+        });
+    }
 }
 
 function handleKeyPressSearchBar(e){
     var key=e.keyCode || e.which;
     if (key==13){
-    filterCampagnes();
+    filterConfigurations();
     }
 }
-
