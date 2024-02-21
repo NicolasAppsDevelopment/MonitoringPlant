@@ -520,3 +520,117 @@ function setParametersPHP(int $supprInterval, bool $enabled) : bool
         replyError("Impossible de modifier les paramètres", $th->getMessage());
     }
 }
+
+
+/*
+ * PARTIE CONFIG
+ */
+
+/**
+ * Recovery of all configurations.
+ * 
+ * @param array $filter Influence which configuration the function recovers
+ * @return array
+ */
+function getListConfiguration(array $filter = null) : array
+{
+    $query = "SELECT * FROM Configurations  ";
+    $whereClauses = [];
+    $parameters = []; 
+
+    if (isset($filter) && !empty($filter)) {
+        if (!empty($filter["name"])) {
+
+            $query .= "WHERE ";
+
+            if (!empty($filter["name"])) {
+                array_push($whereClauses, "LOWER(name) LIKE :varName");
+                $parameters["varName"] = "%" . htmlspecialchars($filter["name"]) . "%";
+            }
+        }
+    }
+
+    $query .= join(" AND ", $whereClauses) . " ORDER BY finished ASC, beginDate DESC";
+
+    try {
+        return fetchAll($query, $parameters);
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer les campagnes", $th->getMessage());
+    }
+}
+
+/**
+ * Returns the id of the configuration whose name entered in parameter matches
+ * 
+ * @param string $name Name of a configuration
+ * @return int
+ */
+function getIdConfiguration(string $name): int {
+    try {
+        $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
+            'varName' => htmlspecialchars($name)
+        ]);
+    
+        if (count($results) > 0) {
+            return $results[0]["idConfig"];
+        } else {
+            throw new Exception("Le nom de la configuration est introuvable.");
+        }
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer l'identifiant de la configuration", $th->getMessage());
+    }
+}
+
+
+/**
+ * Returns true if the name entered in parameter corresponds to an existing configuration.
+ * 
+ * @param string $name Name of a configuration
+ * @return bool
+ */
+function existConfiguration(string $name): bool {
+    try {
+        $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
+            'varName' => htmlspecialchars($name)
+        ]);
+    
+        if (count($results) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (\Throwable $th) {
+        replyError("Impossible de vérifier l'existance d'une configuration par son nom.", $th->getMessage());
+    }
+}
+
+/**
+ * Deletes all data of the campaign whose id is entered as a parameter
+ * Returns true if all data are deleted.
+ * 
+ * @param int $id Id of the campaign
+ * @return bool
+ */
+function supprConfiguration(int $id) : bool
+{
+    //Update any campaign related
+    try {
+        fetchAll("DELETE FROM Campaigns WHERE idCampaigns = :varId", [
+            'varId' => $id
+        ]);
+        return true;
+    } catch (\Throwable $th) {
+        replyError("Impossible de modifier les campagnes liées à cette configuration", $th->getMessage());
+    }
+
+
+    //Removal of the campaign
+    try {
+        fetchAll("DELETE FROM Configurations WHERE idConfig = :varId", [
+            'varId' => $id
+        ]);
+        return true;
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer la configuration", $th->getMessage());
+    }
+}

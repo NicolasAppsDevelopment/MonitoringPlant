@@ -277,6 +277,7 @@ async function addCampagne() {
         const data_ = await NODERED_post("/createCampaign", {
             "id": data["id"]
         });
+        console.log(data_);
         if (data_ == null) {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
         }

@@ -16,19 +16,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	$args = json_decode($data, true);
 
     if (!isset($args["name"]) || !is_string($args["name"])){
-        replyError("Impossible de filtrer la campagne", "Paramètre \"name\" manquant/invalide dans la requête.");
+        replyError("Impossible de filtrer les campagnes", "Paramètre \"name\" manquant/invalide dans la requête.");
     }
 
     if (!isset($args["time"]) || !is_string($args["time"])){
-        replyError("Impossible de filtrer la campagne", "Paramètre \"time\" manquant/invalide dans la requête.");
+        replyError("Impossible de filtrer les campagnes", "Paramètre \"time\" manquant/invalide dans la requête.");
     }
 
     if (!isset($args["date"]) || !is_string($args["date"])){
-        replyError("Impossible de filtrer la campagne", "Paramètre \"date\" manquant/invalide dans la requête.");
+        replyError("Impossible de filtrer les campagnes", "Paramètre \"date\" manquant/invalide dans la requête.");
     }
 
     if (!isset($args["processing"]) || !is_bool($args["processing"])){
-        replyError("Impossible de filtrer la campagne", "Paramètre \"processing\" manquant/invalide dans la requête.");
+        replyError("Impossible de filtrer les campagnes", "Paramètre \"processing\" manquant/invalide dans la requête.");
     }
     
     reply(array(
