@@ -65,7 +65,7 @@ async function setSettings()
     if(network.value!=null && network.value!=raspberryNetwork){      
         if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
             //restart
-            const data3 = await NODERED_get("/restart");
+            await NODERED_get("/restart");
         }            
     }
 
