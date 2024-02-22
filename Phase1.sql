@@ -47,6 +47,8 @@ create table Campaigns (
    interval_				int not null,
    volume 					float,
    duration					int not null,
+   humidMode      		int(1) not null,
+   enableFiboxTemp  		int(1) not null,
    finished       			boolean not null,
    alertLevel     			int(1) not null,
    endingDate     			datetime,
