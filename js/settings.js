@@ -82,7 +82,7 @@ async function setSettings()
  */
 async function reset()
 {
-    if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, mesures et paramètres seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
+    if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, les mesures, les paramètres et les configurations seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
 
         const securityKey="I_do_believe_I_am_on_fire"
@@ -92,13 +92,13 @@ async function reset()
         });
 
         if(data != null){
-            displaySuccess("Données supprimées !", "Toutes les campagnes, mesures, logs et paramètres ont été supprimées avec succès.");
+            displaySuccess("Données supprimées !", "Toutes les campagnes, les mesures, les logs, les paramètres et les configurations ont été supprimées avec succès.");
         }
 
 
         hideLoading();
         // redirect
-        window.location = "/setupTime.php"
+        window.location = "/beginning.php"
     }
 }
 
