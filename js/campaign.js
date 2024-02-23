@@ -410,7 +410,7 @@ async function stopCampagne() {
         displayLoading("Arrêt de la campagne...");
 
         const id = document.getElementById("id").value;
-        const data = await NODERED_post("/stop_campaign", {
+        const data = await PHP_post("/PHP_API/stopCampaign.php", {
             "id": id
         });
 

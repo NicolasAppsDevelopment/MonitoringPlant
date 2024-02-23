@@ -278,10 +278,6 @@ async function addCampagne() {
         document.getElementById("id_added_campaign").value = data["id"];
         document.getElementById("add_popup_form").submit();
 
-        const data_ = await NODERED_post("/createCampaign", {
-            "id": data["id"]
-        });
-        console.log(data_);
         if (data_ == null) {
             console.warn("ATTENTION : NodeRed n'a rien retourné");
         }
