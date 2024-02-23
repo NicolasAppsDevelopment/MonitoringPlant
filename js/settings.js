@@ -84,16 +84,15 @@ async function reset()
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, les mesures, les paramètres et les configurations seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
         
-        const data = await PHP_get("/PHP_API/reset.php");
-
-        if(data != null){
-            displaySuccess("Données supprimées !", "Toutes les campagnes, les mesures, les logs, les paramètres et les configurations ont été supprimées avec succès.");
-        }
-
+        const data = await PHP_post("/PHP_API/reset.php");
 
         hideLoading();
-        // redirect
-        window.location = "/beginning.php"
+
+        if(data != null){
+            await displaySuccess("Données supprimées !", "Toutes les campagnes, les mesures, les logs, les paramètres et les configurations ont été supprimées avec succès. Vous allez être redirigés sur la page de première configuration de l'appareil.");
+            // redirect
+            window.location = "/beginning.php"
+        }        
     }
 }
 
