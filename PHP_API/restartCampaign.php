@@ -20,15 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // check if a campaign is already running
-    $url = "$NODE_RED_API_URL/check_working_campaign";
-
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-    $res = curl_exec($curl);
-    curl_close($curl);
-    $data=json_decode($res, true);
+    $data=NodeRedGet("check_working_campaign");
 
     if (!array_key_exists("idCurrent", $data)) {
         replyError("Impossible de redémarrer la campagne", "Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -37,8 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible de redémarrer la campagne", "Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
     }
 
+    restartCampaign($id);
+
     reply(array(
-        "success" => restartCampaign($id)
+        "success" => NodeRedPost("redoCampaign",array("id" => $id,'key' => 'I_do_believe_I_am_on_fire'))
     ));
 } else {
     replyError("Impossible de redémarrer la campagne", "La méthode de requête est incorrecte.");

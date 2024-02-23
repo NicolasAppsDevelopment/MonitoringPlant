@@ -166,9 +166,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
     }
 
-    $id = addCampaign($config_id, $arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration, $arguments["humid_mode"], $arguments["enable_fibox_temp"])
+    $id = addCampaign($config_id, $arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration, $arguments["humid_mode"], $arguments["enable_fibox_temp"]);
 
-    NodeRedPost("createCampaign",array('id' => $id,'key' =>"I_do_believe_I_am_on_fire"));
+    NodeRedPost("createCampaign",array('id' => $id,'key' => 'I_do_believe_I_am_on_fire'));
 
     reply(array(
         "id" => $id

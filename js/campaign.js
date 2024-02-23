@@ -437,21 +437,14 @@ async function restartCampagne() {
         displayLoading("Redémarrage de la campagne...");
 
         const id = document.getElementById("id").value;
-        const data1 = await PHP_post("/PHP_API/restartCampaign.php", {
+        const data = await PHP_post("/PHP_API/restartCampaign.php", {
             "id": id
         });
 
-        if (data1 != null){
-            const data2 = await NODERED_post("/redo_campaign", {
-                "id": id
-            });
-
-            if (data2 == null) {
-                console.warn("ATTENTION : NodeRed n'a rien retourné");
-            } else {
-                document.getElementById("refresh_form").submit();
-            } 
-        }
+        if (data != null) {
+            document.getElementById("refresh_form").submit();
+        } 
+        
 
         hideLoading();
     }
