@@ -1,6 +1,3 @@
-let refresh_delay = 10000;
-let last_measure_datetime = null;
-let refresh_repeat = true;
 let filter = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,13 +5,14 @@ document.addEventListener("DOMContentLoaded", () => {
     getListCampaignJS();
     getStorageCapacity();
     getConfigurations();
+    subscribeRefresh();
 });
 
 async function subscribeRefresh() {
     do {
+        await delay(10000);
         getListCampaignJS(filter, true);
-        await delay(refresh_delay);
-    } while (refresh_repeat);
+    } while (1);
 }
 
 async function getListCampaignJS(filter_ = null, refreshMode = false) {
@@ -97,8 +95,6 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
 
         campagnesContainer.innerHTML = campagnesContainerHTML;
     }
-
-    subscribeRefresh();
 
     const loading = document.getElementById("loading_div");
     if (loading != null) {
