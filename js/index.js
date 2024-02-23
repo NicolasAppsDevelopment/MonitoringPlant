@@ -1,4 +1,6 @@
 let filter = null;
+let refresh_repeat = true;
+let authorize_update = true;
 
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
@@ -11,11 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
 async function subscribeRefresh() {
     do {
         await delay(10000);
-        getListCampaignJS(filter, true);
-    } while (1);
+        if (authorize_update) {
+            getListCampaignJS(filter, true);
+        }
+    } while (refresh_repeat);
 }
 
 async function getListCampaignJS(filter_ = null, refreshMode = false) {
+    authorize_update = false;
     filter = filter_;
     const campagnesContainer = document.getElementById("CM_container");
     if (refreshMode == false){
@@ -35,6 +40,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
     } else {
         data = await PHP_get("/PHP_API/getListCampaign.php");
     }
+    authorize_update = true;
 
     if (data != null){
         let campagnesContainerHTML = "";
@@ -94,6 +100,8 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
         });
 
         campagnesContainer.innerHTML = campagnesContainerHTML;
+    } else {
+        refresh_repeat = false;
     }
 
     const loading = document.getElementById("loading_div");

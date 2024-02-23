@@ -3,6 +3,8 @@ let refresh_delay = 5000;
 let last_measure_datetime = null;
 let last_log_datetime = null;
 let rows = 0;
+let refresh_repeat = true;
+let authorize_update = true;
 
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
@@ -11,13 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function subscribeRefresh() {
     do {
-        getCampaignMeasurements(true);
+        if (authorize_update == true) {
+            getCampaignMeasurements(true);
+        }
         await delay(refresh_delay);
     } while (refresh_repeat);
 }
 
-let refresh_repeat = true;
 async function getCampaignMeasurements(refresh_mode = false) {
+    authorize_update = false;
+
     if (refresh_mode == false){
         displayLoading("Récupération de la campagne...");
         id = document.getElementById("id").value;
@@ -30,6 +35,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
         "last_log_datetime": last_log_datetime,
         "last_measure_datetime": last_measure_datetime
     });
+    authorize_update = true;
 
     if (data != null){
         let campaignInfo = data["campaignInfo"];
@@ -316,6 +322,8 @@ async function getCampaignMeasurements(refresh_mode = false) {
         if (refresh_mode == true) {
             refresh_repeat = true;
         }
+    } else {
+        refresh_repeat = false;
     }
     
     if (refresh_mode == false) {
