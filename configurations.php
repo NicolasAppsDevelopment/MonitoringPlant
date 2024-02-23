@@ -24,7 +24,7 @@
             </div>
 
             <!-- List of configs -->
-            <div class="liste_CM" id="CM_container">
+            <div class="liste_CM" id="config_container">
                 <div class="loading_popup" id="loading_div">
                     <svg class="spinner" viewBox="0 0 50 50">
                         <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
@@ -35,15 +35,15 @@
         </main>
 
         <!-- Create a config popup & button -->
-        <label for="add-popup" class="floating round_btn default add"></label>
+        <label for="add-popup" class="floating round_btn default add" onclick="prepareAddPopup()"></label>
         <input type="checkbox" id="add-popup" class="open_close-popup">
         <div class="popup">
             <div class="popup-inner">
                 <div class="popup-title">
-                    <p>Ajouter une configuration</p>
+                    <p id="add-popup-title">Ajouter une configuration</p>
                     <label for="add-popup" class="round_btn transparent small close"></label>
                 </div>
-                <form id="add_popup_form" class="popup-content" method="post" action="editConfig.php">
+                <form id="add_popup_form" class="popup-content">
                     <input id="id_added_config" type="hidden" name="id" value="-1">
 
                     <div class="label_img_input">
@@ -147,12 +147,12 @@
                         </div>
                     </div>
 
-                    <button class="rect_round_btn gray" type="button" onclick="addConfiguration();">Ajouter</button>
+                    <button id="add-popup-btn" class="rect_round_btn gray" type="button" onclick="saveConfiguration();">Ajouter</button>
                 </form>
             </div>
         </div>
 
         <!-- loading popup -->
-        <?php include "modules/loading_popup.php";?>
+        <?php include "modules/loadingPopup.php";?>
     </body>
 </html>

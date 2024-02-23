@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     reply(array(
         "data" => getListConfiguration(array(
-            "name"=> $args["name"]
+            "name"=> $args["name"],
         ))
     ));
 } else {

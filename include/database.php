@@ -148,6 +148,7 @@ function existCampagne(string $name): bool {
 /**
  * Creates a campaign according to the parameters entered andd returns the id of the new campaign.
  * 
+ * @param int $config_id  Id of the configuration of the new campaign
  * @param string $name  Name of the new campaign
  * @param bool $temperatureSensor  True if the new campaign take the temperature
  * @param bool $CO2Sensor  True if the new campaign take the CO2
@@ -157,16 +158,19 @@ function existCampagne(string $name): bool {
  * @param int $interval  Interval between each measurements of the new campaign
  * @param ?float $volume  Volume in wich the new campaign take measurements
  * @param int $duration  Duration of the new campaign
+ * @param bool $humid_mode  True if the new campaign happened in a humid environment
+ * @param bool $enable_fibox_temp  True if the new campaign take the temperature of the fibox
  * @return int
  */
-function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $O2Sensor,bool $luminositySensor,bool $humiditySensor,int $interval, ?float $volume, int $duration, int $altitude) : int
+function addCampaign(int $config_id, string $name, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, int $interval, ?float $volume, int $duration, bool $humid_mode, bool $enable_fibox_temp) : int
 {
     try {
         if (existCampagne($name)) {
             throw new Exception("Une campagne de mesure avec le même nom existe déjà. Veuillez en choisir un autre.");
         }
 
-        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration SECOND, :varAltitude))", [
+        fetchAll("INSERT INTO Campaigns VALUES (NULL, :varConfigId, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, :varHumidMode, :varEnableFiboxTemp, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
+            'varConfigId' => $config_id,
             'varName' => htmlspecialchars($name),
             'varTemperatureSensor' => (int)$temperatureSensor,
             'varCO2Sensor' => (int)$CO2Sensor,
@@ -176,7 +180,9 @@ function addCampaign(string $name,bool $temperatureSensor,bool $CO2Sensor,bool $
             'varInterval' => $interval,
             'varVolume' => $volume,
             'varDuration' => $duration,
-            'varAltitude' => $altitude 
+            'varDuration2' => $duration, // PDO ne permet pas d'utiliser le même paramètre de liaison plus d'une fois dans une requête !
+            'varHumidMode' => (int)$humid_mode,
+            'varEnableFiboxTemp' => (int)$enable_fibox_temp
         ]);
 
         return getIdCampagne($name);
@@ -388,8 +394,15 @@ function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool 
 //Recovery of all the data of the campaign whose id is entered as a parameter
 function getCampaign(int $id, ?string $logSinceDatetime = NULL, ?string $measureSinceDatetime = NULL) : array {
     try {
+        $campaignInfo = getInfoCampaign($id);
+        try {
+            $campaignInfo["nameConfig"] = getNameConfiguration($campaignInfo["idConfig"]);
+        } catch (\Throwable $th) {
+            $campaignInfo["nameConfig"] = "Configuration supprimée";
+        }
+
         return array(
-            "campaignInfo" => getInfoCampaign($id),
+            "campaignInfo" => $campaignInfo,
             "measurements" => getMeasurements($id, $measureSinceDatetime),
             "logs" => getLogs($id, $logSinceDatetime)
         );
@@ -534,7 +547,7 @@ function setParametersPHP(int $supprInterval, bool $enabled) : bool
  */
 function getListConfiguration(array $filter = null) : array
 {
-    $query = "SELECT * FROM Configurations  ";
+    $query = "SELECT * FROM Configurations ";
     $whereClauses = [];
     $parameters = []; 
 
@@ -550,7 +563,7 @@ function getListConfiguration(array $filter = null) : array
         }
     }
 
-    $query .= join(" AND ", $whereClauses) . " ORDER BY finished ASC, beginDate DESC";
+    $query .= join(" AND ", $whereClauses) . " ORDER BY name ASC";
 
     try {
         return fetchAll($query, $parameters);
@@ -567,7 +580,7 @@ function getListConfiguration(array $filter = null) : array
  */
 function getIdConfiguration(string $name): int {
     try {
-        $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
+        $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName", [
             'varName' => htmlspecialchars($name)
         ]);
     
@@ -581,18 +594,47 @@ function getIdConfiguration(string $name): int {
     }
 }
 
+/**
+ * Return the name of the configuration with a given id
+ * 
+ * @param int $id Id of a configuration
+ * @return string
+ */
+function getNameConfiguration(int $id): string {
+    try {
+        $results = fetchAll("SELECT name FROM Configurations WHERE idConfig = :varId", [
+            'varId' => $id
+        ]);
+    
+        if (count($results) > 0) {
+            return $results[0]["name"];
+        } else {
+            throw new Exception("L'identifiant de la configuration est introuvable.");
+        }
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer le nom de la configuration", $th->getMessage());
+    }
+}
 
 /**
  * Returns true if the name entered in parameter corresponds to an existing configuration.
  * 
  * @param string $name Name of a configuration
+ * @param int $id Id of a configuration (optional, if provided, the function wiil exclude the configuration with this id from the check)
  * @return bool
  */
-function existConfiguration(string $name): bool {
+function existConfiguration(string $name, int $id = -1): bool {
     try {
-        $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
-            'varName' => htmlspecialchars($name)
-        ]);
+        if ($id != -1) {
+            $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName AND idConfig != :varId ORDER BY 1 DESC", [
+                'varName' => htmlspecialchars($name),
+                'varId' => $id
+            ]);
+        } else {
+            $results = fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
+                'varName' => htmlspecialchars($name)
+            ]);
+        }
     
         if (count($results) > 0) {
             return true;
@@ -615,47 +657,46 @@ function supprConfiguration(int $id) : bool
 {
     //Update any campaign related
     try {
-        fetchAll("UPDATE Campaigns SET idConfig = -1 WHERE idConfig = :varId", [
+        fetchAll("UPDATE Campaigns SET idConfig = null WHERE idConfig = :varId", [
             'varId' => $id
         ]);
-        return true;
     } catch (\Throwable $th) {
-        replyError("Impossible de modifier les campagnes liées à cette configuration", $th->getMessage());
+        replyError("Impossible de supprimer les références de la configuration pour les campagnes concernées", $th->getMessage());
     }
-
 
     //Removal of the campaign
     try {
         fetchAll("DELETE FROM Configurations WHERE idConfig = :varId", [
             'varId' => $id
         ]);
-        return true;
     } catch (\Throwable $th) {
         replyError("Impossible de supprimer la configuration", $th->getMessage());
     }
+
+    return true;
 }
 
 /**
  * Add a configuration into the database
  * Returns true if no errors occured
  * 
- * @param name Name of the configuration
- * @param f1 Constant
- * @param m Constant
- * @param dPhi1 Constant
- * @param dPhi2 Constant
- * @param dKSV1 Constant
- * @param dKSV2 Constant
- * @param cal0 Constant
- * @param cal2nd Constant
- * @param t0 Constant
- * @param t2nd Constant
- * @param pressure Constant
- * @param o2cal2nd Constant
- * @param altitude Altitude for the configuration
- * @param calib_is_humid If calib has been done in humid conditions
+ * @param string name Name of the configuration
+ * @param float f1 Constant
+ * @param float m Constant
+ * @param float dPhi1 Constant
+ * @param float dPhi2 Constant
+ * @param float dKSV1 Constant
+ * @param float dKSV2 Constant
+ * @param float cal0 Constant
+ * @param float cal2nd Constant
+ * @param float t0 Constant
+ * @param float t2nd Constant
+ * @param int pressure Constant
+ * @param int o2cal2nd Constant
+ * @param int altitude Altitude for the configuration
+ * @param bool calib_is_humid If calib has been done in humid conditions
  */
-function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calib_is_humid) : int
+function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calib_is_humid) : bool
 {
     try {
         if (existConfiguration($name)) {
@@ -680,8 +721,82 @@ function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float
             'varCalibIsHumid' => (int)$calib_is_humid
         ]);
 
-        return getIdCampagne($name);
+        return true;
     } catch (\Throwable $th) {
         replyError("Impossible d'ajouter la configuration.", $th->getMessage());
+    }
+}
+
+/**
+ * Add a configuration into the database
+ * Returns true if no errors occured
+ * 
+ * @param string name Name of the configuration
+ * @param float f1 Constant
+ * @param float m Constant
+ * @param float dPhi1 Constant
+ * @param float dPhi2 Constant
+ * @param float dKSV1 Constant
+ * @param float dKSV2 Constant
+ * @param float cal0 Constant
+ * @param float cal2nd Constant
+ * @param float t0 Constant
+ * @param float t2nd Constant
+ * @param int pressure Constant
+ * @param int o2cal2nd Constant
+ * @param int altitude Altitude for the configuration
+ * @param bool calib_is_humid If calib has been done in humid conditions
+ */
+function editConfiguration(int $id, string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calib_is_humid) : bool
+{
+    try {
+        if (existConfiguration($name, $id)) {
+            throw new Exception("Une configuration avec le même nom existe déjà. Veuillez en choisir un autre.");
+        }
+
+        fetchAll("UPDATE Configurations SET name = :varName, altitude = :varAltitude, f1 = :varF1, m = :varM, dPhi1 = :varDPhi1, dPhi2 = :varDPhi2, dKSV1 = :varDKSV1, dKSV2 = :varDKSV2, pressure = :varPressure, calibIsHumid = :varCalibIsHumid, cal0 = :varCal0, cal2nd = :varCal2nd, o2Cal2nd = :varO2Cal2nd, t0 = :varT0, t2nd = :varT2nd WHERE idConfig = :varId", [
+            'varName' => htmlspecialchars($name),
+            'varF1' => $f1,
+            'varM' => $m,
+            'varDPhi1' => $dPhi1,
+            'varDPhi2' => $dPhi2,
+            'varDKSV1' => $dKSV1,
+            'varDKSV2' => $dKSV2,
+            'varCal0' => $cal0,
+            'varCal2nd' => $cal2nd,
+            'varT0' => $t0,
+            'varT2nd' => $t2nd,
+            'varPressure' => $pressure,
+            'varO2Cal2nd' => $o2cal2nd,
+            'varAltitude' => $altitude,
+            'varCalibIsHumid' => (int)$calib_is_humid,
+            'varId' => $id
+        ]);
+        
+        return true;
+    } catch (\Throwable $th) {
+        replyError("Impossible de modifier la configuration.", $th->getMessage());
+    }
+}
+
+/**
+ * Get the configuration from the database with a given id
+ * 
+ * @param int id
+ * @return array
+ */
+function getConfiguration(int $id) : array {
+    try {
+        $results = fetchAll("SELECT * FROM Configurations WHERE idConfig = :varId", [
+            'varId' => $id
+        ]);
+
+        if (count($results) > 0) {
+            return $results[0];
+        } else {
+            throw new Exception("La configuration associé à l'identifiant donné est introuvable.");
+        }
+    } catch (\Throwable $th) {
+        replyError("Impossible de récupérer les informations de la configuration", $th->getMessage());
     }
 }

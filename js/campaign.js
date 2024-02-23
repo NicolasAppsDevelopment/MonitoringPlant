@@ -62,6 +62,15 @@ async function getCampaignMeasurements(refresh_mode = false) {
             } else {
                 volume.innerHTML = "N/A";
             }
+
+            const id_config = document.getElementById("id_config");
+            id_config.innerHTML = campaignInfo["nameConfig"];
+
+            const humid_mode = document.getElementById("humid_mode");
+            humid_mode.innerHTML = getReadableBool(campaignInfo["humidMode"]);
+
+            const enable_fibox_temp = document.getElementById("enable_fibox_temp");
+            enable_fibox_temp.innerHTML = getReadableBool(campaignInfo["enableFiboxTemp"]);
         }
 
         let dateFin = new Date(campaignInfo["beginDate"]);

@@ -1,6 +1,6 @@
-const API_IP_ADDRESS = "192.168.4.1";
-const PHP_API_PORT = "80";
-const NODERED_API_PORT = "1880";
+const API_IP_ADDRESS = "91.160.147.139";
+const PHP_API_PORT = "38080";
+const NODERED_API_PORT = "32880";
 
 let blurCompatibility = true;
 
@@ -168,6 +168,10 @@ async function hideLoading() {
 
 async function closePopup(id) {
     document.getElementById(id).checked = false;
+}
+
+async function openPopup(id) {
+    document.getElementById(id).checked = true;
 }
 
 async function post(url, data) {
@@ -357,6 +361,9 @@ function getReadableTimeAndUnit(seconds) {
     return { "value": hours, "unit": unit };
 }
 
+function getReadableBool(bool) {
+    return bool ? "Activé" : "Désactivé";
+}
 
 async function checkTime() {
     const client_datetime = new Date();

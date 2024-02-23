@@ -21,7 +21,7 @@
     <script src="./js/slider.js"></script>
     <link href="./css/slider.css" rel="stylesheet">
     <script src="./js/chart.js"></script>
-    <script src="./js/display_chart.js"></script>
+    <script src="./js/displayChart.js"></script>
     <script src="./js/functions.js"></script>
     <script src="./js/campaign.js"></script>
 
@@ -172,6 +172,33 @@
                                         </th>
                                         <td>
                                             <p id="volume"></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <img src="./img/volume.svg" alt="">
+                                            <p class="title_param">Configuration : </p>
+                                        </th>
+                                        <td>
+                                            <p id="id_config"></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <img src="./img/volume.svg" alt="">
+                                            <p class="title_param">Mode humide : </p>
+                                        </th>
+                                        <td>
+                                            <p id="humid_mode"></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <img src="./img/volume.svg" alt="">
+                                            <p class="title_param">Capteur temp. Fibox : </p>
+                                        </th>
+                                        <td>
+                                            <p id="enable_fibox_temp"></p>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -408,7 +435,7 @@
     </main>
 
     <!-- loading popup displayed with the page -->
-    <?php include "modules/loading_popup_displayed.php";?>
+    <?php include "modules/loadingPopupDisplayed.php";?>
 </body>
 
 </html>

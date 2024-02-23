@@ -1,11 +1,13 @@
 let refresh_delay = 5000;
 let last_measure_datetime = null;
 let refresh_repeat = true;
+let configurations = new Map();
 
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
     getListCampaignJS();
     getStorageCapacity();
+    getConfigurations();
 });
 
 async function subscribeRefresh() {
@@ -34,7 +36,6 @@ async function getListCampaignJS(filter = null) {
     }
 
     if (data != null){
-        const campagnesContainer = document.getElementById("CM_container");
         campagnesContainer.innerHTML = "";
 
         let campagnesContainerHTML = "";
@@ -233,6 +234,9 @@ async function addCampagne() {
     const interval_unit = document.getElementById("interval_unit_combo_box");
     const volume = document.getElementById("volume_input");
     const volume_unit = document.getElementById("volume_unit_combo_box");
+    const config = document.getElementById("config_combo_box");
+    const humid_mode = document.getElementById("humid_mode");
+    const enable_fibox_temp = document.getElementById("enable_fibox_temp");
 
     if (title.validity.badInput === true) {
         hideLoading();
@@ -267,7 +271,10 @@ async function addCampagne() {
         "interval": interval.value,
         "interval_unit": interval_unit.value,
         "volume": volume.value,
-        "volume_unit": volume_unit.value
+        "volume_unit": volume_unit.value,
+        "config_id": config.value,
+        "humid_mode": humid_mode.checked,
+        "enable_fibox_temp": enable_fibox_temp.checked
     });
 
     if (data != null) {
@@ -301,6 +308,19 @@ function handleKeyPressSearchBar(e){
     var key=e.keyCode || e.which;
     if (key==13){
     filterCampagnes();
+    }
+}
+
+async function getConfigurations() {
+    let data = await PHP_get("/PHP_API/getListConfiguration.php");
+    if (data != null){
+        const select = document.getElementById("config_combo_box");
+        data["data"].forEach(configuration => {
+            const option = document.createElement("option");
+            option.value = configuration["idConfig"];
+            option.innerHTML = configuration["name"];
+            select.appendChild(option);
+        });
     }
 }
 

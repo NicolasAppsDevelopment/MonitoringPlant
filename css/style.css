@@ -1967,7 +1967,7 @@ input:invalid::placeholder {
 
 
 
-.popupHelp, .popup {
+.popupHelp > .popup {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1984,12 +1984,12 @@ input:invalid::placeholder {
     transition: 250ms all;
     
 }
-.open_close-popupHelp , .popup{
+.open_close-popupHelp > .popup{
     visibility: none;
     opacity: 0;
 }
 
-.open_close-popupHelp:checked , .popup{
+.open_close-popupHelp:checked > .popup{
     visibility: visible;
     opacity: 1;
 }

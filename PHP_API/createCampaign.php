@@ -110,6 +110,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($interval > $duration) {
         replyError("Impossible d'ajouter la campagne", "L'intervalle demandé doit être inférieur ou égale à la durée de la campagne.");
     }
+
+    $config_id = null;
+    if (!isset($arguments["config_id"])){
+        replyError("Impossible d'ajouter la campagne", "L'identifiant de configuration n'a pas été renseigné. Veuillez entrer un nombre entier positif puis réessayer.");
+    }
+    if (empty($arguments["config_id"])){
+        replyError("Impossible d'ajouter la campagne", "Aucune configuration n'a été séléctionné. Veuillez séléctionner une configuration puis réessayer.");
+    }
+    $config_id = filter_var($arguments["config_id"], FILTER_VALIDATE_INT);
+    if ($config_id === false) {
+        replyError("Impossible d'ajouter la campagne", "Le format de l'identifiant de configuration de la campagne est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
+    }
+
+    if (!isset($arguments["humid_mode"])){
+        replyError("Impossible d'ajouter la campagne", "Le mode de mesure est manquant. Veuillez réessayer.");
+        if (!is_bool($arguments["humid_mode"])){
+            replyError("Impossible d'ajouter la campagne", "Le format du mode de mesure est incorrecte.");
+        }
+    }
+
+    if (!isset($arguments["enable_fibox_temp"])){
+        replyError("Impossible d'ajouter la campagne", "Le mode d'activation du capteur de température du Fibox est manquant. Veuillez réessayer.");
+        if (!is_bool($arguments["enable_fibox_temp"])){
+            replyError("Impossible d'ajouter la campagne", "Le format du mode d'activation du capteur de température du Fibox est incorrecte.");
+        }
+    }
+    
     
     // check if a campaign is already running
     $data = NodeRedGet("check_working_campaign");
@@ -140,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     reply(array(
-        "id" => addCampaign($arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration, $altitude)
+        "id" => addCampaign($config_id, $arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration, $arguments["humid_mode"], $arguments["enable_fibox_temp"])
     ));
 } else {
     replyError("Impossible d'ajouter la campagne", "La méthode de requête est incorrecte.");
