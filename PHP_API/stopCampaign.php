@@ -11,16 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$arguments = json_decode($data, true);
 
-    if (!isset($arguments["datetime"])){
-        replyError("Impossible de paramétrer l'heure", "La date et/ou l'heure ne sont pas renseignés");
+    if (!isset($arguments["id"])){
+        replyError("Impossible d'arrêter la campagne'", "L'identifiant de la campagne n'est pas renseigné");
     }
 
-    if (!is_string($arguments["datetime"])){
-        replyError("Impossible de paramétrer l'heure", "Le format de la date renseignée est incorrect. Veuillez réessayer.");
+    if (!is_int($arguments["id"])){
+        replyError("Impossible d'arrêter la campagne", "Le format de l'identifiant de la campagne renseigné est incorrect. Veuillez réessayer.");
     }
 
     reply(
-        NodeRedPost("setDatetime", array('datetime' => $arguments["datetime"],'key' =>"I_do_believe_I_am_on_fire"))
+        NodeRedPost("stop_campaign", array('id' => $arguments["id"],'key' =>"I_do_believe_I_am_on_fire"))
     );
 
 } else {

@@ -65,7 +65,7 @@ async function setSettings()
     if(network.value!=null && network.value!=raspberryNetwork.name){      
         if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
             //restart
-            await NODERED_get("/restart");
+            await PHP_get("/PHP_API/restart.php");
         }            
     }
 
@@ -84,12 +84,8 @@ async function reset()
 {
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, les mesures, les paramètres et les configurations seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
-
-        const securityKey="I_do_believe_I_am_on_fire"
         
-        const data = await PHP_post("/PHP_API/reset.php", {
-            "key": securityKey
-        });
+        const data = await PHP_get("/PHP_API/reset.php");
 
         if(data != null){
             displaySuccess("Données supprimées !", "Toutes les campagnes, les mesures, les logs, les paramètres et les configurations ont été supprimées avec succès.");
