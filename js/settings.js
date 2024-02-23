@@ -52,6 +52,7 @@ async function setSettings()
         return;
     } 
 
+    const raspberryNetwork = await NODERED_get("/getAccessPoint");
     
     let data1 = await PHP_post("/PHP_API/setSettings.php", {
         "timeConservation": timeConservation.value,
@@ -60,8 +61,6 @@ async function setSettings()
         "network": network.value
     });
 
-    const raspberryNetwork = await NODERED_get("/getAccessPoint");
-    
     if(network.value!=null && network.value!=raspberryNetwork.name){   
         if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
             //restart
