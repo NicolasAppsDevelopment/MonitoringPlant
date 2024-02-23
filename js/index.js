@@ -1,4 +1,4 @@
-let refresh_delay = 5000;
+let refresh_delay = 10000;
 let last_measure_datetime = null;
 let refresh_repeat = true;
 let configurations = new Map();
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function subscribeRefresh() {
     do {
-         //getListCampaignJS();
+         getListCampaignJS();
         await delay(refresh_delay);
     } while (refresh_repeat);
 }

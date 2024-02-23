@@ -319,19 +319,19 @@ function resetAll() : bool
         replyError("Impossible de supprimer les logs", $th->getMessage());
     }
 
-    //Removal of configurations
-    try {
-        fetchAll("DELETE FROM Configurations");
-    } catch (\Throwable $th) {
-        replyError("Impossible de supprimer les configurations", $th->getMessage());
-    }
-
     //Removal of campaigns
     try {
         fetchAll("DELETE FROM Campaigns");
         return true;
     } catch (\Throwable $th) {
         replyError("Impossible de supprimer les campagnes", $th->getMessage());
+    }
+
+    //Removal of configurations
+    try {
+        fetchAll("DELETE FROM Configurations");
+    } catch (\Throwable $th) {
+        replyError("Impossible de supprimer les configurations", $th->getMessage());
     }
 }
 
