@@ -10,14 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$arguments = json_decode($data, true);
 
-    if (!isset($arguments["name"]) || empty($arguments["name"])){
+    if (!isset($arguments["name"]) || $arguments["name"] === ""){
         replyError("Impossible d'ajouter la configuration", "Le nom de votre configuration n'a pas été renseigné. Veuillez donner un nom à votre configuration puis réessayer.");
     }
 
     // get float constants from request
     // f1, m, dPhi1, dPhi2, dKSV1, dKSV2
     $f1 = null;
-    if (isset($arguments["f1"]) && !empty($arguments["f1"])) {
+    if (isset($arguments["f1"]) && $arguments["f1"] !== "") {
         $f1 = filter_var($arguments["f1"], FILTER_VALIDATE_FLOAT);
         if ($f1 === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante f1 est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $m = null;
-    if (isset($arguments["m"]) && !empty($arguments["m"])) {
+    if (isset($arguments["m"]) && $arguments["m"] !== "") {
         $m = filter_var($arguments["m"], FILTER_VALIDATE_FLOAT);
         if ($m === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante m est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $dPhi1 = null;
-    if (isset($arguments["dPhi1"]) && !empty($arguments["dPhi1"])) {
+    if (isset($arguments["dPhi1"]) && $arguments["dPhi1"] !== "") {
         $dPhi1 = filter_var($arguments["dPhi1"], FILTER_VALIDATE_FLOAT);
         if ($dPhi1 === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante dPhi1 est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $dPhi2 = null;
-    if (isset($arguments["dPhi2"]) && !empty($arguments["dPhi2"])) {
+    if (isset($arguments["dPhi2"]) && $arguments["dPhi2"] !== "") {
         $dPhi2 = filter_var($arguments["dPhi2"], FILTER_VALIDATE_FLOAT);
         if ($dPhi2 === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante dPhi2 est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $dKSV1 = null;
-    if (isset($arguments["dKSV1"]) && !empty($arguments["dKSV1"])) {
+    if (isset($arguments["dKSV1"]) && $arguments["dKSV1"] !== "") {
         $dKSV1 = filter_var($arguments["dKSV1"], FILTER_VALIDATE_FLOAT);
         if ($dKSV1 === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante dKSV1 est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $dKSV2 = null;
-    if (isset($arguments["dKSV2"]) && !empty($arguments["dKSV2"])) {
+    if (isset($arguments["dKSV2"]) && $arguments["dKSV2"] !== "") {
         $dKSV2 = filter_var($arguments["dKSV2"], FILTER_VALIDATE_FLOAT);
         if ($dKSV2 === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante dKSV2 est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // cal0, cal2nd, t0, t2nd
 
     $cal0 = null;
-    if (isset($arguments["cal0"]) && !empty($arguments["cal0"])) {
+    if (isset($arguments["cal0"]) && $arguments["cal0"] !== "") {
         $cal0 = filter_var($arguments["cal0"], FILTER_VALIDATE_FLOAT);
         if ($cal0 === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante cal0 est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $cal2nd = null;
-    if (isset($arguments["cal2nd"]) && !empty($arguments["cal2nd"])) {
+    if (isset($arguments["cal2nd"]) && $arguments["cal2nd"] !== "") {
         $cal2nd = filter_var($arguments["cal2nd"], FILTER_VALIDATE_FLOAT);
         if ($cal2nd === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante cal2nd est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $t0 = null;
-    if (isset($arguments["t0"]) && !empty($arguments["t0"])) {
+    if (isset($arguments["t0"]) && $arguments["t0"] !== "") {
         $t0 = filter_var($arguments["t0"], FILTER_VALIDATE_FLOAT);
         if ($t0 === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante t0 est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $t2nd = null;
-    if (isset($arguments["t2nd"]) && !empty($arguments["t2nd"])) {
+    if (isset($arguments["t2nd"]) && $arguments["t2nd"] !== "") {
         $t2nd = filter_var($arguments["t2nd"], FILTER_VALIDATE_FLOAT);
         if ($t2nd === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante t2nd est incorrecte. Veuillez entrer un nombre positif puis réessayer.");
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // pressure, o2cal2nd, altitude
 
     $pressure = null;
-    if (isset($arguments["pressure"]) && !empty($arguments["pressure"])) {
+    if (isset($arguments["pressure"]) && $arguments["pressure"] !== "") {
         $pressure = filter_var($arguments["pressure"], FILTER_VALIDATE_INT);
         if ($pressure === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante pressure est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $o2cal2nd = null;
-    if (isset($arguments["o2cal2nd"]) && !empty($arguments["o2cal2nd"])) {
+    if (isset($arguments["o2cal2nd"]) && $arguments["o2cal2nd"] !== "") {
         $o2cal2nd = filter_var($arguments["o2cal2nd"], FILTER_VALIDATE_INT);
         if ($o2cal2nd === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de la constante o2cal2nd est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $altitude = null;
-    if (isset($arguments["altitude"]) && !empty($arguments["altitude"])) {
+    if (isset($arguments["altitude"]) && $arguments["altitude"] !== "") {
         $altitude = filter_var($arguments["altitude"], FILTER_VALIDATE_INT);
         if ($altitude === false) {
             replyError("Impossible d'ajouter la configuration", "Le format de l'altitude est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
