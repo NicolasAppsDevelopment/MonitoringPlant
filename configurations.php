@@ -53,7 +53,7 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="alt_input">Altitude (en mètre)</label>
-                        <input class="input_field edit" id="alt_input" type="number" placeholder="Altitude" required>
+                        <input class="input_field elevation" id="alt_input" type="number" placeholder="Altitude" required>
                     </div>
 
                     <!-- Constants PreSens -->
@@ -63,32 +63,32 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="f1_input">f1</label>
-                        <input class="input_field edit" id="f1_input" type="number" step=".000000001" placeholder="f1" required>
+                        <input class="input_field object" id="f1_input" type="number" step=".000000001" placeholder="f1" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="m_input">m</label>
-                        <input class="input_field edit" id="m_input" type="number" step=".000000001" placeholder="m" required>
+                        <input class="input_field object" id="m_input" type="number" step=".000000001" placeholder="m" required>
                     </div>
                     
                     <div class="label_img_input">
                         <label class="label_field" for="dphi1_input">dPhi1</label>
-                        <input class="input_field edit" id="dphi1_input" type="number" step=".000000001" placeholder="dPhi1" required>
+                        <input class="input_field object" id="dphi1_input" type="number" step=".000000001" placeholder="dPhi1" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="dphi2_input">dPhi2</label>
-                        <input class="input_field edit" id="dphi2_input" type="number" step=".000000001" placeholder="dPhi2" required>
+                        <input class="input_field object" id="dphi2_input" type="number" step=".000000001" placeholder="dPhi2" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="dksv1_input">dKSV1</label>
-                        <input class="input_field edit" id="dksv1_input" type="number" step=".000000001" placeholder="dKsv1" required>
+                        <input class="input_field object" id="dksv1_input" type="number" step=".000000001" placeholder="dKsv1" required>
                     </div>
 
                     <div class="label_img_input">
                         <label class="label_field" for="dksv2_input">dKSV2</label>
-                        <input class="input_field edit" id="dksv2_input" type="number" step=".000000001" placeholder="dKsv2" required>
+                        <input class="input_field object" id="dksv2_input" type="number" step=".000000001" placeholder="dKsv2" required>
                     </div>
 
                     <div class="section_head_container">
@@ -97,7 +97,7 @@
 
                     <div class="label_img_input">
                         <label class="label_field" for="pressure_input">Pression atmosphérique (en hPa)</label>
-                        <input class="input_field edit" id="pressure_input" type="number" min="0" placeholder="Pression" required>
+                        <input class="input_field pressure" id="pressure_input" type="number" min="0" placeholder="Pression" required>
                     </div>
 
                     <div class="checkbox">
@@ -118,12 +118,12 @@
                     <div class="sub_section_container">
                         <div class="label_img_input">
                             <label class="label_field" for="cal0_input">Phase (en °)</label>
-                            <input class="input_field edit" id="cal0_input" type="number" step=".0001" placeholder="Phase cal0" required>
+                            <input class="input_field sinus" id="cal0_input" type="number" step=".0001" placeholder="Phase cal0" required>
                         </div>
 
                         <div class="label_img_input">
                             <label class="label_field" for="t0_input">Température (en °C)</label>
-                            <input class="input_field edit" id="t0_input" type="number" step=".01" placeholder="Température cal0" required>
+                            <input class="input_field temperature" id="t0_input" type="number" step=".01" placeholder="Température cal0" required>
                         </div>
                     </div>
 
@@ -133,17 +133,17 @@
                     <div class="sub_section_container bottom_gap">
                         <div class="label_img_input">
                             <label class="label_field" for="o2cal2nd_input">%air-sat. (en %)</label>
-                            <input class="input_field edit" id="o2cal2nd_input" type="number" min="0" max="100" placeholder="%air-sat." required>
+                            <input class="input_field percent" id="o2cal2nd_input" type="number" min="0" max="100" placeholder="%air-sat." required>
                         </div>
 
                         <div class="label_img_input">
                             <label class="label_field" for="cal2nd_input">Phase (en °)</label>
-                            <input class="input_field edit" id="cal2nd_input" type="number"  step=".0001" placeholder="Phase cal2nd" required>
+                            <input class="input_field sinus" id="cal2nd_input" type="number"  step=".0001" placeholder="Phase cal2nd" required>
                         </div>
 
                         <div class="label_img_input">
                             <label class="label_field" for="t2nd_input">Température (en °C)</label>
-                            <input class="input_field edit" id="t2nd_input" type="number"  step=".01" placeholder="Température cal2nd" required>
+                            <input class="input_field temperature" id="t2nd_input" type="number"  step=".01" placeholder="Température cal2nd" required>
                         </div>
                     </div>
 

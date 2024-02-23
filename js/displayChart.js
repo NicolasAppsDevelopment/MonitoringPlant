@@ -145,7 +145,7 @@ async function initChart(date_array, lum_array, hum_array, temp_array, o2_array,
 
         switch (data_name) {
           case "O2":
-            data_val += " mg/L";
+            data_val += " %";
             break;
           case "CO2":
             data_val += " vol%";
