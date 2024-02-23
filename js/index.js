@@ -1,7 +1,7 @@
 let refresh_delay = 10000;
 let last_measure_datetime = null;
 let refresh_repeat = true;
-let configurations = new Map();
+let filter = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     checkTime();
@@ -12,21 +12,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function subscribeRefresh() {
     do {
-         getListCampaignJS();
+        getListCampaignJS(filter, true);
         await delay(refresh_delay);
     } while (refresh_repeat);
 }
 
-async function getListCampaignJS(filter = null) {
+async function getListCampaignJS(filter_ = null, refreshMode = false) {
+    filter = filter_;
     const campagnesContainer = document.getElementById("CM_container");
-    campagnesContainer.innerHTML = `
-    <div class="loading_popup" id="loading_div">
-        <svg class="spinner" viewBox="0 0 50 50">
-            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-        </svg>
-        <p class="loading_msg">Récupération des campagnes...</p>
-    </div>
-    `;
+    if (refreshMode == false){
+        campagnesContainer.innerHTML = `
+        <div class="loading_popup" id="loading_div">
+            <svg class="spinner" viewBox="0 0 50 50">
+                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
+            <p class="loading_msg">Récupération des campagnes...</p>
+        </div>
+        `;
+    }
 
     let data = null;
     if (filter != null) {
@@ -36,8 +39,6 @@ async function getListCampaignJS(filter = null) {
     }
 
     if (data != null){
-        campagnesContainer.innerHTML = "";
-
         let campagnesContainerHTML = "";
 
         data["data"].forEach(campagne => {
