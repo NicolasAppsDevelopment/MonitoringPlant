@@ -36,7 +36,7 @@ create table Configurations (
 /*==============================================================*/
 create table Campaigns (
    idCampaign          		int not null auto_increment,
-   idConfig					int not null,
+   idConfig					int,
    name               		varchar(50) not null,
    beginDate				datetime not null,
    temperatureSensorState  	int(1) not null,
