@@ -262,7 +262,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
                 o2 = "";
                 o2_array.push(null);
             } else {
-                o2 += " mg/L";
+                o2 += " %";
                 o2_array.push(parseFloat(o2));
             }
 

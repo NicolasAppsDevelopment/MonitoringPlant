@@ -1188,6 +1188,24 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 .input_field.key {
     background-image: url('../img/key.svg');
 }
+.input_field.elevation {
+    background-image: url('../img/elevation.svg');
+}
+.input_field.object {
+    background-image: url('../img/object.svg');
+}
+.input_field.pressure {
+    background-image: url('../img/pressure.svg');
+}
+.input_field.temperature {
+    background-image: url('../img/temperature.svg');
+}
+.input_field.sinus {
+    background-image: url('../img/sinus.svg');
+}
+.input_field.percent {
+    background-image: url('../img/percent.svg');
+}
 
 
 .input_field::placeholder {

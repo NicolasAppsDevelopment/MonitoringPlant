@@ -131,7 +131,7 @@
                                 <tbody>
                                     <tr>
                                         <th>
-                                            <img src="./img/timer.svg" alt="">
+                                            <img src="./img/calendar.svg" alt="">
                                             <p class="title_param">Date de démarrage : </p>
                                         </th>
                                         <td>
@@ -176,7 +176,7 @@
                                     </tr>
                                     <tr>
                                         <th>
-                                            <img src="./img/volume.svg" alt="">
+                                            <img src="./img/config.svg" alt="">
                                             <p class="title_param">Configuration : </p>
                                         </th>
                                         <td>
@@ -185,7 +185,7 @@
                                     </tr>
                                     <tr>
                                         <th>
-                                            <img src="./img/volume.svg" alt="">
+                                            <img src="./img/humidity.svg" alt="">
                                             <p class="title_param">Mode humide : </p>
                                         </th>
                                         <td>
@@ -194,7 +194,7 @@
                                     </tr>
                                     <tr>
                                         <th>
-                                            <img src="./img/volume.svg" alt="">
+                                            <img src="./img/temperature.svg" alt="">
                                             <p class="title_param">Capteur temp. Fibox : </p>
                                         </th>
                                         <td>
