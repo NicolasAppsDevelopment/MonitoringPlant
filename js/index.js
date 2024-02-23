@@ -1,4 +1,4 @@
-let refresh_delay = 5000;
+let refresh_delay = 10000;
 let last_measure_datetime = null;
 let refresh_repeat = true;
 let filter = null;
