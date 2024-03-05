@@ -391,3 +391,17 @@ async function delay(milliSeconds) {
     // return await for better async stack trace support in case of errors.
     return await new Promise(resolve => setTimeout(resolve, milliSeconds));
 }
+
+
+function displayHide(icon, id) {
+    let input = this.document.getElementById(id);
+    if (icon.classList.contains('btn-eye-show')) {
+        icon.classList.add('btn-eye-hide');
+        icon.classList.remove('btn-eye-show');
+        input.setAttribute('type', 'text')
+    } else {
+        icon.classList.add('btn-eye-show');
+        icon.classList.remove('btn-eye-hide');
+        input.setAttribute('type', 'password')
+    }
+} 

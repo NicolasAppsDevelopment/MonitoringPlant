@@ -54,11 +54,26 @@
 
             <div class="label_img_input no-margin-top">
                 <label class="label_field" for="network">Nom du WIFI</label>
-                <input class="input_field edit" id="network" name="network" type="text" placeholder="nom" min="0" autocomplete="off">
+                <input class="input_field edit" id="network" name="network" type="text" placeholder="Nom" autocomplete="off" minlength="1">
             </div>
 
+            <label class="label_field" for="password">Mot de passe du WIFI</label>
+            <div class="label_img_input no-margin-top password-input">
+                <span class="btn-show-pass" id="btn-show-pass">
+                  <i class="btn-eye btn-eye-show" onclick="displayHide(this, 'password')"></i>
+                </span>
+                <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
+            </div>
+
+            <div class="section_head_container">
+                <h2 class="section_head">Accès administrateur</h2>
+            </div>
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Refaire les questions de sécurités</button>
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Modifier le mot de passe</button>
+
+            <div class="section_head_container"></div>
             <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Enregistrer</button>
-            <button class="rect_round_btn destructive" type="button" onclick="reset()">Effacer les données</button>
+            <button class="rect_round_btn destructive bottom_gap" type="button" onclick="reset()">Effacer les données</button>
         </main>
 
         <!-- loading popup -->
