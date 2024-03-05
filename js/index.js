@@ -8,7 +8,7 @@ let authorize_update = true;
  */
 document.addEventListener("DOMContentLoaded", () => {
 
-    //Checks if the raspberry pi's time is the same as that of the device using the website.
+    // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
 
     //Recovery of all measurement campaigns.
@@ -40,7 +40,7 @@ async function subscribeRefresh() {
 /**
  * Recovery and display of all measurement campaigns.
  * @param {array} filter Influences which campaigns the function recovers
- * @param {boolean} refreshMode Influences the visual aspect of recovery
+ * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
 async function getListCampaignJS(filter_ = null, refreshMode = false) {
     authorize_update = false;
@@ -265,7 +265,7 @@ async function predictStoreUsage() {
 async function addCampagne() {
     displayLoading("Ajout de la campagne...");
 
-    //Recovery of all the new measurement campaign ssettings.
+    //Recovery of all the new measurement campaign settings.
     const title = document.getElementById("name_input");
     const CO2_enabled = document.getElementById("CO2_checkbox");
     const O2_enabled = document.getElementById("O2_checkbox");
@@ -281,6 +281,7 @@ async function addCampagne() {
     const config = document.getElementById("config_combo_box");
     const humid_mode = document.getElementById("humid_mode");
     const enable_fibox_temp = document.getElementById("enable_fibox_temp");
+
 
     // Checking the new measurement campaign settings.
     if (title.validity.badInput === true) {
@@ -303,6 +304,7 @@ async function addCampagne() {
         displayError("Impossible d'ajouter la campagne", "Le format du volume de la campagne est incorrecte. Veuillez entrer un nombre décimal positif puis réessayer.");
         return;
     }
+    
 
     // Creation of the new measurement campaign.
     const data = await PHP_post("/PHP_API/createCampaign.php", {

@@ -6,20 +6,32 @@ let rows = 0;
 let refresh_repeat = true;
 let authorize_update = true;
 
+/**
+ * Executes each of the following functions when all html code is loaded.
+ */
 document.addEventListener("DOMContentLoaded", () => {
+    // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
     getCampaignMeasurements();
 });
 
+/**
+ * Automatic refresh of measurement campaign data.
+ */
 async function subscribeRefresh() {
     do {
         if (authorize_update == true) {
+            // Recovery and display measurement campaign data.
             getCampaignMeasurements(true);
         }
         await delay(refresh_delay);
     } while (refresh_repeat);
 }
 
+/**
+ * Recovery and display measurement campaign data.
+ * @param {boolean} refreshMode Influences the visual aspect of the recovery
+ */
 async function getCampaignMeasurements(refresh_mode = false) {
     authorize_update = false;
 
@@ -30,11 +42,14 @@ async function getCampaignMeasurements(refresh_mode = false) {
         refresh_repeat = false;
     }
 
+    // Recovery measurement campaign data.
     let data = await PHP_post("/PHP_API/getCampaign.php", {
         "id": id,
         "last_log_datetime": last_log_datetime,
         "last_measure_datetime": last_measure_datetime
     });
+
+
     authorize_update = true;
 
     if (data != null){
@@ -331,9 +346,13 @@ async function getCampaignMeasurements(refresh_mode = false) {
     }
 }
 
+/**
+ * Exports measurement campaign data.
+  */
 async function exportCampagne() {
     displayLoading("Export de la campagne...");
 
+    // Settings to export measurement campaign data.
     const id = document.getElementById("id").value;
     const CO2_enabled = document.getElementById("CO2_checkbox").checked;
     const O2_enabled = document.getElementById("O2_checkbox").checked;
@@ -350,6 +369,8 @@ async function exportCampagne() {
     const time_end = document.getElementById("heurefin_choice");
     const volume = document.getElementById("calc_volume").checked;
 
+
+    // Checking export settings.
     if (interval.validity.badInput === true) {
         hideLoading();
         displayError("Impossible d'exporter la campagne", "Le format de l'interval de récupération des mesures de la campagne est incorrecte. Veuillez renseigner un interval puis réessayez.");
@@ -381,6 +402,7 @@ async function exportCampagne() {
     }
 
 
+    //Exports measurement campaign data.
     const data = await PHP_postGetFile("/PHP_API/exportCampaign.php", {
         "id": id,
         "CO2_enabled": CO2_enabled,
