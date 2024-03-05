@@ -54,7 +54,7 @@ function fetchAll(string $query, array $parameters = []) : array {
 /**
  * Recovery of all measurement campaigns.
  * 
- * @param array $filter Influence which campaigns the function recovers
+ * @param array $filter Influences which campaigns the function recovers
  * @return array
  */
 function getListCampaign(array $filter = null) : array

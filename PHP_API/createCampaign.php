@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = file_get_contents("php://input");
 	$arguments = json_decode($data, true);
 
+    // Checking the new measurement campaign settings.
     if (!isset($arguments["title"]) || empty($arguments["title"])){
         replyError("Impossible d'ajouter la campagne", "Le nom de votre campagne n'a pas été renseigné. Veuillez donner un nom à votre campagne puis réessayer.");
     }
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $interval = null;
     if (!isset($arguments["interval"]) || empty($arguments["interval"])){
-        replyError("Impossible d'ajouter la campagne", "L'intervalle de relevé de la campagne n'a pas été renseigné. Veuillez entrer un nombre entier positif puis réessayer.");
+        replyError("Impossible d'ajouter la campagne", "L'intervalle de relevé de la campagne n'a pas été renseigné ou son format est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
     }
     $interval = filter_var($arguments["interval"], FILTER_VALIDATE_INT);
     if ($interval === false) {
@@ -59,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($arguments["volume_unit"], $arguments["interval_unit"], $arguments["duration_unit"]) || !is_string($arguments["volume_unit"]) || !is_string($arguments["interval_unit"]) || !is_string($arguments["duration_unit"])) {
         replyError("Impossible d'ajouter la campagne", "Le format d'une unité séléctionné est incorrecte ou manquante.");
     }
+    
 
     if ($volume != null) {
         switch ($arguments["volume_unit"]) {
@@ -138,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     
-    // check if a campaign is already running
+    // Check if a campaign is already running
     $data = NodeRedGet("check_working_campaign");
 
     if (!array_key_exists("idCurrent", $data)) {
@@ -148,12 +150,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'ajouter la campagne", "Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
     }
 
+
     // check if there is enough space on the device
     $storage=NodeRedGet("storage");
 
     $lines = $duration / $interval;
     $size = $lines * MEASUREMENTS_SIZE_PER_LINE;
-
 
     if (!isset($storage["used"]) || !isset($storage["total"])) {
         replyError("Impossible d'ajouter la campagne", "Les caractéristiques actuelles de la mémoire de l'appareil n'ont pas été récupéré");
@@ -166,6 +168,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'ajouter la campagne", "La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
     }
 
+
+    // Creation of the new measurement campaign.
     $id = addCampaign($config_id, $arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration, $arguments["humid_mode"], $arguments["enable_fibox_temp"]);
 
     NodeRedPost("createCampaign",array('id' => $id,'key' => 'I_do_believe_I_am_on_fire'));

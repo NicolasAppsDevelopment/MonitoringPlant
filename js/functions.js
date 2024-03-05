@@ -365,6 +365,9 @@ function getReadableBool(bool) {
     return bool ? "Activé" : "Désactivé";
 }
 
+/**
+ * Checks if the raspberry pi's time is the same as that of the device using the website.
+ */
 async function checkTime() {
     const client_datetime = new Date();
     const data = await PHP_post("/PHP_API/checkTime.php", {

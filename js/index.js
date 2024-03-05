@@ -2,23 +2,46 @@ let filter = null;
 let refresh_repeat = true;
 let authorize_update = true;
 
+
+/**
+ * Executes each of the following functions when all html code is loaded.
+ */
 document.addEventListener("DOMContentLoaded", () => {
+
+    //Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
+
+    //Recovery of all measurement campaigns.
     getListCampaignJS();
+
+    //Recovery of raspberry pi storage capacity.
     getStorageCapacity();
+
+    //Recovery of all configurations.
     getConfigurations();
+
+    //Automatic refresh of the list of measurement campaigns.
     subscribeRefresh();
 });
 
+/**
+ * Automatic refresh of the list of measurement campaigns.
+ */
 async function subscribeRefresh() {
     do {
         await delay(10000);
         if (authorize_update) {
+            // Recovery and display all measurement campaigns according to the current filter.
             getListCampaignJS(filter, true);
         }
     } while (refresh_repeat);
 }
 
+/**
+ * Recovery and display of all measurement campaigns.
+ * @param {array} filter Influences which campaigns the function recovers
+ * @param {boolean} refreshMode Influences the visual aspect of recovery
+ */
 async function getListCampaignJS(filter_ = null, refreshMode = false) {
     authorize_update = false;
     filter = filter_;
@@ -36,8 +59,10 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
 
     let data = null;
     if (filter != null) {
+        //Recovery of measurement campaigns according to filter.
         data = await PHP_post("/PHP_API/getListCampaign.php", filter);
     } else {
+        //Recovery of all measurement campaigns.
         data = await PHP_get("/PHP_API/getListCampaign.php");
     }
     authorize_update = true;
@@ -110,6 +135,9 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
     }
 }
 
+/**
+ * Recovery of all measurement campaigns depending on the filter parameters recovered.
+ */
 async function filterCampagnes() {
     const name = document.getElementById("campaign_name_search_bar").value;
     const date = document.getElementById("campaign_date");
@@ -129,6 +157,7 @@ async function filterCampagnes() {
 
     closePopup("filter-popup");
 
+    //Recovery Recovery all measurement campaigns according to filter's parameters.
     getListCampaignJS({"name": name.toLowerCase(), "date": date.value, "time": time.value, "processing": processing});
 }
 
@@ -137,6 +166,9 @@ const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
 let used = 0; // In KB
 let total = 0; // In KB
 
+/**
+ * Recovering raspberry pi storage capacity.
+ */
 async function getStorageCapacity() {
     const usedStorageBar = document.getElementById("used_storage_bar");
     const storageTxt = document.getElementById("storage_txt");
@@ -157,6 +189,9 @@ async function getStorageCapacity() {
     }
 }
 
+/**
+ * Predict and display the storage that will be used by the new measurement campaign.
+ */
 async function predictStoreUsage() {
     const useStorageBar = document.getElementById("use_storage_bar");
     let duration = document.getElementById("duration_input").value;
@@ -224,9 +259,13 @@ async function predictStoreUsage() {
  
 }
 
+/**
+ * Creation of a new measurement campaign.
+ */
 async function addCampagne() {
     displayLoading("Ajout de la campagne...");
 
+    //Recovery of all the new measurement campaign ssettings.
     const title = document.getElementById("name_input");
     const CO2_enabled = document.getElementById("CO2_checkbox");
     const O2_enabled = document.getElementById("O2_checkbox");
@@ -243,6 +282,7 @@ async function addCampagne() {
     const humid_mode = document.getElementById("humid_mode");
     const enable_fibox_temp = document.getElementById("enable_fibox_temp");
 
+    // Checking the new measurement campaign settings.
     if (title.validity.badInput === true) {
         hideLoading();
         displayError("Impossible d'ajouter la campagne", "Le titre de la campagne n'a pas été renseigné. Veuillez donner un titre à la campagne puis réessayez.");
@@ -264,6 +304,7 @@ async function addCampagne() {
         return;
     }
 
+    // Creation of the new measurement campaign.
     const data = await PHP_post("/PHP_API/createCampaign.php", {
         "title": title.value,
         "CO2_enabled": CO2_enabled.checked,
@@ -294,17 +335,26 @@ async function addCampagne() {
     hideLoading();
 }
 
+/**
+ * Deletes all data of the measurement campaign whose id is entered as a parameter.
+ * @param {integer} id id of the campaing that we want to remove
+ */
 async function removeCampagne(id) {
     event.stopPropagation();
 
     if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
         document.getElementById("campagne_" + id).remove();
+        //Deletes all data of the campaign whose id is entered as a parameter.
         PHP_post("/PHP_API/removeCampaign.php", {
             "id": id
         });
     }
 }
 
+/**
+ * Filters all measurement campaigns when users press the "enter" key in the search bar.
+ * @param {event} e event when the users press a key
+ */
 function handleKeyPressSearchBar(e){
     var key=e.keyCode || e.which;
     if (key==13){
@@ -312,6 +362,9 @@ function handleKeyPressSearchBar(e){
     }
 }
 
+/**
+ * Recovery of all configurations.
+ */
 async function getConfigurations() {
     let data = await PHP_get("/PHP_API/getListConfiguration.php");
     if (data != null){
@@ -323,56 +376,4 @@ async function getConfigurations() {
             select.appendChild(option);
         });
     }
-}
-
-function nextGif(){
-    let id=document.getElementById("idHelpIndex").value;
-    console.log(id);
-    if(id<3){
-        const nb=parseInt(id)+1;
-        document.getElementById("idHelpIndex").value=nb;
-
-        switch (id) {
-            case 1:
-                document.getElementById("HelpGif").src="/img/naméouie.gif";
-                break;
-    
-            case 2:
-                document.getElementById("HelpGif").src="/img/vulpix.gif";
-                break;
-    
-            case 3:
-                document.getElementById("HelpGif").src="/img/eiffel.gif";
-                break;
-                
-            default:
-                break;
-        }
-    }
-
-}
-
-function previousGif(){
-    let id=document.getElementById("idHelpIndex");
-
-    if(id>1){
-        id--;
-        document.getElementById("idHelpIndex").value=id;
-
-        switch (id) {
-            case 1:
-                document.getElementById("HelpGif").src="/img/naméouie.gif";
-                break;
-            case 2:
-                document.getElementById("HelpGif").src="/img/vulpix.gif";
-                break;
-            case 3:
-                document.getElementById("HelpGif").src="/img/eiffel.gif";
-                break;
-        
-            default:
-                break;
-        }
-    }
-
 }

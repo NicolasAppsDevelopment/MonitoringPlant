@@ -1,5 +1,5 @@
 /**
- * Set raspberry pi date and time
+ * Sets raspberry pi date and time.
  */
 
 async function setTime() {
