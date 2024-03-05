@@ -93,6 +93,30 @@ create table Logs(
    references Campaigns (idCampaign) on delete restrict on update restrict
 );
 
+/*==============================================================*/
+/* Table : Users                                                 */
+/*==============================================================*/
+create table Users(
+   idUser       int not null,
+   user varchar(100),
+   password varchar(100),
+   primary key (idUser)
+);
+
+/*==============================================================*/
+/* Table : Questions                                                 */
+/*==============================================================*/
+create table Questions(
+   idUser       int not null,
+   question varchar(300),
+   answer varchar(200),
+   primary key (idUser,question,answer),
+   constraint FK_Questions_Users foreign key (idUser)
+   references Users (idUser) on delete restrict on update restrict
+);
+
+
+
 
 drop procedure if exists ajoutCampagne;
 delimiter $
