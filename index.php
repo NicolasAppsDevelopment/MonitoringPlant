@@ -27,7 +27,7 @@
                                 </div>
                                 <div>
                                     <h3 class="log_btn_title">Un(e) élève</h3>
-                                    <p class="log_btn_desc">Accedez directeme nbt.</p>
+                                    <p class="log_btn_desc">Accédez directement à la liste des campagnes</p>
                                 </div>
                             </div>
                         </a>
@@ -38,7 +38,7 @@
                                 </div>
                                 <div>
                                     <h3 class="log_btn_title">Un(e) professeur(e)</h3>
-                                    <p class="log_btn_desc">Connectez-vous grâce à vos identifiants admin.</p>
+                                    <p class="log_btn_desc">Connectez-vous en administrateur.</p>
                                 </div>
                             </div>
                         </a>

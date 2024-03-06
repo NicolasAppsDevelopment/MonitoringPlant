@@ -12,13 +12,13 @@
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
     </head>
-    <body class="bg_animated main_theme">
+    <body class="bg_animated main_theme login">
         <main class="main_popup_container">
             <div class="main_popup">
                 <div class="popup_contenu" id="div_page1">
                     <h2>Espace admin</h2>
                     <p>
-                        Met mot de passe d'administrateur.
+                        Mettez le  mot de passe d'administrateur.
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top password-input">
@@ -26,7 +26,9 @@
                             <i class="btn-eye btn-eye-show" onclick="displayHide(this, 'password')"></i>
                             </span>
                             <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
+                            <a href="./alternativeLogin.php">Mot de passe oublié ?</a>                       
                         </div>
+                        
                         <button class="rect_round_btn" type="button" onclick="next()">
                             Se connecter
                         </button>

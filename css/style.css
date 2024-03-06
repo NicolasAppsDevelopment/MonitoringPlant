@@ -2133,3 +2133,16 @@ body.index .log_option:hover .log_btn_desc {
 body.index main a {
     text-decoration: none;
 }
+
+
+/*CSS FOR login.PHP*/
+body.login a{
+    color: var(--default-color);
+    font-size: 16px;
+    font-family: Inter_SemiBold;
+   
+} 
+
+
+/*CSS FOR alternativeLogin.PHP*/
+
