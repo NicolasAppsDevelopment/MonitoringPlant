@@ -1,5 +1,7 @@
 <?php
 
+include_once __DIR__ . "/database.php";
+
 // always start the session when we need to access session data
 session_start();
 
@@ -107,7 +109,7 @@ function isAdminDefined(): bool {
  * @return bool
  */
 function isLogged(): bool {
-    return $_SESSION["logged"] == true; 
+    return isset($_SESSION["logged"]) && $_SESSION["logged"] == true; 
 }
 
 /**
@@ -116,5 +118,5 @@ function isLogged(): bool {
  * @return bool
  */
 function isAdmin(): bool {
-    return isLogged() && $_SESSION["admin"] == true; 
+    return isLogged() && $_SESSION["admin"] && $_SESSION["admin"] == true; 
 }

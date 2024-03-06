@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
-        <script src="./js/setPassword.js"></script>
+        <script src="./js/login.js"></script>
 
-        <title>Définition du mot de passe</title>
+        <title>Se connecter</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
     </head>
@@ -16,9 +16,9 @@
         <main class="main_popup_container">
             <div class="main_popup">
                 <div class="popup_contenu" id="div_page1">
-                    <h2>Espace admin</h2>
+                    <h2>Espace administrateur</h2>
                     <p>
-                        Mettez le  mot de passe d'administrateur.
+                        Veuillez saisir votre mot de passe d'administrateur afin d'accéder à votre espace.
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top password-input">
@@ -28,8 +28,7 @@
                             <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
                             <a href="./alternativeLogin.php">Mot de passe oublié ?</a>                       
                         </div>
-                        
-                        <button class="rect_round_btn" type="button" onclick="next()">
+                        <button class="rect_round_btn" type="button" onclick="login()">
                             Se connecter
                         </button>
                     </div>
