@@ -14,7 +14,7 @@ async function setTime() {
     });
     
     if (data != null) {
-        window.location.href = "index.php";
+        window.location.href = "listCampaign.php";
     }
     
     hideLoading();

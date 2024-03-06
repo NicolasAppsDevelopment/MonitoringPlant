@@ -47,7 +47,7 @@
         <!-- Navigation -->
         <div class="top_action_menu">
             <div class="back_title">
-                <a href="./index.php" class="row_center">
+                <a href="./listCampaign.php" class="row_center">
                     <div class="back_btn">
                         <p>Retour</p>
                     </div>

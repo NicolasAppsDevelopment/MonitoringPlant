@@ -6,235 +6,44 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
-        <script src="./js/index.js"></script>
-        <title>Liste des campagnes</title>
+        <script src="./js/setPassword.js"></script>
+
+        <title>Connexion</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
-        <link rel="preload" href="./img/warning_ico.svg" as="image"/>
     </head>
-    <body class="bg main_theme">
-
-        <!-- Navigation -->
-        <?php include "modules/header.php";?>
-        
-        <main>
-            <div class="top_action_menu">
-
-                <!-- Search bar -->
-                <input type="text" placeholder="Rechercher..." class="custom_search_bar" id="campaign_name_search_bar" onkeydown="handleKeyPressSearchBar(event)">
-
-                <!-- Filter popup & button -->
-                <div class="btn_container"><label for="filter-popup" class="round_btn default filter"></label></div>
-                <input type="checkbox" id="filter-popup" class="open_close-popup">
-                <div class="popup">
-                    <div class="popup-inner">
-                        <div class="popup-title">
-                            <p>Filtrer une campagne</p>
-                            <label for="filter-popup" class="round_btn transparent small close"></label>
-                        </div>
-                        <div class="popup-content">
-                            <div class="label_img_input">
-                                <label class="label_field" for="campaign_date">Date de la campagne de mesure</label>
-                                <div class="row_fields gap">
-                                    <input class="input_field calendar" id="campaign_date" type="date" placeholder="Date">
-                                    <input class="input_field clock" id="campaign_time" type="time" placeholder="Heure">
-                                </div>
-                            </div>
-                            
-                            <div class="checkbox bottom_gap">
-                                <label for="processing">
-                                    <input type="checkbox" id="processing">
-                                    <span class="cbx">
-                                        <svg width="12px" height="11px" viewBox="0 0 12 11">
-                                            <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-                                        </svg>
-                                    </span>
-                                    <span>Filtrer par campagnes en cours</span>
-                                </label>
-                            </div>
-
-                            <button class="rect_round_btn gray" type="button" onclick="filterCampagnes()">Filtrer</button>
-                        </div>
-                    </div>
+    <body class="bg_animated main_theme index">
+        <main class="main_popup_container">
+            <div class="main_popup">
+                <div>
+                    <h1 class="i_am">Je suis ...</h1>
                 </div>
-            </div>
-
-            <!-- List of campaigns -->
-            <div class="liste_CM" id="CM_container">
-                <div class="loading_popup" id="loading_div">
-                    <svg class="spinner" viewBox="0 0 50 50">
-                        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                    </svg>
-                    <p class="loading_msg">Récupération des campagnes...</p>
+                <div>
+                    <a href="./listCampaign.php">
+                        <div class="log_option btn_student">
+                            <div class="ico_log_btn_container">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="5.72 22.9 160.57 137.65" class="ico_log_btn"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"  font-size="none"  style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#1368ce" class="ico_fill"><path d="M17.2,22.93333c-3.1663,0.00032 -5.73302,2.56703 -5.73333,5.73333v13.05677c-3.41497,1.98528 -5.73333,5.63994 -5.73333,9.87656v80.52422c0,6.15187 4.90075,11.17534 11.04115,11.42187c27.6058,1.12409 47.49127,6.25781 58.68828,10.01094c1.79844,4.22575 5.94471,6.97084 10.53724,6.9763c4.5966,-0.00098 8.7484,-2.74681 10.54844,-6.9763c11.19868,-3.75235 31.07866,-8.87949 58.67708,-9.99974c6.1404,-0.25227 11.04114,-5.2812 11.04114,-11.43307v-80.52422c0,-4.23663 -2.31837,-7.89128 -5.73333,-9.87656v-13.05677c-0.00032,-3.1663 -2.56703,-5.73302 -5.73333,-5.73333c-26.22469,0 -43.92646,2.90992 -55.22812,5.9237c-9.15693,2.44185 -11.88385,4.31699 -13.57188,5.27422c-1.68803,-0.95723 -4.41494,-2.83237 -13.57188,-5.27422c-11.30167,-3.01378 -29.00343,-5.9237 -55.22812,-5.9237zM22.93333,34.71354c21.6834,0.44074 37.25884,2.75484 46.53854,5.22943c5.61862,1.4983 8.80314,2.73742 10.79479,3.65052v91.55417c-8.95722,-3.03776 -27.83556,-7.96336 -57.33333,-8.66719zM149.06667,34.71354v91.76693c-29.49777,0.70382 -48.37611,5.62943 -57.33333,8.66719v-91.55417c1.99165,-0.9131 5.17617,-2.15222 10.79479,-3.65052c9.2797,-2.47459 24.85514,-4.78869 46.53854,-5.22943z"></path></g></g></svg>
+                            </div>
+                            <div>
+                                <h3 class="log_btn_title">Un(e) élève</h3>
+                                <p class="log_btn_desc">Accedez directeme nbt.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="./login.php">
+                        <div class="log_option btn_teacher">
+                            <div class="ico_log_btn_container">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="44 20 172.07 208.07" class="ico_log_btn"><g class="ico_fill" fill="#E4183A" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"  font-size="none"  style="mix-blend-mode: normal"><g transform="scale(4,4)"><path d="M20,5c-2.766,0 -5,2.242 -5,5c0,2.758 2.234,5 5,5c2.766,0 5,-2.242 5,-5c0,-2.758 -2.234,-5 -5,-5zM35,7c-1.104,0 -2,0.896 -2,2v1h-4c-1.104,0 -2,0.896 -2,2c0,1.104 0.896,2 2,2h20c0.552,0 1,0.449 1,1v18c0,0.551 -0.448,1 -1,1h-18c-1.104,0 -2,0.896 -2,2c0,1.104 0.896,2 2,2h5.45703l4.60742,17.50781c0.237,0.898 1.04659,1.49219 1.93359,1.49219c0.168,0 0.34077,-0.02141 0.50977,-0.06641c1.069,-0.281 1.70578,-1.37536 1.42578,-2.44336l-4.33984,-16.49023h8.40625c2.757,0 5,-2.243 5,-5v-18c0,-2.757 -2.243,-5 -5,-5h-12v-1c0,-1.104 -0.896,-2 -2,-2zM20,17c-5.65,0 -9,4 -9,7v12c0,1.1 0.9,2 2,2h1v16.94922c0,1.132 0.91878,2.05078 2.05078,2.05078c1.092,0 1.99287,-0.85627 2.04688,-1.94727l0.80859,-17.05273h2.1875l0.80859,17.05273c0.054,1.091 0.95488,1.94727 2.04688,1.94727c1.132,0 2.05078,-0.91878 2.05078,-2.05078v-16.94922v-2v-11.16992c1.18102,0.76172 2.55025,1.64579 2.64648,1.70703c0.286,0.182 0.86866,0.46289 1.34766,0.46289c0.305,0 0.61053,-0.06894 0.89453,-0.21094l8,-4c0.989,-0.495 1.38853,-1.69559 0.89453,-2.68359c-0.494,-0.986 -1.69164,-1.38953 -2.68164,-0.89453l-6.78906,3.39453l-4.3125,-3.73242v-0.00391c-1.5,-1.11 -3.54,-1.86914 -6,-1.86914z"></path></g></g></svg>
+                            </div>
+                            <div>
+                                <h3 class="log_btn_title">Un(e) professeur(e)</h3>
+                                <p class="log_btn_desc">Connectez-vous grâce à vos identifiants admin.</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </main>
-
-        <!-- Create a campaign popup & button -->
-        <label for="add-popup" class="floating round_btn default add"></label>
-        <input type="checkbox" id="add-popup" class="open_close-popup">
-        <div class="popup">
-            <div class="popup-inner">
-                <div class="popup-title">
-                    <p>Démarrer une campagne</p>
-                    <label for="add-popup" class="round_btn transparent small close"></label>
-                </div>
-                <form id="add_popup_form" class="popup-content" method="post" action="campaign.php">
-                    <input id="id_added_campaign" type="hidden" name="id" value="-1">
-
-                    <div class="grid_section">
-                        <label class="icon-checkbox-wrapper">
-                            <input id="CO2_checkbox" type="checkbox" class="checkbox-input" hidden/>
-                            <span class="checkbox-tile">
-                            <span class="checkbox-icon">
-                                <img src="./img/CO2.svg">
-                            </span>
-                            <span class="checkbox-label">CO2</span>
-                            </span>
-                        </label>
-                        <label class="icon-checkbox-wrapper">
-                            <input id="O2_checkbox" type="checkbox" class="checkbox-input" hidden/>
-                            <span class="checkbox-tile">
-                                <span class="checkbox-icon">
-                                <img src="./img/O2.svg">
-                                </span>
-                                <span class="checkbox-label">O2</span>
-                            </span>
-                        </label>
-                        <label class="icon-checkbox-wrapper">
-                            <input id="temperature_checkbox" type="checkbox" class="checkbox-input" hidden/>
-                            <span class="checkbox-tile">
-                                <span class="checkbox-icon">
-                                <img src="./img/tempeture.svg">
-                                </span>
-                                <span class="checkbox-label">Température</span>
-                            </span>
-                        </label>
-                        <label class="icon-checkbox-wrapper">
-                            <input id="humidity_checkbox" type="checkbox" class="checkbox-input" hidden/>
-                            <span class="checkbox-tile">
-                                <span class="checkbox-icon">
-                                <img src="./img/humidity.svg">
-                                </span>
-                                <span class="checkbox-label">Humidité</span>
-                            </span>
-                        </label>
-                        <label class="icon-checkbox-wrapper">
-                            <input id="luminosity_checkbox" type="checkbox" class="checkbox-input" hidden/>
-                            <span class="checkbox-tile">
-                                <span class="checkbox-icon">
-                                <img src="./img/luminosity.svg">
-                                </span>
-                                <span class="checkbox-label">Luminosité</span>
-                            </span>
-                        </label>     
-                    </div>
-                    
-                    
-                    <div class="label_img_input">
-                        <label class="label_field" for="duration_input">Durée de la campagne de mesure</label>
-                        <div class="row_fields">
-                            <input class="input_field clock" id="duration_input" type="number" placeholder="Durée" min="0" required oninput="predictStoreUsage()">
-                            <select class="combo_box" id="duration_unit_combo_box" onchange="predictStoreUsage()">
-                                <option selected value="s">s</option>
-                                <option value="min">min</option>
-                                <option value="h">h</option>
-                                <option value="j">j</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="label_img_input">
-                        <label class="label_field" for="interval_input">Intervalle de la campagne de mesure</label>
-                        <div class="row_fields">
-                            <input class="input_field timer" id="interval_input" type="number" placeholder="Intervalle" min="0" required oninput="predictStoreUsage()">
-                            <select class="combo_box" id="interval_unit_combo_box" onchange="predictStoreUsage()">
-                                <option selected value="s">s</option>
-                                <option value="min">min</option>
-                                <option value="h">h</option>
-                                <option value="j">j</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="label_img_input">
-                        <div class="row">
-                            <label class="label_field" for="volume_input">Volume du contenant</label>
-                            <div class="annotation">Champs optionnel</div>
-                        </div>
-                        
-                        <div class="row_fields">
-                            <input class="input_field volume" id="volume_input" type="number" placeholder="Volume" min="0" step=".01">
-                            <select class="combo_box" id="volume_unit_combo_box">
-                                <option selected value="mL">mL</option>
-                                <option value="cL">cL</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="label_img_input">
-                        <label class="label_field" for="name_input">Nom de la campagne de mesure</label>
-                        <input class="input_field edit" id="name_input" type="text" placeholder="Nom" required>
-                    </div>
-
-                    <div class="label_img_input">
-                        <label class="label_field" for="config_input">Configuration</label>
-                        <select class="combo_box no-side-margin" id="config_combo_box">
-                        </select>
-                    </div>
-
-                    <div class="checkbox">
-                        <label for="humid_mode">
-                            <input type="checkbox" id="humid_mode">
-                            <span class="cbx">
-                                <svg width="12px" height="11px" viewBox="0 0 12 11">
-                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-                                </svg>
-                            </span>
-                            <span>Mesure en milieu humide ? (coché = Oui)</span>
-                        </label>
-                    </div>
-
-                    <div class="checkbox">
-                        <label for="enable_fibox_temp">
-                            <input type="checkbox" id="enable_fibox_temp">
-                            <span class="cbx">
-                                <svg width="12px" height="11px" viewBox="0 0 12 11">
-                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
-                                </svg>
-                            </span>
-                            <span>Activer le capteur de température PreSens ? (coché = Oui)</span>
-                        </label>
-                    </div>
-
-                    <div class="section">
-                        <div class="row_center" id="space_taken_warning">
-                            
-                        </div>
-                        <div class="row">
-                            <p class="device_name">Cellule</p>
-                            <p class="storage_txt" id="storage_txt">Calcul...</p>
-                        </div>
-                        <div class="storage_bar_container">
-                            <div id="used_storage_bar" class="used_storage_bar"></div>
-                            <div id="use_storage_bar" class="use_storage_bar"></div>
-                        </div>
-                        <div class="row_no_space">
-                            <div class="legend">
-                                <div class="dot_legend_used"></div>
-                                <p class="legend_name">Espace utilisé</p>
-                            </div>
-                            <div class="legend">
-                                <div class="dot_legend_use"></div>
-                                <p class="legend_name">Espace estimé de la mesure</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="rect_round_btn gray" type="button" onclick="addCampagne();">Démarrer</button>
-                </form>
-            </div>
-        </div>
 
         <!-- loading popup -->
         <?php include "modules/loadingPopup.php";?>

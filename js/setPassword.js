@@ -19,7 +19,7 @@ async function setPassword(){
     });
     
     if (data != null) {
-        //window.location.href = "index.php";
+        window.location.href = data["redirect"];
     }
     
     hideLoading();

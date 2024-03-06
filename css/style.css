@@ -2056,3 +2056,76 @@ input:invalid::placeholder {
 .input_field.btn-show {
     padding-right: 26px;
 }
+
+/*CSS FOR INDEX.PHP*/
+
+body.index .i_am {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 32px;
+}
+
+body.index .log_option {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+body.index .log_option:first-child {
+    margin-bottom: 6px;
+}
+body.index .btn_student {
+    border: 1px solid #1368ce;
+}
+body.index .log_option * {
+    transition: all 0.2s ease-in-out;
+}
+body.index .btn_student:hover {
+    background-color: #1368ce;
+}
+body.index .btn_teacher {
+    border: 1px solid var(--default-color);
+}
+body.index .btn_teacher:hover {
+    background-color: var(--default-color);
+}
+body.index .ico_log_btn {
+    width: 32px;
+    height: 32px;
+    padding-right: 16px;
+    margin: auto;
+}
+body.index .log_option:hover .ico_fill {
+    fill: white;
+    stroke: white;
+}
+body.index .ico_log_btn_container {
+    display: flex;
+}
+body.index .log_btn_title {
+    color: rgb(44, 44, 44);
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+    font-weight: 700;
+}
+body.index .log_option:hover .log_btn_title {
+    color: rgb(250, 250, 250);
+}
+body.index .log_btn_desc {
+    color: gray;
+    font-style: italic;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+}
+body.index .log_option:hover .log_btn_desc {
+    color: rgb(228, 228, 228);
+}
+
+body.index main a {
+    text-decoration: none;
+}
