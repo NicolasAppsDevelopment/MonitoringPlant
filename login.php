@@ -26,8 +26,8 @@
                             <i class="btn-eye btn-eye-show" onclick="displayHide(this, 'password')"></i>
                             </span>
                             <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
-                            <a href="./alternativeLogin.php">Mot de passe oublié ?</a>                       
                         </div>
+                        <a href="./alternativeLogin.php">Mot de passe oublié ?</a>
                         <button class="rect_round_btn" type="button" onclick="login()">
                             Se connecter
                         </button>
