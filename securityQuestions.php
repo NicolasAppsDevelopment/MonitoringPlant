@@ -15,7 +15,7 @@
     <body class="bg_animated main_theme">
         <main class="main_popup_container">
             <div class="main_popup">
-                <div class="progression_bar_container">
+                <div class="progression_bar_container" id="page2">
                     <div class="progression_bar"></div>
                 </div>
                 <div class="popup_contenu" id="div_page1">

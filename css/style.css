@@ -756,7 +756,15 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     width: 50%;
 }
 
-#page2 .progression_bar {
+#page2-2 .progression_bar {
+    width: 50%;
+}
+
+#page2-3 .progression_bar {
+    width: 33%;
+}
+
+#page3-3 .progression_bar {
     width: 66%;
 }
 
@@ -1363,7 +1371,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 }
 
 .progression_bar {
-    width: 33%;
+    width: 0%;
     height: 100%;
     background: #7ffc6e;
 }

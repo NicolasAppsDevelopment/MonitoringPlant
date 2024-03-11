@@ -1,5 +1,7 @@
 function next(){
     document.getElementById("div_page1").classList.add("hidden");
+    let bar=document.getElementsByClassName("progression_bar");
+    bar[0].style.width="20%";
     document.getElementById("div_page2").classList.remove("hidden");
 }
 
@@ -19,7 +21,7 @@ async function setPassword(){
     });
     
     if (data != null) {
-        window.location.href = data["redirect"];
+        window.location.href = "setSecurityQuestions.php";
     }
     
     hideLoading();
