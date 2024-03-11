@@ -1,6 +1,9 @@
 <?php 
 header("Content-Type: application/json; charset=utf-8");
 
+include_once __DIR__ . "/../include/session.php";
+initSession();
+
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
 
@@ -9,6 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $data = file_get_contents("php://input");
 	$args = json_decode($data, true);
+
+    if (!isAdmin()){
+        replyError("Impossible de supprimer la configuration", "Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+    }
 
     if (!isset($args["id"])){
         replyError("Impossible de supprimer la configuration", "L'identifiant de la configuration n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");

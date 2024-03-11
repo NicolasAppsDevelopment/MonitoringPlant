@@ -82,6 +82,22 @@
                     <p class="top_nav_text">Aide</p>
                 </div>
             </a></li>
+            <li class="expend"></li>
+            <?php if (isAdmin()) { ?>
+            <li><a href="/PHP_API/logout.php">
+                <div class="info_ico_container logout">
+                    <svg version="1.1" id="svg2" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="15.63 24.45 240.37 207.1">
+                        <defs id="defs2"></defs>
+                        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="none" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode:normal" id="g2">
+                            <g transform="scale(8.53333)" id="g1">
+                                <path d="m 4.0211981,2.872871 c -1.1740949,0 -2.1256822,0.9548215 -2.1289119,2.1289119 L 1.8372787,24.998229 c -0.00323,1.174091 0.954817,2.128912 2.1289119,2.128912 H 18.263493 c 1.174095,0 2.125303,-0.954822 2.128912,-2.128912 l 0.0275,-8.947519 h -8.515648 c -0.58758,0 -1.064456,-0.476876 -1.064456,-1.064456 0,-0.587579 0.476876,-1.064456 1.064456,-1.064456 h 8.515648 l 0.0275,-8.9200151 C 20.451033,3.8276936 19.492597,2.872871 18.318502,2.872871 Z M 20.419909,13.921798 v 2.128912 h 5.945987 l -2.440766,2.440766 c -0.278078,0.266987 -0.390102,0.663443 -0.292853,1.036471 0.09725,0.373028 0.388559,0.664338 0.761586,0.761587 0.373028,0.09725 0.769485,-0.01478 1.036472,-0.292854 l 4.257824,-4.257823 c 0.415531,-0.415702 0.415531,-1.089503 0,-1.505205 L 25.430335,9.9758279 C 25.22993,9.7698237 24.954736,9.6535958 24.667333,9.6535852 c -0.433149,1.17e-4 -0.823048,0.2626651 -0.986038,0.6639758 -0.162989,0.40131 -0.06658,0.861368 0.243835,1.163482 l 2.440766,2.440766 z" id="path1" style="fill:#ffffff;stroke-width:1.06446"></path>
+                            </g>
+                        </g>
+                    </svg>
+                    <p class="top_nav_text">Se déconnecter</p>
+                </div>
+            </a></li>
+            <?php } ?>
         </ul>
     </nav>
 </header>

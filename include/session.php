@@ -2,8 +2,11 @@
 
 include_once __DIR__ . "/database.php";
 
-// always start the session when we need to access session data
-session_start();
+function initSession(): void { 
+    // always start the session when we need to access session data
+    session_start();
+}
+
 
 /**
  * Returns true if the password is correct for a user entered in parameter.
@@ -121,4 +124,16 @@ function isLogged(): bool {
  */
 function isAdmin(): bool {
     return isLogged() && $_SESSION["admin"] && $_SESSION["admin"] == true; 
+}
+
+/**
+ * Returns true if the logged user is an admin.
+ * 
+ * @return bool
+ */
+function checkPageAccess(): void {
+    if (!isAdmin()) {
+        header("Location: /login.php");
+        exit;
+    } 
 }

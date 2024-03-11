@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $id = filter_var($args["id"], FILTER_VALIDATE_INT);
     if ($id === false) {
-        replyError("Impossible de récupérer la configuration", "Le format de l'identifiaant de la configuration est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+        replyError("Impossible de récupérer la configuration", "Le format de l'identifiant de la configuration est incorrecte. Veuillez rafraîchir la page puis réessayer.");
     }
 
     $data = getConfiguration($id);

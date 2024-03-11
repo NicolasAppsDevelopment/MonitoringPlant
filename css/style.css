@@ -92,6 +92,8 @@ header nav * {
     flex-direction: row;
     padding-left: 12px;
     padding-right: 12px;
+    justify-content: space-between;
+    width: 100%;
 }
 .div_top_nav * {
     margin: auto;
@@ -112,6 +114,7 @@ header nav * {
     font-family: Inter_SemiBold;
     font-size: 16px;
     font-weight: 400;
+    white-space: nowrap;
 }
 
 /* selected effect css */
@@ -1577,7 +1580,8 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
 /* TABLE PART */
 .table-container table  {
-    border-collapse: collapse; width: 100%;
+    border-collapse: collapse;
+    width: 100%;
 }
 .table-container td { 
     padding: 12px 16px;
@@ -2159,5 +2163,18 @@ body.login a:hover{
 
 
 
-/*CSS FOR alternativeLogin.PHP*/
-
+/* CSS logout btn */
+.logout {
+    background-color: var(--destructive-color);
+    border-color: var(--destructive-color-darker);
+}
+.logout:hover {
+    background-color: var(--destructive-color-darker);
+    border-color: var(--destructive-color-darker);
+}
+.logout .top_nav_text {
+    color: white;
+}
+.expend {
+    width: 100%;
+} 

@@ -1,4 +1,9 @@
 <?php
+    include_once "include/session.php";
+    initSession();
+    
+    include "include/checkSetup.php";
+
     if (!isset($_POST['id']) || empty($_POST['id'])){
         header("Location: /");
     }
@@ -7,8 +12,6 @@
     if ($id === false) {
         header("Location: /");
     }
-
-    include "include/checkSetup.php";
 ?>
 
 <!DOCTYPE html>

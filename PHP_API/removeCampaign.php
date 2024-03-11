@@ -1,6 +1,9 @@
 <?php 
 header("Content-Type: application/json; charset=utf-8");
 
+include_once __DIR__ . "/../include/session.php";
+initSession();
+
 include_once __DIR__ . "/../include/database.php";
 include_once __DIR__ . "/../include/reply.php";
 
@@ -10,6 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $data = file_get_contents("php://input");
 	$args = json_decode($data, true);
+
+    if (!isAdmin()){
+        replyError("Impossible de supprimer la campagne", "Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+    }
 
     // Checking the id.
     if (!isset($args["id"])){
