@@ -28,7 +28,6 @@
                     <button class="rect_round_btn" type="button" onclick="setDefaultSettings()">
                         Continuer
                     </button>
-
                 </div>
             </div>
         </main>

@@ -14,17 +14,19 @@ session_start();
  */
 function login(string $username, string $password): bool {
     try {
-        $results = fetchAll("SELECT user FROM Users WHERE user = :varUsername AND password = :varPassword", [
-            'varPassword' => hash_pwd($password),
+        $hashData = fetchAll("SELECT password FROM Users WHERE user = :varUsername", [
             'varUsername' => htmlspecialchars($username)
         ]);
-    
-        if (count($results) > 0) {
-            $_SESSION['logged'] = true;
-            if ($username == "admin"){
-                $_SESSION['admin'] = true; 
+
+        if (count($hashData) > 0) {
+            if (password_verify($password, $hashData[0]["password"])) {
+                $_SESSION['logged'] = true;
+                if ($username == "admin"){
+                    $_SESSION['admin'] = true; 
+                }
+                return true;
             }
-            return true;
+            return false;
         } else {
             return false;
         }
