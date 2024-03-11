@@ -5,27 +5,11 @@
  * - this library has no dependencies.
  * 
  * @author davidshimjs
- * @see <a href="http://www.d-project.com/" target="_blank">http://www.d-project.com/</a>
- * @see <a href="http://jeromeetienne.github.com/jquery-qrcode/" target="_blank">http://jeromeetienne.github.com/jquery-qrcode/</a>
+ * @see https://github.com/davidshimjs/qrcodejs
  */
 var QRCode;
 
 (function () {
-	//---------------------------------------------------------------------
-	// QRCode for JavaScript
-	//
-	// Copyright (c) 2009 Kazuhiko Arase
-	//
-	// URL: http://www.d-project.com/
-	//
-	// Licensed under the MIT license:
-	//   http://www.opensource.org/licenses/mit-license.php
-	//
-	// The word "QR Code" is registered trademark of 
-	// DENSO WAVE INCORPORATED
-	//   http://www.denso-wave.com/qrcode/faqpatent-e.html
-	//
-	//---------------------------------------------------------------------
 	function QR8bitByte(data) {
 		this.mode = QRMode.MODE_8BIT_BYTE;
 		this.data = data;
