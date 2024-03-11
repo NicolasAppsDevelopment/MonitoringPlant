@@ -2016,6 +2016,7 @@ input:invalid::placeholder {
 /* Show/Hide password */
 .password-input {
     position: relative;
+    margin: 0px !important;
 } 
 
 .btn-show-pass {
@@ -2140,8 +2141,22 @@ body.login a{
     color: var(--default-color);
     font-size: 16px;
     font-family: Inter_SemiBold;
-   
+    justify-content: center; 
 } 
+
+body.login a:hover{
+    text-decoration: underline;
+}
+
+#div_login_a{
+    margin-bottom: 20px; 
+    margin-top: 10px;
+    display:flex;
+    justify-content: right;
+}
+
+
+
 
 
 /*CSS FOR alternativeLogin.PHP*/

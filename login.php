@@ -27,7 +27,9 @@
                             </span>
                             <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
                         </div>
-                        <a href="./alternativeLogin.php">Mot de passe oublié ?</a>
+                        <div id="div_login_a">
+                            <a href="./alternativeLogin.php">Mot de passe oublié ?</a>
+                        </div>
                         <button class="rect_round_btn" type="button" onclick="login()">
                             Se connecter
                         </button>
