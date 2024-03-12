@@ -71,6 +71,8 @@
                 <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
             </div>
 
+            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Récupérer le QR code</button>
+
             <div class="section_head_container">
                 <h2 class="section_head">Accès administrateur</h2>
             </div>
