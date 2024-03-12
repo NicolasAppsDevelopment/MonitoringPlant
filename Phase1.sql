@@ -97,9 +97,9 @@ create table Logs(
 /* Table : Users                                                 */
 /*==============================================================*/
 create table Users(
-   idUser       int not null,
+   idUser       int not null auto_increment,
    user varchar(100),
-   password varchar(100),
+   password varchar(255),
    primary key (idUser)
 );
 
