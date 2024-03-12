@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $arguments = json_decode($data, true);
 
     if (!isset($arguments["password"]) || !is_string($arguments["password"])){
-        replyError("Impossible de définir le mot de passe", "Le mot de passe n'a pas été renseigné ou son format est incorrecte. Veuillez le renseigner.");
+        replyError("Impossible de définir le mot de passe", "Le mot de passe n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
     }
 
     if (!isAdminDefined()) {

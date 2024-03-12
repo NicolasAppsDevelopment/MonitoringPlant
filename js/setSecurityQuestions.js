@@ -1,15 +1,14 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const question1 = document.getElementById("question1").value;
+    const response1 = document.getElementById("response1").value;
+    const question2 = document.getElementById("question2").value;
+    const response2 = document.getElementById("response2").value;
+    const question3 = document.getElementById("question3").value;
+    const response3 = document.getElementById("response3").value;
 
-//à faire après initialisation des éléments html
-/*const question1 = document.getElementById("question1").value;
-const response1 = document.getElementById("response1").value;
-const question2 = document.getElementById("question2").value;
-const response2 = document.getElementById("response2").value;
-const question3 = document.getElementById("question3").value;
-const response3 = document.getElementById("response3").value;
-
-let bar=document.getElementsByClassName("progression_bar");
-bar[0].style.width="40%";*/
-
+    let bar=document.getElementsByClassName("progression_bar");
+    bar[0].style.width="40%";
+});
 
 function next1(){
     if (question1!=question2  && response1!=response2){
@@ -49,7 +48,12 @@ async function setSecurityQuestions(){
     } 
 
     const data = await PHP_post("/PHP_API/setSecurityQuestions.php", {
-        "password": password2,
+        "question1": question1,
+        "response1": response1,
+        "question1": question2,
+        "response1": response2,
+        "question1": question3,
+        "response1": response3
     });
     
     if (data != null) {

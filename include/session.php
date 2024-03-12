@@ -81,6 +81,54 @@ function updateAdminPassword(string $password)
     }
 }
 
+
+/**
+ * Register the user with his password into the database (the password will be stored hashed)
+ * 
+ * @param string $password The password (not hashed)
+ */
+function registerAdminQuestions(string $question,string $response)
+{
+    try {
+        fetchAll("INSERT INTO Questions VALUES ('admin', :question, :response)", [
+            'question' => $question, 
+            'response' => $response
+
+        ]);
+    } catch (\Throwable $th) {
+        replyError("Impossible d'enregistrer les réponses et questions de sécurité.", $th->getMessage());
+    }
+}
+
+/**
+ * Modify the password of the admin into the database (the password will be stored hashed)
+ * 
+ * @param string $password The password (not hashed)
+ */
+function updateAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3)
+{
+    try {
+        fetchAll("DELETE FROM Questions WHERE user = 'admin'");
+        fetchAll("INSERT INTO Questions VALUES ('admin', :question1, :response1)", [
+            'question1' => $question1, 
+            'response1' => $response1
+
+        ]);
+        fetchAll("INSERT INTO Questions VALUES ('admin', :question2, :response2)", [
+            'question2' => $question2, 
+            'response2' => $response2
+
+        ]);
+        fetchAll("INSERT INTO Questions VALUES ('admin', :question3, :response3)", [
+            'question3' => $question3, 
+            'response3' => $response3
+
+        ]);
+    } catch (\Throwable $th) {
+        replyError("Impossible de modifier les réponses et questions de sécurité.", $th->getMessage());
+    }
+}
+
 /**
  * Logout the current user
  */
