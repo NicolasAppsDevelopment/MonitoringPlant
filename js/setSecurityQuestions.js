@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const question3 = document.getElementById("question3").value;
     const response3 = document.getElementById("response3").value;
 
-    let bar=document.getElementsByClassName("progression_bar");
+    bar=document.getElementsByClassName("progression_bar");
     bar[0].style.width="40%";
 });
 

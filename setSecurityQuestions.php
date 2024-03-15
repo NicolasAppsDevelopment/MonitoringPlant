@@ -47,12 +47,14 @@
                         <div class="label_img_input no-margin-top">
                             <input class="input_field btn-show key" id="response2" name="response2" type="text" placeholder="Sarah" autocomplete="off" minlength="1">
                         </div>
-                        <button class="rect_round_btn" type="button" onclick="previous1()">
-                            Précédent
-                        </button>
-                        <button class="rect_round_btn" type="button" onclick="next2()">
-                            Suivant
-                        </button>
+                        <div class="two_buttons">
+                            <button class="rect_round_btn" type="button" onclick="previous1()">
+                                Précédent
+                            </button>
+                            <button class="rect_round_btn" type="button" onclick="next2()">
+                                Suivant
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="popup_contenu hidden" id="div_page3">
@@ -67,12 +69,14 @@
                         <div class="label_img_input no-margin-top">
                             <input class="input_field btn-show key" id="response3" name="response3" type="text" placeholder="Martin" autocomplete="off" minlength="1">
                         </div>
-                        <button class="rect_round_btn" type="button" onclick="previous2()">
-                            Précédent
-                        </button>
-                        <button class="rect_round_btn" type="button" onclick="setSecurityQuestions()">
-                            Continuer
-                        </button>
+                        <div class="two_buttons">
+                            <button class="rect_round_btn" type="button" onclick="previous2()">
+                                Précédent
+                            </button>
+                            <button class="rect_round_btn" type="button" onclick="setSecurityQuestions()">
+                                Continuer
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
