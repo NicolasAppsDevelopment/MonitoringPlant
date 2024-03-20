@@ -1,65 +1,72 @@
 <?php
-header("Content-Type: application/json; charset=utf-8");
 
-include_once __DIR__ . "/../include/database.php";
-include_once __DIR__ . "/../include/reply.php";
-include_once __DIR__ . "/../include/NodeRED_API.php";
+use Session;
+use SettingsManager;
+use RequestReplySender;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
+$settingsManager = SettingsManager::getInstance();
+$reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$errorTitle = "Impossible de sauvegarder les paramètres";
 
-    $data = file_get_contents("php://input");
-    $arguments = json_decode($data, true);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
 
-    if (!isset($arguments["timeConservation"])){
-        replyError("Impossible de sauvegarder les paramètres", "L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
-    }
-    if (!isset($arguments["timeConservationUnit"]) || !is_string($arguments["timeConservationUnit"])){
-        replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle de suppression des campagnes n'a pas été renseigné ou son format est incorrect. Veuillez la renseigner.");
-    }
-    if (!isset($arguments["enableAutoRemove"]) || !is_bool($arguments["enableAutoRemove"])){
-        replyError("Impossible de sauvegarder les paramètres", "L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
-    if (!isset($arguments["network"]) || !is_string($arguments["network"])){
-        replyError("Impossible de sauvegarder les paramètres", "Le nom du réseau WIFI n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
+        $data = file_get_contents("php://input");
+        $arguments = json_decode($data, true);
 
-    $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
-    if ($interval === false) {
-        replyError("Impossible de sauvegarder les paramètres", "Le format de l'intervalle de suppression des campagnes est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
-    }
+        if (!isset($arguments["timeConservation"])){
+            throw new Exception("L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
+        }
+        if (!isset($arguments["timeConservationUnit"]) || !is_string($arguments["timeConservationUnit"])){
+            throw new Exception("L'unité de l'intervalle de suppression des campagnes n'a pas été renseigné ou son format est incorrect. Veuillez la renseigner.");
+        }
+        if (!isset($arguments["enableAutoRemove"]) || !is_bool($arguments["enableAutoRemove"])){
+            throw new Exception("L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["network"]) || !is_string($arguments["network"])){
+            throw new Exception("Le nom du réseau WIFI n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
 
-    switch ($arguments["timeConservationUnit"]) {
-        case "h":
-            $interval *= 3600;
-            break;
-        case "j":
-            $interval *= 86400;
-            break;
-        case "mois":
-            $interval *= 2592000;
-            break;
-        default:
-            replyError("Impossible de sauvegarder les paramètres", "L'unité de l'intervalle séléctionné est incorrecte.");
-            break;
-    }
+        $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
+        if ($interval === false) {
+            throw new Exception("Le format de l'intervalle de suppression des campagnes est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
+        }
 
-    if($arguments["network"]!=null && $arguments["network"]!=NodeRedGet("getAccessPoint")){
-        if(strlen($arguments["network"])<=32 && strlen($arguments["network"])>0){
-            if(preg_match('/^[a-zA-Z0-9\s\-_]+$/',$arguments["network"])){
-                NodeRedPost("setAccessPoint",array('network' => $arguments["network"],'key' =>"I_do_believe_I_am_on_fire"));
+        switch ($arguments["timeConservationUnit"]) {
+            case "h":
+                $interval *= 3600;
+                break;
+            case "j":
+                $interval *= 86400;
+                break;
+            case "mois":
+                $interval *= 2592000;
+                break;
+            default:
+                throw new Exception("L'unité de l'intervalle séléctionné est incorrecte.");
+                break;
+        }
+
+        if($arguments["network"]!=null && $arguments["network"]!=NodeRedGet("getAccessPoint")){
+            if(strlen($arguments["network"])<=32 && strlen($arguments["network"])>0){
+                if(preg_match('/^[a-zA-Z0-9\s\-_]+$/',$arguments["network"])){
+                    NodeRedPost("setAccessPoint",array('network' => $arguments["network"],'key' =>"I_do_believe_I_am_on_fire"));
+                }else{
+                    throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
+                }
             }else{
-                replyError("Impossible de sauvegarder les paramètres", "Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
-            }    
-        }else{
-            replyError("Impossible de sauvegarder les paramètres", "Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
-        } 
-    }
+                throw new Exception("Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
+            }
+        }
 
-    reply(array(
-        "success" => setParametersPHP($interval, $arguments["enableAutoRemove"])
-    ));
-    
-} else {
-    replyError("Impossible de sauvegarder les paramètres", "La méthode de requête est incorrecte.");
+        $settingsManager->setSettings($interval, $arguments["enableAutoRemove"]);
+
+        $reply->replySuccess();
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
+    }
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

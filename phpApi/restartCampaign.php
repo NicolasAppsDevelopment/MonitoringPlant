@@ -1,39 +1,44 @@
-<?php 
-header("Content-Type: application/json; charset=utf-8");
+<?php
 
-include_once __DIR__ . "/../include/database.php";
-include_once __DIR__ . "/../include/reply.php";
-include_once __DIR__ . "/../include/NodeRED_API.php";
+use CampaignsManager;
+use RequestReplySender;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
+$campaignsManager = CampaignsManager::getInstance();
+$reply = RequestReplySender::getInstance();
+$errorTitle = "Impossible de redémarrer la campagne";
 
-    $data = file_get_contents("php://input");
-	$args = json_decode($data, true);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
 
-    if (!isset($args["id"])){
-        replyError("Impossible de redémarrer la campagne", "L'identifiant de la campagne n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
+        $data = file_get_contents("php://input");
+        $args = json_decode($data, true);
+
+        if (!isset($args["id"])){
+            throw new Exception("L'identifiant de la campagne n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
+        }
+        $id = filter_var($args["id"], FILTER_VALIDATE_INT);
+        if ($id === false) {
+            throw new Exception("Le format de l'identifiant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+        }
+
+        // check if a campaign is already running
+        $data=NodeRedGet("check_working_campaign");
+
+        if (!array_key_exists("idCurrent", $data)) {
+            throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
+        }
+        if ($data["idCurrent"] != null && $data["idCurrent"] != $id) {
+            throw new Exception("Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
+        }
+
+        $campaignsManager->restartCampaign($id);
+        NodeRedPost("redoCampaign",array("id" => $id,'key' => 'I_do_believe_I_am_on_fire'));
+
+        $reply->replySuccess();
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-    $id = filter_var($args["id"], FILTER_VALIDATE_INT);
-    if ($id === false) {
-        replyError("Impossible de redémarrer la campagne", "Le format de l'identifiant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
-    }
-
-    // check if a campaign is already running
-    $data=NodeRedGet("check_working_campaign");
-
-    if (!array_key_exists("idCurrent", $data)) {
-        replyError("Impossible de redémarrer la campagne", "Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
-    }
-    if ($data["idCurrent"] != null && $data["idCurrent"] != $id) {
-        replyError("Impossible de redémarrer la campagne", "Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
-    }
-
-    restartCampaign($id);
-
-    reply(array(
-        "success" => NodeRedPost("redoCampaign",array("id" => $id,'key' => 'I_do_believe_I_am_on_fire'))
-    ));
-} else {
-    replyError("Impossible de redémarrer la campagne", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

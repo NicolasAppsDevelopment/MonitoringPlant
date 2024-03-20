@@ -1,28 +1,31 @@
 <?php
-header("Content-Type: application/json; charset=utf-8");
 
-include_once __DIR__ . "/../include/session.php";
-initSession();
+use Session;
+use RequestReplySender;
 
-include_once __DIR__ . "/../include/reply.php";
+$reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$errorTitle = "Impossible de se connecter";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
 
-    $data = file_get_contents("php://input");
-    $arguments = json_decode($data, true);
+        $data = file_get_contents("php://input");
+        $arguments = json_decode($data, true);
 
-    if (!isset($arguments["password"]) || !is_string($arguments["password"])){
-        replyError("Impossible de se connecter", "Le mot de passe n'a pas été renseigné ou son format est incorrecte. Veuillez le renseigner.");
-    }
+        if (!isset($arguments["password"]) || !is_string($arguments["password"])){
+            throw new Exception("Le mot de passe n'a pas été renseigné ou son format est incorrecte. Veuillez le renseigner.");
+        }
 
-    if (!login("admin", $arguments["password"])) {
-        replyError("Impossible de se connecter", "Le mot de passe est incorrecte.");
+        if (!$session->login("admin", $arguments["password"])) {
+            throw new Exception("Le mot de passe est incorrecte.");
+        } else {
+            $reply->replySuccess();
+        }
     } else {
-        reply(array(
-            "success" => true,
-        ));
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-} else {
-    replyError("Impossible de se connecter", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

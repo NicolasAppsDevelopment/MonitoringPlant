@@ -1,20 +1,26 @@
 <?php
-header("Content-Type: application/json; charset=utf-8");
 
-include_once __DIR__ . "/../include/session.php";
-initSession();
+use Session;
+use SettingsManager;
+use RequestReplySender;
 
-include_once __DIR__ . "/../include/database.php";
-include_once __DIR__ . "/../include/reply.php";
+$settingsManager = SettingsManager::getInstance();
+$reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$errorTitle = "Impossible de récupérer les paramètres";
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // handle GET request
-    if (!isAdmin()){
-        replyError("Impossible de récupérer les paramètres", "Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // handle GET request
+        if (!$session->isAdmin()){
+            throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+        }
+
+        $reply->replyData($settingsManager->getSettings());
+
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-
-    reply(getParametersPHP());
-
-} else {
-    replyError("Impossible de récupérer les paramètres", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

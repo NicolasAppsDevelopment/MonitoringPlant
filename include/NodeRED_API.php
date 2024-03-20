@@ -27,7 +27,7 @@ function NodeRedPost(string $name, array $array)
     if (curl_errno($curl)) {
         $error_msg = curl_error($curl);
         curl_close($curl);
-        replyError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
+        throw new Exception("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
     }
 
     curl_close($curl);
@@ -37,7 +37,7 @@ function NodeRedPost(string $name, array $array)
 /**
  * This function send a get request to Node Red which reply.
  * @param  string $name the name of the Node Red request will receive. This string must not contains any special characters.
- * @return values  $res is the data that NodeRed send back, it can be a interger, string, etc... 
+ * @return array  $res is the data that NodeRed send back, it can be a interger, string, etc... 
  */
 function NodeRedGet(string $name)
 {
@@ -53,7 +53,7 @@ function NodeRedGet(string $name)
     if (curl_errno($curl)) {
         $error_msg = curl_error($curl);
         curl_close($curl);
-        replyError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
+        throw new Exception("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
     }
 
     curl_close($curl);

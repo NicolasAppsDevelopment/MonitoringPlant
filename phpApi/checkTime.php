@@ -1,33 +1,39 @@
 <?php
-header("Content-Type: application/json; charset=utf-8");
 
-include_once __DIR__ . "/../include/reply.php";
+use RequestReplySender;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
+$reply = RequestReplySender::getInstance();
+$errorTitle = "Impossible de vérifier la date & heure de la cellule";
 
-    $data = file_get_contents("php://input");
-	$args = json_decode($data, true);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
 
-    if (!isset($args["client_datetime"])){
-        replyError("Impossible de vérifier la date & heure de la cellule", "La date et l'heure de votre appareil sont indéfinis. Veuillez rechagez la page.");
+        $data = file_get_contents("php://input");
+        $args = json_decode($data, true);
+
+        if (!isset($args["client_datetime"])){
+            throw new Exception("La date et l'heure de votre appareil sont indéfinis. Veuillez rechagez la page.");
+        }
+
+        if (!is_string($args["client_datetime"])){
+            throw new Exception("Le format de la date et de l'heure de votre appareil sont incorrectes. Veuillez rechagez la page.");
+        }
+
+        $client_datetime = strtotime($args["client_datetime"]);
+        if ($client_datetime === false) {
+            throw new Exception("Le format de la date et de l'heure de votre appareil sont incorrectes. Veuillez rechagez la page.");
+        }
+
+        $server_datetime = time();
+        $timeout = 120; // in seconds
+
+        $reply->replyData([
+            "up_to_date" => abs($client_datetime - $server_datetime) < $timeout
+        ]);
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-
-    if (!is_string($args["client_datetime"])){
-        replyError("Impossible de vérifier la date & heure de la cellule", "Le format de la date et de l'heure de votre appareil sont incorrectes. Veuillez rechagez la page.");
-    }
-
-    $client_datetime = strtotime($args["client_datetime"]);
-    if ($client_datetime === false) {
-        replyError("Impossible de vérifier la date & heure de la cellule", "Le format de la date et de l'heure de votre appareil sont incorrectes. Veuillez rechagez la page.");
-    }
-
-    $server_datetime = time();
-    $timeout = 120; // in seconds
-
-    reply([
-        "up_to_date" => abs($client_datetime - $server_datetime) < $timeout
-    ]);
-} else {
-    replyError("Impossible de vérifier la date & heure de la cellule", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

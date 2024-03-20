@@ -1,19 +1,22 @@
 <?php
-header("Content-Type: application/json; charset=utf-8");
 
-include_once __DIR__ . "/../include/session.php";
-initSession();
+use Session;
+use RequestReplySender;
 
-include_once __DIR__ . "/../include/reply.php";
+$reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$errorTitle = "Impossible de se déconnecter";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    logout();
-    reply(array(
-        "success" => true,
-    ));
-} else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    logout();
-    header("Location: /");
-} else {
-    replyError("Impossible de récupérer les paramètres", "La méthode de requête est incorrecte.");
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $session->logout();
+        $reply->replySuccess();
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $session->logout();
+        header("Location: /");
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
+    }
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

@@ -1,29 +1,36 @@
-<?php 
-header("Content-Type: application/json; charset=utf-8");
+<?php
 
-include_once __DIR__ . "/../include/database.php";
-include_once __DIR__ . "/../include/reply.php";
+use ConfigurationsManager;
+use RequestReplySender;
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // handle GET request
-    reply(array(
-        "data" => getListConfiguration()
-    ));
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
+$configManager = ConfigurationsManager::getInstance();
+$reply = RequestReplySender::getInstance();
+$errorTitle = "Impossible de lister les configurations";
 
-    $data = file_get_contents("php://input");
-	$args = json_decode($data, true);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // handle GET request
+        $reply->replyData([
+            $configManager->getListConfiguration()
+        ]);
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
 
-    if (!isset($args["name"]) || !is_string($args["name"])){
-        replyError("Impossible de filtrer les configurations", "Paramètre \"name\" manquant/invalide dans la requête.");
+        $data = file_get_contents("php://input");
+        $args = json_decode($data, true);
+
+        if (!isset($args["name"]) || !is_string($args["name"])){
+            throw new Exception("Paramètre \"name\" manquant/invalide dans la requête.");
+        }
+        
+        $reply->replyData([
+            $configManager->getListConfiguration(array(
+                "name"=> $args["name"],
+            ))
+        ]);
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-    
-    reply(array(
-        "data" => getListConfiguration(array(
-            "name"=> $args["name"],
-        ))
-    ));
-} else {
-    replyError("Impossible de récupérer les campagnes", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

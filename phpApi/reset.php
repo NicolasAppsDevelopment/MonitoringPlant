@@ -1,22 +1,28 @@
-<?php 
-header("Content-Type: application/json; charset=utf-8");
+<?php
 
-include_once __DIR__ . "/../include/session.php";
-initSession();
+use Session;
+use Database;
+use RequestReplySender;
 
-include_once __DIR__ . "/../include/database.php";
-include_once __DIR__ . "/../include/reply.php";
+$db = Database::getInstance();
+$reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$errorTitle = "Impossible d'effacer toutes les données";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
-    
-    if (!isAdmin()){
-        replyError("Impossible d'effacer toute les données", "Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
+        
+        if (!$session->isAdmin()){
+            throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+        }
+
+        $db->resetAll();
+
+        $reply->replySuccess();
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-
-    reply(array(
-        "data" => resetAll()
-    ));
-} else {
-    replyError("Impossible d'effacer toute les données", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

@@ -96,6 +96,24 @@ async function reset()
     }
 }
 
+/**
+ * Display QR Code to access the Raspi
+ */
+async function displayQRcode()
+{
+    // Check password/ssid was edited from IU. If so, ask user to save first or refresh page to discard changes.
+    if (true) {
+        displayError('Modification non sauvegardée', "Le nom et/ou le mot de passe du réseau Wifi a été modifié sur cette page et les chagements n'ont pas été sauvegardés. Veuillez enregistrer les modifications ou rafraîchissez la page pour les abandonnées ; puis réessayer.")
+        return;
+    } 
+
+    displayLoading("Génération du QR code...");
+    
+    // Remove and then recreate img HTML componants with src = ./PHP_API/getQRcode.php
+
+    hideLoading();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     getSettings();
 });

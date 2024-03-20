@@ -1,20 +1,25 @@
 <?php
-header("Content-Type: application/json; charset=utf-8");
 
-include_once __DIR__ . "/../include/session.php";
-initSession();
+use Session;
+use RequestReplySender;
 
-include_once __DIR__ . "/../include/database.php";
-include_once __DIR__ . "/../include/reply.php";
-include_once __DIR__ . "/../include/NodeRED_API.php";
+$reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$errorTitle = "Impossible de redémarrer le microcontrôleur";
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // handle GET request
-    if (!isAdmin()){
-        replyError("Impossible de redémarrer le microcontrôleur", "Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // handle GET request
+        if (!$session->isAdmin()){
+            throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+        }
+
+        NodeRedPost('restart',array('key' =>"I_do_believe_I_am_on_fire"));
+
+        $reply->replySuccess();
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-
-    reply(NodeRedPost('restart',array('key' =>"I_do_believe_I_am_on_fire")));
-} else {
-    replyError("Impossible de redémarrer le microcontrôleur", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

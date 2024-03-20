@@ -1,3 +1,4 @@
 <?php
-include_once __DIR__ . "/database.php";
-getParametersPHP();
+
+use SettingsManager;
+SettingsManager::getInstance()->getSettings();

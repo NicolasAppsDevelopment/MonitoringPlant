@@ -1,26 +1,34 @@
-<?php 
-header("Content-Type: application/json; charset=utf-8");
+<?php
 
-include_once __DIR__ . "/../include/database.php";
-include_once __DIR__ . "/../include/reply.php";
+use ConfigurationsManager;
+use RequestReplySender;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
+$configManager = ConfigurationsManager::getInstance();
+$reply = RequestReplySender::getInstance();
+$errorTitle = "Impossible de récupérer la configuration";
 
-    $data = file_get_contents("php://input");
-	$args = json_decode($data, true);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
 
-    if (!isset($args["id"])){
-        replyError("Impossible de récupérer la configuration", "L'identifiant de la configuration n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
+        $data = file_get_contents("php://input");
+        $args = json_decode($data, true);
+
+        if (!isset($args["id"])){
+            throw new Exception("L'identifiant de la configuration n'a pas été renseigné. Veuillez rafraîchir la page puis réessayer.");
+        }
+
+        $id = filter_var($args["id"], FILTER_VALIDATE_INT);
+        if ($id === false) {
+            throw new Exception("Le format de l'identifiant de la configuration est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+        }
+
+        $data = $configManager->getConfiguration($id);
+        
+        $reply->replyData($data);
+    } else {
+        throw new Exception("La méthode de requête est incorrecte.");
     }
-    $id = filter_var($args["id"], FILTER_VALIDATE_INT);
-    if ($id === false) {
-        replyError("Impossible de récupérer la configuration", "Le format de l'identifiant de la configuration est incorrecte. Veuillez rafraîchir la page puis réessayer.");
-    }
-
-    $data = getConfiguration($id);
-    
-    reply($data);
-} else {
-    replyError("Impossible de récupérer la configuration", "La méthode de requête est incorrecte.");
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }
