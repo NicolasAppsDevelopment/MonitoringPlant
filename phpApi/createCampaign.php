@@ -19,15 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'ajouter la campagne", "Le nom de votre campagne n'a pas été renseigné. Veuillez donner un nom à votre campagne puis réessayer.");
     }
 
-    if (!isset($arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["temperature_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"])){
+    if (!isset($arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["temperatureEnabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"])){
         replyError("Impossible d'ajouter la campagne", "Il manque un ou plusieurs capteurs dans la requête.");
     }
 
-    if (!is_bool($arguments["CO2_enabled"]) || !is_bool($arguments["O2_enabled"]) || !is_bool($arguments["temperature_enabled"]) || !is_bool($arguments["luminosity_enabled"]) || !is_bool($arguments["humidity_enabled"])){
+    if (!is_bool($arguments["co2Enabled"]) || !is_bool($arguments["o2Enabled"]) || !is_bool($arguments["temperatureEnabled"]) || !is_bool($arguments["luminosityEnabled"]) || !is_bool($arguments["humidityEnabled"])){
         replyError("Impossible d'ajouter la campagne", "Le format de la liste des capteurs séléctionnés est incorrecte.");
     }
 
-    if ($arguments["CO2_enabled"] == false && $arguments["O2_enabled"] == false && $arguments["temperature_enabled"] == false && $arguments["luminosity_enabled"] == false && $arguments["humidity_enabled"] == false){
+    if ($arguments["co2Enabled"] == false && $arguments["o2Enabled"] == false && $arguments["temperatureEnabled"] == false && $arguments["luminosityEnabled"] == false && $arguments["humidityEnabled"] == false){
         replyError("Impossible d'ajouter la campagne", "Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
     }
 
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (!isset($arguments["volume_unit"], $arguments["interval_unit"], $arguments["duration_unit"]) || !is_string($arguments["volume_unit"]) || !is_string($arguments["interval_unit"]) || !is_string($arguments["duration_unit"])) {
+    if (!isset($arguments["volume_unit"], $arguments["intervalUnit"], $arguments["duration_unit"]) || !is_string($arguments["volume_unit"]) || !is_string($arguments["intervalUnit"]) || !is_string($arguments["duration_unit"])) {
         replyError("Impossible d'ajouter la campagne", "Le format d'une unité séléctionné est incorrecte ou manquante.");
     }
     
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    switch ($arguments["interval_unit"]) {
+    switch ($arguments["intervalUnit"]) {
         case "s":
             break;
         case "min":
@@ -125,16 +125,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'ajouter la campagne", "Le format de l'identifiant de configuration de la campagne est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
     }
 
-    if (!isset($arguments["humid_mode"])){
+    if (!isset($arguments["humidMode"])){
         replyError("Impossible d'ajouter la campagne", "Le mode de mesure est manquant. Veuillez réessayer.");
-        if (!is_bool($arguments["humid_mode"])){
+        if (!is_bool($arguments["humidMode"])){
             replyError("Impossible d'ajouter la campagne", "Le format du mode de mesure est incorrecte.");
         }
     }
 
-    if (!isset($arguments["enable_fibox_temp"])){
+    if (!isset($arguments["enableFiboxTemp"])){
         replyError("Impossible d'ajouter la campagne", "Le mode d'activation du capteur de température du Fibox est manquant. Veuillez réessayer.");
-        if (!is_bool($arguments["enable_fibox_temp"])){
+        if (!is_bool($arguments["enableFiboxTemp"])){
             replyError("Impossible d'ajouter la campagne", "Le format du mode d'activation du capteur de température du Fibox est incorrecte.");
         }
     }
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     // Creation of the new measurement campaign.
-    $id = addCampaign($config_id, $arguments["title"], $arguments["temperature_enabled"], $arguments["CO2_enabled"], $arguments["O2_enabled"], $arguments["luminosity_enabled"], $arguments["humidity_enabled"], $interval, $volume, $duration, $arguments["humid_mode"], $arguments["enable_fibox_temp"]);
+    $id = addCampaign($config_id, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
 
     NodeRedPost("createCampaign",array('id' => $id,'key' => 'I_do_believe_I_am_on_fire'));
 

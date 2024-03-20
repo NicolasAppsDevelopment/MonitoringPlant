@@ -41,19 +41,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Checking export settings.
-    if (!isset($args["CO2_enabled"], $args["O2_enabled"], $args["temperature_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"])){
+    if (!isset($args["co2Enabled"], $args["o2Enabled"], $args["temperatureEnabled"], $args["luminosityEnabled"], $args["humidityEnabled"])){
         replyError("Impossible d'exporter la campagne", "Il manque un ou plusieurs capteurs dans la requête.");
     }
 
-    if (!is_bool($args["CO2_enabled"]) || !is_bool($args["O2_enabled"]) || !is_bool($args["temperature_enabled"]) || !is_bool($args["luminosity_enabled"]) || !is_bool($args["humidity_enabled"])){
+    if (!is_bool($args["co2Enabled"]) || !is_bool($args["o2Enabled"]) || !is_bool($args["temperatureEnabled"]) || !is_bool($args["luminosityEnabled"]) || !is_bool($args["humidityEnabled"])){
         replyError("Impossible d'exporter la campagne", "Le format de la liste des capteurs séléctionnés est incorrecte.");
     }
 
-    if ($args["CO2_enabled"] == false && $args["O2_enabled"] == false && $args["temperature_enabled"] == false && $args["luminosity_enabled"] == false && $args["humidity_enabled"] == false){
+    if ($args["co2Enabled"] == false && $args["o2Enabled"] == false && $args["temperatureEnabled"] == false && $args["luminosityEnabled"] == false && $args["humidityEnabled"] == false){
         replyError("Impossible d'exporter la campagne", "Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
     }
 
-    if (isset($args["interval_unit"]) && !is_string($args["interval_unit"])){
+    if (isset($args["intervalUnit"]) && !is_string($args["intervalUnit"])){
         replyError("Impossible d'exporter la campagne", "Le format de l'unité de l'interval de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
 
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
 
-        switch ($args["interval_unit"]) {
+        switch ($args["intervalUnit"]) {
             case "s":
                 break;
             case "min":
@@ -91,38 +91,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'exporter la campagne", "Vous avez demandé la moyennage des valeurs sans définir un interval");
     }
 
-    if (isset($args["start_date"]) && !is_string($args["start_date"])){
+    if (isset($args["startDate"]) && !is_string($args["startDate"])){
         replyError("Impossible d'exporter la campagne", "Le format de la date de début de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
 
-    if (isset($args["end_date"]) && !is_string($args["end_date"])){
+    if (isset($args["endDate"]) && !is_string($args["endDate"])){
         replyError("Impossible d'exporter la campagne", "Le format de la date de fin de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
 
-    if (isset($args["start_time"]) && !is_string($args["start_time"])){
+    if (isset($args["startTime"]) && !is_string($args["startTime"])){
         replyError("Impossible d'exporter la campagne", "Le format de l'heure de début de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
 
-    if (isset($args["end_time"]) && !is_string($args["end_time"])){
+    if (isset($args["endTime"]) && !is_string($args["endTime"])){
         replyError("Impossible d'exporter la campagne", "Le format de l'heure de fin de récupération des mesures de la campagne est incorrecte. Veuillez réessayer.");
     }
 
-    if ((!isset($args["start_time"]) || $args["start_time"] == "") && isset($args["start_date"])){
-        $args["start_time"] = "00:00:00";
+    if ((!isset($args["startTime"]) || $args["startTime"] == "") && isset($args["startDate"])){
+        $args["startTime"] = "00:00:00";
     }
 
-    if ((!isset($args["end_time"]) || $args["end_time"] == "") && isset($args["end_date"])){
-        $args["end_time"] = "23:59:59";
+    if ((!isset($args["endTime"]) || $args["endTime"] == "") && isset($args["endDate"])){
+        $args["endTime"] = "23:59:59";
     }
 
     $start = "";
-    if (isset($args["start_time"]) && isset($args["start_date"]) && $args["start_date"] != "" && $args["start_time"] != ""){
-        $start = $args["start_date"] . " " . $args["start_time"];
+    if (isset($args["startTime"]) && isset($args["startDate"]) && $args["startDate"] != "" && $args["startTime"] != ""){
+        $start = $args["startDate"] . " " . $args["startTime"];
     }
 
     $end = "";
-    if (isset($args["end_time"]) && isset($args["end_date"]) && $args["end_date"] != "" && $args["end_time"] != ""){
-        $end = $args["end_date"] . " " . $args["end_time"];
+    if (isset($args["endTime"]) && isset($args["endDate"]) && $args["endDate"] != "" && $args["endTime"] != ""){
+        $end = $args["endDate"] . " " . $args["endTime"];
     }
 
     if (isset($args["volume"]) && !is_bool($args["volume"]) ){
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
    
-    $measurements=exportCampaign($id, $args["temperature_enabled"], $args["CO2_enabled"], $args["O2_enabled"], $args["luminosity_enabled"], $args["humidity_enabled"], $start, $end);
+    $measurements=exportCampaign($id, $args["temperatureEnabled"], $args["co2Enabled"], $args["o2Enabled"], $args["luminosityEnabled"], $args["humidityEnabled"], $start, $end);
     if (count($measurements) == 0){
         replyError("Impossible d'exporter la campagne", "Aucune mesure ne correspond aux critères que vous avez demandé.");
     }
@@ -143,10 +143,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nbcolmum = $nbcolmum = (int)(count($measurements[0]) / 2);
     $indexC02=null;
     $index02=null;
-    if ($args["CO2_enabled"] == true){
+    if ($args["co2Enabled"] == true){
         $indexC02=getIndexFromKeyName($measurements[0], "CO2");
     }
-    if ($args["O2_enabled"] == true){
+    if ($args["o2Enabled"] == true){
         $index02=getIndexFromKeyName($measurements[0], "O2");
     }   
 

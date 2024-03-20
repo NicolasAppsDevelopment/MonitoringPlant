@@ -158,11 +158,11 @@ function existCampagne(string $name): bool {
  * @param int $interval  Interval between each measurements of the new campaign
  * @param ?float $volume  Volume in wich the new campaign take measurements
  * @param int $duration  Duration of the new campaign
- * @param bool $humid_mode  True if the new campaign happened in a humid environment
- * @param bool $enable_fibox_temp  True if the new campaign take the temperature of the fibox
+ * @param bool $humidMode  True if the new campaign happened in a humid environment
+ * @param bool $enableFiboxTemp  True if the new campaign take the temperature of the fibox
  * @return int
  */
-function addCampaign(int $config_id, string $name, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, int $interval, ?float $volume, int $duration, bool $humid_mode, bool $enable_fibox_temp) : int
+function addCampaign(int $config_id, string $name, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, int $interval, ?float $volume, int $duration, bool $humidMode, bool $enableFiboxTemp) : int
 {
     try {
         if (existCampagne($name)) {
@@ -181,8 +181,8 @@ function addCampaign(int $config_id, string $name, bool $temperatureSensor, bool
             'varVolume' => $volume,
             'varDuration' => $duration,
             'varDuration2' => $duration, // PDO ne permet pas d'utiliser le même paramètre de liaison plus d'une fois dans une requête !
-            'varHumidMode' => (int)$humid_mode,
-            'varEnableFiboxTemp' => (int)$enable_fibox_temp
+            'varHumidMode' => (int)$humidMode,
+            'varEnableFiboxTemp' => (int)$enableFiboxTemp
         ]);
 
         return getIdCampagne($name);

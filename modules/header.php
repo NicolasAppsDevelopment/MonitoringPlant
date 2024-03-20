@@ -84,7 +84,7 @@
             </a></li>
             <li class="expend"></li>
             <?php if (isAdmin()) { ?>
-            <li><a href="/PHP_API/logout.php">
+            <li><a href="/phpApi/logout.php">
                 <div class="info_ico_container logout">
                     <svg version="1.1" id="svg2" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="15.63 24.45 240.37 207.1">
                         <defs id="defs2"></defs>

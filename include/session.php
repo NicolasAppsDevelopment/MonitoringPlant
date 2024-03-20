@@ -83,9 +83,10 @@ function updateAdminPassword(string $password)
 
 
 /**
- * Register the user with his password into the database (the password will be stored hashed)
+ * Register a security question define by the user into the database (the question and its response will be stored hashed)
  * 
- * @param string $password The password (not hashed)
+ * @param string $question The question (not hashed)
+ * @param string $response The response to the question (not hashed)
  */
 function registerAdminQuestions(string $question,string $response)
 {
@@ -101,10 +102,16 @@ function registerAdminQuestions(string $question,string $response)
 }
 
 /**
- * Modify the password of the admin into the database (the password will be stored hashed)
+ * Modify the security questions of the admin into the database (the questions and responses will be stored hashed)
  * 
- * @param string $password The password (not hashed)
+ * @param string $question1 The first question (not hashed)
+ * @param string $response1 The response to the first question (not hashed)
+ * @param string $question2 The second question (not hashed)
+ * @param string $response2 The response to the second question (not hashed)
+ * @param string $question3 The third question (not hashed)
+ * @param string $response3 The response to the third question (not hashed)
  */
+
 function updateAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3)
 {
     try {

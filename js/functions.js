@@ -1,5 +1,5 @@
 const API_IP_ADDRESS = "localhost";
-const PHP_API_PORT = "8080";
+const phpApi_PORT = "8080";
 const NODERED_API_PORT = "1880";
 
 let blurCompatibility = true;
@@ -241,16 +241,16 @@ async function get(url) {
     return null;
 }
 
-async function PHP_post(url, data) {
-    return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, data);
+async function phpPost(url, data) {
+    return await post("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url, data);
 }
 
-async function PHP_postGetFile(url, data) {
-    return await postGetFile("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, data);
+async function phpPostGetFile(url, data) {
+    return await postGetFile("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url, data);
 } 
 
-async function PHP_get(url) { 
-    return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url);
+async function phpGet(url) { 
+    return await get("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url);
 } 
 
 async function NODERED_post(url, data) {
@@ -370,7 +370,7 @@ function getReadableBool(bool) {
  */
 async function checkTime() {
     const client_datetime = new Date();
-    const data = await PHP_post("/PHP_API/checkTime.php", {
+    const data = await phpPost("/phpApi/checkTime.php", {
         "client_datetime": client_datetime
     });
 

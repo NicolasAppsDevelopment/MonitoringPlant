@@ -20,39 +20,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         replyError("Impossible d'accéder à la campagne", "Le format de l'identifiaant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
     }
 
-    if (isset($args["last_log_datetime"]) && !is_string($args["last_log_datetime"])){
-        replyError("Impossible d'accéder à la campagne", "Paramètre \"last_log_datetime\" est invalide dans la requête.");
+    if (isset($args["lastLogDatetime"]) && !is_string($args["lastLogDatetime"])){
+        replyError("Impossible d'accéder à la campagne", "Paramètre \"lastLogDatetime\" est invalide dans la requête.");
     }
 
-    if (!isset($args["last_log_datetime"])){
-        $args["last_log_datetime"] = NULL;
+    if (!isset($args["lastLogDatetime"])){
+        $args["lastLogDatetime"] = NULL;
     }
 
-    if (isset($args["last_measure_datetime"]) && !is_string($args["last_measure_datetime"])){
-        replyError("Impossible d'accéder à la campagne", "Paramètre \"last_measure_datetime\" est invalide dans la requête.");
+    if (isset($args["lastMeasureDatetime"]) && !is_string($args["lastMeasureDatetime"])){
+        replyError("Impossible d'accéder à la campagne", "Paramètre \"lastMeasureDatetime\" est invalide dans la requête.");
     }
 
-    if (!isset($args["last_measure_datetime"])){
-        $args["last_measure_datetime"] = NULL;
+    if (!isset($args["lastMeasureDatetime"])){
+        $args["lastMeasureDatetime"] = NULL;
     }
 
     // Recovery measurement campaign data.
-    $data = getCampaign($id, $args["last_log_datetime"], $args["last_measure_datetime"]);
+    $data = getCampaign($id, $args["lastLogDatetime"], $args["lastMeasureDatetime"]);
 
 
     // Get last log datetime
     if (count($data["logs"]) > 0) {
-        $data["last_log_datetime"] = $data["logs"][count($data["logs"])-1]["occuredDate"];
+        $data["lastLogDatetime"] = $data["logs"][count($data["logs"])-1]["occuredDate"];
     } else{
-        $data["last_log_datetime"] = NULL;
+        $data["lastLogDatetime"] = NULL;
     } 
     
 
     // Get last measure datetime
     if (count($data["measurements"]) > 0) {
-        $data["last_measure_datetime"] = $data["measurements"][count($data["measurements"])-1]["date"];
+        $data["lastMeasureDatetime"] = $data["measurements"][count($data["measurements"])-1]["date"];
     } else{
-        $data["last_measure_datetime"] = NULL;
+        $data["lastMeasureDatetime"] = NULL;
     }
     
     

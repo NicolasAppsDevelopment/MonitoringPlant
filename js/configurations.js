@@ -1,7 +1,16 @@
+//Executes each of the following functions when all html code is loaded.
 document.addEventListener("DOMContentLoaded", () => {
+    // Checks if the raspberry pi's time is the same as that of the device using the website.
+    checkTime();
+    //
     getListConfigJS();
 });
 
+/**
+ * Recovery and display measurement campaign data.
+ * @param {boolean} editMode Influences the visual aspect of the recovery
+ * @param {integer} id 
+ */
 async function saveConfiguration(editMode = false, id = null) {
     let actionVerb = "d'ajouter";
     if (editMode === true) {
@@ -11,6 +20,7 @@ async function saveConfiguration(editMode = false, id = null) {
         displayLoading("Ajout de la configuration...");
     }
 
+    // Settings to register a configuration.
     const name = document.getElementById("name_input");
     const f1 = document.getElementById("f1_input");
     const m = document.getElementById("m_input");
@@ -113,7 +123,7 @@ async function saveConfiguration(editMode = false, id = null) {
 
     let data = null;
     if (editMode === true) {
-        data = await PHP_post("/PHP_API/editConfiguration.php", {
+        data = await phpPost("/phpApi/editConfiguration.php", {
             "id": id,
             "name": name.value,
             "f1": f1.value,
@@ -132,7 +142,7 @@ async function saveConfiguration(editMode = false, id = null) {
             "calib_is_humid": calib_is_humid.checked
         });
     } else {
-        data = await PHP_post("/PHP_API/addConfiguration.php", {
+        data = await phpPost("/phpApi/addConfiguration.php", {
             "name": name.value,
             "f1": f1.value,
             "m": m.value,
@@ -184,7 +194,7 @@ async function loadConfiguration(id) {
     const altitude = document.getElementById("alt_input");
     const calib_is_humid = document.getElementById("calib_is_humid");
 
-    const data = await PHP_post("/PHP_API/getConfiguration.php", {
+    const data = await phpPost("/phpApi/getConfiguration.php", {
         "id": id,
     });
 
@@ -248,7 +258,7 @@ async function removeConfig(id) {
 
     if (await displayConfirm('Voulez-vous vraiment supprimer cette configuration de mesure ?', 'Cette configuration est supprimée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière supprimé (vous ne pourrez plus voir le nom de la configuration utilisé par la campagne concerné). Cette action est irréversible.', 'Supprimer', true) == true) {
         document.getElementById("config_" + id).remove();
-        PHP_post("/PHP_API/removeConfiguration.php", {
+        phpPost("/phpApi/removeConfiguration.php", {
             "id": id
         });
     }
@@ -274,9 +284,9 @@ async function getListConfigJS(filter = null) {
 
     let data = null;
     if (filter != null) {
-        data = await PHP_post("/PHP_API/getListConfiguration.php", filter);
+        data = await phpPost("/phpApi/getListConfiguration.php", filter);
     } else {
-        data = await PHP_get("/PHP_API/getListConfiguration.php");
+        data = await phpGet("/phpApi/getListConfiguration.php");
     }
 
     if (data != null){

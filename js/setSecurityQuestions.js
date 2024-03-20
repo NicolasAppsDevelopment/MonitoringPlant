@@ -10,44 +10,52 @@ document.addEventListener("DOMContentLoaded", () => {
     bar[0].style.width="40%";
 });
 
-function next1(){
-    if (question1!=question2  && response1!=response2){
-        document.getElementById("div_page1").classList.add("hidden");
-        bar[0].style.width="60%";
-        document.getElementById("div_page2").classList.remove("hidden");
-    }
+/**
+ * Display the first form to define the first question and its response.
+ */
+function gotform1(){
+    document.getElementById("div_page3").classList.add("hidden");
+    document.getElementById("div_page2").classList.add("hidden");
+    bar[0].style.width="40%";
+    document.getElementById("div_page1").classList.remove("hidden");
 }
 
-function next2(){
-    if (question1!=question2  && response1!=response2 && question1!=question3  && response1!=response3 && question2!=question3  && response2!=response3){
+/**
+ * Display the second form to define the second question and its response.
+ */
+function gotform2(){
+    document.getElementById("div_page3").classList.add("hidden");
+    document.getElementById("div_page1").classList.add("hidden");
+    bar[0].style.width="60%";
+    document.getElementById("div_page2").classList.remove("hidden");
+}
+
+/**
+ * Display the third form to definie the third question and its response.
+ */
+function gotform3(){
+    if (question1!=question2  && response1!=response2){
+        document.getElementById("div_page1").classList.add("hidden");
         document.getElementById("div_page2").classList.add("hidden");
         bar[0].style.width="80%";
         document.getElementById("div_page3").classList.remove("hidden");
     }
 }
 
-function previous1(){  
-    document.getElementById("div_page2").classList.add("hidden");
-    bar[0].style.width="40%";
-    document.getElementById("div_page1").classList.remove("hidden");
-}
-
-function previous2(){
-    document.getElementById("div_page3").classList.add("hidden");
-    bar[0].style.width="60%";
-    document.getElementById("div_page2").classList.remove("hidden");
-}
-
+/**
+ * Register the questions and their responses into the database.
+ */
 async function setSecurityQuestions(){
     displayLoading("Mise à jour du mot de passe...");
     
-    if (password1 != password2) {
-        await displayError("Impossible de définir le mot de passe", "Les mot de passe sont différents. Veuillez recommencer.");
+    if (question1==question2 || response1!=response2 || question1!=question3  || response1!=response3 || question2!=question3  || response2!=response3){
+        await displayError("Impossible de définir les questions de sécurités", "Certaines questions ont le même intitulé et/ou la même réponse. Veuillez recommencer.");
         window.location.reload();
         return;
     } 
 
-    const data = await PHP_post("/PHP_API/setSecurityQuestions.php", {
+    //Register the questions and their responses into the database.
+    const data = await phpPost("/phpApi/setSecurityQuestions.php", {
         "question1": question1,
         "response1": response1,
         "question1": question2,
@@ -55,6 +63,7 @@ async function setSecurityQuestions(){
         "question1": question3,
         "response1": response3
     });
+    
     
     if (data != null) {
         window.location.href = data["redirect"];

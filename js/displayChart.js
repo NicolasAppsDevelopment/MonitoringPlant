@@ -7,44 +7,44 @@ function destroyChart() {
 }
 
 
-async function addValuesChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) { 
-  if (date_array.length == 0) {
+async function addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) { 
+  if (dateArray.length == 0) {
     return;
   } 
 
-  date_array.forEach(date => {
+  dateArray.forEach(date => {
     chart.data.labels.push(date);
   });
   
   chart.data.datasets.forEach((dataset) => {
     switch (dataset.label) {
       case "O2":
-        o2_array.forEach(o2 => {
+        o2Array.forEach(o2 => {
           dataset.data.push(o2);
         });
         break;
 
       case "CO2":
-        co2_array.forEach(co2 => {
+        co2Array.forEach(co2 => {
           dataset.data.push(co2);
         });
         break;
 
 
       case "Température":
-        temp_array.forEach(temp => {
+        tempArray.forEach(temp => {
           dataset.data.push(temp);
         });
         break;
 
       case "Humidité":
-        hum_array.forEach(hum => {
+        humArray.forEach(hum => {
           dataset.data.push(hum);
         });
         break;
 
       case "Luminosité":
-        lum_array.forEach(lum => {
+        lumArray.forEach(lum => {
           dataset.data.push(lum);
         });
         break;
@@ -57,7 +57,7 @@ async function addValuesChart(date_array, lum_array, hum_array, temp_array, o2_a
   chart.update('none');
 } 
 
-async function initChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array) {
+async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) {
   const myChart = document.getElementById('ChartCanvas');
 
   const tooltipLine =  {
@@ -206,10 +206,10 @@ async function initChart(date_array, lum_array, hum_array, temp_array, o2_array,
   chart = new Chart(myChart, {
     type: 'line',
     data: {
-      labels: date_array,
+      labels: dateArray,
       datasets: [{
         label: 'CO2',
-        data: co2_array,
+        data: co2Array,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -218,7 +218,7 @@ async function initChart(date_array, lum_array, hum_array, temp_array, o2_array,
         backgroundColor: "gray",
       },{
         label: 'O2',
-        data: o2_array,
+        data: o2Array,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -227,7 +227,7 @@ async function initChart(date_array, lum_array, hum_array, temp_array, o2_array,
         backgroundColor: "#eb1e4b",
       },{
         label: 'Température',
-        data: temp_array,
+        data: tempArray,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -236,7 +236,7 @@ async function initChart(date_array, lum_array, hum_array, temp_array, o2_array,
         backgroundColor: "#f06937",
       },{
         label: 'Humidité',
-        data: hum_array,
+        data: humArray,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,
@@ -245,7 +245,7 @@ async function initChart(date_array, lum_array, hum_array, temp_array, o2_array,
         backgroundColor: "#2d969b",
       },{
         label: 'Luminosité',
-        data: lum_array,
+        data: lumArray,
         borderWidth: 3,
         pointStyle: 'dot',
         pointRadius: 0,

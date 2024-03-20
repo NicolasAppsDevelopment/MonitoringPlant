@@ -11,7 +11,7 @@ async function getSettings()
     network.value=accesPoint["name"];
 
     
-    const settings = await PHP_get("/PHP_API/getSettings.php");
+    const settings = await phpGet("/phpApi/getSettings.php");
     if (settings != null){
         if (settings["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
@@ -54,7 +54,7 @@ async function setSettings()
 
     const raspberryNetwork = await NODERED_get("/getAccessPoint");
     
-    let data1 = await PHP_post("/PHP_API/setSettings.php", {
+    let data1 = await phpPost("/phpApi/setSettings.php", {
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
@@ -64,7 +64,7 @@ async function setSettings()
     if(network.value!=null && network.value!=raspberryNetwork.name){   
         if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
             //restart
-            await PHP_get("/PHP_API/restart.php");
+            await phpGet("/phpApi/restart.php");
         }            
     }
 
@@ -84,7 +84,7 @@ async function reset()
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, les mesures, les paramètres et les configurations seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
         
-        const data = await PHP_post("/PHP_API/reset.php");
+        const data = await phpPost("/phpApi/reset.php");
 
         hideLoading();
 

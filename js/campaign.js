@@ -1,17 +1,16 @@
 let id = -1;
-let refresh_delay = 5000;
-let last_measure_datetime = null;
-let last_log_datetime = null;
+let refreshDelay = 5000;
+let lastMeasureDatetime = null;
+let lastLogDatetime = null;
 let rows = 0;
-let refresh_repeat = true;
-let authorize_update = true;
+let refreshRepeat = true;
+let authorizeUpdate = true;
 
-/**
- * Executes each of the following functions when all html code is loaded.
- */
+//Executes each of the following functions when all html code is loaded.
 document.addEventListener("DOMContentLoaded", () => {
     // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
+    // Recovers and displays measurement campaign data.
     getCampaignMeasurements();
 });
 
@@ -20,12 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 async function subscribeRefresh() {
     do {
-        if (authorize_update == true) {
+        if (authorizeUpdate == true) {
             // Recovery and display measurement campaign data.
             getCampaignMeasurements(true);
         }
-        await delay(refresh_delay);
-    } while (refresh_repeat);
+        await delay(refreshDelay);
+    } while (refreshRepeat);
 }
 
 /**
@@ -33,38 +32,38 @@ async function subscribeRefresh() {
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
 async function getCampaignMeasurements(refresh_mode = false) {
-    authorize_update = false;
+    authorizeUpdate = false;
 
-    if (refresh_mode == false){
+    if (refreshMode == false){
         displayLoading("Récupération de la campagne...");
         id = document.getElementById("id").value;
     } else {
-        refresh_repeat = false;
+        refreshRepeat = false;
     }
 
     // Recovery measurement campaign data.
-    let data = await PHP_post("/PHP_API/getCampaign.php", {
+    let data = await phpPost("/phpApi/getCampaign.php", {
         "id": id,
-        "last_log_datetime": last_log_datetime,
-        "last_measure_datetime": last_measure_datetime
+        "lastLogDatetime": lastLogDatetime,
+        "lastMeasureDatetime": lastMeasureDatetime
     });
 
 
-    authorize_update = true;
+    authorizeUpdate = true;
 
     if (data != null){
         let campaignInfo = data["campaignInfo"];
         let mesurements = data["measurements"];
         let logs = data["logs"];
 
-        if (last_log_datetime == null || data["last_log_datetime"] != null){
-            last_log_datetime = data["last_log_datetime"];
+        if (lastLogDatetime == null || data["lastLogDatetime"] != null){
+            lastLogDatetime = data["lastLogDatetime"];
         }
-        if (last_measure_datetime == null || data["last_measure_datetime"] != null){
-            last_measure_datetime = data["last_measure_datetime"];
+        if (lastMeasureDatetime == null || data["lastMeasureDatetime"] != null){
+            lastMeasureDatetime = data["lastMeasureDatetime"];
         }
 
-        if (refresh_mode == false){
+        if (refreshMode == false){
             const titleCampaign = document.getElementById("titleCampaign");
             titleCampaign.innerHTML = campaignInfo["name"];
 
@@ -84,14 +83,14 @@ async function getCampaignMeasurements(refresh_mode = false) {
                 volume.innerHTML = "N/A";
             }
 
-            const id_config = document.getElementById("id_config");
-            id_config.innerHTML = campaignInfo["nameConfig"];
+            const idConfig = document.getElementById("id_config");
+            idConfig.innerHTML = campaignInfo["nameConfig"];
 
-            const humid_mode = document.getElementById("humid_mode");
-            humid_mode.innerHTML = getReadableBool(campaignInfo["humidMode"]);
+            const humidMode = document.getElementById("humid_mode");
+            humidMode.innerHTML = getReadableBool(campaignInfo["humidMode"]);
 
-            const enable_fibox_temp = document.getElementById("enable_fibox_temp");
-            enable_fibox_temp.innerHTML = getReadableBool(campaignInfo["enableFiboxTemp"]);
+            const enableFiboxTemp = document.getElementById("enable_fibox_temp");
+            enableFiboxTemp.innerHTML = getReadableBool(campaignInfo["enableFiboxTemp"]);
         }
 
         let dateFin = new Date(campaignInfo["beginDate"]);
@@ -105,22 +104,22 @@ async function getCampaignMeasurements(refresh_mode = false) {
             let logsContainerHTML = "";
 
             logs.forEach(log => {
-                let icon_name = "";
+                let iconName = "";
                 switch (log["state"]) {
                     case 0: // En cours
-                        icon_name = "working_status";
+                        iconName = "working_status";
                         break;
                         
                     case 1: // Terminé
-                        icon_name = "success_status";
+                        iconName = "success_status";
                         break;
 
                     case 2: // Erreur
-                        icon_name = "error_status";
+                        iconName = "error_status";
                         break;
 
                     case 3: // Danger
-                        icon_name = "warn_status";
+                        iconName = "warn_status";
                         break;
 
                     default:
@@ -130,7 +129,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
                 logsContainerHTML += `
                 <div class="status-row">
                     <div class="status-title">
-                        <img style="width: 16px;" class="status-icon" src="./img/${icon_name}.svg">
+                        <img style="width: 16px;" class="status-icon" src="./img/${iconName}.svg">
                         ${log["title"]}
                     </div>
                     <span class="status-message">
@@ -140,7 +139,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
                 `;
             });
             
-            if (refresh_mode == true) {
+            if (refreshMode == true) {
                 logsContainer.innerHTML += logsContainerHTML;
             } else {
                 logsContainer.innerHTML = logsContainerHTML;
@@ -148,100 +147,100 @@ async function getCampaignMeasurements(refresh_mode = false) {
             
         }
 
-        const CO2_state = document.getElementById("state_CO2");        
+        const co2State = document.getElementById("state_CO2");        
         switch (campaignInfo["CO2SensorState"]) {
             case 0:
-                CO2_state.classList.add("unselected");
+                co2State.classList.add("unselected");
                 break;
             case 1:
-                CO2_state.classList.add("ok");
+                co2State.classList.add("ok");
                 break;
 
             case 2:
-                CO2_state.classList.add("error");
+                co2State.classList.add("error");
                 break;
 
             default:
                 break;
         }
 
-        const O2_state = document.getElementById("state_O2");
+        const o2State = document.getElementById("state_O2");
         switch (campaignInfo["O2SensorState"]) {
             case 0:
-                O2_state.classList.add("unselected");
+                o2State.classList.add("unselected");
                 break;
             case 1:
-                O2_state.classList.add("ok");
+                o2State.classList.add("ok");
                 break;
 
             case 2:
-                O2_state.classList.add("error");
+                o2State.classList.add("error");
                 break;
             
             default:
                 break;
         }
 
-        const temp_state = document.getElementById("state_temp");
+        const tempState = document.getElementById("state_temp");
         switch (campaignInfo["temperatureSensorState"]) {
             case 0:
-                temp_state.classList.add("unselected");
+                tempState.classList.add("unselected");
                 break;
             case 1:
-                temp_state.classList.add("ok");
+                tempState.classList.add("ok");
                 break;
 
             case 2:
-                temp_state.classList.add("error");
+                tempState.classList.add("error");
                 break;
             
             default:
                 break;
         }
 
-        const hum_state = document.getElementById("state_hum");
+        const humState = document.getElementById("state_hum");
         switch (campaignInfo["humiditySensorState"]) {
             case 0:
-                hum_state.classList.add("unselected");
+                humState.classList.add("unselected");
                 break;
             case 1:
-                hum_state.classList.add("ok");
+                humState.classList.add("ok");
                 break;
 
             case 2:
-                hum_state.classList.add("error");
+                humState.classList.add("error");
                 break;
             
             default:
                 break;
         }
 
-        const lum_state = document.getElementById("state_lum");
+        const lumState = document.getElementById("state_lum");
         switch (campaignInfo["luminositySensorState"]) {
             case 0:
-                lum_state.classList.add("unselected");
+                lumState.classList.add("unselected");
                 break;
             case 1:
-                lum_state.classList.add("ok");
+                lumState.classList.add("ok");
                 break;
 
             case 2:
-                lum_state.classList.add("error");
+                lumState.classList.add("error");
                 break;
             
             default:
                 break;
         }
     
-        let date_array = [];
-        let lum_array = [];
-        let hum_array = [];
-        let temp_array = [];
-        let o2_array = [];
-        let co2_array = [];
+        let dateArray = [];
+        let lumArray = [];
+        let humArray = [];
+        let tempArray = [];
+        let o2Array = [];
+        let co2Array = [];
 
         rows += mesurements.length;
-        refresh_delay = 5000 + rows;
+        refreshDelay = 5000 + rows;
 
         const tableContent = document.getElementById("tableContent");
         let tableContentHTML = "";
@@ -249,51 +248,51 @@ async function getCampaignMeasurements(refresh_mode = false) {
         mesurements.forEach(mesure => {
             let date = new Date(mesure["date"]);
             date = dateToString(date, false, true);
-            date_array.push(date);
+            dateArray.push(date);
 
             let lum = mesure["luminosity"];
             if (lum == null || lum == undefined) {
                 lum = "";
-                lum_array.push(null);
+                lumArray.push(null);
             } else {
                 lum += " %";
-                lum_array.push(parseFloat(lum));
+                lumArray.push(parseFloat(lum));
             }
 
             let hum = mesure["humidity"];
             if (hum == null || hum == undefined) {
                 hum = "";
-                hum_array.push(null);
+                humArray.push(null);
             } else {
                 hum += " %";
-                hum_array.push(parseFloat(hum));
+                humArray.push(parseFloat(hum));
             }
 
             let temp = mesure["temperature"];
             if (temp == null || temp == undefined) {
                 temp = "";
-                temp_array.push(null);
+                tempArray.push(null);
             } else {
                 temp += " °C";
-                temp_array.push(parseFloat(temp));
+                tempArray.push(parseFloat(temp));
             }
 
             let o2 = mesure["O2"];
             if (o2 == null || o2 == undefined) {
                 o2 = "";
-                o2_array.push(null);
+                o2Array.push(null);
             } else {
                 o2 += " %";
-                o2_array.push(parseFloat(o2));
+                o2Array.push(parseFloat(o2));
             }
 
             let co2 = mesure["CO2"];
             if (co2 == null || co2 == undefined) {
                 co2 = "";
-                co2_array.push(null);
+                co2Array.push(null);
             } else {
                 co2 += " vol%";
-                co2_array.push(parseFloat(co2));
+                co2Array.push(parseFloat(co2));
             }
 
             tableContentHTML += `
@@ -308,7 +307,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
             `;
         });
 
-        if (refresh_mode == true) {
+        if (refreshMode == true) {
             if (rows <= 1000) {
                 if (tableContentHTML != "") {
                     tableContent.innerHTML += tableContentHTML;
@@ -317,56 +316,56 @@ async function getCampaignMeasurements(refresh_mode = false) {
                 document.getElementById("refreshTableDisabled").style.display = "flex";
             } 
             
-            addValuesChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
+            addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array);
         } else {
             tableContent.innerHTML = tableContentHTML;
-            initChart(date_array, lum_array, hum_array, temp_array, o2_array, co2_array);
+            initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array);
         } 
 
         if (campaignInfo["finished"] == 1) {
             document.getElementById("stop_btn").remove();
-            if (refresh_mode == true){
+            if (refreshMode == true){
                 return;
             } 
         } else {
-            if (refresh_mode == false){
+            if (refreshMode == false){
                 subscribeRefresh();
             } 
         }
 
-        if (refresh_mode == true) {
-            refresh_repeat = true;
+        if (refreshMode == true) {
+            refreshRepeat = true;
         }
     } else {
-        refresh_repeat = false;
+        refreshRepeat = false;
     }
     
-    if (refresh_mode == false) {
+    if (refreshMode == false) {
         hideLoading();
     }
 }
 
 /**
  * Exports measurement campaign data.
-  */
+ */
 async function exportCampagne() {
     displayLoading("Export de la campagne...");
 
     // Settings to export measurement campaign data.
     const id = document.getElementById("id").value;
-    const CO2_enabled = document.getElementById("CO2_checkbox").checked;
-    const O2_enabled = document.getElementById("O2_checkbox").checked;
-    const temperature_enabled = document.getElementById("temperature_checkbox").checked;
-    const luminosity_enabled = document.getElementById("luminosity_checkbox").checked;
-    const humidity_enabled = document.getElementById("humidity_checkbox").checked;
+    const co2Enabled = document.getElementById("CO2_checkbox").checked;
+    const o2Enabled = document.getElementById("O2_checkbox").checked;
+    const temperatureEnabled = document.getElementById("temperature_checkbox").checked;
+    const luminosityEnabled = document.getElementById("luminosity_checkbox").checked;
+    const humidityEnabled = document.getElementById("humidity_checkbox").checked;
     
     const interval = document.getElementById("interval_choice");
-    const interval_unit = document.getElementById("interval_unit").value;
+    const intervalUnit = document.getElementById("intervalUnit").value;
     const averaging = document.getElementById("moyennage").checked;
-    const date_start = document.getElementById("datedebut_choice");
-    const time_start = document.getElementById("heuredebut_choice");
-    const date_end = document.getElementById("datefin_choice");
-    const time_end = document.getElementById("heurefin_choice");
+    const dateStart = document.getElementById("datedebut_choice");
+    const timeStart = document.getElementById("heuredebut_choice");
+    const dateEnd = document.getElementById("datefin_choice");
+    const timeEnd = document.getElementById("heurefin_choice");
     const volume = document.getElementById("calc_volume").checked;
 
 
@@ -377,25 +376,25 @@ async function exportCampagne() {
         return;
     }
 
-    if (date_start.validity.badInput === true) {
+    if (dateStart.validity.badInput === true) {
         hideLoading();
         displayError("Impossible d'exporter la campagne", "Le format de la date de début est incorrecte. Veuillez renseigner une date puis réessayez.");
         return;
     }
 
-    if (time_start.validity.badInput === true) {
+    if (timeStart.validity.badInput === true) {
         hideLoading();
         displayError("Impossible d'exporter la campagne", "Le format de l'heure de début est incorrecte. Veuillez renseigner une heure puis réessayez.");
         return;
     }
 
-    if (date_end.validity.badInput === true) {
+    if (dateEnd.validity.badInput === true) {
         hideLoading();
         displayError("Impossible d'exporter la campagne", "Le format de la date de fin est incorrecte. Veuillez renseigner une date puis réessayez.");
         return;
     }
 
-    if (time_end.validity.badInput === true) {
+    if (timeEnd.validity.badInput === true) {
         hideLoading();
         displayError("Impossible d'exporter la campagne", "Le format de l'heure de fin est incorrecte. Veuillez renseigner une heure puis réessayez.");
         return;
@@ -403,20 +402,20 @@ async function exportCampagne() {
 
 
     //Exports measurement campaign data.
-    const data = await PHP_postGetFile("/PHP_API/exportCampaign.php", {
+    const data = await phpPostGetFile("/phpApi/exportCampaign.php", {
         "id": id,
-        "CO2_enabled": CO2_enabled,
-        "O2_enabled": O2_enabled,
-        "temperature_enabled": temperature_enabled,
-        "luminosity_enabled": luminosity_enabled,
-        "humidity_enabled": humidity_enabled,
+        "co2Enabled": co2Enabled,
+        "o2Enabled": o2Enabled,
+        "temperatureEnabled": temperatureEnabled,
+        "luminosityEnabled": luminosityEnabled,
+        "humidityEnabled": humidityEnabled,
         "interval": interval.value,
-        "interval_unit": interval_unit,
+        "intervalUnit": intervalUnit,
         "averaging":averaging,
-        "start_date": date_start.value,
-        "start_time": time_start.value,
-        "end_date": date_end.value,
-        "end_time": time_end.value,
+        "startDate": dateStart.value,
+        "startTime": timeStart.value,
+        "endDate": dateEnd.value,
+        "endTime": timeEnd.value,
         "volume": volume
     });
 
@@ -435,12 +434,16 @@ async function exportCampagne() {
     hideLoading();
 }
 
+/**
+ * Stop the selected measurement campaign.
+ */
 async function stopCampagne() {
     if (await displayConfirm('Voulez-vous vraiment arrêter cette campagne de mesure ?', 'La relève des données sera interrompu définitivement. Cette action est irréversible.', 'Arrêter', true) == true) {
         displayLoading("Arrêt de la campagne...");
 
+        // Setting to stop the measurement campaign.
         const id = document.getElementById("id").value;
-        const data = await PHP_post("/PHP_API/stopCampaign.php", {
+        const data = await phpPost("/phpApi/stopCampaign.php", {
             "id": id
         });
 
@@ -454,12 +457,16 @@ async function stopCampagne() {
     }
 }
 
+/**
+ * Restart the selected measurement campaign.
+ */
 async function restartCampagne() {
     if (await displayConfirm('Voulez-vous vraiment redémarrer cette campagne de mesure ?', 'La relève des données sera interrompu et le données déjà enregistrées de cette campagne seront supprimées définitivement. Cette action est irréversible.', 'Redémarrer', true) == true) {
         displayLoading("Redémarrage de la campagne...");
 
+        // Setting to restart the measurement campaign.
         const id = document.getElementById("id").value;
-        const data = await PHP_post("/PHP_API/restartCampaign.php", {
+        const data = await phpPost("/phpApi/restartCampaign.php", {
             "id": id
         });
 

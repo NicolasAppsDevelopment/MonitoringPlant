@@ -4,7 +4,7 @@
 async function setDefaultSettings() {
     displayLoading("Initialisation des paramètres...");
 
-    const data = await PHP_post("/PHP_API/setSettings.php", {
+    const data = await phpPost("/phpApi/setSettings.php", {
         "timeConservation": 1,
         "timeConservationUnit": "mois",
         "enableAutoRemove": false,

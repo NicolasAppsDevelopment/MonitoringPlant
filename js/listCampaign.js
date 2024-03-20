@@ -1,6 +1,6 @@
 let filter = null;
-let refresh_repeat = true;
-let authorize_update = true;
+let refreshRepeat = true;
+let authorizeUpdate = true;
 
 
 /**
@@ -30,11 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
 async function subscribeRefresh() {
     do {
         await delay(10000);
-        if (authorize_update) {
+        if (authorizeUpdate) {
             // Recovery and display all measurement campaigns according to the current filter.
             getListCampaignJS(filter, true);
         }
-    } while (refresh_repeat);
+    } while (refreshRepeat);
 }
 
 /**
@@ -43,7 +43,7 @@ async function subscribeRefresh() {
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
 async function getListCampaignJS(filter_ = null, refreshMode = false) {
-    authorize_update = false;
+    authorizeUpdate = false;
     filter = filter_;
     const campagnesContainer = document.getElementById("CM_container");
     if (refreshMode == false){
@@ -60,12 +60,12 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
     let data = null;
     if (filter != null) {
         //Recovery of measurement campaigns according to filter.
-        data = await PHP_post("/PHP_API/getListCampaign.php", filter);
+        data = await phpPost("/phpApi/getListCampaign.php", filter);
     } else {
         //Recovery of all measurement campaigns.
-        data = await PHP_get("/PHP_API/getListCampaign.php");
+        data = await phpGet("/phpApi/getListCampaign.php");
     }
-    authorize_update = true;
+    authorizeUpdate = true;
 
     if (data != null){
         let campagnesContainerHTML = "";
@@ -126,7 +126,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
 
         campagnesContainer.innerHTML = campagnesContainerHTML;
     } else {
-        refresh_repeat = false;
+        refreshRepeat = false;
     }
 
     const loading = document.getElementById("loading_div");
@@ -215,9 +215,9 @@ async function predictStoreUsage() {
     }
 
     let interval = document.getElementById("interval_input").value;
-    const interval_unit = document.getElementById("interval_unit_combo_box").value;
+    const intervalUnit = document.getElementById("intervalUnit_combo_box").value;
 
-    switch (interval_unit) {
+    switch (intervalUnit) {
         case "min":
             interval *= 60;
             break;
@@ -267,20 +267,20 @@ async function addCampagne() {
 
     //Recovery of all the new measurement campaign settings.
     const title = document.getElementById("name_input");
-    const CO2_enabled = document.getElementById("CO2_checkbox");
-    const O2_enabled = document.getElementById("O2_checkbox");
-    const temperature_enabled = document.getElementById("temperature_checkbox");
-    const luminosity_enabled = document.getElementById("luminosity_checkbox");
-    const humidity_enabled = document.getElementById("humidity_checkbox");
+    const co2Enabled = document.getElementById("CO2_checkbox");
+    const o2Enabled = document.getElementById("O2_checkbox");
+    const temperatureEnabled = document.getElementById("temperature_checkbox");
+    const luminosityEnabled = document.getElementById("luminosity_checkbox");
+    const humidityEnabled = document.getElementById("humidity_checkbox");
     const duration = document.getElementById("duration_input");
     const duration_unit = document.getElementById("duration_unit_combo_box");
     const interval = document.getElementById("interval_input");
-    const interval_unit = document.getElementById("interval_unit_combo_box");
+    const intervalUnit = document.getElementById("intervalUnit_combo_box");
     const volume = document.getElementById("volume_input");
     const volume_unit = document.getElementById("volume_unit_combo_box");
     const config = document.getElementById("config_combo_box");
-    const humid_mode = document.getElementById("humid_mode");
-    const enable_fibox_temp = document.getElementById("enable_fibox_temp");
+    const humidMode = document.getElementById("humid_mode");
+    const enableFiboxTemp = document.getElementById("enable_fibox_temp");
 
 
     // Checking the new measurement campaign settings.
@@ -307,22 +307,22 @@ async function addCampagne() {
     
 
     // Creation of the new measurement campaign.
-    const data = await PHP_post("/PHP_API/createCampaign.php", {
+    const data = await phpPost("/phpApi/createCampaign.php", {
         "title": title.value,
-        "CO2_enabled": CO2_enabled.checked,
-        "O2_enabled": O2_enabled.checked,
-        "temperature_enabled": temperature_enabled.checked,
-        "luminosity_enabled": luminosity_enabled.checked,
-        "humidity_enabled": humidity_enabled.checked,
+        "co2Enabled": co2Enabled.checked,
+        "o2Enabled": o2Enabled.checked,
+        "temperatureEnabled": temperatureEnabled.checked,
+        "luminosityEnabled": luminosityEnabled.checked,
+        "humidityEnabled": humidityEnabled.checked,
         "duration": duration.value,
         "duration_unit": duration_unit.value,
         "interval": interval.value,
-        "interval_unit": interval_unit.value,
+        "intervalUnit": intervalUnit.value,
         "volume": volume.value,
         "volume_unit": volume_unit.value,
         "config_id": config.value,
-        "humid_mode": humid_mode.checked,
-        "enable_fibox_temp": enable_fibox_temp.checked
+        "humidMode": humidMode.checked,
+        "enableFiboxTemp": enableFiboxTemp.checked
     });
 
     if (data != null) {
@@ -347,7 +347,7 @@ async function removeCampagne(id) {
     if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
         document.getElementById("campagne_" + id).remove();
         //Deletes all data of the campaign whose id is entered as a parameter.
-        PHP_post("/PHP_API/removeCampaign.php", {
+        phpPost("/phpApi/removeCampaign.php", {
             "id": id
         });
     }
@@ -368,7 +368,7 @@ function handleKeyPressSearchBar(e){
  * Recovery of all configurations.
  */
 async function getConfigurations() {
-    let data = await PHP_get("/PHP_API/getListConfiguration.php");
+    let data = await phpGet("/phpApi/getListConfiguration.php");
     if (data != null){
         const select = document.getElementById("config_combo_box");
         data["data"].forEach(configuration => {

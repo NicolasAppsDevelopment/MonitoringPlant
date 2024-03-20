@@ -138,7 +138,7 @@
                                             <p class="title_param">Date de démarrage : </p>
                                         </th>
                                         <td>
-                                            <p id="start_date"></p>
+                                            <p id="startDate"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -183,7 +183,7 @@
                                             <p class="title_param">Configuration : </p>
                                         </th>
                                         <td>
-                                            <p id="id_config"></p>
+                                            <p id="idConfig"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -376,7 +376,7 @@
                         <label class="label_field" for="interval">Redéfinir l'intervalle de la campagne de mesure</label>
                         <div class="row_fields">
                             <input class="input_field timer" id="interval_choice" name="interval_choice" type="number" placeholder="Intervalle" min="0">
-                            <select class="combo_box" id="interval_unit">
+                            <select class="combo_box" id="intervalUnit">
                                 <option selected value="s">s</option>
                                 <option value="min">min</option>
                                 <option value="h">h</option>
