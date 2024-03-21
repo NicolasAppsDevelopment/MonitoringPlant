@@ -1,8 +1,8 @@
 <?php
 
-use Session;
-use SettingsManager;
-use RequestReplySender;
+include_once '../include/Session.php';
+include_once '../include/SettingsManager.php';
+include_once '../include/RequestReplySender.php';
 
 $settingsManager = SettingsManager::getInstance();
 $reply = RequestReplySender::getInstance();

@@ -1,6 +1,6 @@
 <?php
 
-use RequestReplySender;
+include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de paramétrer l'heure";

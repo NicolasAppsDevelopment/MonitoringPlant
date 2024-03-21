@@ -1,6 +1,6 @@
 <?php
 
-use RequestReplySender;
+include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'arrêter la campagne";

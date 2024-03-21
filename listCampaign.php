@@ -1,8 +1,5 @@
 <?php
-include_once "include/session.php";
-initSession();
-
-include "include/checkSetup.php";
+    include_once "include/checkSetup.php";
 ?>
 <!DOCTYPE html>
 <html lang="fr">

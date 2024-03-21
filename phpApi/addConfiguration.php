@@ -1,8 +1,8 @@
 <?php
 
-use API\Session;
-use API\ConfigurationsManager;
-use API\RequestReplySender;
+include_once '../include/Session.php';
+include_once '../include/ConfigurationsManager.php';
+include_once '../include/RequestReplySender.php';
 
 $configManager = ConfigurationsManager::getInstance();
 $reply = RequestReplySender::getInstance();

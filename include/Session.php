@@ -1,9 +1,6 @@
 <?php
- 
-namespace API;
 
-use API\Database;
-use Exception;
+require_once 'Database.php';
 
 class Session {
     /**
@@ -26,7 +23,7 @@ class Session {
      * @return void
      */
     private function __construct() {
-        self::$db = Database::getInstance();
+        $this->db = Database::getInstance();
     }
     
     /**
@@ -40,13 +37,13 @@ class Session {
         self::initSession();
 
         if(is_null(self::$_instance)) {
-        self::$_instance = new Session();
+            self::$_instance = new Session();
         }
     
         return self::$_instance;
     }
 
-    private function initSession(): void {
+    private static function initSession(): void {
         // always start the session when we need to access session data
         session_start();
     }
@@ -61,7 +58,7 @@ class Session {
      */
     public function login(string $username, string $password): bool {
         try {
-            $hashData = self::$db->fetchAll("SELECT password FROM Users WHERE user = :varUsername", [
+            $hashData = $this->db->fetchAll("SELECT password FROM Users WHERE user = :varUsername", [
                 'varUsername' => htmlspecialchars($username)
             ]);
 
@@ -101,7 +98,7 @@ class Session {
     public function registerAdmin(string $password)
     {
         try {
-            self::$db->fetchAll("INSERT INTO Users VALUES (null, 'admin', :varPassword)", [
+            $this->db->fetchAll("INSERT INTO Users VALUES (null, 'admin', :varPassword)", [
                 'varPassword' => self::hashPwd($password),
             ]);
         } catch (\Throwable $th) {
@@ -117,7 +114,7 @@ class Session {
     public function updateAdminPassword(string $password)
     {
         try {
-            self::$db->fetchAll("UPDATE Users SET password = :varPassword WHERE user = 'admin'", [
+            $this->db->fetchAll("UPDATE Users SET password = :varPassword WHERE user = 'admin'", [
                 'varPassword' => self::hashPwd($password),
             ]);
         } catch (\Throwable $th) {
@@ -134,7 +131,7 @@ class Session {
     public function registerAdminQuestions(string $question,string $response)
     {
         try {
-            self::$db->fetchAll("INSERT INTO Questions VALUES ('admin', :question, :response)", [
+            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question, :response)", [
                 'question' => $question,
                 'response' => $response
 
@@ -152,18 +149,18 @@ class Session {
     public function updateAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3)
     {
         try {
-            self::$db->fetchAll("DELETE FROM Questions WHERE user = 'admin'");
-            self::$db->fetchAll("INSERT INTO Questions VALUES ('admin', :question1, :response1)", [
+            $this->db->fetchAll("DELETE FROM Questions WHERE user = 'admin'");
+            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question1, :response1)", [
                 'question1' => $question1,
                 'response1' => $response1
 
             ]);
-            self::$db->fetchAll("INSERT INTO Questions VALUES ('admin', :question2, :response2)", [
+            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question2, :response2)", [
                 'question2' => $question2,
                 'response2' => $response2
 
             ]);
-            self::$db->fetchAll("INSERT INTO Questions VALUES ('admin', :question3, :response3)", [
+            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question3, :response3)", [
                 'question3' => $question3,
                 'response3' => $response3
 
@@ -188,7 +185,7 @@ class Session {
      */
     public function isAdminDefined(): bool {
         try {
-            $results = self::$db->fetchAll("SELECT user FROM Users WHERE user = 'admin'");
+            $results = $this->db->fetchAll("SELECT user FROM Users WHERE user = 'admin'");
         
             if (count($results) > 0) {
                 return true;

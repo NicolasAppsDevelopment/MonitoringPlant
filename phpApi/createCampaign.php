@@ -1,8 +1,8 @@
 <?php
 include_once __DIR__ . "/../include/NodeRED_API.php";
 
-use CampaignsManager;
-use RequestReplySender;
+include_once '../include/CampaignsManager.php';
+include_once '../include/RequestReplySender.php';
 
 $campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();

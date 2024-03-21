@@ -1,7 +1,7 @@
 <?php
 
-use Session;
-use RequestReplySender;
+include_once '../include/Session.php';
+include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
 $session = Session::getInstance();

@@ -1,9 +1,6 @@
 <?php
 
-namespace API;
-
-use API\Database;
-use Exception;
+require_once 'Database.php';
 
 class LogsManager {
     /**
@@ -26,7 +23,7 @@ class LogsManager {
      * @return void
      */
     private function __construct() {
-        self::$db = Database::getInstance();
+        $this->db = Database::getInstance();
     }
     
     /**
@@ -39,7 +36,7 @@ class LogsManager {
     public static function getInstance() {
     
         if(is_null(self::$_instance)) {
-        self::$_instance = new LogsManager();
+            self::$_instance = new LogsManager();
         }
     
         return self::$_instance;
@@ -64,7 +61,7 @@ class LogsManager {
                 $parameters["fromDate"] = $sinceDatetime;
             }
 
-            return self::$db->fetchAll($query, $parameters);
+            return $this->db->fetchAll($query, $parameters);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer l'historique des évenements de la campagne. {$th->getMessage()}");
         }
@@ -81,7 +78,7 @@ class LogsManager {
     {
         //Removal of logs
         try {
-            self::$db->fetchAll("DELETE FROM Logs WHERE idCampaign = :varId", [
+            $this->db->fetchAll("DELETE FROM Logs WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
             return true;

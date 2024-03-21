@@ -1,4 +1,6 @@
-<?php include "include/checkSetup.php";?>
+<?php
+    include_once "include/checkSetup.php";
+?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -21,7 +23,7 @@
                 <div class="popup_contenu">
                     <h2>Quelle heure est-il ?</h2>
                     <p>
-                        À present, nous avons besoins de savoir la date et l’heure qu’il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été feur démarré.
+                        À present, nous avons besoins de savoir la date et l'heure qu'il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été feur démarré.
                     </p>
                     <form>
                         <div class="label_img_input">

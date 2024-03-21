@@ -1,9 +1,6 @@
 <?php
 
-namespace API;
-
-use API\Database;
-use Exception;
+require_once 'Database.php';
 
 class ConfigurationsManager {
     /**
@@ -26,7 +23,7 @@ class ConfigurationsManager {
      * @return void
      */
     private function __construct() {
-        self::$db = Database::getInstance();
+        $this->db = Database::getInstance();
     }
     
     /**
@@ -69,7 +66,7 @@ class ConfigurationsManager {
         $query .= join(" AND ", $whereClauses) . " ORDER BY name ASC";
 
         try {
-            return self::$db->fetchAll($query, $parameters);
+            return $this->db->fetchAll($query, $parameters);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer les campagnes. {$th->getMessage()}");
         }
@@ -83,7 +80,7 @@ class ConfigurationsManager {
      */
     public function getIdConfiguration(string $name): int {
         try {
-            $results = self::$db->fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName", [
+            $results = $this->db->fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName", [
                 'varName' => htmlspecialchars($name)
             ]);
         
@@ -105,7 +102,7 @@ class ConfigurationsManager {
      */
     public function getNameConfiguration(int $id): string {
         try {
-            $results = self::$db->fetchAll("SELECT name FROM Configurations WHERE idConfig = :varId", [
+            $results = $this->db->fetchAll("SELECT name FROM Configurations WHERE idConfig = :varId", [
                 'varId' => $id
             ]);
         
@@ -129,12 +126,12 @@ class ConfigurationsManager {
     public function existConfiguration(string $name, int $id = -1): bool {
         try {
             if ($id != -1) {
-                $results = self::$db->fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName AND idConfig != :varId ORDER BY 1 DESC", [
+                $results = $this->db->fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName AND idConfig != :varId ORDER BY 1 DESC", [
                     'varName' => htmlspecialchars($name),
                     'varId' => $id
                 ]);
             } else {
-                $results = self::$db->fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
+                $results = $this->db->fetchAll("SELECT idConfig FROM Configurations WHERE name = :varName ORDER BY 1 DESC", [
                     'varName' => htmlspecialchars($name)
                 ]);
             }
@@ -160,7 +157,7 @@ class ConfigurationsManager {
     {
         //Update any campaign related
         try {
-            self::$db->fetchAll("UPDATE Campaigns SET idConfig = null WHERE idConfig = :varId", [
+            $this->db->fetchAll("UPDATE Campaigns SET idConfig = null WHERE idConfig = :varId", [
                 'varId' => $id
             ]);
         } catch (\Throwable $th) {
@@ -169,7 +166,7 @@ class ConfigurationsManager {
 
         //Removal of the campaign
         try {
-            self::$db->fetchAll("DELETE FROM Configurations WHERE idConfig = :varId", [
+            $this->db->fetchAll("DELETE FROM Configurations WHERE idConfig = :varId", [
                 'varId' => $id
             ]);
         } catch (\Throwable $th) {
@@ -206,7 +203,7 @@ class ConfigurationsManager {
                 throw new Exception("Une configuration avec le même nom existe déjà. Veuillez en choisir un autre.");
             }
 
-            self::$db->fetchAll("INSERT INTO Configurations VALUES (NULL, :varName, :varAltitude, :varF1, :varM, :varDPhi1, :varDPhi2, :varDKSV1, :varDKSV2, :varPressure, :varCalibIsHumid, :varCal0, :varCal2nd, :varO2Cal2nd, :varT0, :varT2nd)", [
+            $this->db->fetchAll("INSERT INTO Configurations VALUES (NULL, :varName, :varAltitude, :varF1, :varM, :varDPhi1, :varDPhi2, :varDKSV1, :varDKSV2, :varPressure, :varCalibIsHumid, :varCal0, :varCal2nd, :varO2Cal2nd, :varT0, :varT2nd)", [
                 'varName' => htmlspecialchars($name),
                 'varF1' => $f1,
                 'varM' => $m,
@@ -257,7 +254,7 @@ class ConfigurationsManager {
                 throw new Exception("Une configuration avec le même nom existe déjà. Veuillez en choisir un autre.");
             }
 
-            self::$db->fetchAll("UPDATE Configurations SET name = :varName, altitude = :varAltitude, f1 = :varF1, m = :varM, dPhi1 = :varDPhi1, dPhi2 = :varDPhi2, dKSV1 = :varDKSV1, dKSV2 = :varDKSV2, pressure = :varPressure, calibIsHumid = :varCalibIsHumid, cal0 = :varCal0, cal2nd = :varCal2nd, o2Cal2nd = :varO2Cal2nd, t0 = :varT0, t2nd = :varT2nd WHERE idConfig = :varId", [
+            $this->db->fetchAll("UPDATE Configurations SET name = :varName, altitude = :varAltitude, f1 = :varF1, m = :varM, dPhi1 = :varDPhi1, dPhi2 = :varDPhi2, dKSV1 = :varDKSV1, dKSV2 = :varDKSV2, pressure = :varPressure, calibIsHumid = :varCalibIsHumid, cal0 = :varCal0, cal2nd = :varCal2nd, o2Cal2nd = :varO2Cal2nd, t0 = :varT0, t2nd = :varT2nd WHERE idConfig = :varId", [
                 'varName' => htmlspecialchars($name),
                 'varF1' => $f1,
                 'varM' => $m,
@@ -290,7 +287,7 @@ class ConfigurationsManager {
      */
     public function getConfiguration(int $id) : array {
         try {
-            $results = self::$db->fetchAll("SELECT * FROM Configurations WHERE idConfig = :varId", [
+            $results = $this->db->fetchAll("SELECT * FROM Configurations WHERE idConfig = :varId", [
                 'varId' => $id
             ]);
 

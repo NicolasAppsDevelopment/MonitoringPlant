@@ -1,9 +1,6 @@
 <?php
 
-namespace API;
-
-use API\Database;
-use Exception;
+require_once 'Database.php';
 
 class SettingsManager {
     /**
@@ -26,7 +23,7 @@ class SettingsManager {
      * @return void
      */
     private function __construct() {
-        self::$db = Database::getInstance();
+        $this->db = Database::getInstance();
     }
     
     /**
@@ -39,7 +36,7 @@ class SettingsManager {
     public static function getInstance() {
     
         if(is_null(self::$_instance)) {
-        self::$_instance = new SettingsManager();
+            self::$_instance = new SettingsManager();
         }
     
         return self::$_instance;
@@ -55,7 +52,7 @@ class SettingsManager {
     public function getSettings() : array
     {
         try {
-            $data = self::$db->fetchAll("SELECT * , NOW() AS 'date' FROM Settings");
+            $data = $this->db->fetchAll("SELECT * , NOW() AS 'date' FROM Settings");
             if (count($data) > 0) {
                 return $data[0];
             } else {
@@ -77,8 +74,8 @@ class SettingsManager {
     public function setSettings(int $supprInterval, bool $enabled) : bool
     {
         try {
-            self::$db->fetchAll("DELETE FROM Settings");
-            self::$db->fetchAll("INSERT INTO Settings VALUES (:varSuppr, :varEnabled)", [
+            $this->db->fetchAll("DELETE FROM Settings");
+            $this->db->fetchAll("INSERT INTO Settings VALUES (:varSuppr, :varEnabled)", [
                 'varSuppr' => $supprInterval,
                 'varEnabled' => (int)$enabled
             ]);

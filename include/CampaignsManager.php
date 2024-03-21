@@ -1,12 +1,9 @@
 <?php
 
-namespace API;
-
-use API\Database;
-use API\MeasurementsManager;
-use API\LogsManager;
-use API\ConfigurationsManager;
-use Exception;
+require_once 'Database.php';
+require_once 'MeasurementsManager.php';
+require_once 'LogsManager.php';
+require_once 'ConfigurationsManager.php';
 
 class CampaignsManager {
     /**
@@ -47,10 +44,10 @@ class CampaignsManager {
      * @return void
      */
     private function __construct() {
-        self::$db = Database::getInstance();
-        self::$measuresManager = MeasurementsManager::getInstance();
-        self::$logsManager = LogsManager::getInstance();
-        self::$configsManager = ConfigurationsManager::getInstance();
+        $this->db = Database::getInstance();
+        $this->measuresManager = MeasurementsManager::getInstance();
+        $this->logsManager = LogsManager::getInstance();
+        $this->configsManager = ConfigurationsManager::getInstance();
     }
     
     /**
@@ -110,7 +107,7 @@ class CampaignsManager {
         $query .= join(" AND ", $whereClauses) . " ORDER BY finished ASC, beginDate DESC";
 
         try {
-            return self::$db->fetchAll($query, $parameters);
+            return $this->db->fetchAll($query, $parameters);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer la liste des campagnes. {$th->getMessage()}");
         }
@@ -124,7 +121,7 @@ class CampaignsManager {
      */
     public function getIdCampaign(string $name): int {
         try {
-            $results = self::$db->fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
+            $results = $this->db->fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
                 'varName' => htmlspecialchars($name)
             ]);
         
@@ -146,7 +143,7 @@ class CampaignsManager {
      */
     public function existCampaign(string $name): bool {
         try {
-            $results = self::$db->fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
+            $results = $this->db->fetchAll("SELECT idCampaign FROM Campaigns WHERE name = :varName ORDER BY 1 DESC", [
                 'varName' => htmlspecialchars($name)
             ]);
         
@@ -184,7 +181,7 @@ class CampaignsManager {
                 throw new Exception("Une campagne de mesure avec le même nom existe déjà. Veuillez en choisir un autre.");
             }
 
-            self::$db->fetchAll("INSERT INTO Campaigns VALUES (NULL, :varConfigId, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, :varHumidMode, :varEnableFiboxTemp, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
+            $this->db->fetchAll("INSERT INTO Campaigns VALUES (NULL, :varConfigId, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, :varHumidMode, :varEnableFiboxTemp, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
                 'varConfigId' => $config_id,
                 'varName' => htmlspecialchars($name),
                 'varTemperatureSensor' => (int)$temperatureSensor,
@@ -216,14 +213,14 @@ class CampaignsManager {
     public function supprCampaign(int $id) : bool
     {
         //Removal of measurements
-        self::$measuresManager->supprMeasurements($id);
+        $this->measuresManager->supprMeasurements($id);
 
         //Removal of logs
-        self::$logsManager->supprLogs($id);
+        $this->logsManager->supprLogs($id);
 
         //Removal of the campaign
         try {
-            self::$db->fetchAll("DELETE FROM Campaigns WHERE idCampaign = :varId", [
+            $this->db->fetchAll("DELETE FROM Campaigns WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
             return true;
@@ -242,14 +239,14 @@ class CampaignsManager {
     public function restartCampaign(int $id) : bool
     {
         //Removal of measurements
-        self::$measuresManager->supprMeasurements($id);
+        $this->measuresManager->supprMeasurements($id);
 
         //Removal of logs
-        self::$logsManager->supprLogs($id);
+        $this->logsManager->supprLogs($id);
 
         //Update campaign start and end dates
         try {
-            self::$db->fetchAll("UPDATE Campaigns SET beginDate=NOW(), endingDate=DATE_ADD(NOW(),INTERVAL duration SECOND) WHERE idCampaign = :varId", [
+            $this->db->fetchAll("UPDATE Campaigns SET beginDate=NOW(), endingDate=DATE_ADD(NOW(),INTERVAL duration SECOND) WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
             return true;
@@ -307,7 +304,7 @@ class CampaignsManager {
         }
 
         try {
-            return self::$db->fetchAll($query, $parameters);
+            return $this->db->fetchAll($query, $parameters);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer les données de la campagne pour l'export. {$th->getMessage()}");
         }
@@ -326,15 +323,15 @@ class CampaignsManager {
         try {
             $campaignInfo = self::getInfoCampaign($id);
             try {
-                $campaignInfo["nameConfig"] = self::$configsManager->getNameConfiguration($campaignInfo["idConfig"]);
+                $campaignInfo["nameConfig"] = $this->configsManager->getNameConfiguration($campaignInfo["idConfig"]);
             } catch (\Throwable $th) {
                 $campaignInfo["nameConfig"] = "Configuration supprimée";
             }
 
             return array(
                 "campaignInfo" => $campaignInfo,
-                "measurements" => self::$measuresManager->getMeasurements($id, $measureSinceDatetime),
-                "logs" => self::$logsManager->getLogs($id, $logSinceDatetime)
+                "measurements" => $this->measuresManager->getMeasurements($id, $measureSinceDatetime),
+                "logs" => $this->logsManager->getLogs($id, $logSinceDatetime)
             );
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer les données de la campagne. {$th->getMessage()}");
@@ -350,7 +347,7 @@ class CampaignsManager {
     //Recovery of general information about the campaign whose id is entered as a parameter
     public function getInfoCampaign(int $id) : array {
         try {
-            $results = self::$db->fetchAll("SELECT * FROM Campaigns WHERE idCampaign = :varId", [
+            $results = $this->db->fetchAll("SELECT * FROM Campaigns WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
 

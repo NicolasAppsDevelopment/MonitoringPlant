@@ -1,6 +1,6 @@
 <?php
 
-use RequestReplySender;
+include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de vérifier la date & heure de la cellule";

@@ -1,11 +1,5 @@
 <?php
 
-namespace API;
-
-use PDO;
-use PDOException;
-use Exception;
-
 class Database {
     /**
      * @var Database
@@ -27,9 +21,9 @@ class Database {
      * @return void
      */
     private function __construct() {
-        self::$db = self::initDataBase();
-        self::$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->db = self::initDataBase();
+        $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
     
     /**
@@ -42,7 +36,7 @@ class Database {
     public static function getInstance() {
     
         if(is_null(self::$_instance)) {
-        self::$_instance = new Database();
+            self::$_instance = new Database();
         }
     
         return self::$_instance;
@@ -62,7 +56,7 @@ class Database {
         try {
             return new PDO($dsn, $user, $password);
         } catch (PDOException $e) {
-            throw new Exception("Impossible de se connecter à la base de données", $e->getMessage());
+            throw new Exception("Impossible de se connecter à la base de données. {$e->getMessage()}");
         }
     }
 
@@ -75,15 +69,14 @@ class Database {
      * @return array
      */
     public function fetchAll(string $query, array $parameters = []) : array {
-        global $PDO;
-        if (!$PDO){
+        if (!$this->db){
             throw new Exception("La connexion à la base de donnée a échoué.");
         }
 
-        $statement = $PDO->prepare($query);
+        $statement = $this->db->prepare($query);
 
         if (!$statement) {
-            throw new Exception("La préparation de la requête a échouée. Erreur SQLSTATE " . $PDO->errorInfo()[0] . " : " . $PDO->errorInfo()[2]);
+            throw new Exception("La préparation de la requête a échouée. Erreur SQLSTATE " . $this->db->errorInfo()[0] . " : " . $this->db->errorInfo()[2]);
         }
 
         $statement->execute($parameters);

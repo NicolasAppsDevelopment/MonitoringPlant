@@ -1,7 +1,7 @@
 <?php
 
-use Session;
-use RequestReplySender;
+include_once '../include/Session.php';
+include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
 $session = Session::getInstance();
@@ -22,16 +22,16 @@ try {
             // the first register for the admin
             $session->registerAdmin($arguments["password"]);
 
-            $reply->replyData(array(
+            $reply->replyData([
                 "redirect" => "setupTime.php"
-            ));
+            ]);
         } elseif ($session->isAdmin()) {
             // admin want to change his password
             $session->updateAdminPassword($arguments["password"]);
 
-            $reply->replyData(array(
+            $reply->replyData([
                 "redirect" => "settings.php"
-            ));
+            ]);
         } else {
             // naughty boy >:O
             throw new Exception("Veuillez vous identifier avant de modifier le mot de passe.");

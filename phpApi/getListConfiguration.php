@@ -1,7 +1,7 @@
 <?php
 
-use ConfigurationsManager;
-use RequestReplySender;
+include_once '../include/ConfigurationsManager.php';
+include_once '../include/RequestReplySender.php';
 
 $configManager = ConfigurationsManager::getInstance();
 $reply = RequestReplySender::getInstance();
@@ -10,9 +10,7 @@ $errorTitle = "Impossible de lister les configurations";
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // handle GET request
-        $reply->replyData([
-            $configManager->getListConfiguration()
-        ]);
+        $reply->replyData($configManager->getListConfiguration());
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 
@@ -23,11 +21,11 @@ try {
             throw new Exception("Paramètre \"name\" manquant/invalide dans la requête.");
         }
         
-        $reply->replyData([
-            $configManager->getListConfiguration(array(
+        $reply->replyData(
+            $configManager->getListConfiguration([
                 "name"=> $args["name"],
-            ))
-        ]);
+            ])
+        );
     } else {
         throw new Exception("La méthode de requête est incorrecte.");
     }

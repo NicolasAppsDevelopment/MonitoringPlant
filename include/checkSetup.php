@@ -1,3 +1,3 @@
 <?php
-use API\SettingsManager;
+require_once 'SettingsManager.php';
 SettingsManager::getInstance()->getSettings();

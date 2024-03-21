@@ -1,5 +1,6 @@
 <?php
-    include_once __DIR__ . "/../include/session.php";
+    include_once __DIR__ . '/../include/Session.php';
+    $session = Session::getInstance();
 
     function selectedPage(array $urls) : string
     {
@@ -9,7 +10,7 @@
             }
         }
 
-        return ""; 
+        return "";
     }
 ?>
 
@@ -35,7 +36,7 @@
                         <p class="top_nav_text">Campagnes</p>
                     </div>
                 </a></li>
-            <?php if (isAdmin()) { ?>
+            <?php if ($session->isAdmin()) { ?>
             <li><a href="/configurations.php">
                 <div class="info_ico_container <?= selectedPage(["/configurations.php"]) ?>">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0,0,256,256">
@@ -64,7 +65,7 @@
                             </path>
                         </g>
                     </g>
-                </svg>    
+                </svg>
                 
                     <p class="top_nav_text">Paramètres</p>
                 </div>
@@ -83,7 +84,7 @@
                 </div>
             </a></li>
             <li class="expend"></li>
-            <?php if (isAdmin()) { ?>
+            <?php if ($session->isAdmin()) { ?>
             <li><a href="/phpApi/logout.php">
                 <div class="info_ico_container logout">
                     <svg version="1.1" id="svg2" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="15.63 24.45 240.37 207.1">

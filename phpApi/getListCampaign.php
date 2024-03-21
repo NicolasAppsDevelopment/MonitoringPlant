@@ -1,7 +1,7 @@
 <?php
 
-use CampaignsManager;
-use RequestReplySender;
+include_once '../include/CampaignsManager.php';
+include_once '../include/RequestReplySender.php';
 
 $campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
@@ -39,12 +39,12 @@ try {
         }
         
         // Recovery and transmission of measurement campaigns according to filter.
-        $reply->replyData($campaignsManager->getListCampaign(array(
-                "name"=> $args["name"], 
+        $reply->replyData($campaignsManager->getListCampaign([
+                "name"=> $args["name"],
                 "time"=>$args["time"],
                 "date"=>$args["date"],
                 "processing"=>$args["processing"]
-            ))
+            ])
         );
     } else {
         throw new Exception("La méthode de requête est incorrecte.");

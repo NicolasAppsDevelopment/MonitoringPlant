@@ -1,7 +1,7 @@
 <?php
 
-use ConfigurationsManager;
-use RequestReplySender;
+include_once '../include/ConfigurationsManager.php';
+include_once '../include/RequestReplySender.php';
 
 $configManager = ConfigurationsManager::getInstance();
 $reply = RequestReplySender::getInstance();

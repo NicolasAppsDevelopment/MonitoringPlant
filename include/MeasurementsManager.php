@@ -1,9 +1,6 @@
 <?php
 
-namespace API;
-
-use API\Database;
-use Exception;
+require_once 'Database.php';
 
 class MeasurementsManager {
     /**
@@ -26,7 +23,7 @@ class MeasurementsManager {
      * @return void
      */
     private function __construct() {
-        self::$db = Database::getInstance();
+        $this->db = Database::getInstance();
     }
     
     /**
@@ -39,7 +36,7 @@ class MeasurementsManager {
     public static function getInstance() {
     
         if(is_null(self::$_instance)) {
-        self::$_instance = new MeasurementsManager();
+            self::$_instance = new MeasurementsManager();
         }
     
         return self::$_instance;
@@ -66,7 +63,7 @@ class MeasurementsManager {
 
             $query .= " ORDER BY date ASC";
 
-            return self::$db->fetchAll($query, $parameters);
+            return $this->db->fetchAll($query, $parameters);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer les données de mesure de la campagnes. {$th->getMessage()}");
         }
@@ -83,7 +80,7 @@ class MeasurementsManager {
     {
         //Removal of measurements
         try {
-            self::$db->fetchAll("DELETE FROM Measurements WHERE idCampaign = :varId", [
+            $this->db->fetchAll("DELETE FROM Measurements WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
             return true;

@@ -1,7 +1,3 @@
-<?php 
-    include_once "include/session.php";
-    initSession();
-?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>

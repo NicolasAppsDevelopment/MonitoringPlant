@@ -1,8 +1,8 @@
 <?php
 
-use Session;
-use Database;
-use RequestReplySender;
+include_once '../include/Session.php';
+include_once '../include/Database.php';
+include_once '../include/RequestReplySender.php';
 
 $db = Database::getInstance();
 $reply = RequestReplySender::getInstance();

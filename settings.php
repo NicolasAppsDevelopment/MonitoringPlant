@@ -1,9 +1,5 @@
-<?php 
-    include_once "include/session.php";
-    initSession();
-    checkPageAccess();
-
-    include "include/checkSetup.php";
+<?php
+    include_once "include/checkSetup.php";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
