@@ -1,9 +1,12 @@
 <?php
 
-use Database;
-use MeasurementsManager;
-use LogsManager;
-use ConfigurationsManager;
+namespace API;
+
+use API\Database;
+use API\MeasurementsManager;
+use API\LogsManager;
+use API\ConfigurationsManager;
+use Exception;
 
 class CampaignsManager {
     /**
@@ -60,7 +63,7 @@ class CampaignsManager {
     public static function getInstance() {
     
         if(is_null(self::$_instance)) {
-        self::$_instance = new CampaignsManager();
+            self::$_instance = new CampaignsManager();
         }
     
         return self::$_instance;

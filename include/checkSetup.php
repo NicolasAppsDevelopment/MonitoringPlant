@@ -1,4 +1,3 @@
 <?php
-
-use SettingsManager;
+use API\SettingsManager;
 SettingsManager::getInstance()->getSettings();

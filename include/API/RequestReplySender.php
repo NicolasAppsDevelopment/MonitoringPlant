@@ -1,5 +1,9 @@
 <?php
 
+namespace API;
+
+use Exception;
+
 class RequestReplySender {
     /**
      * @var RequestReplySender

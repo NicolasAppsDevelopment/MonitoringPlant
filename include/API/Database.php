@@ -1,5 +1,11 @@
 <?php
 
+namespace API;
+
+use PDO;
+use PDOException;
+use Exception;
+
 class Database {
     /**
      * @var Database

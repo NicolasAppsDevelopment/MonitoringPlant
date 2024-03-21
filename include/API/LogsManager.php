@@ -1,6 +1,9 @@
 <?php
 
-use Database;
+namespace API;
+
+use API\Database;
+use Exception;
 
 class LogsManager {
     /**

@@ -1,8 +1,9 @@
 <?php
 
-include_once __DIR__ . "/../include/reply.php";
+namespace API;
 
-use Database;
+use API\Database;
+use Exception;
 
 class SettingsManager {
     /**
