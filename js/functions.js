@@ -1,5 +1,5 @@
-const API_IP_ADDRESS = "localhost";
-const phpApi_PORT = "8080";
+const apiIpAddress = "localhost";
+const phpApiPort = "8080";
 const NODERED_API_PORT = "1880";
 
 let blurCompatibility = true;
@@ -8,13 +8,21 @@ if (navigator.appVersion.indexOf("Chrome/") != -1) {
     blurCompatibility = false;
 }
 
-let id_msg = 0;
+let idMessage = 0;
 
+/**
+ * Creates and displays a popup to confirm or cancel an important action.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ * @param {String} confirmBtnTitle Title of the button of confirmation
+ * @param {boolean} destructive True if there is a risk of data loss or if there is a suppression of data. False otherwise.
+ * @returns {boolean} True if the user confirms the action and false if he cancels it
+ */
 async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) {
-    const id = id_msg;
-    id_msg++;
+    const id = idMessage;
+    idMessage++;
 
-    const html_popup = `
+    const htmlPopup = `
         <div class="popup open_anim" id="confirm_popup_container${id}">
             <div id="confirm_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">
                 <div class="popup-content center">
@@ -31,7 +39,7 @@ async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) 
         </div>
     `;
 
-    document.body.insertAdjacentHTML("beforeend", html_popup);
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
 
     const promise = new Promise((resolve, reject) => {
         document.getElementById("confirm" + id).addEventListener('click', resolve)
@@ -49,22 +57,31 @@ async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) 
         return false;
     })
 }
-
+ 
+/**
+ * Hides the confirmation popup whose id is in the parameter.
+ * @param {integer} id id of the popup that will be hidden
+ */
 async function hideConfirm(id) {
-    const popup_container = document.getElementById("confirm_popup_container" + id);
-    popup_container.classList.remove("open_anim");
-    popup_container.classList.add("close_anim");
+    const popupContainer = document.getElementById("confirm_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
 
     setTimeout(function() {
-        popup_container.remove();
+        popupContainer.remove();
     }, 300);
 }
 
+/**
+ * Creates and displays an error report popup.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ */
 async function displayError(title, msg) {
-    const id = id_msg;
-    id_msg++;
+    const id = idMessage;
+    idMessage++;
 
-    const html_popup = `
+    const htmlPopup = `
         <div class="popup open_anim" id="error_popup_container${id}">
             <div id="error_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">    
                 <div class="popup-content center">
@@ -80,7 +97,7 @@ async function displayError(title, msg) {
         </div>
     `;
 
-    document.body.insertAdjacentHTML("beforeend", html_popup);
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
 
     const promise = new Promise((resolve) => {
         document.getElementById("close" + id).addEventListener('click', resolve)
@@ -94,21 +111,30 @@ async function displayError(title, msg) {
     })
 }
 
+/**
+ * Hides the error report popup whose id is in the parameter.
+ * @param {integer} id id of the popup that will be hidden
+ */
 async function hideError(id) {
-    const popup_container = document.getElementById("error_popup_container" + id);
-    popup_container.classList.remove("open_anim");
-    popup_container.classList.add("close_anim");
+    const popupContainer = document.getElementById("error_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
 
     setTimeout(function() {
-        popup_container.remove();
+        popupContainer.remove();
     }, 300);
 }
 
+/**
+ * Creates and displays a success report popup.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ */
 async function displaySuccess(title, msg) {
-    const id = id_msg;
-    id_msg++;
+    const id = idMessage;
+    idMessage++;
 
-    const html_popup = `
+    const htmlPopup = `
         <div class="popup open_anim" id="success_popup_container${id}">
             <div id="success_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">    
                 <div class="popup-content center">
@@ -124,7 +150,7 @@ async function displaySuccess(title, msg) {
         </div>
     `;
 
-    document.body.insertAdjacentHTML("beforeend", html_popup);
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
 
     const promise = new Promise((resolve) => {
         document.getElementById("close" + id).addEventListener('click', resolve)
@@ -138,42 +164,68 @@ async function displaySuccess(title, msg) {
     })
 }
 
+/**
+ * Hides the success report popup whose id is in the parameter.
+ * @param {integer} id id of the popup that will be hidden
+ */
 async function hideSuccess(id) {
-    const popup_container = document.getElementById("success_popup_container" + id);
-    popup_container.classList.remove("open_anim");
-    popup_container.classList.add("close_anim");
+    const popupContainer = document.getElementById("success_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
 
     setTimeout(function() {
-        popup_container.remove();
+        popupContainer.remove();
     }, 300);
 }
 
+/**
+ * Displays a loading popup.
+ * @param {String} msg Message of the popup
+ */
 async function displayLoading(msg = "Chargement...") {
-    const popup_container = document.getElementById("loading_popup_container");
+    const popupContainer = document.getElementById("loading_popup_container");
     const popup = document.getElementById("loading_popup");
     popup.style.transform = "scale(1)";
 
     document.getElementById("loading_msg").innerHTML = msg.replace("\n", "<br>");
     
-    popup_container.style.opacity = 1;
-    popup_container.style.visibility = "inherit";
-}
-async function hideLoading() {
-    const popup_container = document.getElementById("loading_popup_container");
-    popup_container.classList.remove("displayed");
-    const popup = document.getElementById("loading_popup");
-    popup.removeAttribute("style");
-    popup_container.removeAttribute("style");
+    popupContainer.style.opacity = 1;
+    popupContainer.style.visibility = "inherit";
 }
 
+/**
+ * Displays the loading popup.
+ */
+async function hideLoading() {
+    const popupContainer = document.getElementById("loading_popup_container");
+    popupContainer.classList.remove("displayed");
+    const popup = document.getElementById("loading_popup");
+    popup.removeAttribute("style");
+    popupContainer.removeAttribute("style");
+}
+
+/**
+ * Closes the popup whose id is in parameter
+ * @param {integer} id id of the popup that will be closed
+ */
 async function closePopup(id) {
     document.getElementById(id).checked = false;
 }
 
+/**
+ * Opens the popup whose id is in parameter
+ * @param {integer} id id of the popup that will be opened
+ */
 async function openPopup(id) {
     document.getElementById(id).checked = true;
 }
 
+/**
+ * Sends data to an URL
+ * @param {String} url Where the data are sent
+ * @param {Object} data The data sent
+ * @returns {(json|null)}  Response from the location where the data is sent. Null if the data is not sent or received, json if the data is sent and received.
+ */
 async function post(url, data) {
     try {
         const response = await fetch(url, {
@@ -196,6 +248,14 @@ async function post(url, data) {
 
     return null;
 }
+
+
+/**
+ * Recovers ----
+ * @param {String} url Where the --- are sent
+ * @param {Object} data ---
+ * @returns {(json|null)}  Response from the location where the ---- is sent. Null if the --- is not sent or received, json if the --- is sent and received. Json contains -----
+ */
 async function postGetFile(url, data) {
     try {
         const response = await fetch(url, {
@@ -219,6 +279,8 @@ async function postGetFile(url, data) {
 
     return null;
 }
+
+
 async function get(url) {
     try {
         const response = await fetch(url, {
@@ -242,23 +304,23 @@ async function get(url) {
 }
 
 async function phpPost(url, data) {
-    return await post("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url, data);
+    return await post("http://" + apiIpAddress + ":" + phpApiPort + url, data);
 }
 
 async function phpPostGetFile(url, data) {
-    return await postGetFile("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url, data);
+    return await postGetFile("http://" + apiIpAddress + ":" + phpApiPort + url, data);
 } 
 
 async function phpGet(url) { 
-    return await get("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url);
+    return await get("http://" + apiIpAddress + ":" + phpApiPort + url);
 } 
 
 async function NODERED_post(url, data) {
-    return await post("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url, data);
+    return await post("http://" + apiIpAddress + ":" + NODERED_API_PORT + url, data);
 } 
 
 async function NODERED_get(url) {
-    return await get("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url);
+    return await get("http://" + apiIpAddress + ":" + NODERED_API_PORT + url);
 } 
 
 function dateToString(date, str_separator_date_time = true, display_seconds = false) {

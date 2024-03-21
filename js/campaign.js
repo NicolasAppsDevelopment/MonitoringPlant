@@ -51,6 +51,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
 
     authorizeUpdate = true;
 
+    // Display measurement campaign data.
     if (data != null){
         let campaignInfo = data["campaignInfo"];
         let mesurements = data["measurements"];
@@ -419,6 +420,7 @@ async function exportCampagne() {
         "volume": volume
     });
 
+    // Creation and download of the csv file
     if (data != null) {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(data);

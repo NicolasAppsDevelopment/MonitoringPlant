@@ -354,7 +354,7 @@ async function removeCampagne(id) {
 }
 
 /**
- * Filters all measurement campaigns when users press the "enter" key in the search bar.
+ * Filters all measurement campaigns when the user presses the "enter" key in the search bar.
  * @param {event} e event when the users press a key
  */
 function handleKeyPressSearchBar(e){

@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Recovery and display measurement campaign data.
+ * Saves the configuration.
  * @param {boolean} editMode Influences the visual aspect of the recovery
- * @param {integer} id 
+ * @param {integer} id Configuration id
  */
 async function saveConfiguration(editMode = false, id = null) {
     let actionVerb = "d'ajouter";
@@ -35,8 +35,9 @@ async function saveConfiguration(editMode = false, id = null) {
     const pressure = document.getElementById("pressure_input");
     const o2cal2nd = document.getElementById("o2cal2nd_input");
     const altitude = document.getElementById("alt_input");
-    const calib_is_humid = document.getElementById("calib_is_humid");
+    const calibIsHumid = document.getElementById("calibIsHumid");
 
+    // Checking if all configuration settings are define.
     if (name.validity.badInput === true) {
         hideLoading();
         displayError("Impossible " + actionVerb + " la configuration", "Le nom de la configuration n'a pas été renseigné. Veuillez renseigner un nom puis réessayez.");
@@ -121,6 +122,7 @@ async function saveConfiguration(editMode = false, id = null) {
         return;
     }
 
+    // Register of the configuration
     let data = null;
     if (editMode === true) {
         data = await phpPost("/phpApi/editConfiguration.php", {
@@ -139,7 +141,7 @@ async function saveConfiguration(editMode = false, id = null) {
             "pressure": pressure.value,
             "o2cal2nd": o2cal2nd.value,
             "altitude": altitude.value,
-            "calib_is_humid": calib_is_humid.checked
+            "calibIsHumid": calibIsHumid.checked
         });
     } else {
         data = await phpPost("/phpApi/addConfiguration.php", {
@@ -157,10 +159,9 @@ async function saveConfiguration(editMode = false, id = null) {
             "pressure": pressure.value,
             "o2cal2nd": o2cal2nd.value,
             "altitude": altitude.value,
-            "calib_is_humid": calib_is_humid.checked
+            "calibIsHumid": calibIsHumid.checked
         });
     }
-
 
     if (data != null) {
         hideLoading();
@@ -171,6 +172,10 @@ async function saveConfiguration(editMode = false, id = null) {
     hideLoading();
 }
 
+/**
+ * Recovery and diplay of the configuration whose id corresponds to the parameter
+ * @param {integer} id Configuration id
+ */
 async function loadConfiguration(id) {
     displayLoading("Récupération de la configuration...");
 
@@ -178,6 +183,7 @@ async function loadConfiguration(id) {
     document.getElementById("add-popup-btn").innerText = "Modifier";
     document.getElementById("add-popup-btn").setAttribute("onclick", "editConfiguration(" + id + ");");
 
+    // Settings of the configuration.
     const name = document.getElementById("name_input");
     const f1 = document.getElementById("f1_input");
     const m = document.getElementById("m_input");
@@ -192,7 +198,7 @@ async function loadConfiguration(id) {
     const pressure = document.getElementById("pressure_input");
     const o2cal2nd = document.getElementById("o2cal2nd_input");
     const altitude = document.getElementById("alt_input");
-    const calib_is_humid = document.getElementById("calib_is_humid");
+    const calibIsHumid = document.getElementById("calibIsHumid");
 
     const data = await phpPost("/phpApi/getConfiguration.php", {
         "id": id,
@@ -215,7 +221,7 @@ async function loadConfiguration(id) {
         pressure.value = data["pressure"];
         o2cal2nd.value = data["o2cal2nd"];
         altitude.value = data["altitude"];
-        calib_is_humid.checked = Boolean(data["calibIsHumid"]);
+        calibIsHumid.checked = Boolean(data["calibIsHumid"]);
 
         hideLoading();
         openPopup("add-popup");
@@ -225,11 +231,15 @@ async function loadConfiguration(id) {
     hideLoading();
 }
 
+/**
+ * Prepare the popup to add a configuration
+ */
 async function prepareAddPopup() {
     document.getElementById("add-popup-title").innerText = "Ajouter une configuration";
     document.getElementById("add-popup-btn").innerText = "Ajouter";
     document.getElementById("add-popup-btn").setAttribute("onclick", "saveConfiguration();");
 
+    // Settings to add a configuration.
     document.getElementById("name_input").value = "";
     document.getElementById("f1_input").value = "";
     document.getElementById("m_input").value = "";
@@ -247,12 +257,21 @@ async function prepareAddPopup() {
     document.getElementById("calib_is_humid").checked = false;
 }
 
+/**
+ * Displays a message asking if the user wants to modify the configuration whose id is in the parameter.
+ * If the user answers yes, it is modified, if he answers no, it is not modified.
+ * @param {integer} id Configuration id
+ */
 async function editConfiguration(id) {
     if (await displayConfirm('Voulez-vous vraiment modifier cette configuration de mesure ?', 'Cette configuration sera modifiée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière également modifié (si vous changez le nom de la configuration, ce dernier sera aussi modifié sur chaque campagne concerné). Cette action est irréversible.', 'Modifier', true) == true) {
         saveConfiguration(true, id);
     }
 }
 
+/**
+ * Removes the configuration whose id is in the parameter.
+ * @param {integer} id Configuration id
+ */
 async function removeConfig(id) {
     event.stopPropagation();
 
@@ -264,6 +283,10 @@ async function removeConfig(id) {
     }
 }
 
+/**
+ * Filters all configurations when the user presses the "enter" key in the search bar.
+ * @param {*} e event when the users press a key
+ */
 function handleKeyPressSearchBar(e){
     var key=e.keyCode || e.which;
     if (key==13){
@@ -271,6 +294,10 @@ function handleKeyPressSearchBar(e){
     }
 }
 
+/**
+ * Recovers and displays all configurations based on the filter in parameter.
+ * @param {String} filter Sequence of characters searched for in configuration names
+ */
 async function getListConfigJS(filter = null) {
     const configurationsContainer = document.getElementById("config_container");
     configurationsContainer.innerHTML = `
@@ -315,6 +342,9 @@ async function getListConfigJS(filter = null) {
     }
 }
 
+/**
+ * Displays all configurations based on the filter
+ */
 async function filterConfigurations() {
     const name = document.getElementById("config_name_search_bar").value;
     getListConfigJS({"name": name.toLowerCase()});

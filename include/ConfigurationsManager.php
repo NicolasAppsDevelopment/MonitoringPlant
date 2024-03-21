@@ -194,9 +194,9 @@ class ConfigurationsManager {
      * @param int pressure Constant
      * @param int o2cal2nd Constant
      * @param int altitude Altitude for the configuration
-     * @param bool calib_is_humid If calib has been done in humid conditions
+     * @param bool calibIsHumid If calib has been done in humid conditions
      */
-    public function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calib_is_humid) : bool
+    public function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calibIsHumid) : bool
     {
         try {
             if (self::existConfiguration($name)) {
@@ -218,7 +218,7 @@ class ConfigurationsManager {
                 'varPressure' => $pressure,
                 'varO2Cal2nd' => $o2cal2nd,
                 'varAltitude' => $altitude,
-                'varCalibIsHumid' => (int)$calib_is_humid
+                'varCalibIsHumid' => (int)$calibIsHumid
             ]);
 
             return true;
@@ -245,9 +245,9 @@ class ConfigurationsManager {
      * @param int pressure Constant
      * @param int o2cal2nd Constant
      * @param int altitude Altitude for the configuration
-     * @param bool calib_is_humid If calib has been done in humid conditions
+     * @param bool calibIsHumid If calib has been done in humid conditions
      */
-    public function editConfiguration(int $id, string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calib_is_humid) : bool
+    public function editConfiguration(int $id, string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calibIsHumid) : bool
     {
         try {
             if (self::existConfiguration($name, $id)) {
@@ -269,7 +269,7 @@ class ConfigurationsManager {
                 'varPressure' => $pressure,
                 'varO2Cal2nd' => $o2cal2nd,
                 'varAltitude' => $altitude,
-                'varCalibIsHumid' => (int)$calib_is_humid,
+                'varCalibIsHumid' => (int)$calibIsHumid,
                 'varId' => $id
             ]);
             
