@@ -185,10 +185,10 @@ async function post(url, data) {
             }
         });
         let res = await response.json();
-        if (response.status === 200) {
+        if (response.status === 200 && res["success"] == true) {
             return res;
         } else {
-            displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
+            displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
         }
     } catch (e) {
         displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
@@ -206,12 +206,12 @@ async function postGetFile(url, data) {
                 'Content-Type': 'application/json'
             }
         });
-        if (response.status !== 200) {
-            let res = await response.json();
-            displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
-        } else {
+        if (response.status === 200 && res["success"] == true) {
             let data = await response.blob();
             return data;
+        } else {
+            let res = await response.json();
+            displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
         }
     } catch (e) {
         displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
@@ -229,10 +229,10 @@ async function get(url) {
             }
         });
         let res = await response.json();
-        if (response.status === 200) {
+        if (response.status === 200 && res["success"] == true) {
             return res;
         } else {
-            displayError(res["title"], "La requête a retourné une erreur... " + res["error"]);
+            displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
         }
     } catch (e) {
         displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
