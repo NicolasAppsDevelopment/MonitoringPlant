@@ -78,7 +78,7 @@ header nav {
     scrollbar-width: none;  /* Firefox */
 } 
 
-nav a div g {
+nav a div g:not(.fixedColor) {
     fill: var(--unselected-font-color);
 }
 header nav * {
@@ -2182,6 +2182,17 @@ body.login a:hover{
 }
 .logout .top_nav_text {
     color: white;
+}
+.login {
+    background-color: white;
+    border-color: var(--input_border_color);
+}
+.login:hover {
+    background-color: var(--input_border_color);
+    border-color: var(--input_border_color);
+}
+.login .top_nav_text {
+    color: black;
 }
 .expend {
     width: 100%;

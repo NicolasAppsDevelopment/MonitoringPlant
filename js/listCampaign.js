@@ -119,7 +119,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
                         </p>
                     </div>
 
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(${campagne["idCampaign"]})"></button>
+                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]})"></button>
                 </form>
             `;
         });
@@ -138,7 +138,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
 /**
  * Recovery of all measurement campaigns depending on the filter parameters recovered.
  */
-async function filterCampagnes() {
+async function filterCampaigns() {
     const name = document.getElementById("campaign_name_search_bar").value;
     const date = document.getElementById("campaign_date");
     const time = document.getElementById("campaign_time");
@@ -262,7 +262,7 @@ async function predictStoreUsage() {
 /**
  * Creation of a new measurement campaign.
  */
-async function addCampagne() {
+async function addCampaign() {
     displayLoading("Ajout de la campagne...");
 
     //Recovery of all the new measurement campaign settings.
@@ -337,7 +337,7 @@ async function addCampagne() {
  * Deletes all data of the measurement campaign whose id is entered as a parameter.
  * @param {integer} id id of the campaing that we want to remove
  */
-async function removeCampagne(id) {
+async function tryRemoveCampaign(id) {
     event.stopPropagation();
 
     if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
@@ -356,7 +356,7 @@ async function removeCampagne(id) {
 function handleKeyPressSearchBar(e){
     var key=e.keyCode || e.which;
     if (key==13){
-    filterCampagnes();
+    filterCampaigns();
     }
 }
 

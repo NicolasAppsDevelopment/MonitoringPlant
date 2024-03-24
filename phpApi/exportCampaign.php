@@ -3,10 +3,8 @@
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'exporter la campagne";
-
 
 function getIndexFromKeyName(array $arr, string $keyName) : int {
     // remove the duplicate keys
@@ -29,6 +27,8 @@ function getIndexFromKeyName(array $arr, string $keyName) : int {
 }
 
 try {
+    $campaignsManager = CampaignsManager::getInstance();
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 

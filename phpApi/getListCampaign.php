@@ -3,11 +3,12 @@
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de lister les campagnes";
 
-try { 
+try {
+    $campaignsManager = CampaignsManager::getInstance();
+    
     // Recovery and transmission of all measurement campaigns..
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // handle GET request

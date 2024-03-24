@@ -4,12 +4,13 @@ include_once '../include/Session.php';
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$configManager = ConfigurationsManager::getInstance();
 $reply = RequestReplySender::getInstance();
-$session = Session::getInstance();
 $errorTitle = "Impossible d'ajouter la configuration";
 
 try {
+    $configManager = ConfigurationsManager::getInstance();
+    $session = Session::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
         $data = file_get_contents("php://input");

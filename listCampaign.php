@@ -38,10 +38,18 @@
                     </div>
                     <div class="popup-content">
                         <div class="label_img_input">
-                            <label class="label_field" for="campaign_date">Date de la campagne de mesure</label>
-                            <div class="row_fields gap">
-                                <input class="input_field calendar" id="campaign_date" type="date" placeholder="Date">
-                                <input class="input_field clock" id="campaign_time" type="time" placeholder="Heure">
+                            <label class="label_field" for="datetime">Date de la campagne de mesure</label>
+                            <div class="row_fields gap with_subtitle">
+                                <p>De :</p>
+                                <input class="input_field calendar" id="datedebut_choice" name="date" type="date"
+                                    placeholder="Date">
+                                <input class="input_field clock" id="heuredebut_choice" name="time" type="time" placeholder="Heure">
+                            </div>
+                            <div class="row_fields gap with_subtitle">
+                                <p>À :</p>
+                                <input class="input_field calendar" id="datefin_choice" name="date" type="date"
+                                    placeholder="Date">
+                                <input class="input_field clock" id="heurefin_choice" name="time" type="time" placeholder="Heure">
                             </div>
                         </div>
 
@@ -56,8 +64,42 @@
                                 <span>Filtrer par campagnes en cours</span>
                             </label>
                         </div>
+                        <div class="checkbox bottom_gap">
+                            <label for="success">
+                                <input type="checkbox" id="success">
+                                <span class="cbx">
+                                    <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Filtrer par campagnes terminées avec succès</span>
+                            </label>
+                        </div>
+                        <div class="checkbox bottom_gap">
+                            <label for="error">
+                                <input type="checkbox" id="error">
+                                <span class="cbx">
+                                    <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Filtrer par campagnes terminées par une erreur</span>
+                            </label>
+                        </div>
+                        <div class="checkbox bottom_gap">
+                            <label for="warn">
+                                <input type="checkbox" id="warn">
+                                <span class="cbx">
+                                    <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Filtrer par campagnes avec un/des avertissements</span>
+                            </label>
+                        </div>
 
-                        <button class="rect_round_btn gray" type="button" onclick="filterCampagnes()">Filtrer</button>
+                        <button class="rect_round_btn gray bottom_gap" type="button" onclick="resetFilter()">Réinitialiser le filtre</button>
+                        <button class="rect_round_btn gray" type="button" onclick="filterCampaigns()">Filtrer</button>
                     </div>
                 </div>
             </div>
@@ -235,7 +277,7 @@
                     </div>
                 </div>
 
-                <button class="rect_round_btn gray" type="button" onclick="addCampagne()">Démarrer</button>
+                <button class="rect_round_btn gray" type="button" onclick="addCampaign()">Démarrer</button>
             </form>
         </div>
     </div>

@@ -4,13 +4,15 @@ include_once __DIR__ . "/../include/NodeRED_API.php";
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'ajouter la campagne";
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
 const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
+
 try {
+    $campaignsManager = CampaignsManager::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 
@@ -147,7 +149,7 @@ try {
         
         
         // Check if a campaign is already running
-        /*$data = NodeRedGet("check_working_campaign");
+        $data = NodeRedGet("check_working_campaign");
 
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -171,13 +173,13 @@ try {
         
         if ($size + $storage["used"] >= $storage["total"]){
             throw new Exception("La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
-        }*/
+        }
 
 
         // Creation of the new measurement campaign.
         $id = $campaignsManager->addCampaign($configId, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
 
-        //NodeRedPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
+        NodeRedPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
 
         $reply->replyData([
             "id" => $id
