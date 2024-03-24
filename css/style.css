@@ -144,7 +144,7 @@ nav a div p {
 .info_ico_container:hover p {
     color: var(--selected-font-color);
 }
-.info_ico_container:hover g {
+.info_ico_container:hover g:not(.fixedColor) {
     fill: var(--selected-font-color);
 }
 .info_ico_container {
@@ -2183,15 +2183,15 @@ body.login a:hover{
 .logout .top_nav_text {
     color: white;
 }
-.login {
+a .login {
     background-color: white;
     border-color: var(--input_border_color);
 }
-.login:hover {
+a .login:hover {
     background-color: var(--input_border_color);
     border-color: var(--input_border_color);
 }
-.login .top_nav_text {
+a .login .top_nav_text {
     color: black;
 }
 .expend {
