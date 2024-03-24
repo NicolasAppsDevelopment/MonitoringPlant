@@ -78,7 +78,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
             if (campagne["finished"] == 0) {
                 // la campagne n'est pas fini
                 state = "processing";
-                state_desc = `En cours (reste ${dateToReamingString(new Date(campagne["endingDate"]))})...`;
+                state_desc = `En cours (reste ${dateToRemainingString(new Date(campagne["endingDate"]))})...`;
                 state_ico = "working_status";
             } else {
                 // la campagne est fini

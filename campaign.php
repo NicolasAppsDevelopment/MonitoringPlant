@@ -144,7 +144,7 @@
                                             <p class="title_param">Durée restante : </p>
                                         </th>
                                         <td>
-                                            <p id="reaming_duration"></p>
+                                            <p id="remaining_duration"></p>
                                         </td>
                                     </tr>
                                     <tr>

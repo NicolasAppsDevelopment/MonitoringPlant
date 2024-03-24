@@ -97,8 +97,8 @@ async function getCampaignMeasurements(refresh_mode = false) {
         let dateFin = new Date(campaignInfo["beginDate"]);
         dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
 
-        const reamingDuration = document.getElementById("reaming_duration");
-        reamingDuration.innerHTML = dateToReamingString(dateFin);
+        const remainingDuration = document.getElementById("remaining_duration");
+        remainingDuration.innerHTML = dateToRemainingString(dateFin);
 
         const logsContainer = document.getElementById("logs_container");
         if (logs != null){

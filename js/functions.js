@@ -1,5 +1,5 @@
-const apiIpAddress = "localhost";
-const phpApiPort = "8080";
+const API_IP_ADDRESS = "localhost";
+const PHP_API_PORT = "8080";
 const NODERED_API_PORT = "1880";
 
 let blurCompatibility = true;
@@ -221,16 +221,16 @@ async function openPopup(id) {
 }
 
 /**
- * Sends data to an URL
- * @param {String} url Where the data are sent
- * @param {Object} data The data sent
- * @returns {(json|null)}  Response from the location where the data is sent. Null if the data is not sent or received, json if the data is sent and received.
+ * Sends a request to retrieve data from an URL address and the data retrieval depends on the settings.
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(json|null)}  Response from the location where the data is sent. Null if the data is not sent or not received, json if the request is sent and received. Json contains data from the url address.
  */
-async function post(url, data) {
+async function post(url, settings) {
     try {
         const response = await fetch(url, {
             method: 'post',
-            body: JSON.stringify(data),
+            body: JSON.stringify(settings),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -251,16 +251,16 @@ async function post(url, data) {
 
 
 /**
- * Recovers ----
- * @param {String} url Where the --- are sent
- * @param {Object} data ---
- * @returns {(json|null)}  Response from the location where the ---- is sent. Null if the --- is not sent or received, json if the --- is sent and received. Json contains -----
+ * Sends a request to retrieve data from an URL address and the data retrieval depends on the settings. (The retrieved data format is used to create a downloadable file)
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
  */
-async function postGetFile(url, data) {
+async function postGetFile(url, settings) {
     try {
         const response = await fetch(url, {
             method: 'post',
-            body: JSON.stringify(data),
+            body: JSON.stringify(settings),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -281,6 +281,11 @@ async function postGetFile(url, data) {
 }
 
 
+/**
+ * Sends a request to retrieve data from an url address.
+ * @param {String} url Where the data are
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
 async function get(url) {
     try {
         const response = await fetch(url, {
@@ -303,35 +308,76 @@ async function get(url) {
     return null;
 }
 
-async function phpPost(url, data) {
-    return await post("http://" + apiIpAddress + ":" + phpApiPort + url, data);
+/**
+ * Sends a request to retrieve data from an url address linked to a php file and the data retrieval depends on the settings.
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function phpPost(url, settings) {
+    return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
 }
 
-async function phpPostGetFile(url, data) {
-    return await postGetFile("http://" + apiIpAddress + ":" + phpApiPort + url, data);
+/**
+ * Sends a request to retrieve data from an url address linked to a php file and the data retrieval depends on the settings. (The retrieved data format is used to create a downloadable file)
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function phpPostGetFile(url, settings) {
+    return await postGetFile("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
 } 
 
+
+/**
+ * Sends a request to retrieve data from an url address linked to a php file.
+ * @param {String} url Where the data are
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
 async function phpGet(url) { 
-    return await get("http://" + apiIpAddress + ":" + phpApiPort + url);
+    return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url);
 } 
 
-async function NODERED_post(url, data) {
-    return await post("http://" + apiIpAddress + ":" + NODERED_API_PORT + url, data);
+/**
+ * Sends a request to retrieve data from an url address linked to NodeRed and the data retrieval depends on the settings.
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function NODERED_post(url, settings) {
+    return await post("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url, settings);
 } 
 
+/**
+ * Sends a request to retrieve data from an url address linked to NodeRed.
+ * @param {String} url Where the data are
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
 async function NODERED_get(url) {
-    return await get("http://" + apiIpAddress + ":" + NODERED_API_PORT + url);
+    return await get("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url);
 } 
 
-function dateToString(date, str_separator_date_time = true, display_seconds = false) {
+/**
+ * Transforms a Javascript Date into a string with the format : "day/month/year hour:minute:second" or "day/month/year à hour:minute:second" or "day/month/year hour:minute" or  "day/month/year à hour:minute"
+ * @param {Date} date date in JavaScript format
+ * @param {boolean} separatorDateTime If true, the returned string will contain the "à" character between the day/month/year and the hour:minute:second.
+ * @param {boolean} display_seconds If true, the returned string will contain the seconds part.
+ * @returns {String} date with the format : "day/month/year hour:minute:second" or "day/month/year à hour:minute:second" or "day/month/year hour:minute" or  "day/month/year à hour:minute"
+ */
+function dateToString(date, separatorDateTime = true, display_seconds = false) {
     let d = date.getDate();
     let m = date.getMonth() + 1; //Month from 0 to 11
     let y = date.getFullYear();
     let h = date.getHours();
     let min = date.getMinutes();
-    return '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y + " " + (str_separator_date_time ? "à " : "") + (h<=9 ? '0' + h : h) + ":" + (min<=9 ? '0' + min : min) + (display_seconds ? ":" + (date.getSeconds()<=9 ? '0' + date.getSeconds() : date.getSeconds()) : "");
+    return '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y + " " + (separatorDateTime ? "à " : "") + (h<=9 ? '0' + h : h) + ":" + (min<=9 ? '0' + min : min) + (display_seconds ? ":" + (date.getSeconds()<=9 ? '0' + date.getSeconds() : date.getSeconds()) : "");
 }
 
+/**
+ * Transforms a Javascript Date into a Object with two sections : "date" and "time"
+ * @param {Date} date date in JavaScript format
+ * @returns {Object} the "date" section contains the date in the format "year-month-day", the "time" section contains the time in the format "hour:minute"
+ */
 function dateToStandardString(date) {
     const datetime = new Date(date);
     let d = datetime.getDate();
@@ -346,11 +392,16 @@ function dateToStandardString(date) {
     return {"date": formattedDate, "time": formattedTime};
 }
 
-function dateToReamingString(date) {
+/**
+ * Returns a string indicating the remaining time
+ * @param {Date} date date in JavaScript format
+ * @returns {String} remaining time
+ */
+function dateToRemainingString(date) {
     let now = new Date();
 
-    const MS_PER_MINUTES = 1000 * 60;
-    const minutes = Math.floor((date - now) / MS_PER_MINUTES);
+    const MILLISECONDS_PER_MINUTES = 1000 * 60;
+    const minutes = Math.floor((date - now) / MILLISECONDS_PER_MINUTES);
 
     if (minutes < 1) {
         return "moins d'1 minute";
@@ -369,6 +420,11 @@ function dateToReamingString(date) {
     }
 }
 
+/**
+ * Transforms a integer into a string with the format : "x month x day x minute x sscond" where x are different numbers
+ * @param {integer} seconds number of seconds
+ * @returns {String} date with the format : "x month x day x minute x sscond" where x are different numbers
+ */
 function getReadableTime(seconds) {
     const SECONDS_PER_MINUTE = 60;
     const SECONDS_PER_HOUR = 3600;
@@ -408,6 +464,12 @@ function getReadableTime(seconds) {
     return result.trim();
 }
 
+
+/**
+ * Transforms a integer into a Object with two sections : "value" and "unit"
+ * @param {integer} seconds a number of seconds
+ * @returns {Object} the "value" section contains a number in a string, the "unit" section contains the time unit in a string
+ */
 function getReadableTimeAndUnit(seconds) {
     let hours = seconds / 3600;
     
@@ -423,6 +485,11 @@ function getReadableTimeAndUnit(seconds) {
     return { "value": hours, "unit": unit };
 }
 
+/**
+ * Returns "Activé" or "Désactivé" according to bool
+ * @param {boolean} bool If true, the returned string will contain "Activé", "Désactivé" if not
+ * @returns {String} contains "Activé" or "Désactivé"
+ */
 function getReadableBool(bool) {
     return bool ? "Activé" : "Désactivé";
 }
@@ -446,15 +513,18 @@ async function checkTime() {
 
 /**
  * Set refresh delay
- * @param milliSeconds Time of delay
- * @returns 
+ * @param {integer} milliSeconds Time of delay
  */
 async function delay(milliSeconds) {
     // return await for better async stack trace support in case of errors.
     return await new Promise(resolve => setTimeout(resolve, milliSeconds));
 }
 
-
+/**
+ * Hide an icon of a HTML page
+ * @param {HTMLElement} icon where the function has been called
+ * @param {String} id id of a HTML element
+ */
 function displayHide(icon, id) {
     let input = this.document.getElementById(id);
     if (icon.classList.contains('btn-eye-show')) {
