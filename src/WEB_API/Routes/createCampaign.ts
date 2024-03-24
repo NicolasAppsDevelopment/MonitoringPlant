@@ -9,19 +9,22 @@ import { sqlConnections } from '../../Database/DatabaseManager';
     DESCRIPTION : test de la connexion
 */
 module.exports = function(app: Express){
-    app.post('/test', async (req: Request, res: Response) => {
+    app.post('/createCampaign', async (req: Request, res: Response) => {
         // Vérifie le corps
         let data = req.body;
         if (data.id == null || typeof data.id != "number") {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
             return;
         }
-
         // Traite la requête
         try {
             // data.server_id must be send as string or else it will not work
             const sid = data.id;
+            if (data.key === "I_do_believe_I_am_on_fire"){
 
+            }
+
+            
             const response: any[] = ["coucou"];
             res.send({"success": response});
         } catch (error) {

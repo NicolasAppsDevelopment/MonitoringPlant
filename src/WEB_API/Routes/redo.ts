@@ -9,20 +9,21 @@ import { sqlConnections } from '../../Database/DatabaseManager';
     DESCRIPTION : test de la connexion
 */
 module.exports = function(app: Express){
-    app.post('/test', async (req: Request, res: Response) => {
+    app.post('/redo', async (req: Request, res: Response) => {
         // Vérifie le corps
         let data = req.body;
         if (data.id == null || typeof data.id != "number") {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
             return;
         }
-
         // Traite la requête
         try {
             // data.server_id must be send as string or else it will not work
-            const sid = data.id;
+            const currentCampaignId = data.id;
+            const result = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign=?;", [currentCampaignId]);
+            console.log(result);
 
-            const response: any[] = ["coucou"];
+            const response: any[] = [result];
             res.send({"success": response});
         } catch (error) {
             let message = 'Erreur inconnue'
