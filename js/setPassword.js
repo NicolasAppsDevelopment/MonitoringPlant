@@ -1,3 +1,6 @@
+/**
+ * Displays the second form to define the administrator password.
+ */
 function next(){
     document.getElementById("div_page1").classList.add("hidden");
     let bar=document.getElementsByClassName("progression_bar");
@@ -5,6 +8,9 @@ function next(){
     document.getElementById("div_page2").classList.remove("hidden");
 }
 
+/**
+ * Sets the administrator password.
+ */
 async function setPassword(){
     displayLoading("Mise à jour du mot de passe...");
 

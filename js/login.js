@@ -1,3 +1,6 @@
+/**
+ * Checks that the password entered by the user is the administrator password.
+ */
 async function login(){
     displayLoading("Connexion...");
 
