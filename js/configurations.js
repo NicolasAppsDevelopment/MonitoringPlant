@@ -35,7 +35,7 @@ async function saveConfiguration(editMode = false, id = null) {
     const pressure = document.getElementById("pressure_input");
     const o2cal2nd = document.getElementById("o2cal2nd_input");
     const altitude = document.getElementById("alt_input");
-    const calibIsHumid = document.getElementById("calibIsHumid");
+    const calibIsHumid = document.getElementById("calib_is_humid");
 
     // Checking if all configuration settings are define.
     if (name.validity.badInput === true) {
@@ -198,7 +198,7 @@ async function loadConfiguration(id) {
     const pressure = document.getElementById("pressure_input");
     const o2cal2nd = document.getElementById("o2cal2nd_input");
     const altitude = document.getElementById("alt_input");
-    const calibIsHumid = document.getElementById("calibIsHumid");
+    const calibIsHumid = document.getElementById("calib_is_humid");
 
     const data = await phpPost("/phpApi/getConfiguration.php", {
         "id": id,
@@ -320,7 +320,7 @@ async function getListConfigJS(filter = null) {
         configurationsContainer.innerHTML = "";
 
         let configContainerHTML = "";
-        data["data"].forEach(config => {
+        data.forEach(config => {
             configContainerHTML += `
                 <form class="CM" id="config_${config["idConfig"]}" onclick="loadConfiguration(${config["idConfig"]});">
                     <input type="hidden" name="id" value="${config["idConfig"]}">

@@ -1,4 +1,14 @@
 let chart;
+let mouseX = 0;
+
+/**
+ * Mouse mouve listener to track the mouse X position.
+ * In order to display correctly the tooltip.
+ */
+document.addEventListener('mousemove', (event) => {
+  mouseX = event.clientX;
+});
+
 
 /**
  * Destroys the chart
@@ -213,7 +223,7 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 1;
 
-    if (positionX + tooltip.caretX > window.screen.width - tooltipEl.offsetWidth) {
+    if (mouseX + 12 + tooltipEl.offsetWidth > document.body.clientWidth - 12) {
       tooltipEl.style.left = positionX + tooltip.caretX - 12 - tooltipEl.offsetWidth + 'px';
     } else {
       tooltipEl.style.left = positionX + tooltip.caretX + 12 + 'px';

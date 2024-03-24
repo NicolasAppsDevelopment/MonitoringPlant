@@ -70,7 +70,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
     if (data != null){
         let campagnesContainerHTML = "";
 
-        data["data"].forEach(campagne => {
+        data.forEach(campagne => {
             let state = "";
             let state_desc = "";
             let state_ico = "";
@@ -273,11 +273,11 @@ async function addCampagne() {
     const luminosityEnabled = document.getElementById("luminosity_checkbox");
     const humidityEnabled = document.getElementById("humidity_checkbox");
     const duration = document.getElementById("duration_input");
-    const duration_unit = document.getElementById("duration_unit_combo_box");
+    const durationUnit = document.getElementById("duration_unit_combo_box");
     const interval = document.getElementById("interval_input");
-    const intervalUnit = document.getElementById("intervalUnit_combo_box");
+    const intervalUnit = document.getElementById("interval_unit_combo_box");
     const volume = document.getElementById("volume_input");
-    const volume_unit = document.getElementById("volume_unit_combo_box");
+    const volumeUnit = document.getElementById("volume_unit_combo_box");
     const config = document.getElementById("config_combo_box");
     const humidMode = document.getElementById("humid_mode");
     const enableFiboxTemp = document.getElementById("enable_fibox_temp");
@@ -315,12 +315,12 @@ async function addCampagne() {
         "luminosityEnabled": luminosityEnabled.checked,
         "humidityEnabled": humidityEnabled.checked,
         "duration": duration.value,
-        "duration_unit": duration_unit.value,
+        "durationUnit": durationUnit.value,
         "interval": interval.value,
         "intervalUnit": intervalUnit.value,
         "volume": volume.value,
-        "volume_unit": volume_unit.value,
-        "config_id": config.value,
+        "volumeUnit": volumeUnit.value,
+        "configId": config.value,
         "humidMode": humidMode.checked,
         "enableFiboxTemp": enableFiboxTemp.checked
     });
@@ -328,10 +328,6 @@ async function addCampagne() {
     if (data != null) {
         document.getElementById("id_added_campaign").value = data["id"];
         document.getElementById("add_popup_form").submit();
-
-        if (data_ == null) {
-            console.warn("ATTENTION : NodeRed n'a rien retourné");
-        }
     }
 
     hideLoading();
@@ -371,7 +367,7 @@ async function getConfigurations() {
     let data = await phpGet("/phpApi/getListConfiguration.php");
     if (data != null){
         const select = document.getElementById("config_combo_box");
-        data["data"].forEach(configuration => {
+        data.forEach(configuration => {
             const option = document.createElement("option");
             option.value = configuration["idConfig"];
             option.innerHTML = configuration["name"];

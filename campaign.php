@@ -135,7 +135,7 @@
                                             <p class="title_param">Date de démarrage : </p>
                                         </th>
                                         <td>
-                                            <p id="startDate"></p>
+                                            <p id="start_date"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -180,7 +180,7 @@
                                             <p class="title_param">Configuration : </p>
                                         </th>
                                         <td>
-                                            <p id="idConfig"></p>
+                                            <p id="config_name"></p>
                                         </td>
                                     </tr>
                                     <tr>

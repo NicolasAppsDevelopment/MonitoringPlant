@@ -60,9 +60,9 @@ class RequestReplySender {
     /**
      * Reply to the client with a 500 error code and JSON data about the error
      * @param string $title - Title of the exception
-     * @param Exception $ex - Exception object
+     * @param Throwable $ex - Throwable error object
      */
-    public function replyError(string $title, Exception $ex){
+    public function replyError(string $title, Throwable $ex){
         http_response_code(500);
 
         $msg_cleared = $ex->getMessage();

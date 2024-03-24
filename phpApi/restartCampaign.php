@@ -2,6 +2,7 @@
 
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
+include_once '../include/NodeRED_API.php';
 
 $campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();

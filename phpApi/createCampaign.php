@@ -119,15 +119,15 @@ try {
             throw new Exception("L'intervalle demandé doit être inférieur ou égale à la durée de la campagne.");
         }
 
-        $config_id = null;
-        if (!isset($arguments["config_id"])){
+        $configId = null;
+        if (!isset($arguments["configId"])){
             throw new Exception("L'identifiant de configuration n'a pas été renseigné. Veuillez entrer un nombre entier positif puis réessayer.");
         }
-        if (empty($arguments["config_id"])){
+        if (empty($arguments["configId"])){
             throw new Exception("Aucune configuration n'a été séléctionné. Veuillez séléctionner une configuration puis réessayer.");
         }
-        $config_id = filter_var($arguments["config_id"], FILTER_VALIDATE_INT);
-        if ($config_id === false) {
+        $configId = filter_var($arguments["configId"], FILTER_VALIDATE_INT);
+        if ($configId === false) {
             throw new Exception("Le format de l'identifiant de configuration de la campagne est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
         }
 
@@ -147,7 +147,7 @@ try {
         
         
         // Check if a campaign is already running
-        $data = NodeRedGet("check_working_campaign");
+        /*$data = NodeRedGet("check_working_campaign");
 
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -171,13 +171,13 @@ try {
         
         if ($size + $storage["used"] >= $storage["total"]){
             throw new Exception("La place que prendra la campagne dépasse l'espace mémoire restant. Veuillez changer la durée, l'intervalle de la campagne et/ou supprimer d'anciennes campagnes");
-        }
+        }*/
 
 
         // Creation of the new measurement campaign.
-        $id = $campaignsManager->addCampaign($config_id, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
+        $id = $campaignsManager->addCampaign($configId, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
 
-        NodeRedPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
+        //NodeRedPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
 
         $reply->replyData([
             "id" => $id

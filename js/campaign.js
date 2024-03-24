@@ -4,7 +4,6 @@ let lastMeasureDatetime = null;
 let lastLogDatetime = null;
 let rows = 0;
 let refreshRepeat = true;
-let authorizeUpdate = true;
 
 //Executes each of the following functions when all html code is loaded.
 document.addEventListener("DOMContentLoaded", () => {
@@ -31,9 +30,7 @@ async function subscribeRefresh() {
  * Recovery and display measurement campaign data.
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
-async function getCampaignMeasurements(refresh_mode = false) {
-    authorizeUpdate = false;
-
+async function getCampaignMeasurements(refreshMode = false) {
     if (refreshMode == false){
         displayLoading("Récupération de la campagne...");
         id = document.getElementById("id").value;
@@ -68,8 +65,8 @@ async function getCampaignMeasurements(refresh_mode = false) {
             const titleCampaign = document.getElementById("titleCampaign");
             titleCampaign.innerHTML = campaignInfo["name"];
 
-            const startDate = document.getElementById("start_date");
-            startDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
+            const beginDate = document.getElementById("start_date");
+            beginDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
 
             const duration = document.getElementById("duration");
             duration.innerHTML = getReadableTime(campaignInfo["duration"]);
@@ -84,8 +81,8 @@ async function getCampaignMeasurements(refresh_mode = false) {
                 volume.innerHTML = "N/A";
             }
 
-            const idConfig = document.getElementById("id_config");
-            idConfig.innerHTML = campaignInfo["nameConfig"];
+            const configName = document.getElementById("config_name");
+            configName.innerHTML = campaignInfo["nameConfig"];
 
             const humidMode = document.getElementById("humid_mode");
             humidMode.innerHTML = getReadableBool(campaignInfo["humidMode"]);

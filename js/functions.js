@@ -238,6 +238,9 @@ async function post(url, settings) {
         });
         let res = await response.json();
         if (response.status === 200 && res["success"] == true) {
+            if (res["data"] != undefined) {
+                return res["data"];
+            }
             return res;
         } else {
             displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
@@ -266,7 +269,7 @@ async function postGetFile(url, settings) {
                 'Content-Type': 'application/json'
             }
         });
-        if (response.status === 200 && res["success"] == true) {
+        if (response.status === 200) {
             let data = await response.blob();
             return data;
         } else {
@@ -297,6 +300,9 @@ async function get(url) {
         });
         let res = await response.json();
         if (response.status === 200 && res["success"] == true) {
+            if (res["data"] != undefined) {
+                return res["data"];
+            }
             return res;
         } else {
             displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);

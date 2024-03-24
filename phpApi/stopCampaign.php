@@ -1,6 +1,7 @@
 <?php
 
 include_once '../include/RequestReplySender.php';
+include_once '../include/NodeRED_API.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'arrêter la campagne";
