@@ -1,7 +1,5 @@
 let filter = null;
 let refreshRepeat = true;
-let authorizeUpdate = true;
-
 
 /**
  * Executes each of the following functions when all html code is loaded.
@@ -19,9 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Recovery of all configurations.
     getConfigurations();
-
-    //Automatic refresh of the list of measurement campaigns.
-    subscribeRefresh();
 });
 
 /**
@@ -29,11 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 async function subscribeRefresh() {
     do {
-        await delay(10000);
-        if (authorizeUpdate) {
+        if (refreshRepeat) {
             // Recovery and display all measurement campaigns according to the current filter.
             getListCampaignJS(filter, true);
         }
+        await delay(10000);
     } while (refreshRepeat);
 }
 
@@ -43,7 +38,6 @@ async function subscribeRefresh() {
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
 async function getListCampaignJS(filter_ = null, refreshMode = false) {
-    authorizeUpdate = false;
     filter = filter_;
     const campagnesContainer = document.getElementById("CM_container");
     if (refreshMode == false){
@@ -65,7 +59,6 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
         //Recovery of all measurement campaigns.
         data = await phpGet("/phpApi/getListCampaign.php");
     }
-    authorizeUpdate = true;
 
     if (data != null){
         let campagnesContainerHTML = "";
@@ -125,6 +118,12 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
         });
 
         campagnesContainer.innerHTML = campagnesContainerHTML;
+
+        if (refreshMode == true) {
+            refreshRepeat = true;
+        } else {
+            subscribeRefresh();
+        }
     } else {
         refreshRepeat = false;
     }

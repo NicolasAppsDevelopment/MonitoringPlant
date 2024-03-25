@@ -1,4 +1,5 @@
 let id = -1;
+let campaignName = "";
 let refreshDelay = 5000;
 let lastMeasureDatetime = null;
 let lastLogDatetime = null;
@@ -18,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 async function subscribeRefresh() {
     do {
-        if (authorizeUpdate == true) {
+        if (refreshRepeat) {
             // Recovery and display measurement campaign data.
             getCampaignMeasurements(true);
         }
@@ -45,9 +46,6 @@ async function getCampaignMeasurements(refreshMode = false) {
         "lastMeasureDatetime": lastMeasureDatetime
     });
 
-
-    authorizeUpdate = true;
-
     // Display measurement campaign data.
     if (data != null){
         let campaignInfo = data["campaignInfo"];
@@ -64,6 +62,7 @@ async function getCampaignMeasurements(refreshMode = false) {
         if (refreshMode == false){
             const titleCampaign = document.getElementById("titleCampaign");
             titleCampaign.innerHTML = campaignInfo["name"];
+            campaignName = campaignInfo["name"];
 
             const beginDate = document.getElementById("start_date");
             beginDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
@@ -421,7 +420,7 @@ async function exportCampagne() {
     if (data != null) {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(data);
-        link.download = "mesures_" + id + ".csv"; // Provide filename
+        link.download = campaignName + ".csv"; // Provide filename
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

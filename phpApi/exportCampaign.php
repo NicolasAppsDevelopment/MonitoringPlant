@@ -139,7 +139,7 @@ try {
         }
         
         $info = $campaignsManager->getInfoCampaign($id);
-        if ($args["volume"]==True && is_null($info["volume"])){
+        if ($args["volume"] == true && is_null($info["volume"])){
             throw new Exception("Aucun volume n'a été renseigné lors du démarrage de la campagne");
         }
 
@@ -229,7 +229,36 @@ try {
         $headers = [];
         foreach ($measurements[0] as $key => $value) {
             if (is_string($key)) {
-                array_push($headers, $key);
+                $unit = null;
+                switch ($key) {
+                    case 'temperature':
+                        $unit = "°C";
+                        break;
+                    case 'CO2':
+                        if ($args["volume"] == true){
+                            $unit = "vol";
+                        } else {
+                            $unit = "vol%";
+                        }
+                        break;
+                    case 'O2':
+                        $unit = "%";
+                        break;
+                    case 'luminosity':
+                        $unit = "%";
+                        break;
+                    case 'humidity':
+                        $unit = "%";
+                        break;
+                    default:
+                        break;
+                }
+                if ($unit == null){
+                    array_push($headers, $key);
+                } else {
+                    array_push($headers, $key . " (" . $unit . ")");
+                }
+                
             }
         }
         fputcsv($f, $headers, ";");

@@ -117,6 +117,10 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
     if (!tooltipEl) {
       tooltipEl = document.createElement('div');
       tooltipEl.classList.add("tooltipChart_container");
+
+      document.getElementById('ChartCanvas').addEventListener('touchstart', (ev) => {
+        tooltipEl.style.opacity = 0;
+      }, false);
   
       const table = document.createElement('table');
       table.style.margin = '0px';
