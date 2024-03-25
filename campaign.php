@@ -421,6 +421,18 @@
                         </label>
                     </div>
 
+                    <div class="checkbox bottom_gap">
+                        <label for="export_config">
+                            <input type="checkbox" id="export_config">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Exporter les paramètres de la campagne</span>
+                        </label>
+                    </div>
+
                     <div class="row_center bottom_gap">
                         <div class="warning_container">
                             <div class="warning_ico"><span class="warn_ico"></span></div>

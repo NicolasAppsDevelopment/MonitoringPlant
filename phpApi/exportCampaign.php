@@ -1,6 +1,7 @@
 <?php
 
 include_once '../include/CampaignsManager.php';
+include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
@@ -28,6 +29,7 @@ function getIndexFromKeyName(array $arr, string $keyName) : int {
 
 try {
     $campaignsManager = CampaignsManager::getInstance();
+    $configManager = ConfigurationsManager::getInstance();
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
@@ -225,6 +227,16 @@ try {
 
         // open the "output" stream
         $f = fopen('php://output', 'w');
+
+        // send parameters data
+        if (isset($args["exportConfig"]) && $args["exportConfig"]) {
+            fputcsv($f, ["Nom de la campagne", "Nom de la configuration utilisé", "Intervalle de mesure (sec)", "Durée de la campagne (sec)", "Volume (mL)", "Relève en milieu humide ?", "Capteur température Fibox activé ?"], ";");
+        
+            $configName = $configManager->getNameConfiguration($info["idConfig"]);
+            fputcsv($f, [$info["name"], $configName, $info["interval_"], $info["duration"], $info["volume"], $info["humidMode"] ? "OUI" : "NON", $info["enableFiboxTemp"] ? "OUI" : "NON"], ";");
+            fputcsv($f, [], ";"); // empty line
+        }
+
         // send the column headers
         $headers = [];
         foreach ($measurements[0] as $key => $value) {

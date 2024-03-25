@@ -364,6 +364,7 @@ async function exportCampagne() {
     const dateEnd = document.getElementById("datefin_choice");
     const timeEnd = document.getElementById("heurefin_choice");
     const volume = document.getElementById("calc_volume").checked;
+    const exportConfig = document.getElementById("export_config").checked;
 
 
     // Checking export settings.
@@ -413,7 +414,8 @@ async function exportCampagne() {
         "startTime": timeStart.value,
         "endDate": dateEnd.value,
         "endTime": timeEnd.value,
-        "volume": volume
+        "volume": volume,
+        "exportConfig": exportConfig
     });
 
     // Creation and download of the csv file
