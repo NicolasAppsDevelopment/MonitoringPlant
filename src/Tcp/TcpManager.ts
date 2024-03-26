@@ -1,11 +1,18 @@
 import * as net from "net";
 import { logger } from "../Logger/LoggerManager";
+import { config } from "dotenv";
 
 export default class TcpManager{
     private client = new net.Socket();
 
     startconnection(){
-        this.client.connect(12778, '127.0.0.1', function() {
+        // Chargement des variables d'environnement
+        config();
+
+        const port: string = process?.env?.DAEMON_PORT || '12778';
+        const host: string = process?.env?.DAEMON_HOST || 'localhost';
+
+        this.client.connect(+port, host, function() {
             logger.info('Connxion TCP établi.');
         });
         this.client.on('data', (data:any) => {
