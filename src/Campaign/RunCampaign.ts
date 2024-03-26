@@ -78,22 +78,22 @@ export default class RunCampaign {
         //const dataParsed = data.parse();
     }
 
-    buildInsertSensorDataRequest(sensorData:any):string{
-        //     if(sensorData.>0){
-        //         var temperature=global.get("temperature");
-        //         }
-        //         if(global.get("capteurCO2")>0){
-        //          co2=global.get("co2");
-        //         }
-        //         if(global.get("capteurO2")>0){
-        //          o2=global.get("o2");
-        //         }
-        //         if(global.get("capteurHumidite")>0){
-        //          humidite=global.get("humidity");
-        //         }
-        //         if(global.get("capteurLumiere")>0){
-        //             lumiere = global.get("luminosity");
-        //         }
+    buildInsertSensorDataRequest():string{
+            // if(sensorData.>0){
+            //     var temperature=global.get("temperature");
+            //     }
+            //     if(global.get("capteurCO2")>0){
+            //      co2=global.get("co2");
+            //     }
+            //     if(global.get("capteurO2")>0){
+            //      o2=global.get("o2");
+            //     }
+            //     if(global.get("capteurHumidite")>0){
+            //      humidite=global.get("humidity");
+            //     }
+            //     if(global.get("capteurLumiere")>0){
+            //         lumiere = global.get("luminosity");
+            //     }
 
         return "";
     }
