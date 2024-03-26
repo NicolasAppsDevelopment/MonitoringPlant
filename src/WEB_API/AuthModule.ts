@@ -21,7 +21,7 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
     
     // Vérifie le token
     try {
-        if (tokenCredential === process.env.API_PORT) {
+        if (tokenCredential === process.env.API_TOKEN) {
             // C'est bon
             next();
             return;
