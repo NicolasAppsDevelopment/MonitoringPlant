@@ -32,7 +32,7 @@
                         <div class="label_img_input no-margin-top">
                             <input class="input_field btn-show key" id="response1" name="response1" type="text" placeholder="Médor" autocomplete="off" minlength="1">
                         </div>
-                        <button class="rect_round_btn" type="button" onclick="next1()">
+                        <button class="rect_round_btn" type="button" onclick="goToForm2()">
                         Suivant
                         </button>
                     </div>
@@ -50,10 +50,10 @@
                             <input class="input_field btn-show key" id="response2" name="response2" type="text" placeholder="Sarah" autocomplete="off" minlength="1">
                         </div>
                         <div class="two_buttons">
-                            <button class="rect_round_btn" type="button" onclick="previous1()">
+                            <button class="rect_round_btn" type="button" onclick="goToForm1()">
                                 Précédent
                             </button>
-                            <button class="rect_round_btn" type="button" onclick="next2()">
+                            <button class="rect_round_btn" type="button" onclick="goToForm3()">
                                 Suivant
                             </button>
                         </div>
@@ -72,7 +72,7 @@
                             <input class="input_field btn-show key" id="response3" name="response3" type="text" placeholder="Martin" autocomplete="off" minlength="1">
                         </div>
                         <div class="two_buttons">
-                            <button class="rect_round_btn" type="button" onclick="previous2()">
+                            <button class="rect_round_btn" type="button" onclick="goToForm2()">
                                 Précédent
                             </button>
                             <button class="rect_round_btn" type="button" onclick="setSecurityQuestions()">

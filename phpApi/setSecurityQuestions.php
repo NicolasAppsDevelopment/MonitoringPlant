@@ -16,22 +16,22 @@ try {
         $arguments = json_decode($data, true);
 
         if (!isset($arguments["question1"]) || !is_string($arguments["question1"])){
-            throw new Exception("Impossible d'enregistrer la première question. La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+            throw new Exception("Impossible d'enregistrer la première question. La question n'a pas été renseignée ou son format est incorrect. Veuillez la renseigner.");
         }
         if (!isset($arguments["response1"]) || !is_string($arguments["response1"])){
-            throw new Exception("Impossible d'enregistrer la première réponse. La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+            throw new Exception("Impossible d'enregistrer la première réponse. La réponse n'a pas été renseignée ou son format est incorrect. Veuillez la renseigner.");
         }
         if (!isset($arguments["question2"]) || !is_string($arguments["question2"])){
-            throw new Exception("Impossible d'enregistrer la deuxième question. La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+            throw new Exception("Impossible d'enregistrer la deuxième question. La question n'a pas été renseignée ou son format est incorrect. Veuillez la renseigner.");
         }
         if (!isset($arguments["response2"]) || !is_string($arguments["response2"])){
-            throw new Exception("Impossible d'enregistrer la deuxième réponse. La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+            throw new Exception("Impossible d'enregistrer la deuxième réponse. La réponse n'a pas été renseignée ou son format est incorrect. Veuillez la renseigner.");
         }
         if (!isset($arguments["question3"]) || !is_string($arguments["question3"])){
-            throw new Exception("Impossible d'enregistrer la troisième question. La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+            throw new Exception("Impossible d'enregistrer la troisième question. La question n'a pas été renseignée ou son format est incorrect. Veuillez la renseigner.");
         }
         if (!isset($arguments["response3"]) || !is_string($arguments["response3"])){
-            throw new Exception("Impossible d'enregistrer la troisième réponse. La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+            throw new Exception("Impossible d'enregistrer la troisième réponse. La réponse n'a pas été renseignée ou son format est incorrect. Veuillez la renseigner.");
         }
 
         if (!$settingsManager->isAdminQuestionsDefined()) {

@@ -11,51 +11,45 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Display the first form to define the first question and its response.
+ * Display the first form to answer the first security question.
  */
 function goToForm1(){
     document.getElementById("div_page3").classList.add("hidden");
     document.getElementById("div_page2").classList.add("hidden");
-    bar[0].style.width="40%";
+    bar[0].style.width="0%";
     document.getElementById("div_page1").classList.remove("hidden");
 }
 
 /**
- * Display the second form to define the second question and its response.
+ * Display the second form to answer the second security question.
  */
 function goToForm2(){
     document.getElementById("div_page3").classList.add("hidden");
     document.getElementById("div_page1").classList.add("hidden");
-    bar[0].style.width="60%";
+    bar[0].style.width="30%";
     document.getElementById("div_page2").classList.remove("hidden");
 }
 
 /**
- * Display the third form to definie the third question and its response.
+ * Display the third form to answer the third security question.
  */
 function goToForm3(){
     if (question1!=question2  && response1!=response2){
         document.getElementById("div_page1").classList.add("hidden");
         document.getElementById("div_page2").classList.add("hidden");
-        bar[0].style.width="80%";
+        bar[0].style.width="60%";
         document.getElementById("div_page3").classList.remove("hidden");
     }
 }
 
 /**
- * Register the questions and their responses into the database.
+ * Verifies that the responses match those defined by the administrator.
  */
-async function setSecurityQuestions(){
+async function alternativeLogin(){
     displayLoading("Mise à jour du mot de passe...");
     
-    if (question1==question2 || response1!=response2 || question1!=question3  || response1!=response3 || question2!=question3  || response2!=response3){
-        await displayError("Impossible de définir les questions de sécurités", "Certaines questions ont le même intitulé et/ou la même réponse. Veuillez recommencer.");
-        window.location.reload();
-        return;
-    } 
-
     //Register the questions and their responses into the database.
-    const data = await phpPost("/phpApi/setSecurityQuestions.php", {
+    const data = await phpPost("/phpApi/alternativeLogin.php", {
         "question1": question1,
         "response1": response1,
         "question1": question2,
@@ -65,8 +59,13 @@ async function setSecurityQuestions(){
     });
     
     
-    if (data != null) {
-        window.location.href = data["redirect"];
+    if (data===true){
+        await displaySuccess("Authentification réussie", "Les réponses sont correctes. Bienvenu(e) Administrateur(rice) !");
+        window.location.href = "./listCampaign.php";
+    } else {
+        await displayError("Erreur d'authentification", "Les réponses sont incorrectes. Veuillez recommencer.");
+        window.location.reload();
+        return;
     }
     
     hideLoading();
