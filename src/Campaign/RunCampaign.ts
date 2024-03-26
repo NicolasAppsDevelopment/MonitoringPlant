@@ -22,7 +22,7 @@ class RunCampaign {
                     this.numberOfMeasureLeft=0;
                     break;
                 }else{
-                    tcpConnection.writeCommandMeasure();
+                    tcpConnection.sendCommandMeasure();
                 }
             }
         }
@@ -38,8 +38,14 @@ class RunCampaign {
     }
 
     insertData(){
-        tcpConnection.writeCommandMeasure();
-         tcpConnection.readData();
+        tcpConnection.sendCommandMeasure();
+        //const data = tcpConnection.readData();
+        //const dataParsed = data.parse();
+    }
+
+    handleTcpData(data:string){
+        let tcpResponse= JSON.parse(data,undefined);
+
     }
 
 }
