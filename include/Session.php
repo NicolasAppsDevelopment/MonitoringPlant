@@ -135,7 +135,7 @@ class Session {
             $res = $this->db->fetchAll("SELECT idUser FROM Users WHERE user = 'admin'");
             return $res[0]["idUser"];
         } catch (\Throwable $th) {
-            throw new Exception("Impossible de modifier le mot de passe de l'administrateur. {$th->getMessage()}");
+            throw new Exception("Impossible de récupérer l'identifiant de l'administrateur. {$th->getMessage()}");
         }
     }
 

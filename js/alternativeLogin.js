@@ -1,13 +1,25 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const question1 = document.getElementById("question1").value;
-    const response1 = document.getElementById("response1").value;
-    const question2 = document.getElementById("question2").value;
-    const response2 = document.getElementById("response2").value;
-    const question3 = document.getElementById("question3").value;
-    const response3 = document.getElementById("response3").value;
+let response1;
+let response2;
+let response3;
+
+let question1;
+let question2;
+let question3;
+
+document.addEventListener("DOMContentLoaded", () => {    
+    question1 = document.getElementById("question1").innerHTML;
+    question2 = document.getElementById("question2").innerHTML;
+    question3 = document.getElementById("question3").innerHTML;
 
     bar=document.getElementsByClassName("progression_bar");
     bar[0].style.width="40%";
+
+    const data = phpGet("/phpApi/getSecurityQuestions.php")
+    console.log(data);
+    question1=data[0];
+    question2=data[1];
+    question3=data[2];
+
 });
 
 /**
@@ -34,21 +46,22 @@ function goToForm2(){
  * Display the third form to answer the third security question.
  */
 function goToForm3(){
-    if (question1!=question2  && response1!=response2){
-        document.getElementById("div_page1").classList.add("hidden");
-        document.getElementById("div_page2").classList.add("hidden");
-        bar[0].style.width="60%";
-        document.getElementById("div_page3").classList.remove("hidden");
-    }
+    document.getElementById("div_page1").classList.add("hidden");
+    document.getElementById("div_page2").classList.add("hidden");
+    bar[0].style.width="60%";
+    document.getElementById("div_page3").classList.remove("hidden");
 }
 
 /**
  * Verifies that the responses match those defined by the administrator.
  */
 async function alternativeLogin(){
-    displayLoading("Mise à jour du mot de passe...");
+    displayLoading("Mise à jour des questions de sécurité...");
+
+    response1 = document.getElementById("response1").value;
+    response2 = document.getElementById("response2").value;
+    response3 = document.getElementById("response3").value;
     
-    //Register the questions and their responses into the database.
     const data = await phpPost("/phpApi/alternativeLogin.php", {
         "question1": question1,
         "response1": response1,

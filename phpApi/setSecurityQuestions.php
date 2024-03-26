@@ -1,14 +1,16 @@
 <?php
 
 include_once '../include/Session.php';
+include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
-$session = Session::getInstance();
-$settingsManager = SettingsManager::getInstance();
 $errorTitle = "Impossible de définir les questions/réponses de sécurité";
 
 try {
+    $settingsManager = SettingsManager::getInstance();
+    $session = Session::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 
@@ -45,7 +47,8 @@ try {
             ]);
         } elseif ($session->isAdmin()) {
             // admin want to change his questions
-            $settingsManager->registerAdminQuestions($arguments["question1"], $arguments["response1"], $arguments["question2"], $arguments["response2"], $arguments["question3"], $arguments["response3"]);
+            echo "update";
+            $settingsManager->updateAdminQuestions($arguments["question1"], $arguments["response1"], $arguments["question2"], $arguments["response2"], $arguments["question3"], $arguments["response3"]);
 
             $reply->replyData([
                 "redirect" => "settings.php"

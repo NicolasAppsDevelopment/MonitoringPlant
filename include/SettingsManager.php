@@ -172,4 +172,17 @@ class SettingsManager {
             throw new Exception("Impossible de vérifier si l'administrateur a déjà un compte. {$th->getMessage()}");
         }
     }
+
+    /**
+     * Returns the security questions
+     */
+    public function getSecurityQuestions()
+    {
+        try {
+            $results = $this->db->fetchAll("SELECT question FROM Questions");
+        
+        } catch (\Throwable $th) {
+            throw new Exception("Impossible de récupérer les questions de sécurité. {$th->getMessage()}");
+        }
+    }
 }
