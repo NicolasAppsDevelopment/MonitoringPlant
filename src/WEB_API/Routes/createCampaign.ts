@@ -3,7 +3,7 @@ import { sqlConnections } from '../../Database/DatabaseManager';
 import {tcpConnection} from "../../Tcp/TcpManager";
 import { fail } from 'assert';
 import Calibration from 'src/Campaign/Calibration';
-import RunCampaign, { campaign } from 'src/Campaign/RunCampaign';
+import RunCampaign, { campaign } from '../../Campaign/RunCampaign';
 
 
 /*

@@ -72,3 +72,5 @@ export default class RunCampaign {
         //const dataParsed = data.parse();
     }
 }
+
+export declare let campaign: RunCampaign;

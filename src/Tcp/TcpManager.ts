@@ -3,6 +3,7 @@ import { logger } from "../Logger/LoggerManager";
 import { config } from "dotenv";
 import { EventEmitter } from "events";
 import { TcpDaemonRequest, TcpDaemonAnswer } from "./TcpDaemonMessageTypes";
+import Calibration from "../Campaign/Calibration";
 
 export default class TcpManager{
     private answerListeners: Map<string, EventEmitter>;
@@ -42,7 +43,7 @@ export default class TcpManager{
         return this.client.write('RESET');
     }
 
-    async calibrateModule(calibration:number[]) {
+    async calibrateModule(calibration: Calibration) {
         return this.client.write('SET_CONFIG');
     }
 
