@@ -1,5 +1,9 @@
 import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
+import {tcpConnection} from "../../Tcp/TcpManager";
+import { fail } from 'assert';
+
+
 /*
     URL : /test
     METHODE : POST
@@ -12,6 +16,7 @@ module.exports = function(app: Express){
     app.post('/createCampaign', async (req: Request, res: Response) => {
         // Vérifie le corps
         let data = req.body;
+        
         if (data.id == null || typeof data.id != "number") {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
             return;
@@ -19,12 +24,25 @@ module.exports = function(app: Express){
         // Traite la requête
         try {
             // data.server_id must be send as string or else it will not work
-            const sid = data.id;
+            const currentCampaignId = data.id;
             if (data.key === "I_do_believe_I_am_on_fire"){
-
-            }
-
+                sqlConnections.insertLogs(currentCampaignId,"Campagne démarrée","La campagne a été démarrée avec succès.");
+            }else{
+                res.send("wrong request methode");
+            } 
+            const result = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign=?;", [currentCampaignId]);
             
+            const interval=result[0].interval;
+            const duration=result[0].duration;
+            const configNumber=result[0].idConfig;
+            const sensorSelected= 
+            {"O2":result[0].O2SensorState,
+            "CO2":result[0].CO2SensorState,
+            "humidity":result[0].humiditySensorState,
+            "light":result[0].luminositySensorState,
+            "temperature":result[0].temperatureSensorState};
+
+   
             const response: any[] = ["coucou"];
             res.send({"success": response});
         } catch (error) {
@@ -35,3 +53,4 @@ module.exports = function(app: Express){
         }
     });
 }
+

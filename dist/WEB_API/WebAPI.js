@@ -11,11 +11,14 @@ const LoggerManager_1 = require("../Logger/LoggerManager");
 const node_util_1 = __importDefault(require("node:util"));
 const node_fs_1 = __importDefault(require("node:fs"));
 const node_path_1 = require("node:path");
+const dotenv_1 = require("dotenv");
 const readdir = node_util_1.default.promisify(node_fs_1.default.readdir);
 const startAPI = async () => {
     // start/config API web
     const app = (0, express_1.default)();
-    const port = process.env.API_PORT;
+    // Chargement des variables d'environnement
+    (0, dotenv_1.config)();
+    const port = process?.env?.API_PORT || 1880;
     app.use((0, cors_1.default)());
     app.use(express_1.default.json());
     app.use(AuthModule_1.isAuth);

@@ -62,6 +62,26 @@ export default class Database {
             });
         });
     }
+
+    insertLogs(idCampaign:number,title:string,msg:string) {
+        let now:Date = new Date();
+        let query:string = "insert into Logs values( ?, ?,? ,?);";
+        this.queryData(query,[idCampaign,title,msg,now]);
+    }
+
+    setAlertLevel(idCampaign:number){
+
+    }
+
+    setFinished(idCampaign:number){
+        let now:Date=new Date();
+        let query="update Campaigns set finished=1,endingDate= ? where idCampaign= ? ";
+        this.queryData(query)
+        //NOW() "+global.get("currentCampagne");
+    }
+
+
+
 }
 
 // gloabal declaration for main process ONLY !
@@ -72,8 +92,6 @@ export function initSqlConnections() {
     sqlConnections.open();
 }
 
-export function insertLogs(idCampaign:number,title:string,msg:string) {
-    let now:Date = new Date();
-    let query:string = "insert into Logs values("+idCampaign+","+title+","+msg+","+now+");";
-    sqlConnections.queryData(query,undefined);
-}
+
+
+

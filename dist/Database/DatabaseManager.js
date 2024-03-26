@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertLogs = exports.initSqlConnections = void 0;
+exports.initSqlConnections = void 0;
 const dotenv_1 = require("dotenv");
 const mysql2_1 = __importDefault(require("mysql2"));
 const LoggerManager_1 = require("../Logger/LoggerManager");
@@ -55,6 +55,19 @@ class Database {
             });
         });
     }
+    insertLogs(idCampaign, title, msg) {
+        let now = new Date();
+        let query = "insert into Logs values( ?, ?,? ,?);";
+        this.queryData(query, [idCampaign, title, msg, now]);
+    }
+    setAlertLevel(idCampaign) {
+    }
+    setFinished(idCampaign) {
+        let now = new Date();
+        let query = "update Campaigns set finished=1,endingDate= ? where idCampaign= ? ";
+        this.queryData(query);
+        //NOW() "+global.get("currentCampagne");
+    }
 }
 exports.default = Database;
 function initSqlConnections() {
@@ -62,9 +75,3 @@ function initSqlConnections() {
     exports.sqlConnections.open();
 }
 exports.initSqlConnections = initSqlConnections;
-function insertLogs(idCampaign, title, msg) {
-    let now = new Date();
-    let query = "insert into Logs values(" + idCampaign + "," + title + "," + msg + "," + now + ");";
-    exports.sqlConnections.queryData(query, undefined);
-}
-exports.insertLogs = insertLogs;
