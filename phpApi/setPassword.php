@@ -33,7 +33,6 @@ try {
                 "redirect" => "settings.php"
             ]);
         } else {
-            // naughty boy >:O
             throw new Exception("Veuillez vous identifier avant de modifier le mot de passe.");
         }
     } else {

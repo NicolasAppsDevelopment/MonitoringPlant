@@ -1,50 +1,61 @@
 <?php
-header("Content-Type: application/json; charset=utf-8");
 
-include_once __DIR__ . "/../include/reply.php";
-include_once __DIR__ . "/../include/session.php";
+include_once '../include/Session.php';
+include_once '../include/RequestReplySender.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // handle POST request
+$reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$settingsManager = SettingsManager::getInstance();
+$errorTitle = "Impossible de définir les questions/réponses de sécurité";
 
-    $data = file_get_contents("php://input");
-    $arguments = json_decode($data, true);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // handle POST request
 
-    if (!isset($arguments["question1"]) || !is_string($arguments["question1"])){
-        replyError("Impossible d'enregistrer la première question", "La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
-    if (!isset($arguments["response1"]) || !is_string($arguments["response1"])){
-        replyError("Impossible d'enregistrer la première réponse", "La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
-    if (!isset($arguments["question2"]) || !is_string($arguments["question2"])){
-        replyError("Impossible d'enregistrer la deuxième question", "La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
-    if (!isset($arguments["response2"]) || !is_string($arguments["response2"])){
-        replyError("Impossible d'enregistrer la deuxième réponse", "La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
-    if (!isset($arguments["question3"]) || !is_string($arguments["question3"])){
-        replyError("Impossible d'enregistrer la troisième question", "La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
-    if (!isset($arguments["response3"]) || !is_string($arguments["response3"])){
-        replyError("Impossible d'enregistrer la troisième réponse", "La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
-    }
+        $data = file_get_contents("php://input");
+        $arguments = json_decode($data, true);
 
-    if (!isAdminDefined()) {
-        // the first register for the admin
-        reply(array(
-            "success" => registerAdminQuestions($arguments["question1"],$arguments["response1"]),registerAdminQuestions($arguments["question2"],$arguments["response2"]),registerAdminQuestions($arguments["question3"],$arguments["response3"]),
-            "redirect" => "setupTime.php"
-        ));
-    } else if (isAdmin()) {
-        // admin want to change his password
-        reply(array(
-            "success" => updateAdminQuestions($arguments["question1"],$arguments["response1"],$arguments["question2"],$arguments["response2"],$arguments["question3"],$arguments["response3"]),
-            "redirect" => "settings.php"
-        ));
+        if (!isset($arguments["question1"]) || !is_string($arguments["question1"])){
+            throw new Exception("Impossible d'enregistrer la première question. La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["response1"]) || !is_string($arguments["response1"])){
+            throw new Exception("Impossible d'enregistrer la première réponse. La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["question2"]) || !is_string($arguments["question2"])){
+            throw new Exception("Impossible d'enregistrer la deuxième question. La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["response2"]) || !is_string($arguments["response2"])){
+            throw new Exception("Impossible d'enregistrer la deuxième réponse. La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["question3"]) || !is_string($arguments["question3"])){
+            throw new Exception("Impossible d'enregistrer la troisième question. La question n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["response3"]) || !is_string($arguments["response3"])){
+            throw new Exception("Impossible d'enregistrer la troisième réponse. La réponse n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+
+        if (!$settingsManager->isAdminQuestionsDefined()) {
+            // the first register for the admin
+            $settingsManager->registerAdminQuestions($arguments["question1"], $arguments["response1"]);
+            $settingsManager->registerAdminQuestions($arguments["question2"], $arguments["response2"]);
+            $settingsManager->registerAdminQuestions($arguments["question3"], $arguments["response3"]);
+
+            $reply->replyData([
+                "redirect" => "setupTime.php"
+            ]);
+        } elseif ($session->isAdmin()) {
+            // admin want to change his questions
+            $settingsManager->registerAdminQuestions($arguments["question1"], $arguments["response1"], $arguments["question2"], $arguments["response2"], $arguments["question3"], $arguments["response3"]);
+
+            $reply->replyData([
+                "redirect" => "settings.php"
+            ]);
+        } else {
+            throw new Exception("Veuillez vous identifier avant de modifier le mot de passe.");
+        }
     } else {
-        // naughty boy >:O
-        replyError("Impossible de définir les questions et réponses de sécurité", "Veuillez vous identifier avant de modifier les questions et réponses de sécurité.");
-    } 
-} else {
-    replyError("Impossible de définir les questions et réponses de sécurité", "La méthode de requête est incorrecte.");
+        throw new Exception("La méthode de requête est incorrecte.");
+    }
+} catch (\Throwable $th) {
+    $reply->replyError($errorTitle, $th);
 }

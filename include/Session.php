@@ -102,7 +102,7 @@ class Session {
                 'varPassword' => self::hashPwd($password),
             ]);
         } catch (\Throwable $th) {
-            throw new Exception("Impossible d'enregistrer l'administrateur.. {$th->getMessage()}");
+            throw new Exception("Impossible d'enregistrer l'administrateur. {$th->getMessage()}");
         }
     }
 
@@ -118,55 +118,22 @@ class Session {
                 'varPassword' => self::hashPwd($password),
             ]);
         } catch (\Throwable $th) {
-            throw new Exception("Impossible de modifier le mot de passe de l'administrateur.. {$th->getMessage()}");
+            throw new Exception("Impossible de modifier le mot de passe de l'administrateur. {$th->getMessage()}");
         }
     }
 
-
-    /**
-     * Register the user with his password into the database (the password will be stored hashed)
-     *
-     * @param string $password The password (not hashed)
-     */
-    public function registerAdminQuestions(string $question,string $response)
-    {
-        try {
-            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question, :response)", [
-                'question' => $question,
-                'response' => $response
-
-            ]);
-        } catch (\Throwable $th) {
-            throw new Exception("Impossible d'enregistrer les réponses et questions de sécurité.. {$th->getMessage()}");
-        }
-    }
-
-    /**
+        /**
      * Modify the password of the admin into the database (the password will be stored hashed)
      *
      * @param string $password The password (not hashed)
      */
-    public function updateAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3)
+    public function getAdminUserId() : int
     {
         try {
-            $this->db->fetchAll("DELETE FROM Questions WHERE user = 'admin'");
-            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question1, :response1)", [
-                'question1' => $question1,
-                'response1' => $response1
-
-            ]);
-            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question2, :response2)", [
-                'question2' => $question2,
-                'response2' => $response2
-
-            ]);
-            $this->db->fetchAll("INSERT INTO Questions VALUES ('admin', :question3, :response3)", [
-                'question3' => $question3,
-                'response3' => $response3
-
-            ]);
+            $res = $this->db->fetchAll("SELECT idUser FROM Users WHERE user = 'admin'");
+            return $res[0]["idUser"];
         } catch (\Throwable $th) {
-            throw new Exception("Impossible de modifier les réponses et questions de sécurité.. {$th->getMessage()}");
+            throw new Exception("Impossible de modifier le mot de passe de l'administrateur. {$th->getMessage()}");
         }
     }
 
@@ -193,7 +160,7 @@ class Session {
                 return false;
             }
         } catch (\Throwable $th) {
-            throw new Exception("Impossible de vérifier si l'administrateur a déjà un compte.. {$th->getMessage()}");
+            throw new Exception("Impossible de vérifier si l'administrateur a déjà un compte. {$th->getMessage()}");
         }
     }
 
