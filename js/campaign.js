@@ -1,10 +1,10 @@
 let id = -1;
+let campaignName = "";
 let refreshDelay = 5000;
 let lastMeasureDatetime = null;
 let lastLogDatetime = null;
 let rows = 0;
 let refreshRepeat = true;
-let authorizeUpdate = true;
 
 //Executes each of the following functions when all html code is loaded.
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 async function subscribeRefresh() {
     do {
-        if (authorizeUpdate == true) {
+        if (refreshRepeat) {
             // Recovery and display measurement campaign data.
             getCampaignMeasurements(true);
         }
@@ -31,9 +31,7 @@ async function subscribeRefresh() {
  * Recovery and display measurement campaign data.
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
-async function getCampaignMeasurements(refresh_mode = false) {
-    authorizeUpdate = false;
-
+async function getCampaignMeasurements(refreshMode = false) {
     if (refreshMode == false){
         displayLoading("Récupération de la campagne...");
         id = document.getElementById("id").value;
@@ -48,9 +46,7 @@ async function getCampaignMeasurements(refresh_mode = false) {
         "lastMeasureDatetime": lastMeasureDatetime
     });
 
-
-    authorizeUpdate = true;
-
+    // Display measurement campaign data.
     if (data != null){
         let campaignInfo = data["campaignInfo"];
         let mesurements = data["measurements"];
@@ -66,9 +62,10 @@ async function getCampaignMeasurements(refresh_mode = false) {
         if (refreshMode == false){
             const titleCampaign = document.getElementById("titleCampaign");
             titleCampaign.innerHTML = campaignInfo["name"];
+            campaignName = campaignInfo["name"];
 
-            const startDate = document.getElementById("start_date");
-            startDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
+            const beginDate = document.getElementById("start_date");
+            beginDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
 
             const duration = document.getElementById("duration");
             duration.innerHTML = getReadableTime(campaignInfo["duration"]);
@@ -83,8 +80,8 @@ async function getCampaignMeasurements(refresh_mode = false) {
                 volume.innerHTML = "N/A";
             }
 
-            const idConfig = document.getElementById("id_config");
-            idConfig.innerHTML = campaignInfo["nameConfig"];
+            const configName = document.getElementById("config_name");
+            configName.innerHTML = campaignInfo["nameConfig"];
 
             const humidMode = document.getElementById("humid_mode");
             humidMode.innerHTML = getReadableBool(campaignInfo["humidMode"]);
@@ -96,8 +93,8 @@ async function getCampaignMeasurements(refresh_mode = false) {
         let dateFin = new Date(campaignInfo["beginDate"]);
         dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
 
-        const reamingDuration = document.getElementById("reaming_duration");
-        reamingDuration.innerHTML = dateToReamingString(dateFin);
+        const remainingDuration = document.getElementById("remaining_duration");
+        remainingDuration.innerHTML = dateToRemainingString(dateFin);
 
         const logsContainer = document.getElementById("logs_container");
         if (logs != null){
@@ -367,6 +364,7 @@ async function exportCampagne() {
     const dateEnd = document.getElementById("datefin_choice");
     const timeEnd = document.getElementById("heurefin_choice");
     const volume = document.getElementById("calc_volume").checked;
+    const exportConfig = document.getElementById("export_config").checked;
 
 
     // Checking export settings.
@@ -416,13 +414,15 @@ async function exportCampagne() {
         "startTime": timeStart.value,
         "endDate": dateEnd.value,
         "endTime": timeEnd.value,
-        "volume": volume
+        "volume": volume,
+        "exportConfig": exportConfig
     });
 
+    // Creation and download of the csv file
     if (data != null) {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(data);
-        link.download = "mesures_" + id + ".csv"; // Provide filename
+        link.download = campaignName + ".csv"; // Provide filename
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

@@ -4,12 +4,13 @@ include_once '../include/Session.php';
 include_once '../include/Database.php';
 include_once '../include/RequestReplySender.php';
 
-$db = Database::getInstance();
 $reply = RequestReplySender::getInstance();
-$session = Session::getInstance();
 $errorTitle = "Impossible d'effacer toutes les données";
 
 try {
+    $db = Database::getInstance();
+    $session = Session::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
         

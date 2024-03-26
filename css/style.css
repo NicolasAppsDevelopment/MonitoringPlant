@@ -78,7 +78,7 @@ header nav {
     scrollbar-width: none;  /* Firefox */
 } 
 
-nav a div g {
+nav a div g:not(.fixedColor) {
     fill: var(--unselected-font-color);
 }
 header nav * {
@@ -144,7 +144,7 @@ nav a div p {
 .info_ico_container:hover p {
     color: var(--selected-font-color);
 }
-.info_ico_container:hover g {
+.info_ico_container:hover g:not(.fixedColor) {
     fill: var(--selected-font-color);
 }
 .info_ico_container {
@@ -2182,6 +2182,17 @@ body.login a:hover{
 }
 .logout .top_nav_text {
     color: white;
+}
+a .login {
+    background-color: white;
+    border-color: var(--input_border_color);
+}
+a .login:hover {
+    background-color: var(--input_border_color);
+    border-color: var(--input_border_color);
+}
+a .login .top_nav_text {
+    color: black;
 }
 .expend {
     width: 100%;

@@ -4,10 +4,11 @@ include_once '../include/Session.php';
 include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
-$session = Session::getInstance();
 $errorTitle = "Impossible de définir le mot de passe";
 
 try {
+    $session = Session::getInstance();
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 

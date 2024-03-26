@@ -4,12 +4,13 @@ include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$settingsManager = SettingsManager::getInstance();
 $reply = RequestReplySender::getInstance();
-$session = Session::getInstance();
 $errorTitle = "Impossible de sauvegarder les paramètres";
 
 try {
+    $settingsManager = SettingsManager::getInstance();
+    $session = Session::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 

@@ -135,7 +135,7 @@
                                             <p class="title_param">Date de démarrage : </p>
                                         </th>
                                         <td>
-                                            <p id="startDate"></p>
+                                            <p id="start_date"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -144,7 +144,7 @@
                                             <p class="title_param">Durée restante : </p>
                                         </th>
                                         <td>
-                                            <p id="reaming_duration"></p>
+                                            <p id="remaining_duration"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -180,7 +180,7 @@
                                             <p class="title_param">Configuration : </p>
                                         </th>
                                         <td>
-                                            <p id="idConfig"></p>
+                                            <p id="config_name"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -418,6 +418,18 @@
                                 </svg>
                             </span>
                             <span>Traiter les données en fonction du volume</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox bottom_gap">
+                        <label for="export_config">
+                            <input type="checkbox" id="export_config">
+                            <span class="cbx">
+                                <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                    <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Exporter les paramètres de la campagne</span>
                         </label>
                     </div>
 

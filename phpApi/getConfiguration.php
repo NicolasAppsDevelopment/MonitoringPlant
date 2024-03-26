@@ -3,11 +3,12 @@
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$configManager = ConfigurationsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de récupérer la configuration";
 
 try {
+    $configManager = ConfigurationsManager::getInstance();
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 

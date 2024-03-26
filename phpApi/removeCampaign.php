@@ -1,13 +1,16 @@
 <?php
 
 include_once '../include/CampaignsManager.php';
+include_once '../include/Session.php';
 include_once '../include/RequestReplySender.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de supprimer la campagne";
 
 try {
+    $campaignsManager = CampaignsManager::getInstance();
+    $session = Session::getInstance();
+
     //Removes a measurement campaign.
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request

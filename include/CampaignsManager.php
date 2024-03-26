@@ -339,12 +339,11 @@ class CampaignsManager {
     }
 
     /**
-     * Description.
+     * Recovery of general information about the campaign whose id is entered as a parameter.
      *
      * @param {string} message
      * @return {string}
      */
-    //Recovery of general information about the campaign whose id is entered as a parameter
     public function getInfoCampaign(int $id) : array {
         try {
             $results = $this->db->fetchAll("SELECT * FROM Campaigns WHERE idCampaign = :varId", [

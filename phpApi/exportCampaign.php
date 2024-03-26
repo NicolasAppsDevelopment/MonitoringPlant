@@ -1,12 +1,11 @@
 <?php
 
 include_once '../include/CampaignsManager.php';
+include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'exporter la campagne";
-
 
 function getIndexFromKeyName(array $arr, string $keyName) : int {
     // remove the duplicate keys
@@ -29,6 +28,9 @@ function getIndexFromKeyName(array $arr, string $keyName) : int {
 }
 
 try {
+    $campaignsManager = CampaignsManager::getInstance();
+    $configManager = ConfigurationsManager::getInstance();
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 
@@ -139,7 +141,7 @@ try {
         }
         
         $info = $campaignsManager->getInfoCampaign($id);
-        if ($args["volume"]==True && is_null($info["volume"])){
+        if ($args["volume"] == true && is_null($info["volume"])){
             throw new Exception("Aucun volume n'a été renseigné lors du démarrage de la campagne");
         }
 
@@ -225,11 +227,50 @@ try {
 
         // open the "output" stream
         $f = fopen('php://output', 'w');
+
+        // send parameters data
+        if (isset($args["exportConfig"]) && $args["exportConfig"]) {
+            fputcsv($f, ["Nom de la campagne", "Nom de la configuration utilisé", "Intervalle de mesure (sec)", "Durée de la campagne (sec)", "Volume (mL)", "Relève en milieu humide ?", "Capteur température Fibox activé ?"], ";");
+        
+            $configName = $configManager->getNameConfiguration($info["idConfig"]);
+            fputcsv($f, [$info["name"], $configName, $info["interval_"], $info["duration"], $info["volume"], $info["humidMode"] ? "OUI" : "NON", $info["enableFiboxTemp"] ? "OUI" : "NON"], ";");
+            fputcsv($f, [], ";"); // empty line
+        }
+
         // send the column headers
         $headers = [];
         foreach ($measurements[0] as $key => $value) {
             if (is_string($key)) {
-                array_push($headers, $key);
+                $unit = null;
+                switch ($key) {
+                    case 'temperature':
+                        $unit = "°C";
+                        break;
+                    case 'CO2':
+                        if ($args["volume"] == true){
+                            $unit = "vol";
+                        } else {
+                            $unit = "vol%";
+                        }
+                        break;
+                    case 'O2':
+                        $unit = "%";
+                        break;
+                    case 'luminosity':
+                        $unit = "%";
+                        break;
+                    case 'humidity':
+                        $unit = "%";
+                        break;
+                    default:
+                        break;
+                }
+                if ($unit == null){
+                    array_push($headers, $key);
+                } else {
+                    array_push($headers, $key . " (" . $unit . ")");
+                }
+                
             }
         }
         fputcsv($f, $headers, ";");

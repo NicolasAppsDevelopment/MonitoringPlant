@@ -3,11 +3,12 @@
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'accéder à la campagne";
 
 try {
+    $campaignsManager = CampaignsManager::getInstance();
+    
     // Recovery measurement campaign data.
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request

@@ -27,7 +27,7 @@ function NodeRedPost(string $name, array $array)
     if (curl_errno($curl)) {
         $error_msg = curl_error($curl);
         curl_close($curl);
-        throw new Exception("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
+        throw new Exception("Erreur d'émission/réception de la requête. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
     }
 
     curl_close($curl);
@@ -53,7 +53,7 @@ function NodeRedGet(string $name)
     if (curl_errno($curl)) {
         $error_msg = curl_error($curl);
         curl_close($curl);
-        throw new Exception("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
+        throw new Exception("Erreur d'émission/réception de la requête. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg");
     }
 
     curl_close($curl);

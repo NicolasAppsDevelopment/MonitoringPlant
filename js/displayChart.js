@@ -1,12 +1,33 @@
 let chart;
+let mouseX = 0;
 
+/**
+ * Mouse mouve listener to track the mouse X position.
+ * In order to display correctly the tooltip.
+ */
+document.addEventListener('mousemove', (event) => {
+  mouseX = event.clientX;
+});
+
+
+/**
+ * Destroys the chart
+ */
 function destroyChart() {
   if (chart != null || chart != undefined){
     chart.destroy();
   }
 }
 
-
+/**
+ * Adds values to the chart of the selected measurement campaign.
+ * @param {String array} dateArray All measurement dates of the selected measurement campaign
+ * @param {String array} lumArray All luminosity values of the selected measurement campaign
+ * @param {String array} humArray All humidity values of the selected measurement campaign
+ * @param {String array} tempArray All temperature values of the selected measurement campaign
+ * @param {String array} o2Array All O2 values of the selected measurement campaign
+ * @param {String array} co2Array All CO2 values of the selected measurement campaign
+ */
 async function addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) { 
   if (dateArray.length == 0) {
     return;
@@ -57,6 +78,16 @@ async function addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array,
   chart.update('none');
 } 
 
+/**
+ * Setups the chart and adds values to the chart of the selected measurement campaign.
+ * @param {String array} dateArray All measurement dates of the selected measurement campaign
+ * @param {String array} lumArray All luminosity values of the selected measurement campaign
+ * @param {String array} humArray All humidity values of the selected measurement campaign
+ * @param {String array} tempArray All temperature values of the selected measurement campaign
+ * @param {String array} o2Array All O2 values of the selected measurement campaign
+ * @param {String array} co2Array All CO2 values of the selected measurement campaign
+ * @returns {(Element|void)}  returns a html element, the tooltip
+ */
 async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) {
   const myChart = document.getElementById('ChartCanvas');
 
@@ -86,6 +117,10 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
     if (!tooltipEl) {
       tooltipEl = document.createElement('div');
       tooltipEl.classList.add("tooltipChart_container");
+
+      document.getElementById('ChartCanvas').addEventListener('touchstart', (ev) => {
+        tooltipEl.style.opacity = 0;
+      }, false);
   
       const table = document.createElement('table');
       table.style.margin = '0px';
@@ -136,42 +171,42 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
         const tr = document.createElement('tr');
         tr.style.backgroundColor = 'inherit';
   
-        const td_mesure_type = document.createElement('td');
-        const td_mesure_val = document.createElement('td');
+        const tdMesureType = document.createElement('td');
+        const tdMesureValue = document.createElement('td');
         
         const data = body[0].split(" ");
-        let data_name = data[0].replace(":", "");
-        let data_val = data[1];
+        let dataName = data[0].replace(":", "");
+        let dataValue = data[1];
 
-        switch (data_name) {
+        switch (dataName) {
           case "O2":
-            data_val += " %";
+            dataValue += " %";
             break;
           case "CO2":
-            data_val += " vol%";
+            dataValue += " vol%";
             break;
           case "Température":
-            data_val += " °C";
+            dataValue += " °C";
             break;
           case "Luminosité":
-            data_val += " %";
+            dataValue += " %";
             break;
           case "Humidité":
-            data_val += " %";
+            dataValue += " %";
             break;
         
           default:
             break;
         }
 
-        const text_mesure_type = document.createTextNode(data_name);
-        const text_mesure_val = document.createTextNode(data_val);
+        const textMesureType = document.createTextNode(dataName);
+        const textMesureValue = document.createTextNode(dataValue);
   
-        td_mesure_type.appendChild(span);
-        td_mesure_type.appendChild(text_mesure_type);
-        td_mesure_val.appendChild(text_mesure_val);
-        tr.appendChild(td_mesure_type);
-        tr.appendChild(td_mesure_val);
+        tdMesureType.appendChild(span);
+        tdMesureType.appendChild(textMesureType);
+        tdMesureValue.appendChild(textMesureValue);
+        tr.appendChild(tdMesureType);
+        tr.appendChild(tdMesureValue);
         tableBody.appendChild(tr);
       });
   
@@ -192,7 +227,7 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 1;
 
-    if (positionX + tooltip.caretX > window.screen.width - tooltipEl.offsetWidth) {
+    if (mouseX + 12 + tooltipEl.offsetWidth > document.body.clientWidth - 12) {
       tooltipEl.style.left = positionX + tooltip.caretX - 12 - tooltipEl.offsetWidth + 'px';
     } else {
       tooltipEl.style.left = positionX + tooltip.caretX + 12 + 'px';

@@ -1,5 +1,5 @@
 const API_IP_ADDRESS = "localhost";
-const phpApi_PORT = "8080";
+const PHP_API_PORT = "8080";
 const NODERED_API_PORT = "1880";
 
 let blurCompatibility = true;
@@ -8,13 +8,21 @@ if (navigator.appVersion.indexOf("Chrome/") != -1) {
     blurCompatibility = false;
 }
 
-let id_msg = 0;
+let idMessage = 0;
 
+/**
+ * Creates and displays a popup to confirm or cancel an important action.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ * @param {String} confirmBtnTitle Title of the button of confirmation
+ * @param {boolean} destructive True if there is a risk of data loss or if there is a suppression of data. False otherwise.
+ * @returns {boolean} True if the user confirms the action and false if he cancels it
+ */
 async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) {
-    const id = id_msg;
-    id_msg++;
+    const id = idMessage;
+    idMessage++;
 
-    const html_popup = `
+    const htmlPopup = `
         <div class="popup open_anim" id="confirm_popup_container${id}">
             <div id="confirm_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">
                 <div class="popup-content center">
@@ -31,7 +39,7 @@ async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) 
         </div>
     `;
 
-    document.body.insertAdjacentHTML("beforeend", html_popup);
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
 
     const promise = new Promise((resolve, reject) => {
         document.getElementById("confirm" + id).addEventListener('click', resolve)
@@ -49,22 +57,31 @@ async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) 
         return false;
     })
 }
-
+ 
+/**
+ * Hides the confirmation popup whose id is in the parameter.
+ * @param {integer} id id of the popup that will be hidden
+ */
 async function hideConfirm(id) {
-    const popup_container = document.getElementById("confirm_popup_container" + id);
-    popup_container.classList.remove("open_anim");
-    popup_container.classList.add("close_anim");
+    const popupContainer = document.getElementById("confirm_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
 
     setTimeout(function() {
-        popup_container.remove();
+        popupContainer.remove();
     }, 300);
 }
 
+/**
+ * Creates and displays an error report popup.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ */
 async function displayError(title, msg) {
-    const id = id_msg;
-    id_msg++;
+    const id = idMessage;
+    idMessage++;
 
-    const html_popup = `
+    const htmlPopup = `
         <div class="popup open_anim" id="error_popup_container${id}">
             <div id="error_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">    
                 <div class="popup-content center">
@@ -80,7 +97,7 @@ async function displayError(title, msg) {
         </div>
     `;
 
-    document.body.insertAdjacentHTML("beforeend", html_popup);
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
 
     const promise = new Promise((resolve) => {
         document.getElementById("close" + id).addEventListener('click', resolve)
@@ -94,21 +111,30 @@ async function displayError(title, msg) {
     })
 }
 
+/**
+ * Hides the error report popup whose id is in the parameter.
+ * @param {integer} id id of the popup that will be hidden
+ */
 async function hideError(id) {
-    const popup_container = document.getElementById("error_popup_container" + id);
-    popup_container.classList.remove("open_anim");
-    popup_container.classList.add("close_anim");
+    const popupContainer = document.getElementById("error_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
 
     setTimeout(function() {
-        popup_container.remove();
+        popupContainer.remove();
     }, 300);
 }
 
+/**
+ * Creates and displays a success report popup.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ */
 async function displaySuccess(title, msg) {
-    const id = id_msg;
-    id_msg++;
+    const id = idMessage;
+    idMessage++;
 
-    const html_popup = `
+    const htmlPopup = `
         <div class="popup open_anim" id="success_popup_container${id}">
             <div id="success_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">    
                 <div class="popup-content center">
@@ -124,7 +150,7 @@ async function displaySuccess(title, msg) {
         </div>
     `;
 
-    document.body.insertAdjacentHTML("beforeend", html_popup);
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
 
     const promise = new Promise((resolve) => {
         document.getElementById("close" + id).addEventListener('click', resolve)
@@ -138,47 +164,73 @@ async function displaySuccess(title, msg) {
     })
 }
 
+/**
+ * Hides the success report popup whose id is in the parameter.
+ * @param {integer} id id of the popup that will be hidden
+ */
 async function hideSuccess(id) {
-    const popup_container = document.getElementById("success_popup_container" + id);
-    popup_container.classList.remove("open_anim");
-    popup_container.classList.add("close_anim");
+    const popupContainer = document.getElementById("success_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
 
     setTimeout(function() {
-        popup_container.remove();
+        popupContainer.remove();
     }, 300);
 }
 
+/**
+ * Displays a loading popup.
+ * @param {String} msg Message of the popup
+ */
 async function displayLoading(msg = "Chargement...") {
-    const popup_container = document.getElementById("loading_popup_container");
+    const popupContainer = document.getElementById("loading_popup_container");
     const popup = document.getElementById("loading_popup");
     popup.style.transform = "scale(1)";
 
     document.getElementById("loading_msg").innerHTML = msg.replace("\n", "<br>");
     
-    popup_container.style.opacity = 1;
-    popup_container.style.visibility = "inherit";
-}
-async function hideLoading() {
-    const popup_container = document.getElementById("loading_popup_container");
-    popup_container.classList.remove("displayed");
-    const popup = document.getElementById("loading_popup");
-    popup.removeAttribute("style");
-    popup_container.removeAttribute("style");
+    popupContainer.style.opacity = 1;
+    popupContainer.style.visibility = "inherit";
 }
 
+/**
+ * Displays the loading popup.
+ */
+async function hideLoading() {
+    const popupContainer = document.getElementById("loading_popup_container");
+    popupContainer.classList.remove("displayed");
+    const popup = document.getElementById("loading_popup");
+    popup.removeAttribute("style");
+    popupContainer.removeAttribute("style");
+}
+
+/**
+ * Closes the popup whose id is in parameter
+ * @param {integer} id id of the popup that will be closed
+ */
 async function closePopup(id) {
     document.getElementById(id).checked = false;
 }
 
+/**
+ * Opens the popup whose id is in parameter
+ * @param {integer} id id of the popup that will be opened
+ */
 async function openPopup(id) {
     document.getElementById(id).checked = true;
 }
 
-async function post(url, data) {
+/**
+ * Sends a request to retrieve data from an URL address and the data retrieval depends on the settings.
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(json|null)}  Response from the location where the data is sent. Null if the data is not sent or not received, json if the request is sent and received. Json contains data from the url address.
+ */
+async function post(url, settings) {
     try {
         const response = await fetch(url, {
             method: 'post',
-            body: JSON.stringify(data),
+            body: JSON.stringify(settings),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -186,6 +238,9 @@ async function post(url, data) {
         });
         let res = await response.json();
         if (response.status === 200 && res["success"] == true) {
+            if (res["data"] != undefined) {
+                return res["data"];
+            }
             return res;
         } else {
             displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
@@ -196,17 +251,25 @@ async function post(url, data) {
 
     return null;
 }
-async function postGetFile(url, data) {
+
+
+/**
+ * Sends a request to retrieve data from an URL address and the data retrieval depends on the settings. (The retrieved data format is used to create a downloadable file)
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function postGetFile(url, settings) {
     try {
         const response = await fetch(url, {
             method: 'post',
-            body: JSON.stringify(data),
+            body: JSON.stringify(settings),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         });
-        if (response.status === 200 && res["success"] == true) {
+        if (response.status === 200) {
             let data = await response.blob();
             return data;
         } else {
@@ -219,6 +282,13 @@ async function postGetFile(url, data) {
 
     return null;
 }
+
+
+/**
+ * Sends a request to retrieve data from an url address.
+ * @param {String} url Where the data are
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
 async function get(url) {
     try {
         const response = await fetch(url, {
@@ -230,6 +300,9 @@ async function get(url) {
         });
         let res = await response.json();
         if (response.status === 200 && res["success"] == true) {
+            if (res["data"] != undefined) {
+                return res["data"];
+            }
             return res;
         } else {
             displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
@@ -241,35 +314,76 @@ async function get(url) {
     return null;
 }
 
-async function phpPost(url, data) {
-    return await post("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url, data);
+/**
+ * Sends a request to retrieve data from an url address linked to a php file and the data retrieval depends on the settings.
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function phpPost(url, settings) {
+    return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
 }
 
-async function phpPostGetFile(url, data) {
-    return await postGetFile("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url, data);
+/**
+ * Sends a request to retrieve data from an url address linked to a php file and the data retrieval depends on the settings. (The retrieved data format is used to create a downloadable file)
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function phpPostGetFile(url, settings) {
+    return await postGetFile("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
 } 
 
+
+/**
+ * Sends a request to retrieve data from an url address linked to a php file.
+ * @param {String} url Where the data are
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
 async function phpGet(url) { 
-    return await get("http://" + API_IP_ADDRESS + ":" + phpApi_PORT + url);
+    return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url);
 } 
 
-async function NODERED_post(url, data) {
-    return await post("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url, data);
+/**
+ * Sends a request to retrieve data from an url address linked to NodeRed and the data retrieval depends on the settings.
+ * @param {String} url Where the data are
+ * @param {Object} settings Data recovery settings
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function NODERED_post(url, settings) {
+    return await post("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url, settings);
 } 
 
+/**
+ * Sends a request to retrieve data from an url address linked to NodeRed.
+ * @param {String} url Where the data are
+ * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
 async function NODERED_get(url) {
     return await get("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url);
 } 
 
-function dateToString(date, str_separator_date_time = true, display_seconds = false) {
+/**
+ * Transforms a Javascript Date into a string with the format : "day/month/year hour:minute:second" or "day/month/year à hour:minute:second" or "day/month/year hour:minute" or  "day/month/year à hour:minute"
+ * @param {Date} date date in JavaScript format
+ * @param {boolean} separatorDateTime If true, the returned string will contain the "à" character between the day/month/year and the hour:minute:second.
+ * @param {boolean} display_seconds If true, the returned string will contain the seconds part.
+ * @returns {String} date with the format : "day/month/year hour:minute:second" or "day/month/year à hour:minute:second" or "day/month/year hour:minute" or  "day/month/year à hour:minute"
+ */
+function dateToString(date, separatorDateTime = true, display_seconds = false) {
     let d = date.getDate();
     let m = date.getMonth() + 1; //Month from 0 to 11
     let y = date.getFullYear();
     let h = date.getHours();
     let min = date.getMinutes();
-    return '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y + " " + (str_separator_date_time ? "à " : "") + (h<=9 ? '0' + h : h) + ":" + (min<=9 ? '0' + min : min) + (display_seconds ? ":" + (date.getSeconds()<=9 ? '0' + date.getSeconds() : date.getSeconds()) : "");
+    return '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y + " " + (separatorDateTime ? "à " : "") + (h<=9 ? '0' + h : h) + ":" + (min<=9 ? '0' + min : min) + (display_seconds ? ":" + (date.getSeconds()<=9 ? '0' + date.getSeconds() : date.getSeconds()) : "");
 }
 
+/**
+ * Transforms a Javascript Date into a Object with two sections : "date" and "time"
+ * @param {Date} date date in JavaScript format
+ * @returns {Object} the "date" section contains the date in the format "year-month-day", the "time" section contains the time in the format "hour:minute"
+ */
 function dateToStandardString(date) {
     const datetime = new Date(date);
     let d = datetime.getDate();
@@ -284,11 +398,16 @@ function dateToStandardString(date) {
     return {"date": formattedDate, "time": formattedTime};
 }
 
-function dateToReamingString(date) {
+/**
+ * Returns a string indicating the remaining time
+ * @param {Date} date date in JavaScript format
+ * @returns {String} remaining time
+ */
+function dateToRemainingString(date) {
     let now = new Date();
 
-    const MS_PER_MINUTES = 1000 * 60;
-    const minutes = Math.floor((date - now) / MS_PER_MINUTES);
+    const MILLISECONDS_PER_MINUTES = 1000 * 60;
+    const minutes = Math.floor((date - now) / MILLISECONDS_PER_MINUTES);
 
     if (minutes < 1) {
         return "moins d'1 minute";
@@ -307,6 +426,11 @@ function dateToReamingString(date) {
     }
 }
 
+/**
+ * Transforms a integer into a string with the format : "x month x day x minute x sscond" where x are different numbers
+ * @param {integer} seconds number of seconds
+ * @returns {String} date with the format : "x month x day x minute x sscond" where x are different numbers
+ */
 function getReadableTime(seconds) {
     const SECONDS_PER_MINUTE = 60;
     const SECONDS_PER_HOUR = 3600;
@@ -346,6 +470,12 @@ function getReadableTime(seconds) {
     return result.trim();
 }
 
+
+/**
+ * Transforms a integer into a Object with two sections : "value" and "unit"
+ * @param {integer} seconds a number of seconds
+ * @returns {Object} the "value" section contains a number in a string, the "unit" section contains the time unit in a string
+ */
 function getReadableTimeAndUnit(seconds) {
     let hours = seconds / 3600;
     
@@ -361,6 +491,11 @@ function getReadableTimeAndUnit(seconds) {
     return { "value": hours, "unit": unit };
 }
 
+/**
+ * Returns "Activé" or "Désactivé" according to bool
+ * @param {boolean} bool If true, the returned string will contain "Activé", "Désactivé" if not
+ * @returns {String} contains "Activé" or "Désactivé"
+ */
 function getReadableBool(bool) {
     return bool ? "Activé" : "Désactivé";
 }
@@ -384,15 +519,18 @@ async function checkTime() {
 
 /**
  * Set refresh delay
- * @param milliSeconds Time of delay
- * @returns 
+ * @param {integer} milliSeconds Time of delay
  */
 async function delay(milliSeconds) {
     // return await for better async stack trace support in case of errors.
     return await new Promise(resolve => setTimeout(resolve, milliSeconds));
 }
 
-
+/**
+ * Hide an icon of a HTML page
+ * @param {HTMLElement} icon where the function has been called
+ * @param {String} id id of a HTML element
+ */
 function displayHide(icon, id) {
     let input = this.document.getElementById(id);
     if (icon.classList.contains('btn-eye-show')) {

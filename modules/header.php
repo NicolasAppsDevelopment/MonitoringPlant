@@ -98,6 +98,20 @@
                     <p class="top_nav_text">Se déconnecter</p>
                 </div>
             </a></li>
+            <?php } else { ?>
+            <li><a href="/login.php">
+                <div class="info_ico_container login">
+                    <svg version="1.1" id="svg2" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="15.63 24.45 240.37 207.1">
+                        <defs id="defs2"></defs>
+                        <g class="fixedColor" fill="#000" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="none" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode:normal" id="g2">
+                            <g class="fixedColor" transform="scale(8.53333,8.53333)" id="g1">
+                                <path d="M8,3c-1.103,0 -2,0.897 -2,2v9h8.58594l-2.29297,-2.29297c-0.391,-0.391 -0.391,-1.02306 0,-1.41406c0.391,-0.391 1.02306,-0.391 1.41406,0l4,4c0.391,0.391 0.391,1.02306 0,1.41406l-4,4c-0.195,0.195 -0.45103,0.29297 -0.70703,0.29297c-0.256,0 -0.51203,-0.09797 -0.70703,-0.29297c-0.391,-0.391 -0.391,-1.02306 0,-1.41406l2.29297,-2.29297h-8.58594v9c0,1.103 0.897,2 2,2h14c1.103,0 2,-0.897 2,-2v-20c0,-1.103 -0.897,-2 -2,-2zM6,16v-2h-5c-0.552,0 -1,0.448 -1,1c0,0.552 0.448,1 1,1z"></path>
+                            </g>
+                        </g>
+                    </svg>
+                    <p class="top_nav_text">Se connecter</p>
+                </div>
+            </a></li>
             <?php } ?>
         </ul>
     </nav>

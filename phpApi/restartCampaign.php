@@ -2,12 +2,14 @@
 
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
+include_once '../include/NodeRED_API.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de redémarrer la campagne";
 
 try {
+    $campaignsManager = CampaignsManager::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 

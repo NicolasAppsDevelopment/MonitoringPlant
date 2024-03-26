@@ -1,7 +1,5 @@
 let filter = null;
 let refreshRepeat = true;
-let authorizeUpdate = true;
-
 
 /**
  * Executes each of the following functions when all html code is loaded.
@@ -19,9 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Recovery of all configurations.
     getConfigurations();
-
-    //Automatic refresh of the list of measurement campaigns.
-    subscribeRefresh();
 });
 
 /**
@@ -29,11 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 async function subscribeRefresh() {
     do {
-        await delay(10000);
-        if (authorizeUpdate) {
+        if (refreshRepeat) {
             // Recovery and display all measurement campaigns according to the current filter.
             getListCampaignJS(filter, true);
         }
+        await delay(10000);
     } while (refreshRepeat);
 }
 
@@ -43,7 +38,6 @@ async function subscribeRefresh() {
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
 async function getListCampaignJS(filter_ = null, refreshMode = false) {
-    authorizeUpdate = false;
     filter = filter_;
     const campagnesContainer = document.getElementById("CM_container");
     if (refreshMode == false){
@@ -65,12 +59,11 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
         //Recovery of all measurement campaigns.
         data = await phpGet("/phpApi/getListCampaign.php");
     }
-    authorizeUpdate = true;
 
     if (data != null){
         let campagnesContainerHTML = "";
 
-        data["data"].forEach(campagne => {
+        data.forEach(campagne => {
             let state = "";
             let state_desc = "";
             let state_ico = "";
@@ -78,7 +71,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
             if (campagne["finished"] == 0) {
                 // la campagne n'est pas fini
                 state = "processing";
-                state_desc = `En cours (reste ${dateToReamingString(new Date(campagne["endingDate"]))})...`;
+                state_desc = `En cours (reste ${dateToRemainingString(new Date(campagne["endingDate"]))})...`;
                 state_ico = "working_status";
             } else {
                 // la campagne est fini
@@ -119,12 +112,18 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
                         </p>
                     </div>
 
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="removeCampagne(${campagne["idCampaign"]})"></button>
+                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]})"></button>
                 </form>
             `;
         });
 
         campagnesContainer.innerHTML = campagnesContainerHTML;
+
+        if (refreshMode == true) {
+            refreshRepeat = true;
+        } else {
+            subscribeRefresh();
+        }
     } else {
         refreshRepeat = false;
     }
@@ -138,7 +137,7 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
 /**
  * Recovery of all measurement campaigns depending on the filter parameters recovered.
  */
-async function filterCampagnes() {
+async function filterCampaigns() {
     const name = document.getElementById("campaign_name_search_bar").value;
     const date = document.getElementById("campaign_date");
     const time = document.getElementById("campaign_time");
@@ -262,7 +261,7 @@ async function predictStoreUsage() {
 /**
  * Creation of a new measurement campaign.
  */
-async function addCampagne() {
+async function addCampaign() {
     displayLoading("Ajout de la campagne...");
 
     //Recovery of all the new measurement campaign settings.
@@ -273,11 +272,11 @@ async function addCampagne() {
     const luminosityEnabled = document.getElementById("luminosity_checkbox");
     const humidityEnabled = document.getElementById("humidity_checkbox");
     const duration = document.getElementById("duration_input");
-    const duration_unit = document.getElementById("duration_unit_combo_box");
+    const durationUnit = document.getElementById("duration_unit_combo_box");
     const interval = document.getElementById("interval_input");
-    const intervalUnit = document.getElementById("intervalUnit_combo_box");
+    const intervalUnit = document.getElementById("interval_unit_combo_box");
     const volume = document.getElementById("volume_input");
-    const volume_unit = document.getElementById("volume_unit_combo_box");
+    const volumeUnit = document.getElementById("volume_unit_combo_box");
     const config = document.getElementById("config_combo_box");
     const humidMode = document.getElementById("humid_mode");
     const enableFiboxTemp = document.getElementById("enable_fibox_temp");
@@ -315,12 +314,12 @@ async function addCampagne() {
         "luminosityEnabled": luminosityEnabled.checked,
         "humidityEnabled": humidityEnabled.checked,
         "duration": duration.value,
-        "duration_unit": duration_unit.value,
+        "durationUnit": durationUnit.value,
         "interval": interval.value,
         "intervalUnit": intervalUnit.value,
         "volume": volume.value,
-        "volume_unit": volume_unit.value,
-        "config_id": config.value,
+        "volumeUnit": volumeUnit.value,
+        "configId": config.value,
         "humidMode": humidMode.checked,
         "enableFiboxTemp": enableFiboxTemp.checked
     });
@@ -328,10 +327,6 @@ async function addCampagne() {
     if (data != null) {
         document.getElementById("id_added_campaign").value = data["id"];
         document.getElementById("add_popup_form").submit();
-
-        if (data_ == null) {
-            console.warn("ATTENTION : NodeRed n'a rien retourné");
-        }
     }
 
     hideLoading();
@@ -341,7 +336,7 @@ async function addCampagne() {
  * Deletes all data of the measurement campaign whose id is entered as a parameter.
  * @param {integer} id id of the campaing that we want to remove
  */
-async function removeCampagne(id) {
+async function tryRemoveCampaign(id) {
     event.stopPropagation();
 
     if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
@@ -354,13 +349,13 @@ async function removeCampagne(id) {
 }
 
 /**
- * Filters all measurement campaigns when users press the "enter" key in the search bar.
+ * Filters all measurement campaigns when the user presses the "enter" key in the search bar.
  * @param {event} e event when the users press a key
  */
 function handleKeyPressSearchBar(e){
     var key=e.keyCode || e.which;
     if (key==13){
-    filterCampagnes();
+    filterCampaigns();
     }
 }
 
@@ -371,7 +366,7 @@ async function getConfigurations() {
     let data = await phpGet("/phpApi/getListConfiguration.php");
     if (data != null){
         const select = document.getElementById("config_combo_box");
-        data["data"].forEach(configuration => {
+        data.forEach(configuration => {
             const option = document.createElement("option");
             option.value = configuration["idConfig"];
             option.innerHTML = configuration["name"];

@@ -4,13 +4,15 @@ include_once __DIR__ . "/../include/NodeRED_API.php";
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$campaignsManager = CampaignsManager::getInstance();
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'ajouter la campagne";
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
 const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
+
 try {
+    $campaignsManager = CampaignsManager::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 
@@ -119,15 +121,15 @@ try {
             throw new Exception("L'intervalle demandé doit être inférieur ou égale à la durée de la campagne.");
         }
 
-        $config_id = null;
-        if (!isset($arguments["config_id"])){
+        $configId = null;
+        if (!isset($arguments["configId"])){
             throw new Exception("L'identifiant de configuration n'a pas été renseigné. Veuillez entrer un nombre entier positif puis réessayer.");
         }
-        if (empty($arguments["config_id"])){
+        if (empty($arguments["configId"])){
             throw new Exception("Aucune configuration n'a été séléctionné. Veuillez séléctionner une configuration puis réessayer.");
         }
-        $config_id = filter_var($arguments["config_id"], FILTER_VALIDATE_INT);
-        if ($config_id === false) {
+        $configId = filter_var($arguments["configId"], FILTER_VALIDATE_INT);
+        if ($configId === false) {
             throw new Exception("Le format de l'identifiant de configuration de la campagne est incorrecte. Veuillez entrer un nombre entier positif puis réessayer.");
         }
 
@@ -175,7 +177,7 @@ try {
 
 
         // Creation of the new measurement campaign.
-        $id = $campaignsManager->addCampaign($config_id, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
+        $id = $campaignsManager->addCampaign($configId, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
 
         NodeRedPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
 

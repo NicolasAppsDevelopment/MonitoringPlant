@@ -4,12 +4,13 @@ include_once '../include/Session.php';
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';
 
-$configManager = ConfigurationsManager::getInstance();
 $reply = RequestReplySender::getInstance();
-$session = Session::getInstance();
 $errorTitle = "Impossible d'ajouter la configuration";
 
 try {
+    $configManager = ConfigurationsManager::getInstance();
+    $session = Session::getInstance();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
         $data = file_get_contents("php://input");
@@ -137,16 +138,16 @@ try {
         }
 
         // get bool from request
-        // calib_is_humid
+        // calibIsHumid
 
-        if (!isset($arguments["calib_is_humid"])){
+        if (!isset($arguments["calibIsHumid"])){
             throw new Exception("Le mode de calibration est manquant. Veuillez réessayer.");
         }
-        if (!is_bool($arguments["calib_is_humid"])){
+        if (!is_bool($arguments["calibIsHumid"])){
             throw new Exception("Le format du mode de calibration est incorrecte.");
         }
 
-        $configManager->addConfiguration($arguments["name"], $f1, $m, $dPhi1, $dPhi2, $dKSV1, $dKSV2, $cal0, $cal2nd, $t0, $t2nd, $pressure, $o2cal2nd, $altitude, $arguments["calib_is_humid"]);
+        $configManager->addConfiguration($arguments["name"], $f1, $m, $dPhi1, $dPhi2, $dKSV1, $dKSV2, $cal0, $cal2nd, $t0, $t2nd, $pressure, $o2cal2nd, $altitude, $arguments["calibIsHumid"]);
         $reply->replySuccess();
     } else {
         throw new Exception("La méthode de requête est incorrecte.");
