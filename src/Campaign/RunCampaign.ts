@@ -1,3 +1,4 @@
+import { logger } from 'src/Logger/LoggerManager';
 import { sqlConnections } from '../Database/DatabaseManager';
 import {tcpConnection} from "../Tcp/TcpManager";
 
@@ -22,7 +23,13 @@ class RunCampaign {
                     this.numberOfMeasureLeft=0;
                     break;
                 }else{
-                    tcpConnection.sendCommandMeasure();
+
+                    try {
+                        const measures = tcpConnection.getMeasure();
+                    } catch (error) {
+                        logger.error(error);
+                    }
+                    
                 }
             }
         }
@@ -38,14 +45,8 @@ class RunCampaign {
     }
 
     insertData(){
-        tcpConnection.sendCommandMeasure();
+        tcpConnection.getMeasure();
         //const data = tcpConnection.readData();
         //const dataParsed = data.parse();
     }
-
-    handleTcpData(data:string){
-        let tcpResponse= JSON.parse(data,undefined);
-
-    }
-
 }

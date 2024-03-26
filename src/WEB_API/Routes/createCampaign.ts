@@ -14,7 +14,6 @@ import { fail } from 'assert';
 */
 module.exports = function(app: Express){
     app.post('/createCampaign', async (req: Request, res: Response) => {
-        // Vérifie le corps
         let data = req.body;
         
         if (data.id == null || typeof data.id != "number") {
@@ -23,13 +22,7 @@ module.exports = function(app: Express){
         }
         // Traite la requête
         try {
-            // data.server_id must be send as string or else it will not work
             const currentCampaignId = data.id;
-            if (data.key === "I_do_believe_I_am_on_fire"){
-                sqlConnections.insertLogs(currentCampaignId,"Campagne démarrée","La campagne a été démarrée avec succès.");
-            }else{
-                res.send("wrong request methode");
-            } 
             const result = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign=?;", [currentCampaignId]);
             
             const interval=result[0].interval;
