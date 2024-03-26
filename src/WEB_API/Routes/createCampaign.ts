@@ -2,6 +2,8 @@ import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
 import {tcpConnection} from "../../Tcp/TcpManager";
 import { fail } from 'assert';
+import Calibration from 'src/Campaign/Calibration';
+import RunCampaign, { campaign } from 'src/Campaign/RunCampaign';
 
 
 /*
@@ -26,7 +28,7 @@ module.exports = function(app: Express){
             // data.server_id must be send as string or else it will not work
             const currentCampaignId = data.id;
             if (data.key === "I_do_believe_I_am_on_fire"){
-                sqlConnections.insertLogs(currentCampaignId,"Campagne démarrée","La campagne a été démarrée avec succès.");
+                sqlConnections.insertLogs(currentCampaignId,0,"Campagne démarrée","La campagne a été démarrée avec succès.");
             }else{
                 res.send("wrong request methode");
             } 
@@ -35,14 +37,13 @@ module.exports = function(app: Express){
             const interval=result[0].interval;
             const duration=result[0].duration;
             const configNumber=result[0].idConfig;
-            const sensorSelected= 
-            {"O2":result[0].O2SensorState,
-            "CO2":result[0].CO2SensorState,
-            "humidity":result[0].humiditySensorState,
-            "light":result[0].luminositySensorState,
-            "temperature":result[0].temperatureSensorState};
+            const sensorSelected=JSON.parse('{"O2":result[0].O2SensorState,"CO2":result[0].CO2SensorState,"humidity":result[0].humiditySensorState,"light":result[0].luminositySensorState,"temperature":result[0].temperatureSensorState}');
 
+            let calibration=await new Calibration(configNumber,currentCampaignId);
+            tcpConnection.sendCommandCalibrate(calibration);
    
+            campaign.initCampaign(currentCampaignId,duration,interval,sensorSelected);
+
             const response: any[] = ["coucou"];
             res.send({"success": response});
         } catch (error) {

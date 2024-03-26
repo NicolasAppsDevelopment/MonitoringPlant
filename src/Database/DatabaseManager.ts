@@ -63,10 +63,10 @@ export default class Database {
         });
     }
 
-    insertLogs(idCampaign:number,title:string,msg:string) {
+    insertLogs(idCampaign:number,state:number,title:string,msg:string) {
         let now:Date = new Date();
-        let query:string = "insert into Logs values( ?, ?,? ,?);";
-        this.queryData(query,[idCampaign,title,msg,now]);
+        let query:string = "insert into Logs values( ?,?, ?,? ,?);";
+        this.queryData(query,[idCampaign,state,title,msg,now]);
     }
 
     setAlertLevel(idCampaign:number){
@@ -77,7 +77,6 @@ export default class Database {
         let now:Date=new Date();
         let query="update Campaigns set finished=1,endingDate= ? where idCampaign= ? ";
         this.queryData(query)
-        //NOW() "+global.get("currentCampagne");
     }
 
 

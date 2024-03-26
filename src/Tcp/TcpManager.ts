@@ -1,6 +1,7 @@
 import * as net from "net";
 import { logger } from "../Logger/LoggerManager";
 import { config } from "dotenv";
+import Calibration from "../Campaign/Calibration"
 
 export default class TcpManager{
     private client = new net.Socket();
@@ -35,9 +36,7 @@ export default class TcpManager{
         this.client.write('RESET');
         return "";
     }
-    sendCommandCalibrate(calibration:number[]) : string {
-        //créer JSON
-
+    sendCommandCalibrate(calibration:Calibration) : string {
         this.client.write('SET_CONFIG');
         return "";
     }

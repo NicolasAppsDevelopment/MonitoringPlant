@@ -10,25 +10,19 @@ import { campaign } from 'src/Campaign/RunCampaign';
     DESCRIPTION : test de la connexion
 */
 module.exports = function(app: Express){
-    app.post('/stop_campaign', async (req: Request, res: Response) => {
+    app.get('/check_working_campaign', async (req: Request, res: Response) => {
         // Vérifie le corps
         let data = req.body;
         if (data.id == null || typeof data.id != "number") {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
             return;
         }
-
         // Traite la requête
         try {
             // data.server_id must be send as string or else it will not work
-            const sid = data.id;
-            if (sid== campaign.getCurrentCampaign){
-                campaign.stopCampaign();
-            }else{
-                res.status(400).send({"error": "wrong campaign number"});
-            }
-            
-            const response: any[] = ["coucou"];
+            const result:number = campaign.getCurrentCampaign();
+
+            const response: any[] = [result];
             res.send({"success": response});
         } catch (error) {
             let message = 'Erreur inconnue'
