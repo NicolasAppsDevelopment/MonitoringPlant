@@ -39,23 +39,17 @@ export default class RunCampaign {
                     this.numberOfMeasureLeft=0;
                     break;
                 }else{
-                    let sensorData ;
-                    try{
-                        sensorData = JSON.parse(await tcpConnection.sendCommandMeasure());
-                        if (sensorData.success){
 
-                        }else{
-
-                        }
-
-                    }catch(error){
-                        logger.error("An error occured while parsing JSON : " + error);
+                    try {
+                        const measures = tcpConnection.getMeasure();
+                    } catch (error) {
+                        logger.error(error);
                     }
                     
                 }
             }
         }
-        sqlConnections.insertLogs(this.currentCampaignId,1,"Arrêt prévu","La campagne s\'est terminé avec succès.")    
+        sqlConnections.insertLogs(this.currentCampaignId, 1,"Arrêt prévu","La campagne s\'est terminé avec succès.")    
     }
 
     stopCampaign(){
@@ -73,7 +67,7 @@ export default class RunCampaign {
     }
 
     insertData(){
-        tcpConnection.sendCommandMeasure();
+        tcpConnection.getMeasure();
         //const data = tcpConnection.readData();
         //const dataParsed = data.parse();
     }

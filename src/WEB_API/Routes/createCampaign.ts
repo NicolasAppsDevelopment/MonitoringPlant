@@ -3,7 +3,7 @@ import { sqlConnections } from '../../Database/DatabaseManager';
 import {tcpConnection} from "../../Tcp/TcpManager";
 import { fail } from 'assert';
 import Calibration from 'src/Campaign/Calibration';
-import RunCampaign, { campaign } from 'src/Campaign/RunCampaign';
+import RunCampaign, { campaign } from '../../Campaign/RunCampaign';
 
 
 /*
@@ -16,7 +16,6 @@ import RunCampaign, { campaign } from 'src/Campaign/RunCampaign';
 */
 module.exports = function(app: Express){
     app.post('/createCampaign', async (req: Request, res: Response) => {
-        // Vérifie le corps
         let data = req.body;
         
         if (data.id == null || typeof data.id != "number") {
@@ -25,13 +24,8 @@ module.exports = function(app: Express){
         }
         // Traite la requête
         try {
-            // data.server_id must be send as string or else it will not work
             const currentCampaignId = data.id;
-            if (data.key === "I_do_believe_I_am_on_fire"){
-                sqlConnections.insertLogs(currentCampaignId,0,"Campagne démarrée","La campagne a été démarrée avec succès.");
-            }else{
-                res.send("wrong request methode");
-            } 
+            sqlConnections.insertLogs(currentCampaignId, 0,"Campagne démarrée","La campagne a été démarrée avec succès.");
             const result = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign=?;", [currentCampaignId]);
             
             const interval=result[0].interval;
@@ -40,7 +34,13 @@ module.exports = function(app: Express){
             const sensorSelected=JSON.parse('{"O2":result[0].O2SensorState,"CO2":result[0].CO2SensorState,"humidity":result[0].humiditySensorState,"light":result[0].luminositySensorState,"temperature":result[0].temperatureSensorState}');
 
             let calibration=await new Calibration(configNumber,currentCampaignId);
-            tcpConnection.sendCommandCalibrate(calibration);
+            
+            try {
+                await tcpConnection.calibrateModule(calibration);
+            } catch (error) {
+                
+            }
+            
    
             campaign.initCampaign(currentCampaignId,duration,interval,sensorSelected);
 
