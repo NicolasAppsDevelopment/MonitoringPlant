@@ -159,7 +159,7 @@ class SettingsManager {
     {
         $id = $this->session->getAdminUserId();
         try {
-            $results = $this->db->fetchAll("SELECT user FROM Questions WHERE idUser = :id", [
+            $results = $this->db->fetchAll("SELECT idUser FROM Questions WHERE idUser = :id", [
                 'id' => $id
             ]);
         
@@ -169,7 +169,7 @@ class SettingsManager {
                 return false;
             }
         } catch (\Throwable $th) {
-            throw new Exception("Impossible de vérifier si l'administrateur a déjà un compte. {$th->getMessage()}");
+            throw new Exception("Impossible de déterminer si les questions de sécurités ont été définies. {$th->getMessage()}");
         }
     }
 
