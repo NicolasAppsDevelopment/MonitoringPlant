@@ -55,10 +55,10 @@ class Database {
             });
         });
     }
-    insertLogs(idCampaign, title, msg) {
+    insertLogs(idCampaign, state, title, msg) {
         let now = new Date();
-        let query = "insert into Logs values( ?, ?,? ,?);";
-        this.queryData(query, [idCampaign, title, msg, now]);
+        let query = "insert into Logs values( ?,?, ?,? ,?);";
+        this.queryData(query, [idCampaign, state, title, msg, now]);
     }
     setAlertLevel(idCampaign) {
     }
@@ -66,7 +66,6 @@ class Database {
         let now = new Date();
         let query = "update Campaigns set finished=1,endingDate= ? where idCampaign= ? ";
         this.queryData(query);
-        //NOW() "+global.get("currentCampagne");
     }
 }
 exports.default = Database;
