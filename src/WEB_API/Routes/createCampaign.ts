@@ -2,7 +2,7 @@ import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
 import {tcpConnection} from "../../Tcp/TcpManager";
 import { fail } from 'assert';
-import Calibration from 'src/Campaign/Calibration';
+import Calibration from '../../Campaign/Calibration';
 import RunCampaign, { campaign } from '../../Campaign/RunCampaign';
 
 

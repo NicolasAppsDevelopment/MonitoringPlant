@@ -1,6 +1,7 @@
 import { Express, Request, Response } from 'express';
-import { sqlConnections } from '../../Database/DatabaseManager';
-import { campaign } from '../../Campaign/RunCampaign';
+import { exec } from "child_process";
+import { logger } from "../../Logger/LoggerManager";
+
 /*
     URL : /test
     METHODE : POST
@@ -10,20 +11,29 @@ import { campaign } from '../../Campaign/RunCampaign';
     DESCRIPTION : test de la connexion
 */
 module.exports = function(app: Express){
-    app.get('/check_working_campaign', async (req: Request, res: Response) => {
-        // Vérifie le corps
+    app.post('/set_datetime', async (req: Request, res: Response) => {
+        
         let data = req.body;
-        if (data.id == null || typeof data.id != "number") {
+        if (data.datetime == null ) {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
             return;
         }
+
         // Traite la requête
         try {
-            // data.server_id must be send as string or else it will not work
-            const result:number = campaign.getCurrentCampaign();
+            let date = " \"" + data.datetime + '"';
 
-            const response: any[] = [result];
-            res.send({"success": response});
+            let result= exec('sudo date -s'+date, (error, stdout, stderr) => {
+                if (error) {
+                    logger.error(`error: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    logger.error(`stderr: ${stderr}`);
+                    return;
+                }
+            });
+            res.send({"success": "true"});
         } catch (error) {
             let message = 'Erreur inconnue'
             if (error instanceof Error) message = error.message

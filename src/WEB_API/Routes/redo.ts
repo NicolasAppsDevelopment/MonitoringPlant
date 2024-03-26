@@ -20,6 +20,8 @@ module.exports = function(app: Express){
         try {
             // data.server_id must be send as string or else it will not work
             const currentCampaignId = data.id;
+            
+
             const result = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign=?;", [currentCampaignId]);
             console.log(result);
 
