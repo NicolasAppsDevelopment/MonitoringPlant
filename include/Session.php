@@ -45,7 +45,9 @@ class Session {
 
     private static function initSession(): void {
         // always start the session when we need to access session data
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
 
