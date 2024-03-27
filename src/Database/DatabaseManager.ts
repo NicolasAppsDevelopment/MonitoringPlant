@@ -9,7 +9,7 @@ export default class Database {
         this.connection = null;
     }
 
-    open(): Database {
+    open() {
         logger.info("Ouverture d'une nouvelle connexion à la base de données.");
 
         // Chargement des variables d'environnement
@@ -28,7 +28,6 @@ export default class Database {
             throw new Error("Le mot de passe de la base de données n'est pas défini dans le fichier .env");
         }
         
-        if (this.connection !== null) return this;
         this.connection = mysql.createPool({
             host: process?.env?.DATABASE_HOST,
             user: process?.env?.DATABASE_USER_NAME,
@@ -40,8 +39,6 @@ export default class Database {
         })
         
         logger.info("Ouverture terminé.");
-
-        return this;
     }
 
     close() {
@@ -109,7 +106,13 @@ export declare var sqlConnections: Database;
 
 export function initSqlConnections() {
     sqlConnections = new Database();
-    sqlConnections.open();
+
+    try {
+        sqlConnections.open();
+    } catch (error) {
+        logger.error("Failed to open database: " + error)
+    }
+    
 }
 
 

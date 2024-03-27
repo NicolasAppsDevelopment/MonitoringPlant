@@ -1,42 +1,37 @@
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"22/03/2024 10:37:38"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"22/03/2024 10:37:38"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"22/03/2024 10:37:38"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"22/03/2024 10:47:10"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"22/03/2024 10:47:10"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"22/03/2024 10:47:10"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"22/03/2024 10:48:21"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"22/03/2024 10:48:21"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"22/03/2024 10:48:21"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 14:02:52"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 14:02:52"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 14:02:52"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 15:39:58"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 15:39:58"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 15:39:58"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 16:07:02"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 16:07:02"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 16:07:02"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 21:11:55"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 21:11:55"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 21:11:55"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 22:46:19"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 22:46:19"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 22:46:19"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 22:46:29"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 22:46:29"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 22:46:29"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 22:52:46"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 22:52:46"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 22:52:46"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 23:04:52"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 23:04:52"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 23:04:52"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"24/03/2024 23:11:41"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"24/03/2024 23:11:41"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"24/03/2024 23:11:41"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"26/03/2024 22:36:31"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"26/03/2024 22:36:31"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"26/03/2024 22:36:31"}
-{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 10:12:20"}
-{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 10:12:20"}
-{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"27/03/2024 10:12:20"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:10:56"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:10:56"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:10:56"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:20:08"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:20:08"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:20:08"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:21:51"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:21:51"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:21:51"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:23:48"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:23:48"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:23:48"}
+{"level":"error","message":"Main Unhandled Rejection : worker.on is not a function","service":"App","stack":"TypeError: worker.on is not a function\n    at startAutoRemoveThread (C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemove.js:8:12)","timestamp":"27/03/2024 12:23:49"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:28:41"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:28:41"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:28:41"}
+{"code":"MODULE_NOT_FOUND","level":"error","message":"Main Uncaught Exception : Cannot find module 'C:\\Users\\colom.000\\Desktop\\monitoring-plante\\autoRemoveWorker'","requireStack":[],"service":"App","stack":"Error: Cannot find module 'C:\\Users\\colom.000\\Desktop\\monitoring-plante\\autoRemoveWorker'\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1077:15)\n    at Module._load (node:internal/modules/cjs/loader:922:27)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)\n    at MessagePort.<anonymous> (node:internal/main/worker_thread:164:24)\n    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:741:20)\n    at exports.emitMessage (node:internal/per_context/messageport:23:28)","timestamp":"27/03/2024 12:28:42"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:29:30"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:29:30"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:29:30"}
+{"code":"MODULE_NOT_FOUND","level":"error","message":"Main Uncaught Exception : Cannot find module 'C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.ts'","requireStack":[],"service":"App","stack":"Error: Cannot find module 'C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.ts'\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1077:15)\n    at Module._load (node:internal/modules/cjs/loader:922:27)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)\n    at MessagePort.<anonymous> (node:internal/main/worker_thread:164:24)\n    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:741:20)\n    at exports.emitMessage (node:internal/per_context/messageport:23:28)","timestamp":"27/03/2024 12:29:30"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:29:56"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:29:56"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:29:56"}
+{"level":"error","message":"Main Uncaught Exception : Cannot read properties of undefined (reading 'info')","service":"App","stack":"TypeError: Cannot read properties of undefined (reading 'info')\n    at autoRemove (C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.js:12:28)\n    at MessagePort.<anonymous> (C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.js:8:9)\n    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:741:20)\n    at exports.emitMessage (node:internal/per_context/messageport:23:28)","timestamp":"27/03/2024 12:29:57"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:30:38"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:30:38"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:30:38"}
+{"level":"error","message":"Main Uncaught Exception : Cannot read properties of undefined (reading 'info')","service":"App","stack":"TypeError: Cannot read properties of undefined (reading 'info')\n    at autoRemove (C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.js:12:28)\n    at MessagePort.<anonymous> (C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.js:8:9)\n    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:741:20)\n    at exports.emitMessage (node:internal/per_context/messageport:23:28)","timestamp":"27/03/2024 12:30:39"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:30:59"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:30:59"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:30:59"}
+{"level":"error","message":"Main Uncaught Exception : Cannot read properties of undefined (reading 'error')","service":"App","stack":"TypeError: Cannot read properties of undefined (reading 'error')\n    at autoRemove (C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.js:23:36)\n    at MessagePort.<anonymous> (C:\\Users\\colom.000\\Desktop\\monitoring-plante\\dist\\Campaign\\autoRemoveWorker.js:8:9)\n    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:741:20)\n    at exports.emitMessage (node:internal/per_context/messageport:23:28)","timestamp":"27/03/2024 12:31:00"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 12:39:10"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 12:39:10"}
+{"level":"info","message":"Auto remove process loop started","service":"App","timestamp":"27/03/2024 12:39:10"}
+{"level":"info","message":"⚡️ Server is running on port 35000","service":"App","timestamp":"27/03/2024 12:39:10"}

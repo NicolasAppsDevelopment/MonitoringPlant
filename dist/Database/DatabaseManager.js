@@ -28,8 +28,6 @@ class Database {
         if (!process?.env?.DATABASE_PASSWORD) {
             throw new Error("Le mot de passe de la base de données n'est pas défini dans le fichier .env");
         }
-        if (this.connection !== null)
-            return this;
         this.connection = mysql2_1.default.createPool({
             host: process?.env?.DATABASE_HOST,
             user: process?.env?.DATABASE_USER_NAME,
@@ -40,7 +38,6 @@ class Database {
             connectionLimit: 10
         });
         LoggerManager_1.logger.info("Ouverture terminé.");
-        return this;
     }
     close() {
         LoggerManager_1.logger.info("Fermeture de la connexion à la base de données.");
@@ -67,23 +64,23 @@ class Database {
             });
         });
     }
-    insertLogs(idCampaign, state, title, msg) {
+    async insertLogs(idCampaign, state, title, msg) {
         let now = new Date();
         let query = "insert into Logs values(?,?, ?,? ,?);";
         try {
-            this.queryData(query, [idCampaign, state, title, msg, now]);
+            await this.queryData(query, [idCampaign, state, title, msg, now]);
         }
         catch (error) {
             LoggerManager_1.logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
         }
     }
-    setAlertLevel(idCampaign) {
+    async setAlertLevel(idCampaign) {
     }
-    setFinished(idCampaign) {
+    async setFinished(idCampaign) {
         let now = new Date();
         let query = "update Campaigns set finished=1,endingDate= ? where idCampaign=?;";
         try {
-            this.queryData(query, [now, idCampaign]);
+            await this.queryData(query, [now, idCampaign]);
         }
         catch (error) {
             LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
@@ -93,6 +90,11 @@ class Database {
 exports.default = Database;
 function initSqlConnections() {
     exports.sqlConnections = new Database();
-    exports.sqlConnections.open();
+    try {
+        exports.sqlConnections.open();
+    }
+    catch (error) {
+        LoggerManager_1.logger.error("Failed to open database: " + error);
+    }
 }
 exports.initSqlConnections = initSqlConnections;
