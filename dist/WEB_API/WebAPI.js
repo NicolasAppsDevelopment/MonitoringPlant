@@ -30,7 +30,7 @@ const startAPI = async () => {
     for (let route of routes) {
         require((0, node_path_1.join)(path_str, route))(app);
     }
-    app.listen(+port, () => {
+    app.listen(port, () => {
         LoggerManager_1.logger.info(`⚡️ Server is running on port ${port}`);
     });
 };

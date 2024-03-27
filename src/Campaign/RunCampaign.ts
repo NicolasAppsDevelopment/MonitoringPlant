@@ -34,14 +34,19 @@ export default class RunCampaign {
         while(this.numberOfMeasureLeft>0){
             if(this.currentCampaignId>0){
                 this.numberOfMeasureLeft--;
-                const result = await sqlConnections.queryData("SELECT idCampaign from Campaigns where finished=0;", []);
-                if(result == undefined){
+
+                let idCampaign: any | null = null;
+                try {
+                    idCampaign = await sqlConnections.queryData("SELECT idCampaign from Campaigns where finished=0;");
+                } catch (error) {
+                    logger.error("Error runCampaign: " + error);
+                }
+                if(idCampaign == null){
                     this.numberOfMeasureLeft=0;
                     break;
                 }else{
-
                     try {
-                        const measures = tcpConnection.getMeasure();
+                        const measures = await tcpConnection.getMeasure();
                     } catch (error) {
                         logger.error(error);
                     }

@@ -1,3 +1,4 @@
+import { logger } from '../Logger/LoggerManager';
 import { sqlConnections } from '../Database/DatabaseManager';
 
 export default class Calibration {
@@ -30,10 +31,17 @@ export default class Calibration {
         this.idCampaign=idCampaign;
         this.idConfig=idConfig;
         const queryCalibrate = "SELECT * from Configurations where idConfig= ? ;"
-        const calibrateData = await sqlConnections.queryData(queryCalibrate, [idConfig]);
-
         const queryCampaign = "SELECT humidMode,enableFiboxTemp from Campaigns where idCampaign= ? ;"
-        const campaignData = await sqlConnections.queryData(queryCampaign,[idCampaign])
+
+        let calibrateData: any | null = null;
+        let campaignData: any | null = null;
+
+        try {
+            calibrateData = await sqlConnections.queryData(queryCalibrate, [idConfig]);
+            campaignData = await sqlConnections.queryData(queryCampaign,[idCampaign])
+        } catch (error) {
+            logger.error("Error init calibration: " + error);
+        }
 
         this.altitude=calibrateData[0].altitude;
         this.f1=calibrateData[0].f1;
