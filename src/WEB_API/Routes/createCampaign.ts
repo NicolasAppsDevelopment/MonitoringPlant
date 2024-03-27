@@ -32,7 +32,12 @@ module.exports = function(app: Express){
             const interval=result[0].interval;
             const duration=result[0].duration;
             const configNumber=result[0].idConfig;
-            const sensorSelected=JSON.parse('{"O2":result[0].O2SensorState,"CO2":result[0].CO2SensorState,"humidity":result[0].humiditySensorState,"light":result[0].luminositySensorState,"temperature":result[0].temperatureSensorState}');
+            const sensorSelected={
+                "O2":result[0].O2SensorState,
+                "CO2":result[0].CO2SensorState,
+                "humidity":result[0].humiditySensorState,
+                "light":result[0].luminositySensorState,
+                "temperature":result[0].temperatureSensorState};
 
             let calibration=await new Calibration(configNumber,currentCampaignId);
             
