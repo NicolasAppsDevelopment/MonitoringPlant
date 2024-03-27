@@ -38,7 +38,7 @@ module.exports = function(app: Express){
             if (result == undefined){
                 res.send({"error":"an error occured during the process" });
             }else{
-                const response: any[] = [result];
+                const response: any[] = [result.stdout?.toArray()];
                 res.send({"success": response});
             }
         } catch (error) {

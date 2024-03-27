@@ -37,3 +37,6 @@
 {"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"26/03/2024 22:36:31"}
 {"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"26/03/2024 22:36:31"}
 {"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"26/03/2024 22:36:31"}
+{"level":"info","message":"Ouverture d'une nouvelle connexion à la base de données.","service":"App","timestamp":"27/03/2024 10:12:20"}
+{"level":"info","message":"Ouverture terminé.","service":"App","timestamp":"27/03/2024 10:12:20"}
+{"level":"info","message":"⚡️ Server is running at http://localhost:35000","service":"App","timestamp":"27/03/2024 10:12:20"}
