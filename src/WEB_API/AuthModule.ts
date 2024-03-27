@@ -1,9 +1,13 @@
 import { sqlConnections } from '../Database/DatabaseManager';
 import { NextFunction, Request, Response } from 'express';
-import { config } from "dotenv";
+import { loadConfig } from "../Helper/loadConfig";
+import { logger } from '../Logger/LoggerManager';
 
 // Chargement des variables d'environnement
-config();
+loadConfig();
+if (!process?.env?.API_TOKEN) {
+    throw new Error("Le token de l'API n'est pas défini dans le fichier .env");
+}
 
 export async function isAuth(req: Request, res: Response, next: NextFunction) {
     // Vérifie la présence d'un token
@@ -27,6 +31,7 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
             return;
         } else {
             // Pas bon
+            logger.warn(process.env.API_TOKEN);
             res.status(401).send({"error": "L'autorisation a échoué."});
             return;
         }

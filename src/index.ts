@@ -7,7 +7,7 @@ import {campaign} from "./Campaign/RunCampaign"
 initLogger(); // initialise le logger
 initSqlConnections(); // initialise les connexions à la base de données
 startAPI(); // démarre l'API WEB
-//initTcpConnection(); // start the TCP connection with the driver in charge of the sensors
+initTcpConnection(); // start the TCP connection with the driver in charge of the sensors
 
 process.on('unhandledRejection', reason => {
     logger.error('Main Unhandled Rejection :', reason);

@@ -1,6 +1,6 @@
 import * as net from "net";
 import { logger } from "../Logger/LoggerManager";
-import { config } from "dotenv";
+import { loadConfig } from "../Helper/loadConfig";
 import { EventEmitter } from "events";
 import { TcpDaemonRequest, TcpDaemonAnswer } from "./TcpDaemonMessageTypes";
 import Calibration from "../Campaign/Calibration";
@@ -16,13 +16,25 @@ export default class TcpManager{
 
     startconnection(){
         // Chargement des variables d'environnement
-        config();
+        loadConfig();
 
-        const port: number = +(process?.env?.DAEMON_PORT ?? 12778);
-        const host: string = process?.env?.DAEMON_HOST ?? 'localhost';
-        this.timeout = +(process?.env?.DAEMON_TIMEOUT ?? 10000);
+        const port: string | undefined = process?.env?.DAEMON_PORT;
+        if (!port) {
+            throw new Error("Le port du démon n'est pas défini dans le fichier .env");
+        }
 
-        this.client.connect(port, host, function() {
+        const host: string | undefined = process?.env?.DAEMON_HOST;
+        if (!host) {
+            throw new Error("L'hôte du démon n'est pas défini dans le fichier .env");
+        }
+
+        const timeout: string | undefined = process?.env?.ANSWER_TIMEOUT;
+        if (!timeout) {
+            throw new Error("Le timeout des requêtes du démon n'est pas défini dans le fichier .env");
+        }
+        this.timeout = +timeout;
+
+        this.client.connect(+port, host, function() {
             logger.info('Connxion TCP établi.');
         });
         this.client.on('data', (message:string) => {

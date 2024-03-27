@@ -1,4 +1,4 @@
-import { config } from "dotenv";
+import { loadConfig } from "../Helper/loadConfig";
 import mysql, { Pool } from "mysql2";
 import { logger } from "../Logger/LoggerManager";
 
@@ -13,7 +13,20 @@ export default class Database {
         logger.info("Ouverture d'une nouvelle connexion à la base de données.");
 
         // Chargement des variables d'environnement
-        config();
+        loadConfig();
+
+        if (!process?.env?.DATABASE_HOST) {
+            throw new Error("L'hôte de la base de données n'est pas défini dans le fichier .env");
+        }
+        if (!process?.env?.DATABASE_USER_NAME) {
+            throw new Error("Le nom d'utilisateur de la base de données n'est pas défini dans le fichier .env");
+        }
+        if (!process?.env?.DATABASE_NAME) {
+            throw new Error("Le nom de la base de données n'est pas défini dans le fichier .env");
+        }
+        if (!process?.env?.DATABASE_PASSWORD) {
+            throw new Error("Le mot de passe de la base de données n'est pas défini dans le fichier .env");
+        }
         
         if (this.connection !== null) return this;
         this.connection = mysql.createPool({
