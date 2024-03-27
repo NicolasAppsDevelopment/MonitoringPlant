@@ -9,7 +9,7 @@ export default class Database {
         this.connection = null;
     }
 
-    open(): Database {
+    open() {
         logger.info("Ouverture d'une nouvelle connexion à la base de données.");
 
         // Chargement des variables d'environnement
@@ -28,7 +28,6 @@ export default class Database {
             throw new Error("Le mot de passe de la base de données n'est pas défini dans le fichier .env");
         }
         
-        if (this.connection !== null) return this;
         this.connection = mysql.createPool({
             host: process?.env?.DATABASE_HOST,
             user: process?.env?.DATABASE_USER_NAME,
@@ -40,8 +39,6 @@ export default class Database {
         })
         
         logger.info("Ouverture terminé.");
-
-        return this;
     }
 
     close() {
@@ -76,25 +73,25 @@ export default class Database {
         });
     }
 
-    insertLogs(idCampaign:number,state:number,title:string,msg:string) {
+    async insertLogs(idCampaign:number,state:number,title:string,msg:string) {
         let now:Date = new Date();
         let query:string = "insert into Logs values(?,?, ?,? ,?);";
         try {
-            this.queryData(query,[idCampaign,state,title,msg,now]);
+            await this.queryData(query,[idCampaign,state,title,msg,now]);
         } catch (error) {
             logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
         }
     }
 
-    setAlertLevel(idCampaign:number){
+    async setAlertLevel(idCampaign:number){
 
     }
 
-    setFinished(idCampaign:number){
+    async setFinished(idCampaign:number){
         let now:Date=new Date();
         let query="update Campaigns set finished=1,endingDate= ? where idCampaign=?;";
         try {
-            this.queryData(query, [now,idCampaign]);
+            await this.queryData(query, [now,idCampaign]);
         } catch (error) {
             logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
         }
@@ -109,7 +106,13 @@ export declare var sqlConnections: Database;
 
 export function initSqlConnections() {
     sqlConnections = new Database();
-    sqlConnections.open();
+
+    try {
+        sqlConnections.open();
+    } catch (error) {
+        logger.error("Failed to open database: " + error)
+    }
+    
 }
 
 

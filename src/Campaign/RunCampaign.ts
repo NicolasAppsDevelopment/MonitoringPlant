@@ -30,7 +30,6 @@ export default class RunCampaign {
     }
 
     async runCampaign(){
-        
         while(this.numberOfMeasureLeft>0){
             if(this.currentCampaignId>0){
                 this.numberOfMeasureLeft--;
@@ -54,25 +53,25 @@ export default class RunCampaign {
                 }
             }
         }
-        sqlConnections.insertLogs(this.currentCampaignId, 1,"Arrêt prévu","La campagne s\'est terminé avec succès.")    
+        await sqlConnections.insertLogs(this.currentCampaignId, 1,"Arrêt prévu","La campagne s\'est terminé avec succès.")    
     }
 
-    stopCampaign(){
+    async stopCampaign(){
         if (this.currentCampaignId>0){
-            sqlConnections.setFinished(this.currentCampaignId);
-            sqlConnections.insertLogs(this.currentCampaignId,1,"Arrêt prévu","La campagne a bien été stoppé suite à votre demande.");
+            await sqlConnections.setFinished(this.currentCampaignId);
+            await sqlConnections.insertLogs(this.currentCampaignId,1,"Arrêt prévu","La campagne a bien été stoppé suite à votre demande.");
             this.currentCampaignId=-1;
             
         }
 
     }
 
-    restartCampaign(){
+    async restartCampaign(){
 
     }
 
-    insertData(){
-        tcpConnection.getMeasure();
+    async insertData(){
+        await tcpConnection.getMeasure();
         //const data = tcpConnection.readData();
         //const dataParsed = data.parse();
     }
