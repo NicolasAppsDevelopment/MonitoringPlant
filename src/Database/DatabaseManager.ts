@@ -76,25 +76,25 @@ export default class Database {
         });
     }
 
-    insertLogs(idCampaign:number,state:number,title:string,msg:string) {
+    async insertLogs(idCampaign:number,state:number,title:string,msg:string) {
         let now:Date = new Date();
         let query:string = "insert into Logs values(?,?, ?,? ,?);";
         try {
-            this.queryData(query,[idCampaign,state,title,msg,now]);
+            await this.queryData(query,[idCampaign,state,title,msg,now]);
         } catch (error) {
             logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
         }
     }
 
-    setAlertLevel(idCampaign:number){
+    async setAlertLevel(idCampaign:number){
 
     }
 
-    setFinished(idCampaign:number){
+    async setFinished(idCampaign:number){
         let now:Date=new Date();
         let query="update Campaigns set finished=1,endingDate= ? where idCampaign=?;";
         try {
-            this.queryData(query, [now,idCampaign]);
+            await this.queryData(query, [now,idCampaign]);
         } catch (error) {
             logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
         }

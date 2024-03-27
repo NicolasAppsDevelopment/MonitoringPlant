@@ -69,15 +69,25 @@ class Database {
     }
     insertLogs(idCampaign, state, title, msg) {
         let now = new Date();
-        let query = "insert into Logs values( ?,?, ?,? ,?);";
-        this.queryData(query, [idCampaign, state, title, msg, now]);
+        let query = "insert into Logs values(?,?, ?,? ,?);";
+        try {
+            this.queryData(query, [idCampaign, state, title, msg, now]);
+        }
+        catch (error) {
+            LoggerManager_1.logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
+        }
     }
     setAlertLevel(idCampaign) {
     }
     setFinished(idCampaign) {
         let now = new Date();
-        let query = "update Campaigns set finished=1,endingDate= ? where idCampaign= ? ";
-        this.queryData(query);
+        let query = "update Campaigns set finished=1,endingDate= ? where idCampaign=?;";
+        try {
+            this.queryData(query, [now, idCampaign]);
+        }
+        catch (error) {
+            LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
+        }
     }
 }
 exports.default = Database;

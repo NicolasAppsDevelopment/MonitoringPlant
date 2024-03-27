@@ -26,7 +26,7 @@ module.exports = function(app: Express){
         // Traite la requête
         try {
             const currentCampaignId = data.id;
-            sqlConnections.insertLogs(currentCampaignId, 0,"Campagne démarrée","La campagne a été démarrée avec succès.");
+            await sqlConnections.insertLogs(currentCampaignId, 0,"Campagne démarrée","La campagne a été démarrée avec succès.");
             const result = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign=?;", [currentCampaignId]);
             
             const interval=result[0].interval;
