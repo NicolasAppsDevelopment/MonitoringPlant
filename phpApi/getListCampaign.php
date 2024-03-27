@@ -27,12 +27,20 @@ try {
             throw new Exception("Erreur lors du filtrage. Paramètre \"name\" manquant/invalide dans la requête.");
         }
 
-        if (!isset($args["time"]) || !is_string($args["time"])){
-            throw new Exception("Erreur lors du filtrage. Paramètre \"time\" manquant/invalide dans la requête.");
+        if (!isset($args["startTime"]) || !is_string($args["startTime"])){
+            throw new Exception("Erreur lors du filtrage. Paramètre \"startTime\" manquant/invalide dans la requête.");
         }
 
-        if (!isset($args["date"]) || !is_string($args["date"])){
-            throw new Exception("Erreur lors du filtrage. Paramètre \"date\" manquant/invalide dans la requête.");
+        if (!isset($args["startDate"]) || !is_string($args["startDate"])){
+            throw new Exception("Erreur lors du filtrage. Paramètre \"startDate\" manquant/invalide dans la requête.");
+        }
+
+        if (!isset($args["endTime"]) || !is_string($args["endTime"])){
+            throw new Exception("Erreur lors du filtrage. Paramètre \"endTime\" manquant/invalide dans la requête.");
+        }
+
+        if (!isset($args["endDate"]) || !is_string($args["endDate"])){
+            throw new Exception("Erreur lors du filtrage. Paramètre \"endDate\" manquant/invalide dans la requête.");
         }
 
         if (!isset($args["processing"]) || !is_bool($args["processing"])){
@@ -42,8 +50,10 @@ try {
         // Recovery and transmission of measurement campaigns according to filter.
         $reply->replyData($campaignsManager->getListCampaign([
                 "name"=> $args["name"],
-                "time"=>$args["time"],
-                "date"=>$args["date"],
+                "startTime"=>$args["startTime"],
+                "startDate"=>$args["startDate"],
+                "endTime"=>$args["endTime"],
+                "endDate"=>$args["endDate"],
                 "processing"=>$args["processing"]
             ])
         );

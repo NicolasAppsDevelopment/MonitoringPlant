@@ -1,4 +1,4 @@
-let filter = null;
+let currentFilter = null;
 let refreshRepeat = true;
 
 /**
@@ -26,7 +26,7 @@ async function subscribeRefresh() {
     do {
         if (refreshRepeat) {
             // Recovery and display all measurement campaigns according to the current filter.
-            getListCampaignJS(filter, true);
+            getListCampaignJS(currentFilter, true);
         }
         await delay(10000);
     } while (refreshRepeat);
@@ -37,8 +37,8 @@ async function subscribeRefresh() {
  * @param {array} filter Influences which campaigns the function recovers
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
-async function getListCampaignJS(filter_ = null, refreshMode = false) {
-    filter = filter_;
+async function getListCampaignJS(filter = null, refreshMode = false) {
+    currentFilter = filter;
     const campagnesContainer = document.getElementById("CM_container");
     if (refreshMode == false){
         campagnesContainer.innerHTML = `
@@ -52,9 +52,9 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
     }
 
     let data = null;
-    if (filter != null) {
-        //Recovery of measurement campaigns according to filter.
-        data = await phpPost("/phpApi/getListCampaign.php", filter);
+    if (currentFilter != null) {
+        //Recovery of measurement campaigns according to the current filter.
+        data = await phpPost("/phpApi/getListCampaign.php", currentFilter);
     } else {
         //Recovery of all measurement campaigns.
         data = await phpGet("/phpApi/getListCampaign.php");
@@ -139,25 +139,38 @@ async function getListCampaignJS(filter_ = null, refreshMode = false) {
  */
 async function filterCampaigns() {
     const name = document.getElementById("campaign_name_search_bar").value;
-    const date = document.getElementById("campaign_date");
-    const time = document.getElementById("campaign_time");
+    const startDate = document.getElementById("datedebut_choice");
+    const startTime = document.getElementById("heuredebut_choice");
+    const endDate = document.getElementById("datefin_choice");
+    const endTime = document.getElementById("heurefin_choice");
     const processing = document.getElementById("processing").checked;
 
-    if (date.validity.badInput === true) {
+    if (startDate.validity.badInput === true) {
         hideLoading();
-        displayError("Impossible de trier les campagnes", "La date cible n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une date puis réessayez.");
+        displayError("Impossible de trier les campagnes", "La date de début n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une date puis réessayez.");
         return;
     }
-    if (time.validity.badInput === true) {
+    if (startTime.validity.badInput === true) {
         hideLoading();
-        displayError("Impossible de trier les campagnes", "L'heure cible n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        displayError("Impossible de trier les campagnes", "L'heure de début n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        return;
+    }
+
+    if (endDate.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de trier les campagnes", "La date de début n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une date puis réessayez.");
+        return;
+    }
+    if (endTime.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de trier les campagnes", "L'heure de début n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner une heure puis réessayez.");
         return;
     }
 
     closePopup("filter-popup");
 
     //Recovery Recovery all measurement campaigns according to filter's parameters.
-    getListCampaignJS({"name": name.toLowerCase(), "date": date.value, "time": time.value, "processing": processing});
+    getListCampaignJS({"name": name.toLowerCase(), "startDate": startDate.value, "startTime": startTime.value, "endDate": endDate.value, "endTime": endTime.value, "processing": processing});
 }
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB

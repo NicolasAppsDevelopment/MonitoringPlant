@@ -41,14 +41,12 @@
                             <label class="label_field" for="datetime">Date de la campagne de mesure</label>
                             <div class="row_fields gap with_subtitle">
                                 <p>De :</p>
-                                <input class="input_field calendar" id="datedebut_choice" name="date" type="date"
-                                    placeholder="Date">
+                                <input class="input_field calendar" id="datedebut_choice" name="date" type="date" placeholder="Date">
                                 <input class="input_field clock" id="heuredebut_choice" name="time" type="time" placeholder="Heure">
                             </div>
                             <div class="row_fields gap with_subtitle">
                                 <p>À :</p>
-                                <input class="input_field calendar" id="datefin_choice" name="date" type="date"
-                                    placeholder="Date">
+                                <input class="input_field calendar" id="datefin_choice" name="date" type="date" placeholder="Date">
                                 <input class="input_field clock" id="heurefin_choice" name="time" type="time" placeholder="Heure">
                             </div>
                         </div>

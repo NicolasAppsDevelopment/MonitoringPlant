@@ -72,7 +72,7 @@
             <div class="section_head_container">
                 <h2 class="section_head">Accès administrateur</h2>
             </div>
-            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Refaire les questions de sécurités</button>
+            <a class="rect_round_btn gray bottom_gap row_center" href="./setSecurityQuestions.php" >Refaire les questions de sécurités</a>
             <a class="rect_round_btn gray bottom_gap row_center" href="./setPassword.php">Modifier le mot de passe</a>
 
             <div class="section_head_container"></div>
