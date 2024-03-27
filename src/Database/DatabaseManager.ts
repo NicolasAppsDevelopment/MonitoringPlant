@@ -83,8 +83,13 @@ export default class Database {
         }
     }
 
-    async setAlertLevel(idCampaign:number){
-
+    async setAlertLevel(idCampaign:number, alertLevel:number){
+        let query="update Campaigns set alertLevel= ? where idCampaign=?;";
+        try {
+            await this.queryData(query, [alertLevel,idCampaign]);
+        } catch (error) {
+            logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
+        }
     }
 
     async setFinished(idCampaign:number){
