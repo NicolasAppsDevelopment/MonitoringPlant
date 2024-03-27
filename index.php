@@ -8,7 +8,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/functions.js"></script>
-        <script src="./js/setPassword.js"></script>
 
         <title>Connexion</title>
 

@@ -14,6 +14,6 @@ async function setDefaultSettings() {
     hideLoading();
 
     if (data != null) {
-        window.location.href = "setupTime.php";
+        window.location.href = "setPassword.php";
     }
 }

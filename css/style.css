@@ -694,6 +694,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     font-weight: normal;
 }
 
+
 /* Page paramétrage */
 
 #main_paramètre h2 {
@@ -724,11 +725,9 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     margin-top: 0px !important;
 }
 
-/* Les Pages Démarage */
 
 
-
-
+/* Les Pages Démarrage */
 
 .loading_msg {
     margin-top: 10px;
@@ -827,7 +826,7 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     margin-bottom: 20px;
 }
 
-/*  */
+/* Page Liste de Campagnes */
 
 .liste_CM {
     display: flex;
@@ -921,6 +920,76 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     align-items: flex-start;
 }
 
+
+/* Page Aide */
+#list_helps{
+    display: flex;
+    flex-direction: column;
+} 
+
+
+.helpSummary{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 10px;
+    border: solid 1px var(--input_border_color);
+    border-radius: 5px;
+    background-color: var(--input_color);
+    cursor: pointer;
+    position: relative;
+}
+
+.helpSummary:hover {
+    background-color: var(--input_border_color);
+}
+
+.helpSummary ul {
+    display: none;
+}
+
+.summaryElement{
+    flex-direction: column;
+}
+.summaryElement li{
+    margin-bottom: 2%;
+    color:#27BCEB;
+    list-style:none;
+}
+
+
+
+
+.popupHelp > .popup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    opacity: 0;
+    visibility:hidden;
+    transition: 250ms all;
+    
+}
+.open_close-popupHelp > .popup{
+    visibility: none;
+    opacity: 0;
+}
+
+.open_close-popupHelp:checked > .popup{
+    visibility: visible;
+    opacity: 1;
+}
 
 
 /* CHECKBOX SENSOR */
@@ -1965,64 +2034,6 @@ input:invalid::placeholder {
 .hidden {
     display: none;
 } 
-
-
-.helpSummary{
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin-inline: 5%;
-    margin-bottom: 1%;
-    border: solid 1px var(--input_border_color);
-    border-radius: 5px;
-    background-color: var(--input_color);
-    cursor: pointer;
-    position: relative;
-}
-
-.helpSummary ul {
-    display: none;
-}
-
-.summaryElement{
-    flex-direction: column;
-}
-.summaryElement li{
-    margin-bottom: 2%;
-    color:#27BCEB;
-    list-style:none;
-}
-
-
-
-.popupHelp > .popup {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 10;
-    opacity: 0;
-    visibility:hidden;
-    transition: 250ms all;
-    
-}
-.open_close-popupHelp > .popup{
-    visibility: none;
-    opacity: 0;
-}
-
-.open_close-popupHelp:checked > .popup{
-    visibility: visible;
-    opacity: 1;
-}
 
 
 /* Show/Hide password */
