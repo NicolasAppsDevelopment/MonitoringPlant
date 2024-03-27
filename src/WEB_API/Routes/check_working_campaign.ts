@@ -20,7 +20,12 @@ module.exports = function(app: Express){
         // Traite la requête
         try {
             // data.server_id must be send as string or else it will not work
-            const result:number = campaign.getCurrentCampaign();
+            let result;
+            if(campaign.getCurrentCampaign()<0){
+                result = null;
+            }else{
+                result = campaign.getCurrentCampaign;
+            }
 
             const response: any[] = [result];
             res.send({"success": response});

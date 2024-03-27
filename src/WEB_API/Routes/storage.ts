@@ -26,19 +26,19 @@ module.exports = function(app: Express){
                 }
                 let split= stdout.split("\n");
                 let data = split[1].split(" ");
-                let total= parseInt(data[0].replace("kB", ""));
-                var used = parseInt(data[1].replace("kB", ""));
+                let total= parseInt(data[1].replace("kB", ""));
+                var used = parseInt(data[2].replace("kB", ""));
                 var maxHours = ((total - used) / 1497.6);
                 var used_percent = (used / total) * 100.0;
                 maxHours=Math.floor(maxHours);
-                return '{"used":' + used + ', "total": ' + total + '}';
+                return '{"success":true, "used":' + used + ', "total": ' + total + '}';
                 console.log(`stdout: ${stdout}`);
             });
             logger.debug(result);
             if (result == undefined){
                 res.send({"error":"an error occured during the process" });
             }else{
-                const response: any[] = [result];
+                const response: any[] = [result.stdout?.toArray()];
                 res.send({"success": response});
             }
         } catch (error) {

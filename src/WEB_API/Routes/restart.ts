@@ -12,12 +12,6 @@ import { logger } from "../../Logger/LoggerManager";
 */
 module.exports = function(app: Express){
     app.post('/restart', async (req: Request, res: Response) => {
-        
-        let data = req.body;
-        if (data.key == null || data.key!= String ) {
-            res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
-            return;
-        }
 
         // Traite la requête
         try {
