@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initSqlConnections = void 0;
-const dotenv_1 = require("dotenv");
+const loadConfig_1 = require("../Helper/loadConfig");
 const mysql2_1 = __importDefault(require("mysql2"));
 const LoggerManager_1 = require("../Logger/LoggerManager");
 class Database {
@@ -15,7 +15,19 @@ class Database {
     open() {
         LoggerManager_1.logger.info("Ouverture d'une nouvelle connexion à la base de données.");
         // Chargement des variables d'environnement
-        (0, dotenv_1.config)();
+        (0, loadConfig_1.loadConfig)();
+        if (!process?.env?.DATABASE_HOST) {
+            throw new Error("L'hôte de la base de données n'est pas défini dans le fichier .env");
+        }
+        if (!process?.env?.DATABASE_USER_NAME) {
+            throw new Error("Le nom d'utilisateur de la base de données n'est pas défini dans le fichier .env");
+        }
+        if (!process?.env?.DATABASE_NAME) {
+            throw new Error("Le nom de la base de données n'est pas défini dans le fichier .env");
+        }
+        if (!process?.env?.DATABASE_PASSWORD) {
+            throw new Error("Le mot de passe de la base de données n'est pas défini dans le fichier .env");
+        }
         if (this.connection !== null)
             return this;
         this.connection = mysql2_1.default.createPool({

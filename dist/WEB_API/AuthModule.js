@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuth = void 0;
-const dotenv_1 = require("dotenv");
+const loadConfig_1 = require("../Helper/loadConfig");
+const LoggerManager_1 = require("../Logger/LoggerManager");
 // Chargement des variables d'environnement
-(0, dotenv_1.config)();
+(0, loadConfig_1.loadConfig)();
+if (!process?.env?.API_TOKEN) {
+    throw new Error("Le token de l'API n'est pas défini dans le fichier .env");
+}
 async function isAuth(req, res, next) {
     // Vérifie la présence d'un token
     let tokenCredential = req.headers.authorization;
@@ -25,6 +29,7 @@ async function isAuth(req, res, next) {
         }
         else {
             // Pas bon
+            LoggerManager_1.logger.warn(process.env.API_TOKEN);
             res.status(401).send({ "error": "L'autorisation a échoué." });
             return;
         }
