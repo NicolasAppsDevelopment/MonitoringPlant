@@ -1,4 +1,3 @@
-import { sqlConnections } from '../Database/DatabaseManager';
 import { NextFunction, Request, Response } from 'express';
 import { loadConfig } from "../Helper/loadConfig";
 import { logger } from '../Logger/LoggerManager';

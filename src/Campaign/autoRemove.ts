@@ -1,5 +1,4 @@
 import { sqlConnections} from "../Database/DatabaseManager";
-import { Worker } from 'worker_threads';
 import { expose } from "threads/worker"
 
 export default class AutoRemove{

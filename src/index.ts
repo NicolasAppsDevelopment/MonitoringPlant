@@ -1,10 +1,8 @@
 import { startAPI } from "./WEB_API/WebAPI";
-import { initSqlConnections,  sqlConnections} from "./Database/DatabaseManager";
+import { initSqlConnections } from "./Database/DatabaseManager";
 import { initLogger, logger } from "./Logger/LoggerManager";
 import { initTcpConnection} from "./Tcp/TcpManager";
-import {campaign} from "./Campaign/RunCampaign";
-import AutoRemove, {initAutoRemove} from "./Campaign/AutoRemove"
-import { spawn, Thread, Worker } from "threads"
+import { spawn, Worker } from "threads"
 
 //Sleep 10s au redémarrage rasp pi.
 initLogger(); // initialise le logger
