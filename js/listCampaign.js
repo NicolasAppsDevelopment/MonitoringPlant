@@ -173,6 +173,34 @@ async function filterCampaigns() {
     getListCampaignJS({"name": name.toLowerCase(), "startDate": startDate.value, "startTime": startTime.value, "endDate": endDate.value, "endTime": endTime.value, "processing": processing});
 }
 
+/**
+ * Resets all filter parameters
+ */
+async function resetFilter(){
+    let name = document.getElementById("campaign_name_search_bar");
+    let startDate = document.getElementById("datedebut_choice");
+    let startTime = document.getElementById("heuredebut_choice");
+    let endDate = document.getElementById("datefin_choice");
+    let endTime = document.getElementById("heurefin_choice");
+    let processing = document.getElementById("processing");
+    let success = document.getElementById("success");
+    let error = document.getElementById("error");
+    let warn = document.getElementById("warn");
+
+    console.log("reset");
+
+    name.value='';
+    startDate.value='';
+    startTime.value='';
+    endDate.value='';
+    endTime.value='';
+    processing.checked=false;
+    success.checked=false;
+    error.checked=false;
+    warn.checked=false;
+
+} 
+
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB
 const MEASUREMENTS_SIZE_PER_LINE = 0.46; // In KB
 let used = 0; // In KB
