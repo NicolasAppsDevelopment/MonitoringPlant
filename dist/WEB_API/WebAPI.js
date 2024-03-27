@@ -22,10 +22,6 @@ const startAPI = async () => {
     if (!port) {
         throw new Error("Le port de l'API n'est pas défini dans le fichier .env");
     }
-    const host = process?.env?.API_HOST;
-    if (!host) {
-        throw new Error("Le nom d'hôte de l'API n'est pas défini dans le fichier .env");
-    }
     app.use((0, cors_1.default)());
     app.use(express_1.default.json());
     app.use(AuthModule_1.isAuth);
@@ -34,8 +30,8 @@ const startAPI = async () => {
     for (let route of routes) {
         require((0, node_path_1.join)(path_str, route))(app);
     }
-    app.listen(+port, host, () => {
-        LoggerManager_1.logger.info(`⚡️ Server is running at http://${host}:${port}`);
+    app.listen(+port, () => {
+        LoggerManager_1.logger.info(`⚡️ Server is running on port ${port}`);
     });
 };
 exports.startAPI = startAPI;

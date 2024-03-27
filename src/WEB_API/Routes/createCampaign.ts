@@ -4,6 +4,7 @@ import {tcpConnection} from "../../Tcp/TcpManager";
 import { fail } from 'assert';
 import Calibration from '../../Campaign/Calibration';
 import RunCampaign, { campaign } from '../../Campaign/RunCampaign';
+import { logger } from "../../Logger/LoggerManager";
 
 
 /*
@@ -38,7 +39,7 @@ module.exports = function(app: Express){
             try {
                 await tcpConnection.calibrateModule(calibration);
             } catch (error) {
-                
+                logger.error(error);
             }
             
    
