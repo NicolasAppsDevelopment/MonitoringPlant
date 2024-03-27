@@ -187,8 +187,6 @@ async function resetFilter(){
     let error = document.getElementById("error");
     let warn = document.getElementById("warn");
 
-    console.log("reset");
-
     name.value='';
     startDate.value='';
     startTime.value='';
