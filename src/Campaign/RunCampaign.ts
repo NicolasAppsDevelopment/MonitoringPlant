@@ -6,21 +6,23 @@ import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
 import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 
 
- /**
-  * @currentCampaignId : id of the running campaign
-  * @numberOfMeasureLeft : the number of measure to register in the campaign
-  * @interval : the interval between two measurements in milliseconds
-  * @duration : the total duration of the campaign in seconds
-  * @isCampaignRunning : boolean that signal if a campaign is currently running
+ 
+export default class RunCampaign {
+    /**
+  * @param currentCampaignId - id of the running campaign
+  * @param numberOfMeasureLeft - the number of measure to register in the campaign
+  * @param interval - the interval between two measurements in milliseconds
+  * @param duration - the total duration of the campaign in seconds
+  * @param isCampaignRunning - boolean that signal if a campaign is currently running
   * 
-  * @o2SensorState is the o2 sensor used in this campaign ?
-  * @co2SensorState is the co2 sensor used in this campaign ?
-  * @humiditySensorState is the humidity sensor used in this campaign ?
-  * @luminositySensorState is the luminosity sensor used in this campaign ?
-  * @temperature2SensorState is the temperature sensor used in this campaign ?
+  * @param o2SensorState - is the o2 sensor used in this campaign
+  * @param co2SensorState - is the co2 sensor used in this campaign
+  * @param humiditySensorState - is the humidity sensor used in this campaign
+  * @param luminositySensorState - is the luminosity sensor used in this campaign
+  * @param temperature2SensorState - is the temperature sensor used in this campaign
   * 
   */
-export default class RunCampaign {
+
     private currentCampaignId: number;
     private numberOfMeasureLeft: number;
     private interval: number;
@@ -46,7 +48,13 @@ export default class RunCampaign {
         this.luminositySensorState = false;
         this.temperature2SensorState = false;
     }
-
+/**
+ * Initialiaze the parameters of the class
+ * @param currentCampaignId : number 
+ * @param duration : number
+ * @param interval : number
+ * @param sensorState : a JSON that contains the used data about the 5 sensors. The json contains booleans.
+ */
     initCampaign(currentCampaignId:number,duration:number,interval:number,sensorState:any){
         this.currentCampaignId = currentCampaignId;
         this.numberOfMeasureLeft = duration / interval * 1000;
@@ -61,7 +69,7 @@ export default class RunCampaign {
         this.runCampaign();
     }
 
-    getCurrentCampaign():number{
+    getCurrentCampaignId():number{
         return this.currentCampaignId;
     }
 
@@ -120,6 +128,12 @@ export default class RunCampaign {
         await this.endCampaign(false, "La campagne s\'est terminé avec succès.");
     }
 
+    /**
+     * update the parameters of the campaign to make it stop depending of the parameters given.
+     * @param isError boolean - if true planned ending else emergency stop
+     * @param message string - the message to insert in logs
+     * @returns Promise<void>
+     */
     private async endCampaign(isError: boolean, message: string){
         if (!this.isRunning()){
             logger.warn("endCampaign function fired without any campaign running!");
@@ -140,6 +154,11 @@ export default class RunCampaign {
         this.endCampaign(false, "La campagne a bien été stoppé suite à votre demande.");
     }
 
+    /**
+     * Start an existing campagn by updating it's parameter and launching runCampaign()
+     * @param campaignId number -  id of the campaign to restart in the database
+     * @returns Promise <boolean>
+     */
     async restartCampaign(campaignId:number){
         try{
             const campaignData = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [campaignId]);
@@ -198,6 +217,10 @@ export default class RunCampaign {
 
     }
 
+    /**
+     * Update the parameter of a campaign already running. 
+     * @param idCampaign number - id of the campaign which was deleted from the database
+     */
     removeCampaign(idCampaign:number){
         if(this.isRunning() && this.currentCampaignId == idCampaign ){
             this.currentCampaignId = -1;
@@ -206,8 +229,15 @@ export default class RunCampaign {
     }
 
     async insertData(){
-        const m = await tcpConnection.getMeasure();
+        const data = await tcpConnection.getMeasure();
+        let request = this.buildInsertSensorDataRequest(data);
+        try {
+            await sqlConnections.queryData(request);
+        } catch (error) {
+            
+        }
     }
+
 
     buildInsertSensorDataRequest(sensorData: TcpDaemonMeasurement): string {
         let date:Date=new Date();
