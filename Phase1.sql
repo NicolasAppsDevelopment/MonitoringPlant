@@ -7,6 +7,8 @@ drop table if exists Logs;
 drop table if exists Campaigns;
 drop table if exists Settings;
 drop table if exists Configurations;
+drop table if exists Questions;
+drop table if exists Users;
 
 /*==============================================================*/
 /* Table : Configurations                                            */
