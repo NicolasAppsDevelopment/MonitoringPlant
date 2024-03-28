@@ -49,9 +49,8 @@ function NodeJsGet(string $name)
 
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_FAILONERROR, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query([]));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: ' . $NODE_JS_API_TOKEN]);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, ['Authorization: ' . $NODE_JS_API_TOKEN]);
 
     $res = curl_exec($curl);
     if (curl_errno($curl)) {
