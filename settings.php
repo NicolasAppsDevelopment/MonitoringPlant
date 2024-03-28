@@ -55,16 +55,16 @@
             </div>
 
             <div class="label_img_input no-margin-top">
-                <label class="label_field" for="network">Nom du WIFI</label>
-                <input class="input_field edit" id="network" name="network" type="text" placeholder="Nom" autocomplete="off" minlength="1">
+                <label class="label_field" for="network_ssid">Nom du WIFI</label>
+                <input class="input_field edit" id="network_ssid" name="network_ssid" type="text" placeholder="Nom" autocomplete="off" minlength="1">
             </div>
 
-            <label class="label_field" for="password">Mot de passe du WIFI</label>
+            <label class="label_field" for="network_password">Mot de passe du WIFI</label>
             <div class="label_img_input no-margin-top password-input">
                 <span class="btn-show-pass" id="btn-show-pass">
-                  <i class="btn-eye btn-eye-show" onclick="displayHide(this, 'password')"></i>
+                  <i class="btn-eye btn-eye-show" onclick="displayHide(this, 'network_password')"></i>
                 </span>
-                <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
+                <input class="input_field btn-show key" id="network_password" name="network_password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
             </div>
 
             <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Récupérer le QR code</button>

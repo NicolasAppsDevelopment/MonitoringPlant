@@ -5,19 +5,13 @@ async function getSettings()
 {
     displayLoading("Récupération des paramètres...");
 
-    //Print the wifi name
-    const accesPoint = await NODERED_get("/getAccessPoint");
-    let network = document.getElementById("network");
-    network.value=accesPoint["name"];
-
-    
     const settings = await phpGet("/phpApi/getSettings.php");
     if (settings != null){
         if (settings["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
         }else{
             document.getElementById("auto_suppr").checked=false;
-        }     
+        }
         
         const timeSettings = getReadableTimeAndUnit(settings["removeInterval"]);
         let timeConservation = document.getElementById("conserv");
@@ -27,6 +21,12 @@ async function getSettings()
         if(timeConservationUnit){
             timeConservationUnit.setAttribute('selected','selected');
         }
+
+        let networkSsid = document.getElementById("network_ssid");
+        networkSsid.value=settings["ssid"];
+
+        let networkPassword = document.getElementById("network_password");
+        networkPassword.value=settings["password"];
     }
 
     hideLoading();

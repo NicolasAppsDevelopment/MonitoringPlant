@@ -53,7 +53,7 @@ try {
         if($arguments["network"]!=null && $arguments["network"]!=NodeJsGet("getAccessPoint")){
             if(strlen($arguments["network"])<=32 && strlen($arguments["network"])>0){
                 if(preg_match('/^[a-zA-Z0-9\s\-_]+$/',$arguments["network"])){
-                    NodeJsPost("setAccessPoint",array('network' => $arguments["network"],'key' =>"I_do_believe_I_am_on_fire"));
+                    NodeJsPost("setAccessPoint",array('ssid' => $arguments["network"])); // TODO: change password à ajouter
                 }else{
                     throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
                 }

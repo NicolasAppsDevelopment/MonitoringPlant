@@ -1,5 +1,5 @@
 <?php
-
+include_once '../include/NodeJsApi.php';
 include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';
@@ -17,7 +17,12 @@ try {
             throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
         }
 
-        $reply->replyData($settingsManager->getSettings());
+        $data = $settingsManager->getSettings();
+        $network = NodeJsGet("getAccessPoint")["data"];
+        $data["ssid"] = $network["ssid"];
+        $data["password"] = $network["password"];
+
+        $reply->replyData($data);
 
     } else {
         throw new Exception("La méthode de requête est incorrecte.");
