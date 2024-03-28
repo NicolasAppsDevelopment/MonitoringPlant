@@ -106,7 +106,7 @@ export default class Database {
 
 }
 
-// gloabal declaration for main process ONLY !
+// gloabal declaration
 export declare var sqlConnections: Database;
 
 export function initSqlConnections() {

@@ -74,7 +74,14 @@ class Database {
             LoggerManager_1.logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
         }
     }
-    async setAlertLevel(idCampaign) {
+    async setAlertLevel(idCampaign, alertLevel) {
+        let query = "update Campaigns set alertLevel= ? where idCampaign=?;";
+        try {
+            await this.queryData(query, [alertLevel, idCampaign]);
+        }
+        catch (error) {
+            LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
+        }
     }
     async setFinished(idCampaign) {
         let now = new Date();

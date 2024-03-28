@@ -1,9 +1,8 @@
 import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
-import {tcpConnection} from "../../Tcp/TcpManager";
-import { fail } from 'assert';
+import { tcpConnection } from "../../Tcp/TcpManager";
 import Calibration from '../../Campaign/Calibration';
-import RunCampaign, { campaign } from '../../Campaign/RunCampaign';
+import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
 import { logger } from "../../Logger/LoggerManager";
 
 
@@ -23,13 +22,17 @@ module.exports = function(app: Express){
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
             return;
         }
+
         // Traite la requête
         try {
+            if (campaignRunner.isRunning()) {
+                throw new Error("Une campagne est déjà en cours d'éxecution.");
+            }
+
             const currentCampaignId = data.id;
-            await sqlConnections.insertLogs(currentCampaignId, 0,"Campagne démarrée","La campagne a été démarrée avec succès.");
             const result = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign=?;", [currentCampaignId]);
             
-            const interval=result[0].interval;
+            const interval=result[0].interval_; // DO NOT FORGET "_" !!
             const duration=result[0].duration;
             const configNumber=result[0].idConfig;
             const sensorSelected={
@@ -39,16 +42,11 @@ module.exports = function(app: Express){
                 "light":result[0].luminositySensorState,
                 "temperature":result[0].temperatureSensorState};
 
-            let calibration=await new Calibration(configNumber,currentCampaignId);
-            
-            try {
-                await tcpConnection.calibrateModule(calibration);
-            } catch (error) {
-                logger.error(error);
-            }
+            let calibration = await new Calibration(configNumber, currentCampaignId);
+            await tcpConnection.calibrateModule(calibration);
             
             //creation of a new thread
-            campaign.initCampaign(currentCampaignId,duration,interval,sensorSelected);
+            campaignRunner.initCampaign(currentCampaignId,duration,interval,sensorSelected);
 
             const response: any[] = ["coucou"];
             res.send({"success": response});

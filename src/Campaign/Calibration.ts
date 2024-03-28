@@ -62,12 +62,12 @@ export default class Calibration {
         this.enableFiboxTemp=campaignData[0].enableFiboxTemp;
     }
 
-    buildTCPCommand():string{
-        let command:string= " "+this.altitude+" "+this.f1+" "+this.m+" "+this.dphi1+" "+this.dphi2+" "+this.dksv1+" "+this.dksv2;
-        command += " "+this.pressure+" "+this.cal0+" "+this.cal2nd+" "+this.t0+" "+this.t2nd+" "+this.o2cal2nd+" "+this.calib_is_humid;
-        command+= " "+this.humidMode+" "+this.enableFiboxTemp;
+    buildTCPCommandArgs(): string {
+        let args: string = " "+this.altitude+" "+this.f1+" "+this.m+" "+this.dphi1+" "+this.dphi2+" "+this.dksv1+" "+this.dksv2;
+        args += " " + this.pressure + " " + this.cal0 + " " + this.cal2nd+" "+this.t0+" "+this.t2nd+" "+this.o2cal2nd+" "+this.calib_is_humid;
+        args += " " + this.humidMode + " " + this.enableFiboxTemp;
 
-        return command;
+        return args;
     }
 
     getCalibNumber():number{

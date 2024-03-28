@@ -1,6 +1,6 @@
 import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
-import { campaign } from '../../Campaign/RunCampaign';
+import { campaignRunner } from '../../Campaign/RunCampaign';
 /*
     URL : /test
     METHODE : POST
@@ -22,8 +22,8 @@ module.exports = function(app: Express){
         try {
             // data.server_id must be send as string or else it will not work
             const sid = data.id;
-            if (sid == campaign.getCurrentCampaign){
-                campaign.stopCampaign();
+            if (sid == campaignRunner.getCurrentCampaign){
+                campaignRunner.stopCampaign();
             }else{
                 res.status(400).send({"error": "wrong campaign number"});
             }

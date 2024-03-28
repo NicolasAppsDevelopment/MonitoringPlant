@@ -1,5 +1,6 @@
 import { sqlConnections } from "../Database/DatabaseManager";
 import { logger } from "../Logger/LoggerManager";
+import { sleep } from "../Helper/sleep";
 
 export async function startAutoRemoveLoop() {
     logger.info("Auto remove process loop started");
@@ -16,6 +17,6 @@ export async function startAutoRemoveLoop() {
             logger.error("Exception in the auto remove process loop: " + error);
         }
     
-        await new Promise(f => setTimeout(f, 60000))
+        await sleep(60000);
     };
 }

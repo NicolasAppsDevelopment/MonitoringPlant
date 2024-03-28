@@ -38,29 +38,30 @@ export default class TcpManager{
             logger.info('Connxion TCP établi.');
         });
         this.client.on('data', (message:string) => {
-            let answer = new TcpDaemonAnswer(message); 
+            console.log("raw: " + message);
+            let answer = new TcpDaemonAnswer(message);
             this.answerListeners.get(answer.id)?.emit("response", answer);
         });
     }
 
     async getMeasure() {
-        return this.sendCommand('GET_MEASURE');
+        return await this.sendCommand('GET_MEASURE');
     }
 
     async closeConnection() {
-        return this.sendCommand('CLOSE');
+        return await this.sendCommand('CLOSE');
     }
     
     async resetModule() {
-        return this.client.write('RESET');
+        return await this.sendCommand('RESET');
     }
 
     async calibrateModule(calibration: Calibration) {
-        return this.client.write('SET_CONFIG');
+        return await this.sendCommand('SET_CONFIG' + calibration.buildTCPCommandArgs());
     }
 
     async getErrors() {
-        return this.client.write('GET_ERRORS');
+        return await this.sendCommand('GET_ERRORS');
     }
 
     async sendCommand(query: string): Promise<any> {
@@ -90,7 +91,7 @@ export default class TcpManager{
     }
 }
 export function initTcpConnection(){
-    let tcpConnection = new TcpManager();
+    tcpConnection = new TcpManager();
     tcpConnection.startconnection();
 }
 export declare var tcpConnection: TcpManager;

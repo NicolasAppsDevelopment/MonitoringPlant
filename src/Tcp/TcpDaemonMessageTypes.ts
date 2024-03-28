@@ -8,8 +8,12 @@ export class TcpDaemonAnswer {
     constructor(message: string) {
         let answer = JSON.parse(message);
         this.id = answer.id;
-        this.response = answer.data;
-        this.error = answer.success;
+        this.error = !answer.success;
+        if (this.error) {
+            this.response = answer.error;
+        } else {
+            this.response = answer.data;
+        }
     }
 }
 
