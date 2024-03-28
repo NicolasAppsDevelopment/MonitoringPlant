@@ -122,6 +122,13 @@ export default class RunCampaign {
 
     }
 
+    removeCampaign(idCampaign:number){
+        if(this.isRunning() && this.currentCampaignId==idCampaign ){
+            this.currentCampaignId=-1;
+            this.isCampaignRunning=false;
+        }
+    }
+
     async insertData(){
         const m = await tcpConnection.getMeasure();
     }
