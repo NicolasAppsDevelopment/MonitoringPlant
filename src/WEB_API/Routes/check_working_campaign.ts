@@ -20,7 +20,7 @@ module.exports = function(app: Express){
             if (campaignRunner.isRunning()) {
                 result = null;
             } else {
-                result = campaignRunner.getCurrentCampaign();
+                result = campaignRunner.getCurrentCampaignId();
             }
 
             const response: any[] = [result];

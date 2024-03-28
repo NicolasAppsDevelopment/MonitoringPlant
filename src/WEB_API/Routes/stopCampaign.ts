@@ -22,7 +22,7 @@ module.exports = function(app: Express){
         try {
             // data.server_id must be send as string or else it will not work
             const sid = data.id;
-            if (sid == campaignRunner.getCurrentCampaign){
+            if (sid == campaignRunner.getCurrentCampaignId){
                 campaignRunner.stopCampaign();
             }else{
                 res.status(400).send({"error": "wrong campaign number"});
