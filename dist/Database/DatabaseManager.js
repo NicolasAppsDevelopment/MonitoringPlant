@@ -64,11 +64,10 @@ class Database {
             });
         });
     }
-    async insertLogs(idCampaign, state, title, msg) {
-        let now = new Date();
+    async insertLogs(idCampaign, state, title, msg, date = new Date()) {
         let query = "insert into Logs values(?,?, ?,? ,?);";
         try {
-            await this.queryData(query, [idCampaign, state, title, msg, now]);
+            await this.queryData(query, [idCampaign, state, title, msg, date]);
         }
         catch (error) {
             LoggerManager_1.logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);

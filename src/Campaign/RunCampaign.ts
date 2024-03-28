@@ -2,8 +2,8 @@ import { sqlConnections } from '../Database/DatabaseManager';
 import {tcpConnection} from "../Tcp/TcpManager";
 import { logger } from "../Logger/LoggerManager";
 import { sleep, sleepUntil } from "../Helper/sleep";
-import { TcpDaemonMeasurement } from 'src/Tcp/TcpCommandAnswerTypes';
-import { TcpDaemonAnswerError } from 'src/Tcp/TcpDaemonMessageTypes';
+import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
+import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 
 
 export default class RunCampaign {
@@ -103,7 +103,7 @@ export default class RunCampaign {
     }
 
     private async endCampaign(isError: boolean, message: string){
-        if (!this.isCampaignRunning){
+        if (!this.isRunning()){
             logger.warn("endCampaign function fired without any campaign running!");
             return;
         }
@@ -114,7 +114,7 @@ export default class RunCampaign {
         await sqlConnections.setAlertLevel(this.currentCampaignId, logLevel);
         await sqlConnections.setFinished(this.currentCampaignId);
         await sqlConnections.insertLogs(this.currentCampaignId, logLevel, logTitle, message);
-        this.currentCampaignId=-1;
+        this.currentCampaignId = -1;
         this.isCampaignRunning = false;
     }
 
