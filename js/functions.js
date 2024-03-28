@@ -1,6 +1,5 @@
-const API_IP_ADDRESS = "localhost";
-const PHP_API_PORT = "8080";
-const NODERED_API_PORT = "1880";
+const API_IP_ADDRESS = "91.160.147.139";
+const PHP_API_PORT = "38080";
 
 let blurCompatibility = true;
 
@@ -334,7 +333,6 @@ async function phpPostGetFile(url, settings) {
     return await postGetFile("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
 } 
 
-
 /**
  * Sends a request to retrieve data from an url address linked to a php file.
  * @param {String} url Where the data are
@@ -342,25 +340,6 @@ async function phpPostGetFile(url, settings) {
  */
 async function phpGet(url) { 
     return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url);
-} 
-
-/**
- * Sends a request to retrieve data from an url address linked to NodeRed and the data retrieval depends on the settings.
- * @param {String} url Where the data are
- * @param {Object} settings Data recovery settings
- * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
- */
-async function NODERED_post(url, settings) {
-    return await post("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url, settings);
-} 
-
-/**
- * Sends a request to retrieve data from an url address linked to NodeRed.
- * @param {String} url Where the data are
- * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
- */
-async function NODERED_get(url) {
-    return await get("http://" + API_IP_ADDRESS + ":" + NODERED_API_PORT + url);
 } 
 
 /**

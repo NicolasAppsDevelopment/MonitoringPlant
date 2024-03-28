@@ -447,9 +447,7 @@ async function stopCampagne() {
             "id": id
         });
 
-        if (data == null) {
-            console.warn("ATTENTION : NodeRed n'a rien retourné");
-        } else {
+        if (data != null) {
             document.getElementById("refresh_form").submit();
         }
 
