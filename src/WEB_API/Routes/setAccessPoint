@@ -14,7 +14,7 @@ module.exports = function(app: Express){
     app.post('/setAccessPoint', async (req: Request, res: Response) => {
         let data = req.body;
         
-        if (data.ssid == null || typeof data.ssid != "string" || data.password == null || typeof data.password != "string") {
+        if ((data.ssid == null || typeof data.ssid != "string") && (data.password == null || typeof data.password != "string")) {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
             return;
         }
@@ -34,9 +34,9 @@ module.exports = function(app: Express){
                 let lines = data.split('\n');
                 let newLines: string[] = [];
                 lines.forEach((line) => {
-                    if (line.startsWith('ssid=')) {
+                    if (line.startsWith('ssid=') && ssid != null) {
                         newLines.push('ssid=' + ssid);
-                    } else if (line.startsWith('wpa_passphrase=')) {
+                    } else if (line.startsWith('wpa_passphrase=') && password != null) {
                         newLines.push('wpa_passphrase=' + password);
                     } else {
                         newLines.push(line);

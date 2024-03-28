@@ -10,7 +10,7 @@ import * as fs from 'fs';
     DESCRIPTION : test de la connexion
 */
 module.exports = function(app: Express){
-    app.get('/check_working_campaign', async (req: Request, res: Response) => {
+    app.get('/getAccessPoint', async (req: Request, res: Response) => {
         // Traite la requête
         try {
             // get the password and ssid of the current access point by reading the hostapd file
