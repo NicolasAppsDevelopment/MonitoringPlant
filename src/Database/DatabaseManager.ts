@@ -73,11 +73,10 @@ export default class Database {
         });
     }
 
-    async insertLogs(idCampaign:number,state:number,title:string,msg:string) {
-        let now:Date = new Date();
+    async insertLogs(idCampaign:number,state:number,title:string,msg:string, date: Date = new Date()) {
         let query:string = "insert into Logs values(?,?, ?,? ,?);";
         try {
-            await this.queryData(query,[idCampaign,state,title,msg,now]);
+            await this.queryData(query,[idCampaign,state,title,msg,date]);
         } catch (error) {
             logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
         }

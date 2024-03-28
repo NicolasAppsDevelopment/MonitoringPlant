@@ -47,7 +47,7 @@ module.exports = function(app: Express){
             
             //creation of a new thread
             campaignRunner.initCampaign(currentCampaignId,duration,interval,sensorSelected);
-
+            
             const response: any[] = ["coucou"];
             res.send({"success": response});
         } catch (error) {
