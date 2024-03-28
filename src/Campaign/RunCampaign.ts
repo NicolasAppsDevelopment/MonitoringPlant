@@ -122,14 +122,34 @@ export default class RunCampaign {
         this.endCampaign(false, "La campagne a bien été stoppé suite à votre demande.");
     }
 
-    async restartCampaign(){
+    async restartCampaign(campaignId:number){
+        try{
+            const campaignData = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [campaignId]);
+            if(!this.isCampaignRunning){
+                const sensorSelected={
+                    "O2":campaignData[0].O2SensorState,
+                    "CO2":campaignData[0].CO2SensorState,
+                    "humidity":campaignData[0].humiditySensorState,
+                    "light":campaignData[0].luminositySensorState,
+                    "temperature":campaignData[0].temperatureSensorState};
+
+                    await sqlConnections.queryData("update Campaigns set finished = 0 where idCampaign= ? ", [campaignId]);
+                    await sqlConnections.queryData("update Campaigns set alertLevel = 0 where idCampaign= ? ", [campaignId]);
+
+                this.initCampaign(campaignId, campaignData[0].duration, campaignData[0].duration, sensorSelected);
+
+                return true;
+            }
+        }catch(error){
+            return false;
+        }
 
     }
 
     removeCampaign(idCampaign:number){
-        if(this.isRunning() && this.currentCampaignId==idCampaign ){
-            this.currentCampaignId=-1;
-            this.isCampaignRunning=false;
+        if(this.isRunning() && this.currentCampaignId == idCampaign ){
+            this.currentCampaignId = -1;
+            this.isCampaignRunning = false;
         }
     }
 

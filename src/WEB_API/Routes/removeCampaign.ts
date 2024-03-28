@@ -18,9 +18,8 @@ module.exports = function(app: Express){
             return;
         }
         // Traite la requête
-
-            campaignRunner.removeCampaign(data.id);
-            res.send({"success": "true"});
+        campaignRunner.removeCampaign(data.id);
+        res.send({"success": "true"});
     });
 
         
