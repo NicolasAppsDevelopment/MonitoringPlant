@@ -1,7 +1,7 @@
 import { startAPI } from "./WEB_API/WebAPI";
 import { initSqlConnections } from "./Database/DatabaseManager";
 import { initLogger, logger } from "./Logger/LoggerManager";
-import { initTcpConnection} from "./Tcp/TcpManager";
+import { initTcpConnection, tcpConnection} from "./Tcp/TcpManager";
 import { startAutoRemoveLoop } from "./Campaign/autoRemove";
 import { initCampaignRunner } from "./Campaign/RunCampaign";
 import { sleep } from "./Helper/sleep";

@@ -81,7 +81,7 @@ export default class TcpManager{
 
             answerListener.on("response", (answer: TcpDaemonAnswer) => {
                 clearTimeout(timeoutCallback); // Clear the timeout if a response is received
-                if (!answer.success) {
+                if (answer.success) {
                     this.answerListeners.delete(answer.id);
                     resolve(answer.response);
                 } else {
