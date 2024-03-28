@@ -4,7 +4,7 @@ import { loadConfig } from "../Helper/loadConfig";
 import { EventEmitter } from "events";
 import { TcpDaemonRequest, TcpDaemonAnswer } from "./TcpDaemonMessageTypes";
 import Calibration from "../Campaign/Calibration";
-import { TcpDaemonError, TcpDaemonMeasurement } from "./TcpCommandAnswerTypes";
+import { TcpDaemonGetError, TcpDaemonMeasurement } from "./TcpCommandAnswerTypes";
 
 export default class TcpManager{
     private answerListeners: Map<string, EventEmitter>;
@@ -61,7 +61,7 @@ export default class TcpManager{
         return await this.sendCommand('SET_CONFIG' + calibration.buildTCPCommandArgs());
     }
 
-    async getErrors(): Promise<TcpDaemonError[]> {
+    async getErrors(): Promise<TcpDaemonGetError[]> {
         return await this.sendCommand('GET_ERRORS');
     }
 
@@ -81,11 +81,11 @@ export default class TcpManager{
 
             answerListener.on("response", (answer: TcpDaemonAnswer) => {
                 clearTimeout(timeoutCallback); // Clear the timeout if a response is received
-                if (!answer.error) {
+                if (!answer.success) {
                     this.answerListeners.delete(answer.id);
                     resolve(answer.response);
                 } else {
-                    reject(new Error(answer.response));
+                    reject(answer.error!);
                 }
             });
         });

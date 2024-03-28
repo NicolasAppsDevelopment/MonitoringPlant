@@ -1,4 +1,4 @@
-export class TcpDaemonError {
+export class TcpDaemonGetError {
     date: Date;
     message: string;
     

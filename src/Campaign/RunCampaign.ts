@@ -3,6 +3,7 @@ import {tcpConnection} from "../Tcp/TcpManager";
 import { logger } from "../Logger/LoggerManager";
 import { sleep, sleepUntil } from "../Helper/sleep";
 import { TcpDaemonMeasurement } from 'src/Tcp/TcpCommandAnswerTypes';
+import { TcpDaemonAnswerError } from 'src/Tcp/TcpDaemonMessageTypes';
 
 
 export default class RunCampaign {
@@ -64,37 +65,40 @@ export default class RunCampaign {
 
             try {
                 const measures = await tcpConnection.getMeasure();
-                console.log(measures);
                 const insertDataRequest = this.buildInsertSensorDataRequest(measures);
                 await sqlConnections.queryData(insertDataRequest);
             } catch (error) {
-                logger.error(error);
-                if(error == "Le dispositif de mesure a probablement été intérrompu à la suite d'une erreur. Pour plus d'information, consultez les erreurs avec GET_ERRORS puis tentez de le réinitialiser avec RESET.") {
-                    const warnings = await tcpConnection.getErrors();
-                    await sqlConnections.insertLogs(this.currentCampaignId,3,"Erreur du module de mesure", warnings[0].message, warnings[1].date);
-                    
-                    warnings.forEach(warn => {
-                        logger.warn(warn.date + " -> " + warn.message);
-                    });
-                    
-                    if(this.nbReset >= 2){
-                        await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
-                        return;
+                logger.error("runCampaign: error while getting measure. " + error);
+
+                if (error instanceof TcpDaemonAnswerError) {
+                    switch (error.code) {
+                        case 1: // Driver module initialization error
+                            logger.warn("Init not finished.");
+                            break;
+
+                        case 2: // Sensor module initialization/processing error
+                            const warnings = await tcpConnection.getErrors();
+                            await sqlConnections.insertLogs(this.currentCampaignId,3,"Erreur du module de mesure", warnings[0].message, warnings[1].date);
+                            
+                            if(this.nbReset >= 2){
+                                await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
+                                return;
+                            }
+        
+                            await tcpConnection.resetModule();
+                            this.nbReset++;
+        
+                            await sqlConnections.insertLogs(this.currentCampaignId,3,"Réinitilisation du module de mesure","Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
+                            break;
+
+                        default:
+                            logger.warn("Erreur inconnue du module de mesure. Code non répertorié.");
                     }
-
-                    await tcpConnection.resetModule();
-                    this.nbReset++;
-
-                    await sqlConnections.insertLogs(this.currentCampaignId,3,"Réinitilisation du module de mesure","Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
-                } else if (error == "Le dispositif de mesure n'a fini de s'initialiser."){
-                    logger.warn(error);
                 }
                 nextLoopMillis = new Date().getTime() + 2500;
             }
-
             await sleepUntil(nextLoopMillis);
         }
-
         await this.endCampaign(false, "La campagne s\'est terminé avec succès.");
     }
 
