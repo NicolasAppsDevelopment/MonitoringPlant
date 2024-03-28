@@ -4,6 +4,7 @@ import { loadConfig } from "../Helper/loadConfig";
 import { EventEmitter } from "events";
 import { TcpDaemonRequest, TcpDaemonAnswer } from "./TcpDaemonMessageTypes";
 import Calibration from "../Campaign/Calibration";
+import { TcpDaemonError, TcpDaemonMeasurement } from "./TcpCommandAnswerTypes";
 
 export default class TcpManager{
     private answerListeners: Map<string, EventEmitter>;
@@ -44,7 +45,7 @@ export default class TcpManager{
         });
     }
 
-    async getMeasure() {
+    async getMeasure(): Promise<TcpDaemonMeasurement> {
         return await this.sendCommand('GET_MEASURE');
     }
 
@@ -60,7 +61,7 @@ export default class TcpManager{
         return await this.sendCommand('SET_CONFIG' + calibration.buildTCPCommandArgs());
     }
 
-    async getErrors() {
+    async getErrors(): Promise<TcpDaemonError[]> {
         return await this.sendCommand('GET_ERRORS');
     }
 

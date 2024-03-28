@@ -1,7 +1,8 @@
 import { sqlConnections } from '../Database/DatabaseManager';
 import {tcpConnection} from "../Tcp/TcpManager";
 import { logger } from "../Logger/LoggerManager";
-import { sleep } from "../Helper/sleep";
+import { sleep, sleepUntil } from "../Helper/sleep";
+import { TcpDaemonMeasurement } from 'src/Tcp/TcpCommandAnswerTypes';
 
 
 export default class RunCampaign {
@@ -10,7 +11,6 @@ export default class RunCampaign {
     private interval: number;
     private nbReset: number;
     private isCampaignRunning: boolean;
-    private warningBeforeReset: boolean;
 
     private o2SensorState: number;
     private co2SensorState: number;
@@ -24,7 +24,6 @@ export default class RunCampaign {
         this.interval = -1;
         this.nbReset = 0;
         this.isCampaignRunning = false;
-        this.warningBeforeReset = false;
     
         this.o2SensorState = -1;
         this.co2SensorState = -1;
@@ -58,62 +57,44 @@ export default class RunCampaign {
     async runCampaign(){
         await sqlConnections.insertLogs(this.currentCampaignId, 0,"Campagne démarrée","La campagne a été démarrée avec succès.");
 
-        while(this.numberOfMeasureLeft>0){
-            let millis:Date= new Date();
-            if(this.currentCampaignId>0){
-                this.numberOfMeasureLeft--;
+        let nextLoopMillis: number = new Date().getTime();
+        while(this.numberOfMeasureLeft > 0 && this.isCampaignRunning){
+            nextLoopMillis += this.interval;
+            this.numberOfMeasureLeft--;
 
-                let idCampaign: any | null = null;
-                try {
-                    idCampaign = await sqlConnections.queryData("SELECT idCampaign from Campaigns where finished=0;");
-                } catch (error) {
-                    logger.error("Error runCampaign: " + error);
-                }
-                if(idCampaign == null){
-                    this.numberOfMeasureLeft=0;
-                    break;
-                }else{
-                    try {
-                        const measures = await tcpConnection.getMeasure();
-                        console.log(measures);
-                        if (measures.success){
-                            const insertDataRequest = this.buildInsertSensorDataRequest(measures);
-                            await sqlConnections.queryData(insertDataRequest);
-                            let now:Date=new Date();
-                            await sleep(this.interval-(now.getTime()-millis.getTime()));
-                        }else if(measures.error == "Le dispositif de mesure a probablement été intérrompu à la suite d'une erreur. Pour plus d'information, consultez les erreurs avec GET_ERRORS puis tentez de le réinitialiser avec RESET."){
-                            if(this.nbReset>1){
-                                await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
-                                return;
-                            }
-                            if(!this.warningBeforeReset){
-                                await sqlConnections.insertLogs(this.currentCampaignId,3,"Disfonctionnement du matériel","Une erreur à été detecté. Veuillez vérifiez que les capteurs sont bien branchés.");
-                                this.warningBeforeReset=true;
-                                await sleep(30000);
-                            }else{
-                                this.nbReset++;
-                                const warning= await tcpConnection.getErrors(); //TODO GET ERROR pour retourner la bonne erreur
-                                await sqlConnections.insertLogs(this.currentCampaignId,3,"Réinitilisation du module de mesure","Le module de mesure va être réinitialisé suite à une erreur survenu dans le module de mesure.");
-                                const reset= await tcpConnection.resetModule();
-                                await sleep(40000);
-                                if (reset){
-                                    sqlConnections.insertLogs(this.currentCampaignId,3,"Réinitilisation du module de mesure","Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
-                                }
-                            }
-                        }else if(measures.error == "Le dispositif de mesure n'a fini de s'initialiser."){
-                            logger.warn(measures.error);
-                        }
-                    } catch (error) {
-                        logger.error(error);
-                        const warnings: any[] = await tcpConnection.getErrors(); //TODO GET ERROR pour retourner la bonne erreur
-                        warnings.forEach(warn => {
-                            logger.warn(warn.date + " -> " + warn.message);
-                        });
+            try {
+                const measures = await tcpConnection.getMeasure();
+                console.log(measures);
+                const insertDataRequest = this.buildInsertSensorDataRequest(measures);
+                await sqlConnections.queryData(insertDataRequest);
+            } catch (error) {
+                logger.error(error);
+                if(error == "Le dispositif de mesure a probablement été intérrompu à la suite d'une erreur. Pour plus d'information, consultez les erreurs avec GET_ERRORS puis tentez de le réinitialiser avec RESET.") {
+                    const warnings = await tcpConnection.getErrors();
+                    await sqlConnections.insertLogs(this.currentCampaignId,3,"Erreur du module de mesure", warnings[0].message, warnings[1].date);
+                    
+                    warnings.forEach(warn => {
+                        logger.warn(warn.date + " -> " + warn.message);
+                    });
+                    
+                    if(this.nbReset >= 2){
+                        await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
+                        return;
                     }
+
+                    await tcpConnection.resetModule();
+                    this.nbReset++;
+
+                    await sqlConnections.insertLogs(this.currentCampaignId,3,"Réinitilisation du module de mesure","Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
+                } else if (error == "Le dispositif de mesure n'a fini de s'initialiser."){
+                    logger.warn(error);
                 }
+                nextLoopMillis = new Date().getTime() + 2500;
             }
-            await sleep(1000);
+
+            await sleepUntil(nextLoopMillis);
         }
+
         await this.endCampaign(false, "La campagne s\'est terminé avec succès.");
     }
 
@@ -145,41 +126,40 @@ export default class RunCampaign {
         const m = await tcpConnection.getMeasure();
     }
 
-    buildInsertSensorDataRequest(sensorData:any):string{
+    buildInsertSensorDataRequest(sensorData: TcpDaemonMeasurement): string {
         let date:Date=new Date();
 
         let values:string="";
         if(this.temperature2SensorState){
-            values+=sensorData.data.temperature+",";
+            values+=sensorData.temperature+",";
         }else{
             values+="NULL,";
         }
         if(this.co2SensorState){
-            values+=sensorData.data.co2+",";
+            values+=sensorData.CO2+",";
         }else{
             values+="NULL,"
         }
         if(this.o2SensorState){
-            values+=sensorData.data.o2+",";
+            values+=sensorData.O2+",";
         }else{
             values+="NULL,"
         }
 
         if(this.humiditySensorState){
-            values+=sensorData.data.humidity;
+            values+=sensorData.humidity;
         }else{
             values+="NULL,"
         }
             
         if(this.luminositySensorState){
-            values+=sensorData.data.luminosity;
+            values+=sensorData.luminosity;
         }else{
             values+="NULL"
         }
         let query="INSERT INTO Measurements values("+this.currentCampaignId+","+values+","+date+");"
         return query;
     }
-
 }
 
 export declare let campaignRunner: RunCampaign;

@@ -3,3 +3,7 @@ export async function sleep(millis:number) {
         setTimeout(resolve, millis);
     });
 }
+
+export async function sleepUntil(millis:number) {
+    return await sleep(new Date().getTime() - millis);
+}
