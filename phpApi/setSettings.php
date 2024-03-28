@@ -1,5 +1,5 @@
 <?php
-
+include_once '../include/NodeJsApi.php';
 include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';

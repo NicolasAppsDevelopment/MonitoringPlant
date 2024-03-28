@@ -1,7 +1,6 @@
 <?php
-
-include_once '../include/RequestReplySender.php';
 include_once '../include/NodeJsApi.php';
+include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'arrêter la campagne";

@@ -1,6 +1,5 @@
 <?php
-include_once __DIR__ . "/../include/NodeJsApi.php";
-
+include_once "../include/NodeJsApi.php";
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 

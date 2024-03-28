@@ -1,5 +1,4 @@
 <?php
-
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 include_once '../include/NodeJsApi.php';
@@ -25,8 +24,8 @@ try {
         }
 
         // check if a campaign is already running
-        $data=NodeJsGet("check_working_campaign");
-
+        $data = NodeJsGet("check_working_campaign");
+        
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
         }
