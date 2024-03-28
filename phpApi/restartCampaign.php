@@ -2,7 +2,7 @@
 
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
-include_once '../include/NodeRED_API.php';
+include_once '../include/NodeJsApi.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de redémarrer la campagne";
@@ -25,7 +25,7 @@ try {
         }
 
         // check if a campaign is already running
-        $data=NodeRedGet("check_working_campaign");
+        $data=NodeJsGet("check_working_campaign");
 
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -35,7 +35,7 @@ try {
         }
 
         $campaignsManager->restartCampaign($id);
-        NodeRedPost("redoCampaign",array("id" => $id,'key' => 'I_do_believe_I_am_on_fire'));
+        NodeJsPost("redoCampaign",array("id" => $id,'key' => 'I_do_believe_I_am_on_fire'));
 
         $reply->replySuccess();
     } else {

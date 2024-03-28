@@ -1,7 +1,7 @@
 <?php
 
 include_once '../include/RequestReplySender.php';
-include_once '../include/NodeRED_API.php';
+include_once '../include/NodeJsApi.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible d'arrêter la campagne";
@@ -22,7 +22,7 @@ try {
             throw new Exception("Le format de l'identifiant de la campagne renseigné est incorrect. Veuillez réessayer.");
         }
 
-        NodeRedPost("stop_campaign", array('id' => $id,'key' =>"I_do_believe_I_am_on_fire"));
+        NodeJsPost("stop_campaign", array('id' => $id,'key' =>"I_do_believe_I_am_on_fire"));
 
         $reply->replySuccess();
     } else {

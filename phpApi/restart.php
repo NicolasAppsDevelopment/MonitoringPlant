@@ -15,7 +15,7 @@ try {
             throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
         }
 
-        NodeRedPost('restart',array('key' =>"I_do_believe_I_am_on_fire"));
+        NodeJsPost('restart',array('key' =>"I_do_believe_I_am_on_fire"));
 
         $reply->replySuccess();
     } else {

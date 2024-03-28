@@ -20,7 +20,7 @@ try {
             throw new Exception("Le format de la date renseignée est incorrect. Veuillez réessayer.");
         }
 
-        NodeRedPost("setDatetime", array('datetime' => $arguments["datetime"],'key' =>"I_do_believe_I_am_on_fire"));
+        NodeJsPost("setDatetime", array('datetime' => $arguments["datetime"],'key' =>"I_do_believe_I_am_on_fire"));
 
         $reply->replySuccess();
     } else {

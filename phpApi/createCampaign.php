@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "/../include/NodeRED_API.php";
+include_once __DIR__ . "/../include/NodeJsApi.php";
 
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
@@ -149,7 +149,7 @@ try {
         
         
         // Check if a campaign is already running
-        $data = NodeRedGet("check_working_campaign");
+        $data = NodeJsGet("check_working_campaign");
 
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -159,7 +159,7 @@ try {
         }
 
         // check if there is enough space on the device
-        $storage=NodeRedGet("storage");
+        $storage=NodeJsGet("storage");
 
         $lines = $duration / $interval;
         $size = $lines * MEASUREMENTS_SIZE_PER_LINE;
@@ -179,7 +179,7 @@ try {
         // Creation of the new measurement campaign.
         $id = $campaignsManager->addCampaign($configId, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
 
-        NodeRedPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
+        NodeJsPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
 
         $reply->replyData([
             "id" => $id
