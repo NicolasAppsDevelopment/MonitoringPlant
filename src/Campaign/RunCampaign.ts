@@ -6,6 +6,20 @@ import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
 import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 
 
+ /**
+  * @currentCampaignId : id of the running campaign
+  * @numberOfMeasureLeft : the number of measure to register in the campaign
+  * @interval : the interval between two measurements in milliseconds
+  * @duration : the total duration of the campaign in seconds
+  * @isCampaignRunning : boolean that signal if a campaign is currently running
+  * 
+  * @o2SensorState is the o2 sensor used in this campaign ?
+  * @co2SensorState is the co2 sensor used in this campaign ?
+  * @humiditySensorState is the humidity sensor used in this campaign ?
+  * @luminositySensorState is the luminosity sensor used in this campaign ?
+  * @temperature2SensorState is the temperature sensor used in this campaign ?
+  * 
+  */
 export default class RunCampaign {
     private currentCampaignId: number;
     private numberOfMeasureLeft: number;
@@ -13,11 +27,11 @@ export default class RunCampaign {
     private nbReset: number;
     private isCampaignRunning: boolean;
 
-    private o2SensorState: number;
-    private co2SensorState: number;
-    private humiditySensorState: number;
-    private luminositySensorState: number;
-    private temperature2SensorState: number;
+    private o2SensorState: boolean;
+    private co2SensorState: boolean;
+    private humiditySensorState: boolean;
+    private luminositySensorState: boolean;
+    private temperature2SensorState: boolean;
 
     constructor() {
         this.currentCampaignId = -1;
@@ -26,11 +40,11 @@ export default class RunCampaign {
         this.nbReset = 0;
         this.isCampaignRunning = false;
     
-        this.o2SensorState = -1;
-        this.co2SensorState = -1;
-        this.humiditySensorState = -1;
-        this.luminositySensorState = -1;
-        this.temperature2SensorState = -1;
+        this.o2SensorState = false;
+        this.co2SensorState = false;
+        this.humiditySensorState = false;
+        this.luminositySensorState = false;
+        this.temperature2SensorState = false;
     }
 
     initCampaign(currentCampaignId:number,duration:number,interval:number,sensorState:any){
@@ -55,6 +69,9 @@ export default class RunCampaign {
         return this.isCampaignRunning;
     }
 
+    /**
+     * Run a loop where the campaign will register the sensor data in the database and handle potential error.
+     */
     async runCampaign(){
         await sqlConnections.insertLogs(this.currentCampaignId, 0,"Campagne démarrée","La campagne a été démarrée avec succès.");
 
@@ -67,6 +84,7 @@ export default class RunCampaign {
                 const measures = await tcpConnection.getMeasure();
                 const insertDataRequest = this.buildInsertSensorDataRequest(measures);
                 await sqlConnections.queryData(insertDataRequest);
+                this.nbReset=0;
             } catch (error) {
                 logger.error("runCampaign: error while getting measure. " + error);
 
@@ -122,12 +140,66 @@ export default class RunCampaign {
         this.endCampaign(false, "La campagne a bien été stoppé suite à votre demande.");
     }
 
-    async restartCampaign(){
+    async restartCampaign(campaignId:number){
+        try{
+            const campaignData = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [campaignId]);
+            if(!this.isCampaignRunning){
+                
+                let o2:boolean;
+                let co2:boolean;
+                let luminosity:boolean;
+                let humidity:boolean;
+                let temperature:boolean;
+    
+                if(campaignData[0].O2SensorState == 1){
+                    o2 = true;
+                }else{
+                     o2 = false;
+                }
+                if(campaignData[0].CO2SensorState == 1){
+                    co2 = true;
+                }else{
+                     co2 = false;
+                }
+                if(campaignData[0].humiditySensorState == 1){
+                    luminosity = true;
+                }else{
+                    luminosity = false;
+                }
+                if(campaignData[0].luminositySensorState == 1){
+                    humidity = true;
+                }else{
+                    humidity = false;
+                }
+                if(campaignData[0].temperatureSensorState == 1){
+                    temperature = true;
+                }else{
+                    temperature = false;
+                }
+    
+                const sensorSelected={
+                    "O2":o2,
+                    "CO2":co2,
+                    "humidity":humidity,
+                    "light":luminosity,
+                    "temperature":temperature};
+
+
+                    await sqlConnections.queryData("update Campaigns set finished = 0 where idCampaign= ? ", [campaignId]);
+                    await sqlConnections.queryData("update Campaigns set alertLevel = 0 where idCampaign= ? ", [campaignId]);
+
+                this.initCampaign(campaignId, campaignData[0].duration, campaignData[0].duration, sensorSelected);
+
+                return true;
+            }
+        }catch(error){
+            return false;
+        }
 
     }
 
     removeCampaign(idCampaign:number){
-        if(this.isRunning() && this.currentCampaignId == idCampaign){
+        if(this.isRunning() && this.currentCampaignId == idCampaign ){
             this.currentCampaignId = -1;
             this.isCampaignRunning = false;
         }
