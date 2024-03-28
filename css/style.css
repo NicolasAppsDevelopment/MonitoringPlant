@@ -925,24 +925,8 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 #list_helps{
     display: flex;
     flex-direction: column;
+    padding: 0px;
 } 
-
-
-.helpSummary{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    margin-left: 10%;
-    margin-right: 10%;
-    padding: 10px;
-    border: solid 1px var(--input_border_color);
-    border-radius: 5px;
-    background-color: var(--input_color);
-    cursor: pointer;
-    position: relative;
-}
 
 .helpSummary:hover {
     background-color: var(--input_border_color);
@@ -954,13 +938,53 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
 .summaryElement{
     flex-direction: column;
+    padding: 10px;
 }
+
 .summaryElement li{
     margin-bottom: 2%;
-    color:#27BCEB;
+    color:var(--default-color);
     list-style:none;
 }
 
+.helpSummary{
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 200;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    border: solid 1px var(--input_border_color);
+    border-radius: 5px;
+    background-color: var(--input_color);
+    cursor: pointer;
+    position: relative;
+}
+
+.grid{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.helpSummary .preview{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.helpSummary h4{
+    margin: 0%;
+}
+
+.helpSummary span{
+    font-size:15px;
+    color:var(--default-color);
+}
 
 
 
