@@ -2,8 +2,8 @@ import { sqlConnections } from '../Database/DatabaseManager';
 import {tcpConnection} from "../Tcp/TcpManager";
 import { logger } from "../Logger/LoggerManager";
 import { sleep, sleepUntil } from "../Helper/sleep";
-import { TcpDaemonMeasurement } from 'src/Tcp/TcpCommandAnswerTypes';
-import { TcpDaemonAnswerError } from 'src/Tcp/TcpDaemonMessageTypes';
+import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
+import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 
 
 export default class RunCampaign {
