@@ -15,8 +15,8 @@ async function isAuth(req, res, next) {
         res.status(401).send({ "error": "L'en-tête \"Authorization\" est manquante/vide." });
         return;
     }
-    // Vérifie le corps
-    if (!req.is('application/json')) {
+    // Vérifie le corps pour les requêtes POST
+    if (req.method !== 'GET' && !req.is('application/json')) {
         res.status(500).send({ "error": "L'en-tête \"Content-Type\" doit être défini sur \"application/json\"." });
         return;
     }
