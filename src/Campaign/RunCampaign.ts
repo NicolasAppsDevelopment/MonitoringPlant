@@ -49,7 +49,7 @@ export default class RunCampaign {
 
     initCampaign(currentCampaignId:number,duration:number,interval:number,sensorState:any){
         this.currentCampaignId = currentCampaignId;
-        this.numberOfMeasureLeft = duration / interval * 1000;
+        this.numberOfMeasureLeft = duration / interval;
         this.o2SensorState = sensorState.o2;
         this.co2SensorState = sensorState.co2;
         this.humiditySensorState = sensorState.humidity;
@@ -182,11 +182,11 @@ export default class RunCampaign {
                     "CO2":co2,
                     "humidity":humidity,
                     "light":luminosity,
-                    "temperature":temperature};
+                    "temperature":temperature
+                };
 
-
-                    await sqlConnections.queryData("update Campaigns set finished = 0 where idCampaign= ? ", [campaignId]);
-                    await sqlConnections.queryData("update Campaigns set alertLevel = 0 where idCampaign= ? ", [campaignId]);
+                await sqlConnections.queryData("update Campaigns set finished = 0 where idCampaign= ? ", [campaignId]);
+                await sqlConnections.queryData("update Campaigns set alertLevel = 0 where idCampaign= ? ", [campaignId]);
 
                 this.initCampaign(campaignId, campaignData[0].duration, campaignData[0].duration, sensorSelected);
 
@@ -210,8 +210,6 @@ export default class RunCampaign {
     }
 
     buildInsertSensorDataRequest(sensorData: TcpDaemonMeasurement): string {
-        let date:Date=new Date();
-
         let values:string="";
         if(this.temperature2SensorState){
             values+=sensorData.temperature+",";
@@ -230,7 +228,7 @@ export default class RunCampaign {
         }
 
         if(this.humiditySensorState){
-            values+=sensorData.humidity;
+            values+=sensorData.humidity+",";
         }else{
             values+="NULL,"
         }
@@ -240,7 +238,7 @@ export default class RunCampaign {
         }else{
             values+="NULL"
         }
-        let query="INSERT INTO Measurements values("+this.currentCampaignId+","+values+","+date+");"
+        let query="INSERT INTO Measurements values("+this.currentCampaignId+","+values+",NOW());"
         return query;
     }
 }

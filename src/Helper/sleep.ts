@@ -5,5 +5,5 @@ export async function sleep(millis:number) {
 }
 
 export async function sleepUntil(millis:number) {
-    return await sleep(new Date().getTime() - millis);
+    return await sleep(millis - new Date().getTime());
 }
