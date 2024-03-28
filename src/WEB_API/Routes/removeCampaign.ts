@@ -1,5 +1,5 @@
 import { Express, Request, Response } from 'express';
-import { exec } from "child_process";
+import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
 import { logger } from "../../Logger/LoggerManager";
 
 /*
@@ -11,12 +11,15 @@ import { logger } from "../../Logger/LoggerManager";
     DESCRIPTION : test de la connexion
 */
 module.exports = function(app: Express){
-    app.post('/restart', async (req: Request, res: Response) => {
+    app.post('/removeCampaign', async (req: Request, res: Response){
         let data = req.body;
-
+        if (data.id == null || typeof data.id != "number") {
+            res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
+            return;
+        }
         // Traite la requête
         try {
-            
+            campaignRunner.
 
             res.send({"success": "true"});
         } catch (error) {
@@ -26,4 +29,6 @@ module.exports = function(app: Express){
             return;
         }
     });
+
+        
 }
