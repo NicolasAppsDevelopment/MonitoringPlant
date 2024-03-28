@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <title>Liste des campagnes</title>
+        <script src="./js/functions.js"></script>
         <script src="./js/help.js"></script>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
@@ -51,7 +52,7 @@
                         <span>1 Article</span>
                     </div>
                     <ul class="summaryElement" id="helpCalibrate">
-                        <li onclick="loadPopUp('helpCalibrateArticle1')">Enregistrer une nouvelle calibration</label>
+                        <li onclick="loadPopUp('helpCalibrateArticle1')">Comment enregistrer une nouvelle calibration ?</label>
                     </ul>
                 </div>  
                 <div  class="helpSummary" onclick="deroule('helpConnexion')">
@@ -60,13 +61,16 @@
                         <span>1 Article</span>
                     </div>
                     <ul class="summaryElement" id="helpConnexion">
-                        <li onclick="loadPopUp('helpConnexionArticle1')">Connexion avec les questions de sécurité</label>
+                        <li onclick="loadPopUp('helpConnexionArticle1')">Comment se connecter avec les questions de sécurité ?</label>
                     </ul>
                 </div>
             </div>
 
             <!-- PopUp -->
-            <div id="popUpAide"></div>
+            
+
+            <input type="checkbox"  id="help-popup" class="open_close-popup">
+            <div id="popUpAide" class="popupHelp popup">
 
         </main>
     </body>

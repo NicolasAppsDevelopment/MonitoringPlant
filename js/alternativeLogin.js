@@ -7,20 +7,22 @@ let question2;
 let question3;
 
 document.addEventListener("DOMContentLoaded", () => {    
-    question1 = document.getElementById("question1").innerHTML;
-    question2 = document.getElementById("question2").innerHTML;
-    question3 = document.getElementById("question3").innerHTML;
+    question1 = document.getElementById("question1");
+    question2 = document.getElementById("question2");
+    question3 = document.getElementById("question3");
 
     bar=document.getElementsByClassName("progression_bar");
     bar[0].style.width="40%";
 
     const data = phpGet("/phpApi/getSecurityQuestions.php")
-    console.log(data);
-    question1=data[0];
-    question2=data[1];
-    question3=data[2];
+    console.log(data[0]);
+    question1.innerHTML=data[0];
+    question2.innerHTML=data[1];
+    question3.innerHTML=data[2];
 
 });
+
+
 
 /**
  * Display the first form to answer the first security question.

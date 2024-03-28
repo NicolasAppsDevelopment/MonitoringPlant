@@ -922,6 +922,11 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 
 
 /* Page Aide */
+video{
+    margin: 10px;
+} 
+
+
 #list_helps{
     display: flex;
     flex-direction: column;
@@ -1004,15 +1009,6 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     visibility:hidden;
     transition: 250ms all;
     
-}
-.open_close-popupHelp > .popup{
-    visibility: none;
-    opacity: 0;
-}
-
-.open_close-popupHelp:checked > .popup{
-    visibility: visible;
-    opacity: 1;
 }
 
 

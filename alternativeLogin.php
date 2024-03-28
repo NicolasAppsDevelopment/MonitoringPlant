@@ -29,7 +29,7 @@
                 </p>
                 <div>
                     <p id="question1"> 
-                        a
+                        question 1
                     </p>
                     <div class="label_img_input no-margin-top">
                         <input class="input_field btn-show key" id="response1" name="response1" type="text" placeholder="Réponse" autocomplete="off" minlength="1">
@@ -46,7 +46,7 @@
                 </p>
                 <div>
                     <p id="question2"> 
-                        b
+                        question 2
                     </p>
                     <div class="label_img_input no-margin-top">
                         <input class="input_field btn-show key" id="response2" name="response2" type="text" placeholder="Réponse" autocomplete="off" minlength="1">
@@ -68,7 +68,7 @@
                 </p>
                 <div>
                     <p id="question3"> 
-                        c
+                        question 3
                     </p>
                     <div class="label_img_input no-margin-top">
                         <input class="input_field btn-show key" id="response3" name="response3" type="text" placeholder="Réponse" autocomplete="off" minlength="1">

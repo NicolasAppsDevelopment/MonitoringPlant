@@ -1,6 +1,5 @@
 <?php
 
-include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';
 
@@ -9,7 +8,6 @@ $errorTitle = "Impossible de récupérer les questions de sécurité";
 
 try {
     $settingsManager = SettingsManager::getInstance();
-    $session = Session::getInstance();
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // handle GET request

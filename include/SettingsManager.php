@@ -179,8 +179,9 @@ class SettingsManager {
     public function getSecurityQuestions()
     {
         try {
-            $results = $this->db->fetchAll("SELECT question FROM Questions");
-        
+            //return $this->db->fetchAll("SELECT question FROM Questions"); 
+            $array = array("test1", "test2", "test3");     
+            return $array;    
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer les questions de sécurité. {$th->getMessage()}");
         }

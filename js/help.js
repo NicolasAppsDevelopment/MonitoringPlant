@@ -17,97 +17,85 @@ async function deroule(id) {
 }
 
 async function loadPopUp(id){
-
-    console.log(id);
     event.stopPropagation();
 
     let helpPopup = document.getElementById("popUpAide");
 
     let title;
-    let imgLoad;
+    let videoSource;
     let description;
     let nbImg;
 
     switch(id){
         case "helpCampaignArticle1":
             title="Comment créer une nouvelle campagne de mesure ?";
-            imgLoad="filtrageHelp.gif";
+            videoSource="../video/ppp";
             description="Vous pouvez filtrez par date.";
             nbImg=2;
             break;
         case "helpCampaignArticle2":
             title="Comment filtrer une campagne de mesure ?";
-            imgLoad="createCampaign.gif";
+            videoSource="../video/ppp";
             description="Durée : définit la durée d'une campagne de mesure. Vous pouvez changez l'unité de mesure en minute heure ou jour"+
             "\n Intervalle: ce paramètre sert à définir l'intervalle entre chaque prise de mesure.";
             nbImg=4;
             break;
         case "helpCampaignArticle3":
             title="Comment voir mes mesures sur Excel ?";
-            imgLoad="filtrageHelp.gif";
+            videoSource="../video/ppp";
             description="Vous pouvez filtrez par date.";
             nbImg=2;
             break;
         case "helpCampaignArticle4":
             title="Comment redémmarer ma campagne ?";
-            imgLoad="filtrageHelp.gif";
+            videoSource="../video/ppp";
             description="Vous pouvez filtrez par date.";
             nbImg=2;
             break;
         case "helpSettingsArticle1":
-            title="Filtrage";
-            imgLoad="filtrageHelp.gif";
+            title="Comment marche la Suppression automatique ?";
+            videoSource="../video/ppp";
             description="Vous pouvez filtrez par date.";
             nbImg=2;
             break;
         case "helpSettingsArticle2":
             title="Comment changer le nom du Wifi ?";
-            imgLoad="filtrageHelp.gif";
+            videoSource="../video/ppp";
             description="Vous pouvez filtrez par date.";
             nbImg=2;
             break;
         case "helpCalibrateArticle1":
-            title="Enregistrer une nouvelle calibration";
-            imgLoad="filtrageHelp.gif";
+            title="Comment enregistrer une nouvelle calibration ?";
+            videoSource="../video/ppp";
             description="Vous pouvez filtrez par date.";
             nbImg=2;
             break;
         case "helpConnexion":
-            title="Connexion avec les questions de sécurité";
-            imgLoad="connexionHelp.gif";
+            title="Comment se connecter avec les questions de sécurité ?";
+            videoSource="../video/ppp";
             description="Vous pouvez vous connectez grâce à vos questions de sécurité.";
             nbImg=2;
             break;
-        case "":
+        default:
             break;
     }
 
-    helpPopup.innerHTML = `<p>${id}</p>`;
-
-    /*helpPopup.innerHTML = `
-
-    <div class="popupHelp popup">
+    helpPopup.innerHTML = `
+    
         <div class="popup-inner">
             <div class="popup-title">
-                <p>`+title+`</p>
-                <label for="help-popup" class="round_btn transparent small close" onclick="loadPopUp()"></label>
+                <p>${title}</p>
+                <label for="help-popup" class="round_btn transparent small close" onclick="closePopup("help-popup"")"></label>
             </div>
-            <img id="HelpGif" src="/img/clock.svg" alt="image d'aide">
-            <p> `+description+` </p>
-            <div class="buttonPopupHelp">
-                <button class="rect_round_btn" type="button" onclick="previousGif()">
-                    Previous
-                </button>
-                <input id="idhelpCampaign" hidden value=`+nbImg+`></input>
-                <button class="rect_round_btn" type="button" onclick="nextGif()"> 
-                    Next 
-                </button>
-            </div>
+            <video controls>
+                <source src="${videoSource}.mp4" type="video/mp4" />
+                <source src="${videoSource}.webm" type="video/webm" />
+            </video>
+            <p> ${description} </p>
         </div>
-    `;*/
+        `; 
     
-
-    console.log("click");
+    openPopup("help-popup");
 
 }
 
