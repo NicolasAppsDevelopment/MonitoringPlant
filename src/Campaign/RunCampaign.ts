@@ -103,7 +103,7 @@ export default class RunCampaign {
     }
 
     private async endCampaign(isError: boolean, message: string){
-        if (!this.isCampaignRunning){
+        if (!this.isRunning()){
             logger.warn("endCampaign function fired without any campaign running!");
             return;
         }
@@ -114,7 +114,7 @@ export default class RunCampaign {
         await sqlConnections.setAlertLevel(this.currentCampaignId, logLevel);
         await sqlConnections.setFinished(this.currentCampaignId);
         await sqlConnections.insertLogs(this.currentCampaignId, logLevel, logTitle, message);
-        this.currentCampaignId=-1;
+        this.currentCampaignId = -1;
         this.isCampaignRunning = false;
     }
 
@@ -127,9 +127,9 @@ export default class RunCampaign {
     }
 
     removeCampaign(idCampaign:number){
-        if(this.isRunning() && this.currentCampaignId==idCampaign ){
-            this.currentCampaignId=-1;
-            this.isCampaignRunning=false;
+        if(this.isRunning() && this.currentCampaignId == idCampaign){
+            this.currentCampaignId = -1;
+            this.isCampaignRunning = false;
         }
     }
 
