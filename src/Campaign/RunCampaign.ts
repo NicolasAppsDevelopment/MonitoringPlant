@@ -238,7 +238,11 @@ export default class RunCampaign {
         }
     }
 
-
+    /**
+     * Build a SQL request depending of the sensor needed for the campaign.
+     * @param sensorData TcpDaemonMeasurement - sensor data from the daemon driver
+     * @returns the command to insert into the database
+     */
     buildInsertSensorDataRequest(sensorData: TcpDaemonMeasurement): string {
         let date:Date=new Date();
 

@@ -2,6 +2,9 @@ import { sqlConnections } from "../Database/DatabaseManager";
 import { logger } from "../Logger/LoggerManager";
 import { sleep } from "../Helper/sleep";
 
+/**
+ * Remove old data in database every minute if autoRemove is activated.
+ */
 export async function startAutoRemoveLoop() {
     logger.info("Auto remove process loop started");
     while (true){

@@ -2,6 +2,10 @@ import { logger } from '../Logger/LoggerManager';
 import { sqlConnections } from '../Database/DatabaseManager';
 
 export default class Calibration {
+/**
+ * Calibration data necessary for having good value for the sensors.
+ */
+
     idConfig:number=-1;
     idCampaign:number=-1;
 
@@ -27,6 +31,7 @@ export default class Calibration {
         this.initCalibration(idConfig,idCampaign);
     }
 
+    
     async initCalibration(idConfig:number, idCampaign:number){
         this.idCampaign=idCampaign;
         this.idConfig=idConfig;
@@ -62,6 +67,10 @@ export default class Calibration {
         this.enableFiboxTemp=campaignData[0].enableFiboxTemp;
     }
 
+    /**
+     * Build a command with all parameters to pass to the driver.
+     * @returns command to pass to the driver that setup and get the sensor data
+     */
     buildTCPCommandArgs(): string {
         let args: string = " "+this.altitude+" "+this.f1+" "+this.m+" "+this.dphi1+" "+this.dphi2+" "+this.dksv1+" "+this.dksv2;
         args += " " + this.pressure + " " + this.cal0 + " " + this.cal2nd+" "+this.t0+" "+this.t2nd+" "+this.o2cal2nd+" "+this.calib_is_humid;

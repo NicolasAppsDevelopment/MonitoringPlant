@@ -7,12 +7,12 @@ import { logger } from "../../Logger/LoggerManager";
 
 
 /*
-    URL : /test
+    URL : /createCampaign
     METHODE : POST
     CORPS : {"id": 69}
     CONTENT-TYPE : application/json
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : initialise a campaign and run it
 */
 module.exports = function(app: Express){
     app.post('/createCampaign', async (req: Request, res: Response) => {

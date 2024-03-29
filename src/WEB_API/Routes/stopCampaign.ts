@@ -2,12 +2,12 @@ import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
 import { campaignRunner } from '../../Campaign/RunCampaign';
 /*
-    URL : /test
+    URL : /stop_campaign
     METHODE : POST
     CORPS : {"id": 69}
     CONTENT-TYPE : application/json
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : stop a campaign currently running
 */
 module.exports = function(app: Express){
     app.post('/stop_campaign', async (req: Request, res: Response) => {

@@ -3,17 +3,15 @@ import { exec } from "child_process";
 import { logger } from "../../Logger/LoggerManager";
 
 /*
-    URL : /test
-    METHODE : POST
-    CORPS : {"id": 69}
+    URL : /storage
+    METHODE : GET
     CONTENT-TYPE : application/json
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : getting Total storage and storage left from the raspberry pi
 */
 module.exports = function(app: Express){
     app.get('/storage', async (req: Request, res: Response) => {
         
-        // Traite la requête
         try {
             exec('df --block-size=KB --output=size --output=used /root', (error, stdout, stderr) => {
                 if (error) {
