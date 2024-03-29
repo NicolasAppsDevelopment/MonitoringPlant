@@ -1,5 +1,6 @@
 import { Express, Request, Response } from 'express';
 import * as fs from 'fs';
+import * as qr from 'qr-image';
 
 /*
     URL : /test
@@ -10,7 +11,7 @@ import * as fs from 'fs';
     DESCRIPTION : test de la connexion
 */
 module.exports = function(app: Express){
-    app.get('/getAccessPoint', async (req: Request, res: Response) => {
+    app.get('/getQRCode', async (req: Request, res: Response) => {
         // Traite la requête
         try {
             // get the password and ssid of the current access point by reading the hostapd file
@@ -28,8 +29,11 @@ module.exports = function(app: Express){
                         password = line.split('=')[1];
                     }
                 });
-                const result = {"ssid": ssid, "password": password};
-                res.send({"success": true, "data": result});
+
+                // generate the QR code to connect to the access point and reply with image
+                const qrCode = qr.image(`WIFI:T:WPA;S:${ssid};P:${password};;`, { type: 'png' });
+                res.setHeader('Content-type', 'image/png');
+                qrCode.pipe(res);
             });
         } catch (error) {
             let message = 'Erreur inconnue'
