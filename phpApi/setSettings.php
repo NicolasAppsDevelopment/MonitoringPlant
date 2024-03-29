@@ -50,16 +50,27 @@ try {
                 break;
         }
 
-        if($arguments["network"]!=null && $arguments["network"]!=NodeJsGet("getAccessPoint")){
-            if(strlen($arguments["network"])<=32 && strlen($arguments["network"])>0){
-                if(preg_match('/^[a-zA-Z0-9\s\-_]+$/',$arguments["network"])){
-                    NodeJsPost("setAccessPoint",array('ssid' => $arguments["network"])); // TODO: change password à ajouter
-                }else{
-                    throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
-                }
-            }else{
+        $networkData = NodeJsGet("getAccessPoint")["data"];
+        $setAccessPointArgs = array();
+        if ($arguments["ssid"]!=null) {
+            if(strlen($arguments["ssid"]) > 32 && strlen($arguments["ssid"]) == 0){
                 throw new Exception("Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
             }
+            if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["ssid"])){
+                throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
+            }
+            if ($arguments["ssid"]!=$networkData["ssid"]) {
+                $setAccessPointArgs["ssid"] = $arguments["ssid"];
+            }
+        }
+        if ($arguments["password"]!=null && $arguments["password"]!=$networkData["password"]) {
+            if(strlen($arguments["ssid"]) < 8){
+                throw new Exception("Le mot de passe du réseau doit contenir au moins 8 caractères. Veuillez renseigner un mot de passe de 8 caractères ou plus puis réessayez.");
+            }
+            $setAccessPointArgs["password"] = $arguments["password"];
+        }
+        if (count($setAccessPointArgs) > 0) {
+            NodeJsPost("setAccessPoint", $setAccessPointArgs);
         }
 
         $settingsManager->setSettings($interval, $arguments["enableAutoRemove"]);

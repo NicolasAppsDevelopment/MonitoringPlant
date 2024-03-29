@@ -43,7 +43,8 @@ async function setSettings()
     const enableAutoRemove = document.getElementById("auto_suppr");
     const timeConservation = document.getElementById("conserv");
     const timeConservationUnit = document.getElementById("comboBoxTpsSuppr");
-    const network = document.getElementById("network");
+    const ssid = document.getElementById("network_ssid");
+    const password = document.getElementById("network_password");
 
 
     if (timeConservation.validity.badInput === true) {
@@ -51,14 +52,13 @@ async function setSettings()
         displayError("Impossible de sauvegarder les paramètres", "L'intervalle de relevé de suppression des campagnes n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
         return;
     } 
-
-    const raspberryNetwork = await NODERED_get("/getAccessPoint");
     
     let data1 = await phpPost("/phpApi/setSettings.php", {
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
-        "network": network.value
+        "network": ssid.value,
+        "password": password.value
     });
 
     if(network.value!=null && network.value!=raspberryNetwork.name){   
