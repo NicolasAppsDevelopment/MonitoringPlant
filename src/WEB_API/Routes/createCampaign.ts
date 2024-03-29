@@ -69,11 +69,12 @@ module.exports = function(app: Express){
             }
 
             const sensorSelected={
-                "O2":o2,
-                "CO2":co2,
+                "o2":o2,
+                "co2":co2,
                 "humidity":humidity,
-                "light":luminosity,
-                "temperature":temperature};
+                "luminosity":luminosity,
+                "temperature":temperature
+            };
 
             let calibration = await new Calibration(configNumber, currentCampaignId);
             await tcpConnection.calibrateModule(calibration);

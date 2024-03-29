@@ -16,11 +16,12 @@ export async function isAuth(req: Request, res: Response, next: NextFunction) {
         return;
     }
 
-    // Vérifie le corps
-    if (!req.is('application/json')) {
+    // Vérifie le corps pour les requêtes POST
+    if (req.method !== 'GET' && !req.is('application/json')) {
         res.status(500).send({"error": "L'en-tête \"Content-Type\" doit être défini sur \"application/json\"."});
         return;
     }
+
     
     // Vérifie le token
     try {
