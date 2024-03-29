@@ -23,31 +23,23 @@ function NodeJsPost(string $name, array $array)
     curl_setopt($curl, CURLOPT_FAILONERROR, false); // do not fail on HTTP error
     curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($array));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HEADER, true); // Inclure l'en-tête dans la sortie
     curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: ' . $NODE_JS_API_TOKEN]);
 
     $res = curl_exec($curl);
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    $returnedError = "";
 
-    if ($httpCode != 200) {
-        try {
-            // Try get error message from server response
-            $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-            $body = substr($res, $headerSize);
-            curl_close($curl);
-            $returnedError = json_decode($body, true)["error"];
-        } catch (\Throwable $_) {}
-    }
+    $returnedError = "Erreur d'émission/réception de la requête POST. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... ";
 
     if (curl_errno($curl)) {
-        $error_msg = curl_error($curl);
+        $returnedError .= curl_error($curl); // error message from curl
+    } else if ($httpCode !== 200) {
+        $returnedError .= json_decode($res, true)["error"]; // error message from server response
+    } else {
         curl_close($curl);
-        throw new Exception("Erreur d'émission/réception de la requête POST. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg $returnedError");
+        return json_decode($res, true);
     }
 
-    curl_close($curl);
-    return json_decode($res, true);
+    throw new Exception($returnedError);
 }
 
 /**
@@ -64,29 +56,21 @@ function NodeJsGet(string $name)
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_FAILONERROR, false); // do not fail on HTTP error
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HEADER, true); // Inclure l'en-tête dans la sortie
     curl_setopt($curl, CURLOPT_HTTPHEADER, ['Authorization: ' . $NODE_JS_API_TOKEN]);
 
     $res = curl_exec($curl);
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    $returnedError = "";
 
-    if ($httpCode != 200) {
-        try {
-            // Try get error message from server response
-            $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-            $body = substr($res, $headerSize);
-            curl_close($curl);
-            $returnedError = json_decode($body, true)["error"];
-        } catch (\Throwable $_) {}
-    }
+    $returnedError = "Erreur d'émission/réception de la requête GET. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... ";
 
     if (curl_errno($curl)) {
-        $error_msg = curl_error($curl);
+        $returnedError .= curl_error($curl); // error message from curl
+    } else if ($httpCode !== 200) {
+        $returnedError .= json_decode($res, true)["error"]; // error message from server response
+    } else {
         curl_close($curl);
-        throw new Exception("Erreur d'émission/réception de la requête GET. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... $error_msg $returnedError");
+        return json_decode($res, true);
     }
 
-    curl_close($curl);
-    return json_decode($res, true);
+    throw new Exception($returnedError);
 }
