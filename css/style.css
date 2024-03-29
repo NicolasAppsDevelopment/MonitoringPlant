@@ -924,6 +924,8 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
 /* Page Aide */
 video{
     margin: 10px;
+    height: 50%;
+    width: 100%;
 } 
 
 
