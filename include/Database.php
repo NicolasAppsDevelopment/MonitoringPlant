@@ -49,9 +49,9 @@ class Database {
      */
     private function initDataBase() : PDO
     {
-        $dsn = "mysql:dbname=phase1;host=localhost;port=3306";
-        $user = "quentin";
-        $password = "password";
+        $dsn = "mysql:dbname=p2201232;host=iutbg-lamp.univ-lyon1.fr;port=3306";
+        $user = "p2201232";
+        $password = "12201232";
 
         try {
             return new PDO($dsn, $user, $password);
