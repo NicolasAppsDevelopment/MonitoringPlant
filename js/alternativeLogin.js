@@ -1,25 +1,21 @@
-let response1;
-let response2;
-let response3;
+let question1LabelComponent;
+let question2LabelComponent;
+let question3LabelComponent;
 
-let question1;
-let question2;
-let question3;
-
-document.addEventListener("DOMContentLoaded", () => {    
-    question1 = document.getElementById("question1");
-    question2 = document.getElementById("question2");
-    question3 = document.getElementById("question3");
+document.addEventListener("DOMContentLoaded", async () => {    
+    question1LabelComponent = document.getElementById("question1");
+    question2LabelComponent = document.getElementById("question2");
+    question3LabelComponent = document.getElementById("question3");
 
     bar=document.getElementsByClassName("progression_bar");
     bar[0].style.width="40%";
 
-    const data = phpGet("/phpApi/getSecurityQuestions.php")
-    console.log(data[0]);
-    question1.innerHTML=data[0];
-    question2.innerHTML=data[1];
-    question3.innerHTML=data[2];
-
+    const data = await phpGet("/phpApi/getSecurityQuestions.php");
+    if (data != null){
+        question1LabelComponent.innerHTML=data[0];
+        question2LabelComponent.innerHTML=data[1];
+        question3LabelComponent.innerHTML=data[2];
+    } 
 });
 
 
@@ -65,21 +61,17 @@ async function alternativeLogin(){
     response3 = document.getElementById("response3").value;
     
     const data = await phpPost("/phpApi/alternativeLogin.php", {
-        "question1": question1,
+        "question1": question1LabelComponent.innerHTML,
         "response1": response1,
-        "question1": question2,
-        "response1": response2,
-        "question1": question3,
-        "response1": response3
+        "question2": question1LabelComponent.innerHTML,
+        "response2": response2,
+        "question3": question1LabelComponent.innerHTML,
+        "response3": response3
     });
     
     
-    if (data===true){
-        await displaySuccess("Authentification réussie", "Les réponses sont correctes. Bienvenu(e) Administrateur(rice) !");
+    if (data != null){
         window.location.href = "./listCampaign.php";
-    } else {
-        await displayError("Erreur d'authentification", "Les réponses sont incorrectes. Veuillez recommencer.");
-        window.location.reload();
         return;
     }
     

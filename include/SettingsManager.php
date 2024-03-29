@@ -101,8 +101,8 @@ class SettingsManager {
         try {
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question, :response)", [
                 'id' => $id,
-                'question' => $question,
-                'response' => $response
+                'question' => strtolower($question),
+                'response' => strtolower($response)
 
             ]);
         } catch (\Throwable $th) {
@@ -129,26 +129,55 @@ class SettingsManager {
             ]);
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question1, :response1)", [
                 'id' => $id,
-                'question1' => $question1,
-                'response1' => $response1
-
+                'question1' => strtolower($question1),
+                'response1' => strtolower($response1)
             ]);
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question2, :response2)", [
                 'id' => $id,
-                'question2' => $question2,
-                'response2' => $response2
-
+                'question2' => strtolower($question2),
+                'response2' => strtolower($response2)
             ]);
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question3, :response3)", [
                 'id' => $id,
-                'question3' => $question3,
-                'response3' => $response3
-
+                'question3' => strtolower($question3),
+                'response3' => strtolower($response3)
             ]);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de modifier les réponses et questions de sécurité. {$th->getMessage()}");
         }
     }
+
+    /**
+     * Verify questions and aswers
+     * 
+     * @param string $question1 The first question
+     * @param string $response1 The first response
+     * @param string $question2 The second question
+     * @param string $response2 The second response
+     * @param string $question3 The third question
+     * @param string $response3 The third response
+     * @return true if all is correct, false otherwise
+     */
+    public function checkAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3): bool
+    { 
+        try {
+            $results=$this->db->fetchAll("SELECT answer FROM Questions WHERE (question = :question1 AND answer = :answer1) OR (question = :question2 AND answer = :answer2) OR (question = :question3 AND answer = :answer3)", [
+                'question1' => strtolower($question1),
+                'answer1' => strtolower($response1),
+                'question2' => strtolower($question2),
+                'answer2' => strtolower($response2),
+                'question3' => strtolower($question3),
+                'answer3' => strtolower($response3)
+            ]);
+            if (count($results) != 3) {
+                return false;
+            } 
+        } catch (\Throwable $th) {
+            throw new Exception("Impossible de récupérer la première question de sécurité et sa réponse {$th->getMessage()}");
+        }
+
+        return true;
+    } 
 
     /**
      * Modify the password of the admin into the database (the password will be stored hashed)
@@ -179,9 +208,7 @@ class SettingsManager {
     public function getSecurityQuestions()
     {
         try {
-            //return $this->db->fetchAll("SELECT question FROM Questions"); 
-            $array = array("test1", "test2", "test3");     
-            return $array;    
+            return $this->db->fetchAll("SELECT question FROM Questions");
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer les questions de sécurité. {$th->getMessage()}");
         }
