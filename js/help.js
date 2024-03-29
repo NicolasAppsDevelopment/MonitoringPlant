@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+    closePopup('help-popup')
+});
+
+
 async function deroule(id) {
 
     event.stopPropagation();
@@ -85,7 +90,7 @@ async function loadPopUp(id){
         <div class="popup-inner">
             <div class="popup-title">
                 <p>${title}</p>
-                <label for="help-popup" class="round_btn transparent small close" onclick="closePopup("help-popup"")"></label>
+                <label for="help-popup" class="round_btn transparent small close" onclick="closePopup("help-popup")"></label>
             </div>
             <video controls>
                 <source src="${videoSource}.mp4" type="video/mp4" />
