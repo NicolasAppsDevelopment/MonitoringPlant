@@ -1,3 +1,6 @@
+let networkSsid;
+let networkPassword;
+
 /**
  * Recovering raspberry pi settings.
  */
@@ -22,11 +25,13 @@ async function getSettings()
             timeConservationUnit.setAttribute('selected','selected');
         }
 
-        let networkSsid = document.getElementById("network_ssid");
-        networkSsid.value=settings["ssid"];
+        let networkSsidInput = document.getElementById("network_ssid");
+        networkSsidInput.value=settings["ssid"];
+        networkSsid=settings["ssid"];
 
-        let networkPassword = document.getElementById("network_password");
-        networkPassword.value=settings["password"];
+        let networkPasswordInput = document.getElementById("network_password");
+        networkPasswordInput.value=settings["password"];
+        networkPassword=settings["password"];
     }
 
     hideLoading();
@@ -61,9 +66,13 @@ async function setSettings()
         "password": password.value
     });
 
-    if(network.value!=null && network.value!=raspberryNetwork.name){   
+    if(password.value!=null && password.value!=networkPassword){   
         if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
-            //restart
+            await phpGet("/phpApi/restart.php");
+        }            
+    }
+    if(ssid.value!=null && ssid.value!=networkSsid){   
+        if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
             await phpGet("/phpApi/restart.php");
         }            
     }
