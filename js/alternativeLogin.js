@@ -63,9 +63,9 @@ async function alternativeLogin(){
     const data = await phpPost("/phpApi/alternativeLogin.php", {
         "question1": question1LabelComponent.innerHTML,
         "response1": response1,
-        "question2": question1LabelComponent.innerHTML,
+        "question2": question2LabelComponent.innerHTML,
         "response2": response2,
-        "question3": question1LabelComponent.innerHTML,
+        "question3": question3LabelComponent.innerHTML,
         "response3": response3
     });
     

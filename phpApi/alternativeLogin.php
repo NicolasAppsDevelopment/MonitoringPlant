@@ -38,6 +38,9 @@ try {
             throw new Exception("Les réponses sont incorrectes.");
         }
 
+        $_SESSION['logged'] = true;
+        $_SESSION['admin'] = true;
+        
         $reply->replySuccess();
     } else {
         throw new Exception("La méthode de requête est incorrecte.");

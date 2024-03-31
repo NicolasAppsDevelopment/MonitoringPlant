@@ -101,7 +101,7 @@ class SettingsManager {
         try {
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question, :response)", [
                 'id' => $id,
-                'question' => strtolower($question),
+                'question' => $question,
                 'response' => strtolower($response)
 
             ]);
@@ -129,17 +129,17 @@ class SettingsManager {
             ]);
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question1, :response1)", [
                 'id' => $id,
-                'question1' => strtolower($question1),
+                'question1' => $question1,
                 'response1' => strtolower($response1)
             ]);
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question2, :response2)", [
                 'id' => $id,
-                'question2' => strtolower($question2),
+                'question2' => $question2,
                 'response2' => strtolower($response2)
             ]);
             $this->db->fetchAll("INSERT INTO Questions VALUES (:id, :question3, :response3)", [
                 'id' => $id,
-                'question3' => strtolower($question3),
+                'question3' => $question3,
                 'response3' => strtolower($response3)
             ]);
         } catch (\Throwable $th) {
@@ -161,14 +161,15 @@ class SettingsManager {
     public function checkAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3): bool
     { 
         try {
-            $results=$this->db->fetchAll("SELECT answer FROM Questions WHERE (question = :question1 AND answer = :answer1) OR (question = :question2 AND answer = :answer2) OR (question = :question3 AND answer = :answer3)", [
-                'question1' => strtolower($question1),
+            $results = $this->db->fetchAll("SELECT answer FROM Questions WHERE (question = :question1 AND answer = :answer1) OR (question = :question2 AND answer = :answer2) OR (question = :question3 AND answer = :answer3)", [
+                'question1' => $question1,
                 'answer1' => strtolower($response1),
-                'question2' => strtolower($question2),
+                'question2' => $question2,
                 'answer2' => strtolower($response2),
-                'question3' => strtolower($question3),
+                'question3' => $question3,
                 'answer3' => strtolower($response3)
             ]);
+
             if (count($results) != 3) {
                 return false;
             } 

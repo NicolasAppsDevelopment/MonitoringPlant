@@ -47,7 +47,6 @@ try {
             ]);
         } elseif ($session->isAdmin()) {
             // admin want to change his questions
-            echo "update";
             $settingsManager->updateAdminQuestions($arguments["question1"], $arguments["response1"], $arguments["question2"], $arguments["response2"], $arguments["question3"], $arguments["response3"]);
 
             $reply->replyData([
