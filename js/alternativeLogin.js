@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const data = await phpGet("/phpApi/getSecurityQuestions.php");
     if (data != null){
-        question1LabelComponent.innerHTML=data[0];
-        question2LabelComponent.innerHTML=data[1];
-        question3LabelComponent.innerHTML=data[2];
+        question1LabelComponent.innerHTML=data[0]["question"];
+        question2LabelComponent.innerHTML=data[1]["question"];
+        question3LabelComponent.innerHTML=data[2]["question"];
     } 
 });
 
