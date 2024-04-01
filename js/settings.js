@@ -58,7 +58,7 @@ async function setSettings()
         return;
     } 
     
-    let data1 = await phpPost("/phpApi/setSettings.php", {
+    let data = await phpPost("/phpApi/setSettings.php", {
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
@@ -66,28 +66,27 @@ async function setSettings()
         "password": password.value
     });
 
-    if (password.value != null && password.value != networkPassword) {
-        if (await displayConfirm("Risque de perte d'accès", "ATTENTION : Vous venez de modifier le mot de passe du Wi-Fi de la cellule de mesure. Cela signifie que si vous n'entrez pas correctement le nouveau mot de passe, vous ne pourrez plus accéder à votre cellule de mesure. Nous vous conseillons vivement de télécharger le nouveau QR code d'accès au Wi-Fi afin d'éviter tout problème d'oubli/mot de passe mal copié !", 'Ne pas télécharger', true, "Télécharger le nouveau code QR") == false) {
-            downloadQRCode();
-        } else {
-            if (await displayConfirm("Risque de perte d'accès", "Êtes vous certains de continuer sans télécharger le nouveau code QR ?", 'Oui', true, "Télécharger le nouveau code QR") == false) {
+    if (data != null) {
+        if (password.value != null && password.value != networkPassword) {
+            if (await displayConfirm("Risque de perte d'accès", "ATTENTION : Vous venez de modifier le mot de passe du Wi-Fi de la cellule de mesure. Cela signifie que si vous n'entrez pas correctement le nouveau mot de passe, vous ne pourrez plus accéder à votre cellule de mesure. Nous vous conseillons vivement de télécharger le nouveau QR code d'accès au Wi-Fi afin d'éviter tout problème d'oubli/mot de passe mal copié !", 'Ne pas télécharger', true, "Télécharger le nouveau code QR") == false) {
                 downloadQRCode();
+            } else {
+                if (await displayConfirm("Risque de perte d'accès", "Êtes vous certains de continuer sans télécharger le nouveau code QR ?", 'Oui', true, "Télécharger le nouveau code QR") == false) {
+                    downloadQRCode();
+                }
             }
         }
-    }
+    
+        if((password.value != null && password.value != networkPassword) || (ssid.value != null && ssid.value != networkSsid)) {   
+            if (await displayConfirm("Information de connexion Wi-Fi modifié", "Vous avez changer les informations de connexion au réseau Wi-Fi de la cellule de mesure, cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous redémarrer maintenant ?", 'Redémarrer la cellule', true, "Non") == true) {
+                await phpGet("/phpApi/restart.php");
+            }            
+        }
 
-    if((password.value != null && password.value != networkPassword) || (ssid.value != null && ssid.value != networkSsid)) {   
-        if (await displayConfirm("Information de connexion Wi-Fi modifié", "Vous avez changer les informations de connexion au réseau Wi-Fi de la cellule de mesure, cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous redémarrer maintenant ?", 'Redémarrer la cellule', true, "Non") == true) {
-            await phpGet("/phpApi/restart.php");
-        }            
-    }
-
-    hideLoading();
-
-    if(data1 != null){
         displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
-    } 
-
+    }
+    
+    hideLoading();
 }
 
 /**
