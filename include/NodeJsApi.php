@@ -21,7 +21,7 @@ function NodeJsPost(string $name, array $array)
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_FAILONERROR, false); // do not fail on HTTP error
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($array));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($array));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: ' . $NODE_JS_API_TOKEN]);
 
