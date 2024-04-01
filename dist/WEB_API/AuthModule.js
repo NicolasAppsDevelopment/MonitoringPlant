@@ -18,7 +18,6 @@ async function isAuth(req, res, next) {
         res.status(500).send({ "error": "L'en-tête \"Content-Type\" doit être défini sur \"application/json\"." });
         return;
     }
-    console.log(req.path);
     // Vérifie si le chemin est autorisé sans token
     if (AUTHORIZED_PATHS_WITOUT_TOKEN.includes(req.path)) {
         next();
