@@ -28,7 +28,7 @@ function NodeJsPost(string $name, array $array)
     $res = curl_exec($curl);
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-    $returnedError = "Erreur d'émission/réception de la requête POST. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... ";
+    $returnedError = "Erreur d'émission/réception de la requête POST. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement (erreur " . $httpCode . ")... ";
 
     if (curl_errno($curl)) {
         $returnedError .= curl_error($curl); // error message from curl
@@ -61,7 +61,7 @@ function NodeJsGet(string $name)
     $res = curl_exec($curl);
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-    $returnedError = "Erreur d'émission/réception de la requête GET. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement... ";
+    $returnedError = "Erreur d'émission/réception de la requête GET. La requête vers l'adresse \"$url\" n'a pas pu être émise/reçu correctement (erreur " . $httpCode . ")... ";
 
     if (curl_errno($curl)) {
         $returnedError .= curl_error($curl); // error message from curl
