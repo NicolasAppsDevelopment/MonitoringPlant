@@ -342,7 +342,7 @@ async function downloadFile(filename, url, settings = null) {
  * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
  */
 async function phpPost(url, settings) {
-    return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
+    return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + "/" + url, settings);
 }
 
 /**
@@ -351,7 +351,16 @@ async function phpPost(url, settings) {
  * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
  */
 async function phpGet(url) { 
-    return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url);
+    return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + "/" + url);
+}
+
+/**
+ * Sends a request to retrieve JSON data from an url address linked to a NodeJS WEB API path.
+ * @param {string} url Where the data are
+ * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function nodeJsGet(url) { 
+    return await get("http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/" + url);
 }
 
 /**
@@ -362,7 +371,18 @@ async function phpGet(url) {
  * @returns {boolean} True if the download has been launched, false in case of error
  */
 async function phpDownload(filename, url, settings = null) {
-    return await downloadFile(filename, "http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
+    return await downloadFile(filename, "http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + "/" + url, settings);
+}
+
+/**
+ * Download a file from an url address linked to a NodeJS WEB API path.
+ * @param {string} filename Name of the file to download
+ * @param {string} url Where the data are
+ * @param {any} settings POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @returns {boolean} True if the download has been launched, false in case of error
+ */
+async function nodeJsDownload(filename, url, settings = null) {
+    return await downloadFile(filename, "http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/" + url, settings);
 }
 
 /**
@@ -507,7 +527,7 @@ function getReadableBool(bool) {
  */
 async function checkTime() {
     const client_datetime = new Date();
-    const data = await phpPost("/phpApi/checkTime.php", {
+    const data = await phpPost("phpApi/checkTime.php", {
         "client_datetime": client_datetime
     });
 

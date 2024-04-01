@@ -22,7 +22,7 @@ async function setPassword(){
         return;
     } 
 
-    const data = await phpPost("/phpApi/setPassword.php", {
+    const data = await phpPost("phpApi/setPassword.php", {
         "password": password2,
     });
     

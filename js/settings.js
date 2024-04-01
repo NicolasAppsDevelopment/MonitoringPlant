@@ -8,7 +8,7 @@ async function getSettings()
 {
     displayLoading("Récupération des paramètres...");
 
-    const settings = await phpGet("/phpApi/getSettings.php");
+    const settings = await phpGet("phpApi/getSettings.php");
     if (settings != null){
         if (settings["autoRemove"]){
             document.getElementById("auto_suppr").checked=true;
@@ -58,7 +58,7 @@ async function setSettings()
         return;
     } 
     
-    let data = await phpPost("/phpApi/setSettings.php", {
+    let data = await phpPost("phpApi/setSettings.php", {
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
@@ -79,7 +79,7 @@ async function setSettings()
     
         if((password.value != null && password.value != networkPassword) || (ssid.value != null && ssid.value != networkSsid)) {   
             if (await displayConfirm("Information de connexion Wi-Fi modifié", "Vous avez changer les informations de connexion au réseau Wi-Fi de la cellule de mesure, cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous redémarrer maintenant ?", 'Redémarrer la cellule', true, "Non") == true) {
-                await phpGet("/phpApi/restart.php");
+                await phpGet("phpApi/restart.php");
             }            
         }
 
@@ -97,7 +97,7 @@ async function reset()
     if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, les mesures, les paramètres et les configurations seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true) == true) {
         displayLoading("Suppression des données...");
         
-        const data = await phpPost("/phpApi/reset.php");
+        const data = await phpPost("phpApi/reset.php");
 
         hideLoading();
 
@@ -128,7 +128,7 @@ async function displayQRCode()
     
     let img = document.getElementById("qr_code_viewer");
 
-    const blob = await get("http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/getQRCode", false);
+    const blob = await nodeJsGet("getQRCode", false);
     if (blob != null) {
         img.src = window.URL.createObjectURL(blob);
         openPopup("qr-popup");
@@ -145,7 +145,7 @@ async function downloadQRCode()
 {
     displayLoading("Génération du QR code...");
     
-    const success = await downloadFile("Code QR wifi cellule mesure.png", "http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/getQRCode");
+    const success = await nodeJsDownload("Code QR wifi cellule mesure.png", "/getQRCode");
     if (success) {
         displaySuccess("Téléchargement réussi !", "Le code QR a été téléchargé avec succès. Vous pouvez le retrouver dans le dossier \"Téléchargement\" de votre appareil.");
         closePopup("qr-popup");

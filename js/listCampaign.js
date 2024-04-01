@@ -54,10 +54,10 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
     let data = null;
     if (currentFilter != null) {
         //Recovery of measurement campaigns according to the current filter.
-        data = await phpPost("/phpApi/getListCampaign.php", currentFilter);
+        data = await phpPost("phpApi/getListCampaign.php", currentFilter);
     } else {
         //Recovery of all measurement campaigns.
-        data = await phpGet("/phpApi/getListCampaign.php");
+        data = await phpGet("phpApi/getListCampaign.php");
     }
 
     if (data != null){
@@ -214,13 +214,13 @@ async function getStorageCapacity() {
     storageTxt.innerHTML = "Calcul...";
     usedStorageBar.style.width = "0%";
 
-    let data = await NODERED_get("/storage");
+    let data = await nodeJsGet("storage");
     if (data != null){
         used = data["used"];
         total = data["total"];
 
         usage_percent = (used / total) * 100;
-        let remaining_hours = (total - used) / MEASUREMENTS_SIZE_PER_HOUR;
+        let remaining_hours = data["maxHours"];
 
         storageTxt.innerHTML = Math.round(usage_percent) + "% utilisé(s) • " + Math.round(remaining_hours) + "h restantes";
         usedStorageBar.style.width = usage_percent + "%";
@@ -253,7 +253,7 @@ async function predictStoreUsage() {
     }
 
     let interval = document.getElementById("interval_input").value;
-    const intervalUnit = document.getElementById("intervalUnit_combo_box").value;
+    const intervalUnit = document.getElementById("interval_unit_combo_box").value;
 
     switch (intervalUnit) {
         case "min":
@@ -345,7 +345,7 @@ async function addCampaign() {
     
 
     // Creation of the new measurement campaign.
-    const data = await phpPost("/phpApi/createCampaign.php", {
+    const data = await phpPost("phpApi/createCampaign.php", {
         "title": title.value,
         "co2Enabled": co2Enabled.checked,
         "o2Enabled": o2Enabled.checked,
@@ -381,7 +381,7 @@ async function tryRemoveCampaign(id) {
     if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
         document.getElementById("campagne_" + id).remove();
         //Deletes all data of the campaign whose id is entered as a parameter.
-        phpPost("/phpApi/removeCampaign.php", {
+        phpPost("phpApi/removeCampaign.php", {
             "id": id
         });
     }
@@ -392,7 +392,7 @@ async function tryRemoveCampaign(id) {
  * @param {event} e event when the users press a key
  */
 function handleKeyPressSearchBar(e){
-    var key=e.keyCode || e.which;
+    let key=e.keyCode || e.which;
     if (key==13){
     filterCampaigns();
     }
@@ -402,7 +402,7 @@ function handleKeyPressSearchBar(e){
  * Recovery of all configurations.
  */
 async function getConfigurations() {
-    let data = await phpGet("/phpApi/getListConfiguration.php");
+    let data = await phpGet("phpApi/getListConfiguration.php");
     if (data != null){
         const select = document.getElementById("config_combo_box");
         data.forEach(configuration => {

@@ -87,7 +87,7 @@
     </main>
 
     <!-- loading popup -->
-    <?php include "modules/loadingPopup.php"; ?>
+    <?php include "modules/loadingPopupDisplayed.php"; ?>
 </body>
 
 </html>

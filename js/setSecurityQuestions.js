@@ -76,7 +76,7 @@ async function setSecurityQuestions(){
         displayLoading("Enregistrement des questions de sécurité....");
 
         //Register the questions and their responses into the database.
-        const data = await phpPost("/phpApi/setSecurityQuestions.php", {
+        const data = await phpPost("phpApi/setSecurityQuestions.php", {
             "question1": question1,
             "response1": response1,
             "question2": question2,

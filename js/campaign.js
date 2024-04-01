@@ -40,7 +40,7 @@ async function getCampaignMeasurements(refreshMode = false) {
     }
 
     // Recovery measurement campaign data.
-    let data = await phpPost("/phpApi/getCampaign.php", {
+    let data = await phpPost("phpApi/getCampaign.php", {
         "id": id,
         "lastLogDatetime": lastLogDatetime,
         "lastMeasureDatetime": lastMeasureDatetime
@@ -400,7 +400,7 @@ async function exportCampagne() {
 
 
     //Exports measurement campaign data.
-    const success = await phpDownload(campaignName + ".csv", "/phpApi/exportCampaign.php", {
+    const success = await phpDownload(campaignName + ".csv", "phpApi/exportCampaign.php", {
         "id": id,
         "co2Enabled": co2Enabled,
         "o2Enabled": o2Enabled,
@@ -436,7 +436,7 @@ async function stopCampagne() {
 
         // Setting to stop the measurement campaign.
         const id = document.getElementById("id").value;
-        const data = await phpPost("/phpApi/stopCampaign.php", {
+        const data = await phpPost("phpApi/stopCampaign.php", {
             "id": id
         });
 
@@ -457,7 +457,7 @@ async function restartCampagne() {
 
         // Setting to restart the measurement campaign.
         const id = document.getElementById("id").value;
-        const data = await phpPost("/phpApi/restartCampaign.php", {
+        const data = await phpPost("phpApi/restartCampaign.php", {
             "id": id
         });
 

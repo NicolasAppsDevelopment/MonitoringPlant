@@ -2,7 +2,9 @@ let question1LabelComponent;
 let question2LabelComponent;
 let question3LabelComponent;
 
-document.addEventListener("DOMContentLoaded", async () => {    
+document.addEventListener("DOMContentLoaded", async () => {  
+    displayLoading("Récupération des questions de sécurité...");
+    
     question1LabelComponent = document.getElementById("question1");
     question2LabelComponent = document.getElementById("question2");
     question3LabelComponent = document.getElementById("question3");
@@ -10,12 +12,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     bar=document.getElementsByClassName("progression_bar");
     bar[0].style.width="40%";
 
-    const data = await phpGet("/phpApi/getSecurityQuestions.php");
+    const data = await phpGet("phpApi/getSecurityQuestions.php");
     if (data != null){
         question1LabelComponent.innerHTML=data[0]["question"];
         question2LabelComponent.innerHTML=data[1]["question"];
         question3LabelComponent.innerHTML=data[2]["question"];
-    } 
+    }
+
+    hideLoading();
 });
 
 
@@ -54,13 +58,13 @@ function goToForm3(){
  * Verifies that the responses match those defined by the administrator.
  */
 async function alternativeLogin(){
-    displayLoading("Mise à jour des questions de sécurité...");
+    displayLoading("Connexion...");
 
     response1 = document.getElementById("response1").value;
     response2 = document.getElementById("response2").value;
     response3 = document.getElementById("response3").value;
     
-    const data = await phpPost("/phpApi/alternativeLogin.php", {
+    const data = await phpPost("phpApi/alternativeLogin.php", {
         "question1": question1LabelComponent.innerHTML,
         "response1": response1,
         "question2": question2LabelComponent.innerHTML,

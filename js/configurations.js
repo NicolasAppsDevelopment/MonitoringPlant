@@ -125,7 +125,7 @@ async function saveConfiguration(editMode = false, id = null) {
     // Register of the configuration
     let data = null;
     if (editMode === true) {
-        data = await phpPost("/phpApi/editConfiguration.php", {
+        data = await phpPost("phpApi/editConfiguration.php", {
             "id": id,
             "name": name.value,
             "f1": f1.value,
@@ -144,7 +144,7 @@ async function saveConfiguration(editMode = false, id = null) {
             "calibIsHumid": calibIsHumid.checked
         });
     } else {
-        data = await phpPost("/phpApi/addConfiguration.php", {
+        data = await phpPost("phpApi/addConfiguration.php", {
             "name": name.value,
             "f1": f1.value,
             "m": m.value,
@@ -200,7 +200,7 @@ async function loadConfiguration(id) {
     const altitude = document.getElementById("alt_input");
     const calibIsHumid = document.getElementById("calib_is_humid");
 
-    const data = await phpPost("/phpApi/getConfiguration.php", {
+    const data = await phpPost("phpApi/getConfiguration.php", {
         "id": id,
     });
 
@@ -277,7 +277,7 @@ async function removeConfig(id) {
 
     if (await displayConfirm('Voulez-vous vraiment supprimer cette configuration de mesure ?', 'Cette configuration est supprimée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière supprimé (vous ne pourrez plus voir le nom de la configuration utilisé par la campagne concerné). Cette action est irréversible.', 'Supprimer', true) == true) {
         document.getElementById("config_" + id).remove();
-        phpPost("/phpApi/removeConfiguration.php", {
+        phpPost("phpApi/removeConfiguration.php", {
             "id": id
         });
     }
@@ -288,7 +288,7 @@ async function removeConfig(id) {
  * @param {*} e event when the users press a key
  */
 function handleKeyPressSearchBar(e){
-    var key=e.keyCode || e.which;
+    let key=e.keyCode || e.which;
     if (key==13){
     filterConfigurations();
     }
@@ -311,9 +311,9 @@ async function getListConfigJS(filter = null) {
 
     let data = null;
     if (filter != null) {
-        data = await phpPost("/phpApi/getListConfiguration.php", filter);
+        data = await phpPost("phpApi/getListConfiguration.php", filter);
     } else {
-        data = await phpGet("/phpApi/getListConfiguration.php");
+        data = await phpGet("phpApi/getListConfiguration.php");
     }
 
     if (data != null){

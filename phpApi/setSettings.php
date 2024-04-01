@@ -53,19 +53,22 @@ try {
         $networkData = NodeJsGet("getAccessPoint")["data"];
         $setAccessPointArgs = array();
         if ($arguments["ssid"]!=null) {
-            if(strlen($arguments["ssid"]) > 32 || strlen($arguments["ssid"]) == 0){
-                throw new Exception("Le nouveau nom du réseau dépasse 32 caractères ou ne contient aucun caractère. Veuillez renseigner un nom de réseau entre 1 et 32 caractères.");
+            if(strlen($arguments["ssid"]) > 32 || strlen($arguments["ssid"]) < 2){
+                throw new Exception("Le nouveau nom du réseau doit contenir entre 2 et 32 caractères.");
             }
             if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["ssid"])){
-                throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau sans caractère spéciaux puis réessayez.");
+                throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau conforme (caractères autorisés : a à z, A à Z, 0 à 9, -, _ et espaces).");
             }
             if ($arguments["ssid"] != $networkData["ssid"]) {
                 $setAccessPointArgs["ssid"] = $arguments["ssid"];
             }
         }
         if ($arguments["password"] != null && $arguments["password"] != $networkData["password"]) {
-            if(strlen($arguments["password"]) < 8){
-                throw new Exception("Le mot de passe du réseau doit contenir au moins 8 caractères. Veuillez renseigner un mot de passe de 8 caractères ou plus puis réessayez.");
+            if(strlen($arguments["ssid"]) > 63 || strlen($arguments["ssid"]) < 8){
+                throw new Exception("Le mot de passe du réseau doit contenir entre 8 et 63 caractères.");
+            }
+            if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["ssid"])){
+                throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau mot de passe du réseau. Veuillez renseigner un mot de passe conforme (caractères autorisés : a à z, A à Z, 0 à 9, -, _ et espaces).");
             }
             $setAccessPointArgs["password"] = $arguments["password"];
         }
