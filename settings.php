@@ -67,7 +67,30 @@
                 <input class="input_field btn-show key" id="network_password" name="network_password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
             </div>
 
-            <button class="rect_round_btn gray bottom_gap" type="button" onclick="setSettings()">Récupérer le QR code</button>
+            <!-- QR code popup & button -->
+            <div id="boutonTelechargerCampagne">
+                <label for="qr-popup">
+                    <div class="rect_round_btn gray bottom_gap">Afficher le code QR</div>
+                </label>
+            </div>
+            <input type="checkbox" id="qr-popup" class="open_close-popup">
+            <div class="popup">
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Code QR du Wi-Fi</p>
+                        <label for="qr-popup" class="round_btn transparent small close"></label>
+                    </div>
+                    <div class="popup-content">
+
+                        
+
+                        <button id="btn_dwld" class="rect_round_btn gray" onclick="exportCampagne()">Télécharger</button>
+                    </div>
+                </div>
+            </div>
+
+
+
 
             <div class="section_head_container">
                 <h2 class="section_head">Accès administrateur</h2>
