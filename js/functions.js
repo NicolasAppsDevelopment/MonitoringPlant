@@ -1,5 +1,6 @@
 const API_IP_ADDRESS = "91.160.147.139";
 const PHP_API_PORT = "38080";
+const NODEJS_API_PORT = "32881";
 
 let blurCompatibility = true;
 
@@ -17,7 +18,7 @@ let idMessage = 0;
  * @param {boolean} destructive True if there is a risk of data loss or if there is a suppression of data. False otherwise.
  * @returns {boolean} True if the user confirms the action and false if he cancels it
  */
-async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) {
+async function displayConfirm(title, msg, confirmBtnTitle, destructive = false, cancelBtnTitle = "Annuler") {
     const id = idMessage;
     idMessage++;
 
@@ -31,7 +32,7 @@ async function displayConfirm(title, msg, confirmBtnTitle, destructive = false) 
                     
                     <div class="actions_msgbox">
                         <button id="confirm${id}" class="shadow_btn rect_round_btn ${destructive ? "destructive" : "gray"}" type="button">${confirmBtnTitle}</button>
-                        <button id="cancel${id}" class="rect_round_btn gray shadow_btn" type="button">Annuler</button>
+                        <button id="cancel${id}" class="rect_round_btn gray shadow_btn" type="button">${cancelBtnTitle}</button>
                     </div>
                 </div>
             </div>
@@ -220,12 +221,13 @@ async function openPopup(id) {
 }
 
 /**
- * Sends a request to retrieve data from an URL address and the data retrieval depends on the settings.
- * @param {String} url Where the data are
- * @param {Object} settings Data recovery settings
- * @returns {(json|null)}  Response from the location where the data is sent. Null if the data is not sent or not received, json if the request is sent and received. Json contains data from the url address.
+ * Sends a POST request to retrieve data from an URL address and the data retrieval depends on the settings.
+ * @param {string} url Where the data are
+ * @param {any} settings Data recovery settings
+ * @param {boolean} retrieveJSON If true, the returned data will be in json format. If false, the returned data will be in Blob format.
+ * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
  */
-async function post(url, settings) {
+async function post(url, settings, retrieveJSON = true) {
     try {
         const response = await fetch(url, {
             method: 'post',
@@ -235,42 +237,22 @@ async function post(url, settings) {
                 'Content-Type': 'application/json'
             }
         });
-        let res = await response.json();
-        if (response.status === 200 && res["success"] == true) {
-            if (res["data"] != undefined) {
-                return res["data"];
-            }
-            return res;
-        } else {
-            displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
-        }
-    } catch (e) {
-        displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
-    }
 
-    return null;
-}
-
-
-/**
- * Sends a request to retrieve data from an URL address and the data retrieval depends on the settings. (The retrieved data format is used to create a downloadable file)
- * @param {String} url Where the data are
- * @param {Object} settings Data recovery settings
- * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
- */
-async function postGetFile(url, settings) {
-    try {
-        const response = await fetch(url, {
-            method: 'post',
-            body: JSON.stringify(settings),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
         if (response.status === 200) {
-            let data = await response.blob();
-            return data;
+            if (retrieveJSON) {
+                let res = await response.json();
+                if (res["success"] == true) {
+                    if (res["data"] != undefined) {
+                        return res["data"];
+                    }
+                    return res;
+                } else {
+                    displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
+                }
+            } else {
+                let data = await response.blob();
+                return data;
+            }
         } else {
             let res = await response.json();
             displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
@@ -282,13 +264,13 @@ async function postGetFile(url, settings) {
     return null;
 }
 
-
 /**
- * Sends a request to retrieve data from an url address.
- * @param {String} url Where the data are
- * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ * Sends a GET request to retrieve data from an url address.
+ * @param {string} url Where the data are
+ * @param {boolean} retrieveJSON If true, the returned data will be in json format. If false, the returned data will be a Blob object.
+ * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
  */
-async function get(url) {
+async function get(url, retrieveJSON = true) {
     try {
         const response = await fetch(url, {
             method: 'get',
@@ -297,13 +279,23 @@ async function get(url) {
                 'Content-Type': 'application/json'
             }
         });
-        let res = await response.json();
-        if (response.status === 200 && res["success"] == true) {
-            if (res["data"] != undefined) {
-                return res["data"];
+        if (response.status === 200) {
+            if (retrieveJSON) {
+                let res = await response.json();
+                if (res["success"] == true) {
+                    if (res["data"] != undefined) {
+                        return res["data"];
+                    }
+                    return res;
+                } else {
+                    displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
+                }
+            } else {
+                let data = await response.blob();
+                return data;
             }
-            return res;
         } else {
+            let res = await response.json();
             displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
         }
     } catch (e) {
@@ -314,33 +306,64 @@ async function get(url) {
 }
 
 /**
- * Sends a request to retrieve data from an url address linked to a php file and the data retrieval depends on the settings.
- * @param {String} url Where the data are
- * @param {Object} settings Data recovery settings
- * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ * Download a file from an url address linked to an URL (with POST settings if provided).
+ * @param {string} filename Name of the file to download
+ * @param {string} url Where the data are
+ * @param {any} settings POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @returns {boolean} True if the download has been launched, false in case of error
+ */
+async function downloadFile(filename, url, settings = null) {
+    let data = null;
+    if (settings == null) {
+        data = await get(url, false);
+    } else {
+        data = await post(url, settings, false);
+    }
+
+    if (data != null) {
+        const url = window.URL.createObjectURL(data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Sends a request to retrieve JSON data from an url address linked to a php file and the data retrieval depends on the settings.
+ * @param {string} url Where the data are
+ * @param {any} settings Data recovery settings
+ * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
  */
 async function phpPost(url, settings) {
     return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
 }
 
 /**
- * Sends a request to retrieve data from an url address linked to a php file and the data retrieval depends on the settings. (The retrieved data format is used to create a downloadable file)
- * @param {String} url Where the data are
- * @param {Object} settings Data recovery settings
- * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
- */
-async function phpPostGetFile(url, settings) {
-    return await postGetFile("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
-} 
-
-/**
- * Sends a request to retrieve data from an url address linked to a php file.
- * @param {String} url Where the data are
- * @returns {(JSON|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ * Sends a request to retrieve JSON data from an url address linked to a php file.
+ * @param {string} url Where the data are
+ * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
  */
 async function phpGet(url) { 
     return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url);
-} 
+}
+
+/**
+ * Download a file from an url address linked to a php file.
+ * @param {string} filename Name of the file to download
+ * @param {string} url Where the data are
+ * @param {any} settings POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @returns {boolean} True if the download has been launched, false in case of error
+ */
+async function phpDownload(filename, url, settings = null) {
+    return await downloadFile(filename, "http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + url, settings);
+}
 
 /**
  * Transforms a Javascript Date into a string with the format : "day/month/year hour:minute:second" or "day/month/year à hour:minute:second" or "day/month/year hour:minute" or  "day/month/year à hour:minute"

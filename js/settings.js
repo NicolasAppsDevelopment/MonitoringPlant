@@ -66,13 +66,18 @@ async function setSettings()
         "password": password.value
     });
 
-    if(password.value!=null && password.value!=networkPassword){   
-        if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
-            await phpGet("/phpApi/restart.php");
-        }            
+    if (password.value != null && password.value != networkPassword) {
+        if (await displayConfirm("Risque de perte d'accès", "ATTENTION : Vous venez de modifier le mot de passe du Wi-Fi de la cellule de mesure. Cela signifie que si vous n'entrez pas correctement le nouveau mot de passe, vous ne pourrez plus accéder à votre cellule de mesure. Nous vous conseillons vivement de télécharger le nouveau QR code d'accès au Wi-Fi afin d'éviter tout problème d'oubli/mot de passe mal copié !", 'Ne pas télécharger', true, "Télécharger le nouveau code QR") == false) {
+            downloadQRCode();
+        } else {
+            if (await displayConfirm("Risque de perte d'accès", "Êtes vous certains de continuer sans télécharger le nouveau code QR ?", 'Oui', true, "Télécharger le nouveau code QR") == false) {
+                downloadQRCode();
+            }
+        }
     }
-    if(ssid.value!=null && ssid.value!=networkSsid){   
-        if (await displayConfirm("Changement du nom du WIFI", "Vous avez changer le nom du WIFI de la cellule cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Redémarrer la cellule', false) == true) {
+
+    if((password.value != null && password.value != networkPassword) || (ssid.value != null && ssid.value != networkSsid)) {   
+        if (await displayConfirm("Information de connexion Wi-Fi modifié", "Vous avez changer les informations de connexion au réseau Wi-Fi de la cellule de mesure, cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous redémarrer maintenant ?", 'Redémarrer la cellule', true, "Non") == true) {
             await phpGet("/phpApi/restart.php");
         }            
     }
@@ -108,17 +113,44 @@ async function reset()
 /**
  * Display QR Code to access the Raspi
  */
-async function displayQRcode()
+async function displayQRCode()
 {
+    const ssid = document.getElementById("network_ssid");
+    const password = document.getElementById("network_password");
+
     // Check password/ssid was edited from IU. If so, ask user to save first or refresh page to discard changes.
-    if (true) {
-        displayError('Modification non sauvegardée', "Le nom et/ou le mot de passe du réseau Wifi a été modifié sur cette page et les chagements n'ont pas été sauvegardés. Veuillez enregistrer les modifications ou rafraîchissez la page pour les abandonnées ; puis réessayer.")
-        return;
+    if ((password.value != null && password.value != networkPassword) || (ssid.value != null && ssid.value != networkSsid)) {
+        if (!await displayConfirm('Modification non sauvegardée', "Le nom et/ou le mot de passe du réseau Wi-Fi a été modifié sur cette page et les chagements n'ont pas été sauvegardés. Le code QR généré ne prendra pas en compte ces modifications. Voulez-vous tout de même voir le code QR ?", 'Voir', false)) {
+            return;
+        }
     } 
 
     displayLoading("Génération du QR code...");
     
-    // Remove and then recreate img HTML componants with src = ./PHP_API/getQRcode.php
+    let img = document.getElementById("qr_code_viewer");
+
+    const blob = await get("http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/getQRCode", false);
+    if (blob != null) {
+        img.src = window.URL.createObjectURL(blob);
+        openPopup("qr-popup");
+    }
+
+
+    hideLoading();
+}
+
+/**
+ * Download QR Code to access the Raspi
+ */
+async function downloadQRCode()
+{
+    displayLoading("Génération du QR code...");
+    
+    const success = await downloadFile("Code QR wifi cellule mesure.png", "http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/getQRCode");
+    if (success) {
+        displaySuccess("Téléchargement réussi !", "Le code QR a été téléchargé avec succès. Vous pouvez le retrouver dans le dossier \"Téléchargement\" de votre appareil.");
+        closePopup("qr-popup");
+    }
 
     hideLoading();
 }

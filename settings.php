@@ -68,11 +68,8 @@
             </div>
 
             <!-- QR code popup & button -->
-            <div id="boutonTelechargerCampagne">
-                <label for="qr-popup">
-                    <div class="rect_round_btn gray bottom_gap">Afficher le code QR</div>
-                </label>
-            </div>
+            <button class="rect_round_btn gray bottom_gap" onclick="displayQRCode()">Afficher le code QR</button>
+
             <input type="checkbox" id="qr-popup" class="open_close-popup">
             <div class="popup">
                 <div class="popup-inner">
@@ -81,10 +78,11 @@
                         <label for="qr-popup" class="round_btn transparent small close"></label>
                     </div>
                     <div class="popup-content">
+                        <div class="qr_code_container bottom_gap">
+                            <img id="qr_code_viewer" alt="QR code"/>
+                        </div>
 
-                        
-
-                        <button id="btn_dwld" class="rect_round_btn gray" onclick="exportCampagne()">Télécharger</button>
+                        <button id="btn_dwld" class="rect_round_btn gray" onclick="downloadQRCode()">Télécharger</button>
                     </div>
                 </div>
             </div>

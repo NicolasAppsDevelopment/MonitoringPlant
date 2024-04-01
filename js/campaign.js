@@ -400,7 +400,7 @@ async function exportCampagne() {
 
 
     //Exports measurement campaign data.
-    const data = await phpPostGetFile("/phpApi/exportCampaign.php", {
+    const success = await phpDownload(campaignName + ".csv", "/phpApi/exportCampaign.php", {
         "id": id,
         "co2Enabled": co2Enabled,
         "o2Enabled": o2Enabled,
@@ -419,14 +419,7 @@ async function exportCampagne() {
     });
 
     // Creation and download of the csv file
-    if (data != null) {
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(data);
-        link.download = campaignName + ".csv"; // Provide filename
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
+    if (success) {
         closePopup("export-popup");
         displaySuccess("Données de mesure exportées !", "Les données de mesure ont été exportées avec succès. Vous pouvez les retrouver dans le dossier \"Téléchargement\" de votre appareil.");
     }
