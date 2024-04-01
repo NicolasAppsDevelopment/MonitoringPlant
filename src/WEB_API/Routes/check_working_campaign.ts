@@ -2,12 +2,11 @@ import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
 import { campaignRunner } from '../../Campaign/RunCampaign';
 /*
-    URL : /test
-    METHODE : POST
-    CORPS : {"id": 69}
+    URL : /check_working_campaign
+    METHODE : GET
     CONTENT-TYPE : application/json
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : return the id of the campaign currently running or null if no campaign is running.
 */
 module.exports = function(app: Express){
     app.get('/check_working_campaign', async (req: Request, res: Response) => {

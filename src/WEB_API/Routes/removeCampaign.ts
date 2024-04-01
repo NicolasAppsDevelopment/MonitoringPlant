@@ -3,12 +3,12 @@ import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
 import { logger } from "../../Logger/LoggerManager";
 
 /*
-    URL : /test
+    URL : /removeCampaign
     METHODE : POST
     CORPS : {"id": 69}
     CONTENT-TYPE : application/json
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : send a message to the RunCampaign to stop it after deleting a campaign from the database if necessary
 */
 module.exports = function(app: Express){
     app.post('/removeCampaign', async (req: Request, res: Response)=>{

@@ -5,10 +5,10 @@ import { logger } from "../../Logger/LoggerManager";
 /*
     URL : /test
     METHODE : POST
-    CORPS : {"id": 69}
+    CORPS : {"datetime": "1789-09-01 18:00"}
     CONTENT-TYPE : application/json
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : set the time of the raspberry pi to the hour of the users device
 */
 module.exports = function(app: Express){
     app.post('/set_datetime', async (req: Request, res: Response) => {

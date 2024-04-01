@@ -3,12 +3,12 @@ import { sqlConnections } from '../../Database/DatabaseManager';
 import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
 
 /*
-    URL : /test
+    URL : /redo_campaign
     METHODE : POST
     CORPS : {"id": 69}
     CONTENT-TYPE : application/json
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : Restart a campaign from the start.
 */
 module.exports = function(app: Express){
     app.post('/redo_campaign', async (req: Request, res: Response) => {
