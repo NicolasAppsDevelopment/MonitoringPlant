@@ -8,16 +8,26 @@ const LoggerManager_1 = require("../Logger/LoggerManager");
 if (!process?.env?.API_TOKEN) {
     throw new Error("Le token de l'API n'est pas défini dans le fichier .env");
 }
+const AUTHORIZED_PATHS_WITOUT_TOKEN = [
+    '/storage',
+    '/getQRCode'
+];
 async function isAuth(req, res, next) {
-    // Vérifie la présence d'un token
-    let tokenCredential = req.headers.authorization;
-    if (tokenCredential == null) {
-        res.status(401).send({ "error": "L'en-tête \"Authorization\" est manquante/vide." });
-        return;
-    }
     // Vérifie le corps pour les requêtes POST
     if (req.method !== 'GET' && !req.is('application/json')) {
         res.status(500).send({ "error": "L'en-tête \"Content-Type\" doit être défini sur \"application/json\"." });
+        return;
+    }
+    console.log(req.path);
+    // Vérifie si le chemin est autorisé sans token
+    if (AUTHORIZED_PATHS_WITOUT_TOKEN.includes(req.path)) {
+        next();
+        return;
+    }
+    // ... sinon, vérifie la présence d'un token
+    let tokenCredential = req.headers.authorization;
+    if (tokenCredential == null) {
+        res.status(401).send({ "error": "L'en-tête \"Authorization\" est manquante/vide." });
         return;
     }
     // Vérifie le token
