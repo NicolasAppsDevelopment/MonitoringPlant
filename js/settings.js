@@ -62,7 +62,7 @@ async function setSettings()
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
-        "network": ssid.value,
+        "ssid": ssid.value,
         "password": password.value
     });
 
@@ -145,7 +145,7 @@ async function downloadQRCode()
 {
     displayLoading("Génération du QR code...");
     
-    const success = await nodeJsDownload("Code QR wifi cellule mesure.png", "/getQRCode");
+    const success = await nodeJsDownload("Code QR wifi cellule mesure.png", "getQRCode");
     if (success) {
         displaySuccess("Téléchargement réussi !", "Le code QR a été téléchargé avec succès. Vous pouvez le retrouver dans le dossier \"Téléchargement\" de votre appareil.");
         closePopup("qr-popup");

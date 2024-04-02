@@ -26,8 +26,11 @@ try {
         if (!isset($arguments["enableAutoRemove"]) || !is_bool($arguments["enableAutoRemove"])){
             throw new Exception("L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
         }
-        if (!isset($arguments["network"]) || !is_string($arguments["network"])){
-            throw new Exception("Le nom du réseau WIFI n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        if (!isset($arguments["ssid"]) || !is_string($arguments["ssid"]) || $arguments["ssid"] == null){
+            throw new Exception("Le nom du réseau Wi-Fi n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["password"]) || !is_string($arguments["password"]) || $arguments["password"] == null){
+            throw new Exception("Le mot de passe du réseau Wi-Fi n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
         }
 
         $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
@@ -52,27 +55,27 @@ try {
 
         $networkData = NodeJsGet("getAccessPoint")["data"];
         $setAccessPointArgs = array();
-        if ($arguments["ssid"]!=null) {
+        if ($arguments["ssid"] != $networkData["ssid"]) {
             if(strlen($arguments["ssid"]) > 32 || strlen($arguments["ssid"]) < 2){
                 throw new Exception("Le nouveau nom du réseau doit contenir entre 2 et 32 caractères.");
             }
             if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["ssid"])){
                 throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau conforme (caractères autorisés : a à z, A à Z, 0 à 9, -, _ et espaces).");
             }
-            if ($arguments["ssid"] != $networkData["ssid"]) {
-                $setAccessPointArgs["ssid"] = $arguments["ssid"];
-            }
+            $setAccessPointArgs["ssid"] = $arguments["ssid"];
         }
-        if ($arguments["password"] != null && $arguments["password"] != $networkData["password"]) {
-            if(strlen($arguments["ssid"]) > 63 || strlen($arguments["ssid"]) < 8){
+        if ($arguments["password"] != $networkData["password"]) {
+            if(strlen($arguments["password"]) > 63 || strlen($arguments["password"]) < 8){
                 throw new Exception("Le mot de passe du réseau doit contenir entre 8 et 63 caractères.");
             }
-            if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["ssid"])){
+            if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["password"])){
                 throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau mot de passe du réseau. Veuillez renseigner un mot de passe conforme (caractères autorisés : a à z, A à Z, 0 à 9, -, _ et espaces).");
             }
             $setAccessPointArgs["password"] = $arguments["password"];
         }
-        if (count($setAccessPointArgs) > 0) {
+
+
+        if (!empty($setAccessPointArgs)) {
             NodeJsPost("setAccessPoint", $setAccessPointArgs);
         }
 
