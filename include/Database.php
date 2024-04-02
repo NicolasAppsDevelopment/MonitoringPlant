@@ -49,9 +49,9 @@ class Database {
      */
     private function initDataBase() : PDO
     {
-        $dsn = "mysql:dbname=p2201232;host=iutbg-lamp.univ-lyon1.fr;port=3306";
-        $user = "p2201232";
-        $password = "12201232";
+        $dsn = "mysql:dbname=phase1;host=localhost;port=3306";
+        $user = "quentin";
+        $password = "password";
 
         try {
             return new PDO($dsn, $user, $password);
@@ -126,6 +126,20 @@ class Database {
             self::fetchAll("DELETE FROM Configurations");
         } catch (\Throwable $th) {
             throw new Exception("Impossible de supprimer les configurations. {$th->getMessage()}");
+        }
+
+        //Removal of security questions
+        try {
+            self::fetchAll("DELETE FROM Questions");
+        } catch (\Throwable $th) {
+            throw new Exception("Impossible de supprimer les questions de sécurité. {$th->getMessage()}");
+        }
+
+        //Removal of users
+        try {
+            self::fetchAll("DELETE FROM Users");
+        } catch (\Throwable $th) {
+            throw new Exception("Impossible de supprimer les utilisateurs. {$th->getMessage()}");
         }
 
         return true;

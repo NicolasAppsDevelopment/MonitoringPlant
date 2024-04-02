@@ -27,7 +27,7 @@ async function setPassword(){
     });
     
     if (data != null) {
-        window.location.href = "setSecurityQuestions.php";
+        window.location.href =  data["redirect"];
     }
     
     hideLoading();

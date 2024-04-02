@@ -36,7 +36,7 @@ try {
             throw new Exception("Impossible d'enregistrer la troisième réponse. La réponse n'a pas été renseignée ou son format est incorrect. Veuillez la renseigner.");
         }
 
-        if (!$settingsManager->isAdminQuestionsDefined()) {
+        if (!$settingsManager->areAdminQuestionsDefined()) {
             // the first register for the admin
             $settingsManager->registerAdminQuestions($arguments["question1"], $arguments["response1"]);
             $settingsManager->registerAdminQuestions($arguments["question2"], $arguments["response2"]);

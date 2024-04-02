@@ -1,14 +1,16 @@
 <?php
 
 include_once '../include/Session.php';
+include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
+$session = Session::getInstance();
+$settingsManager = SettingsManager::getInstance();
 $errorTitle = "Impossible de définir le mot de passe";
+$destination = array("redirect" => "index.php");
 
 try {
-    $session = Session::getInstance();
-    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 
@@ -22,17 +24,13 @@ try {
         if (!$session->isAdminDefined()) {
             // the first register for the admin
             $session->registerAdmin($arguments["password"]);
-
-            $reply->replyData([
-                "redirect" => "setupTime.php"
-            ]);
+            $destination["redirect"] = "setSecurityQuestions.php";
+            $reply->replyData($destination);
         } elseif ($session->isAdmin()) {
             // admin want to change his password
             $session->updateAdminPassword($arguments["password"]);
-
-            $reply->replyData([
-                "redirect" => "settings.php"
-            ]);
+            $destination["redirect"] = "settings.php";
+            $reply->replyData($destination);
         } else {
             throw new Exception("Veuillez vous identifier avant de modifier le mot de passe.");
         }

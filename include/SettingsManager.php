@@ -185,7 +185,7 @@ class SettingsManager {
      *
      * @param string $password The password (not hashed)
      */
-    public function isAdminQuestionsDefined()
+    public function areAdminQuestionsDefined()
     {
         $id = $this->session->getAdminUserId();
         try {

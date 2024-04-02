@@ -8,7 +8,7 @@ async function setDefaultSettings() {
         "timeConservation": 1,
         "timeConservationUnit": "mois",
         "enableAutoRemove": false,
-        "network": "Cellule de mesure"
+        "ssid": "Cellule de mesure"
     });
 
     hideLoading();
