@@ -82,7 +82,7 @@ module.exports = function(app: Express){
             //creation of a new thread
             campaignRunner.initCampaign(currentCampaignId,duration,interval,sensorSelected);
             
-            const response: any[] = ["coucou"];
+            const response: any[] = [true];
             res.send({"success": response});
         } catch (error) {
             let message = 'Erreur inconnue'
