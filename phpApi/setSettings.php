@@ -64,10 +64,10 @@ try {
             }
         }
         if ($arguments["password"] != null && $arguments["password"] != $networkData["password"]) {
-            if(strlen($arguments["ssid"]) > 63 || strlen($arguments["ssid"]) < 8){
+            if(strlen($arguments["password"]) > 63 || strlen($arguments["password"]) < 8){
                 throw new Exception("Le mot de passe du réseau doit contenir entre 8 et 63 caractères.");
             }
-            if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["ssid"])){
+            if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["password"])){
                 throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau mot de passe du réseau. Veuillez renseigner un mot de passe conforme (caractères autorisés : a à z, A à Z, 0 à 9, -, _ et espaces).");
             }
             $setAccessPointArgs["password"] = $arguments["password"];
