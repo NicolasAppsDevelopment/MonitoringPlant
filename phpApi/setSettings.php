@@ -70,7 +70,8 @@ try {
             }
             $setAccessPointArgs["password"] = $arguments["password"];
         }
-        if (count($setAccessPointArgs) > 0) {
+
+        if (!empty($setAccessPointArgs)) {
             NodeJsPost("setAccessPoint", $setAccessPointArgs);
         }
 
