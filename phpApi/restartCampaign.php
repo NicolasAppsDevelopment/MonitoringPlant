@@ -24,7 +24,7 @@ try {
         }
 
         // check if a campaign is already running
-        $data = NodeJsGet("check_working_campaign");
+        $data = NodeJsGet("checkWorkingCampaign");
         
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -34,7 +34,7 @@ try {
         }
 
         $campaignsManager->restartCampaign($id);
-        NodeJsPost("redoCampaign",array("id" => $id,'key' => 'I_do_believe_I_am_on_fire'));
+        NodeJsPost("redoCampaign",array("id" => $id));
 
         $reply->replySuccess();
     } else {

@@ -30,10 +30,10 @@
                         <span>4 Articles</span>
                     </div>
                     <ul class="summaryElement" id="helpCampaign">
-                        <li onclick="loadPopUp('helpCampaignArticle1')">Comment créer une nouvelle campagne de mesure ?</label>
-                        <li onclick="loadPopUp('helpCampaignArticle2')">Comment filtrer une campagne de mesure ? </label>
-                        <li onclick="loadPopUp('helpCampaignArticle3')">Comment avoir mes mesures sur Excel ?</label>
-                        <li onclick="loadPopUp('helpCampaignArticle4')">Comment redémmarer ma campagne ?</label>
+                        <li onclick="goToHelpPage(0)">Comment créer une nouvelle campagne de mesure ?</label>
+                        <li onclick="goToHelpPage(1)">Comment filtrer une campagne de mesure ? </label>
+                        <li onclick="goToHelpPage(2)">Comment avoir mes mesures sur Excel ?</label>
+                        <li onclick="goToHelpPage(3)">Comment redémmarer ma campagne ?</label>
                     </ul>
                 </div>
                 <div class="helpSummary" onclick="deroule('helpSettings')">
@@ -42,17 +42,17 @@
                         <span>2 Articles</span>
                     </div>
                     <ul class="summaryElement" id="helpSettings">
-                        <li onclick="loadPopUp('helpSettingsArticle1')" >Comment marche la Suppression automatique ?</label>
-                        <li onclick="loadPopUp('helpSettingsArticle2')">Comment changer le nom du Wifi ?</label>
+                        <li onclick="goToHelpPage(4)" >Comment marche la Suppression automatique ?</label>
+                        <li onclick="goToHelpPage(5)">Comment changer le nom du Wifi ?</label>
                     </ul>
-                </div>      
+                </div>
                 <div  class="helpSummary" onclick="deroule('helpCalibrate')">
                     <div class="preview">
                         <h4>Fonctionnalités Calibrations</h4>
                         <span>1 Article</span>
                     </div>
                     <ul class="summaryElement" id="helpCalibrate">
-                        <li onclick="loadPopUp('helpCalibrateArticle1')">Comment enregistrer une nouvelle calibration ?</label>
+                        <li onclick="goToHelpPage(6)">Comment enregistrer une nouvelle calibration ?</label>
                     </ul>
                 </div>  
                 <div  class="helpSummary" onclick="deroule('helpConnexion')">
@@ -61,15 +61,10 @@
                         <span>1 Article</span>
                     </div>
                     <ul class="summaryElement" id="helpConnexion">
-                        <li onclick="loadPopUp('helpConnexionArticle1')">Comment se connecter avec les questions de sécurité ?</label>
+                        <li onclick="goToHelpPage(7)">Comment se connecter avec les questions de sécurité ?</label>
                     </ul>
                 </div>
             </div>
-
-            <!-- PopUp -->
-            <input type="checkbox"  id="help-popup" class="open_close-popup">
-            <div id="popUpAide" class="popupHelp popup">
-
         </main>
     </body>
 </html>
