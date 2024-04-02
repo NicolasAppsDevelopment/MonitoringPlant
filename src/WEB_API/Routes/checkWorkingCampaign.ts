@@ -15,12 +15,10 @@ module.exports = function(app: Express){
         // Traite la requête
         try {
             // data.server_id must be send as string or else it will not work
-            let result;
-            if (campaignRunner.isRunning()) {
-                result = null;
-            } else {
+            let result = null;
+            if (!campaignRunner.isRunning()) {
                 result = campaignRunner.getCurrentCampaignId();
-            }
+            } 
 
             const response: any[] = [result];
             res.send({"success": true,"idCurrent":result});
