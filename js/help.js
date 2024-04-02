@@ -26,82 +26,144 @@ async function loadPopUp(id){
 
     let helpPopup = document.getElementById("popUpAide");
 
-    let title;
-    let videoSource;
-    let description;
-    let nbImg;
-
     switch(id){
         case "helpCampaignArticle1":
-            title="Comment créer une nouvelle campagne de mesure ?";
-            videoSource="../video/ppp";
-            description="Vous pouvez filtrez par date.";
-            nbImg=2;
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Comment créer une nouvelle campagne de mesure ?</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/ppp.mp4" type="video/mp4" />
+                    </video>
+                    <p>
+                        Durée : définit la durée d'une campagne de mesure. Vous pouvez changez l'unité de mesure en minute heure ou jour <br/>
+                        Intervalle: ce paramètre sert à définir l'intervalle entre chaque prise de mesure. 
+                    </p>
+                </div>
+            `;
             break;
         case "helpCampaignArticle2":
-            title="Comment filtrer une campagne de mesure ?";
-            videoSource="../video/ppp";
-            description="Durée : définit la durée d'une campagne de mesure. Vous pouvez changez l'unité de mesure en minute heure ou jour"+
-            "\n Intervalle: ce paramètre sert à définir l'intervalle entre chaque prise de mesure.";
-            nbImg=4;
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p> Comment filtrer les campagnes de mesure ? </p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/ppp.mp4" type="video/mp4" />
+                    </video>
+                    <p> Vous pouvez filtrez par date. </p>
+                </div>
+            `;
             break;
         case "helpCampaignArticle3":
-            title="Comment voir mes mesures sur Excel ?";
-            videoSource="../video/ppp";
-            description="Vous pouvez filtrez par date.";
-            nbImg=2;
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Comment télécharger les mesures ?</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/ppp.mp4" type="video/mp4" />
+                    </video>
+                    <p> Vous pouvez filtrez par date. </p>
+                </div>
+            `;
             break;
         case "helpCampaignArticle4":
-            title="Comment redémmarer ma campagne ?";
-            videoSource="../video/ppp";
-            description="Vous pouvez filtrez par date.";
-            nbImg=2;
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Comment redémmarer ma campagne ?</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/ppp.mp4" type="video/mp4" />
+                    </video>
+                    <p> Vous pouvez filtrez par date. </p>
+                </div>
+            `;
             break;
         case "helpSettingsArticle1":
-            title="Comment marche la Suppression automatique ?";
-            videoSource="../video/ppp";
-            description="Vous pouvez filtrez par date.";
-            nbImg=2;
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Comment marche la Suppression automatique ?</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/ppp.mp4" type="video/mp4" />
+                    </video>
+                    <p> Vous pouvez filtrez par date. </p>
+                </div>
+            `;
             break;
         case "helpSettingsArticle2":
-            title="Comment changer le nom du Wifi ?";
-            videoSource="../video/ppp";
-            description="Vous pouvez filtrez par date.";
-            nbImg=2;
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Comment changer le nom du Wifi ?</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/ppp.mp4" type="video/mp4" />
+                    </video>
+                    <p> Vous pouvez filtrez par date. </p>
+                </div>
+            `;
             break;
         case "helpCalibrateArticle1":
-            title="Comment enregistrer une nouvelle calibration ?";
-            videoSource="../video/ppp";
-            description="Vous pouvez filtrez par date.";
-            nbImg=2;
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Comment enregistrer une nouvelle calibration ?</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/Ezekiel.mp4" type="video/mp4" />
+                    </video>
+                    <p> Vous pouvez filtrez par date. </p>
+                </div>
+            `;
             break;
-        case "helpConnexion":
-            title="Comment se connecter avec les questions de sécurité ?";
-            videoSource="../video/ppp";
-            description="Vous pouvez vous connectez grâce à vos questions de sécurité.";
-            nbImg=2;
+        case "helpConnexionArticle1":
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Comment se connecter avec les questions de sécurité ?</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                    <video id="video" controls>
+                        <source src="../video/Ezekiel.mp4" type="video/mp4" />
+                    </video>
+                    <p> Vous pouvez filtrez par date. </p>
+                </div>
+            `;
             break;
         default:
+            helpPopup.innerHTML = `
+                <div class="popup-inner">
+                    <div class="popup-title">
+                        <p>Pop-Up vide</p>
+                        <label for="help-popup" class="round_btn transparent small close" onclick="closeHelpPopUp()"></label>
+                    </div>
+                </div>
+            `;
             break;
     }
-
-    helpPopup.innerHTML = `
-    
-        <div class="popup-inner">
-            <div class="popup-title">
-                <p>${title}</p>
-                <label for="help-popup" class="round_btn transparent small close" onclick="closePopup("help-popup")"></label>
-            </div>
-            <video controls>
-                <source src="${videoSource}.mp4" type="video/mp4" />
-                <source src="${videoSource}.webm" type="video/webm" />
-            </video>
-            <p> ${description} </p>
-        </div>
-        `; 
     
     openPopup("help-popup");
 
+}
+
+async function closeHelpPopUp(){
+    let video = document.getElementById("video");
+    video.pause();
+    console.log(document.getElementById('help-popup').checked);
+    closePopup('help-popup');
+    console.log(document.getElementById('help-popup').checked);
 }
 
 function nextGif(){

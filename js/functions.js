@@ -1,6 +1,6 @@
-const API_IP_ADDRESS = "91.160.147.139";
-const PHP_API_PORT = "38080";
-const NODEJS_API_PORT = "32881";
+const API_IP_ADDRESS = "192.168.4.1";
+const PHP_API_PORT = "80";
+const NODEJS_API_PORT = "1881";
 
 let blurCompatibility = true;
 
@@ -210,6 +210,7 @@ async function hideLoading() {
  */
 async function closePopup(id) {
     document.getElementById(id).checked = false;
+    console.log("function closePopup");
 }
 
 /**

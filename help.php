@@ -67,8 +67,6 @@
             </div>
 
             <!-- PopUp -->
-            
-
             <input type="checkbox"  id="help-popup" class="open_close-popup">
             <div id="popUpAide" class="popupHelp popup">
 
