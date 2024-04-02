@@ -62,7 +62,7 @@ async function setSettings()
         "timeConservation": timeConservation.value,
         "timeConservationUnit": timeConservationUnit.value,
         "enableAutoRemove": enableAutoRemove.checked,
-        "network": ssid.value,
+        "ssid": ssid.value,
         "password": password.value
     });
 
