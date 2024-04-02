@@ -11,8 +11,7 @@ import { logger } from "../../Logger/LoggerManager";
     DESCRIPTION : set the time of the raspberry pi to the hour of the users device
 */
 module.exports = function(app: Express){
-    app.post('/set_datetime', async (req: Request, res: Response) => {
-        
+    app.post('/setDatetime', async (req: Request, res: Response) => {
         let data = req.body;
         if (data.datetime == null ) {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
