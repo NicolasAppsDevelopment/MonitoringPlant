@@ -26,8 +26,11 @@ try {
         if (!isset($arguments["enableAutoRemove"]) || !is_bool($arguments["enableAutoRemove"])){
             throw new Exception("L'état d'activation de la suppression automatique n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
         }
-        if (!isset($arguments["network"]) || !is_string($arguments["network"])){
-            throw new Exception("Le nom du réseau WIFI n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        if (!isset($arguments["ssid"]) || !is_string($arguments["ssid"]) || $arguments["ssid"] == null){
+            throw new Exception("Le nom du réseau Wi-Fi n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
+        }
+        if (!isset($arguments["password"]) || !is_string($arguments["password"]) || $arguments["password"] == null){
+            throw new Exception("Le mot de passe du réseau Wi-Fi n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
         }
 
         $interval = filter_var($arguments["timeConservation"], FILTER_VALIDATE_INT);
@@ -52,7 +55,7 @@ try {
 
         $networkData = NodeJsGet("getAccessPoint")["data"];
         $setAccessPointArgs = array();
-        if ($arguments["ssid"] != null && $arguments["ssid"] != $networkData["ssid"]) {
+        if ($arguments["ssid"] != $networkData["ssid"]) {
             if(strlen($arguments["ssid"]) > 32 || strlen($arguments["ssid"]) < 2){
                 throw new Exception("Le nouveau nom du réseau doit contenir entre 2 et 32 caractères.");
             }
@@ -61,7 +64,7 @@ try {
             }
             $setAccessPointArgs["ssid"] = $arguments["ssid"];
         }
-        if ($arguments["password"] != null && $arguments["password"] != $networkData["password"]) {
+        if ($arguments["password"] != $networkData["password"]) {
             if(strlen($arguments["password"]) > 63 || strlen($arguments["password"]) < 8){
                 throw new Exception("Le mot de passe du réseau doit contenir entre 8 et 63 caractères.");
             }
@@ -71,7 +74,7 @@ try {
             $setAccessPointArgs["password"] = $arguments["password"];
         }
 
-        
+
         if (!empty($setAccessPointArgs)) {
             NodeJsPost("setAccessPoint", $setAccessPointArgs);
         }
