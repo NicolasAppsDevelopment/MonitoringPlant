@@ -12,6 +12,6 @@ async function deroule(id) {
 async function goToHelpPage(pageNumber){
     event.stopPropagation();
 
-    window.location = "./doc.pdf#page=" + pageNumber;
+    window.location = "doc.pdf#page=" + pageNumber;
 }
 
