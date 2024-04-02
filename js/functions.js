@@ -357,10 +357,11 @@ async function phpGet(url) {
 /**
  * Sends a request to retrieve JSON data from an url address linked to a NodeJS WEB API path.
  * @param {string} url Where the data are
- * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ * @param {boolean} retrieveJSON If true, the returned data will be in json format. If false, the returned data will be a Blob object.
+ * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
  */
-async function nodeJsGet(url) { 
-    return await get("http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/" + url);
+async function nodeJsGet(url, retrieveJSON = true) { 
+    return await get("http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/" + url, retrieveJSON);
 }
 
 /**
