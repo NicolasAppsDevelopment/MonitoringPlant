@@ -11,7 +11,7 @@ import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
     DESCRIPTION : Restart a campaign from the start.
 */
 module.exports = function(app: Express){
-    app.post('/redo_campaign', async (req: Request, res: Response) => {
+    app.post('/redoCampaign', async (req: Request, res: Response) => {
         let data = req.body;
         if (data.id == null || typeof data.id != "number") {
             res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});

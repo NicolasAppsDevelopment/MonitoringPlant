@@ -10,7 +10,7 @@ import { campaignRunner } from '../../Campaign/RunCampaign';
     DESCRIPTION : stop a campaign currently running
 */
 module.exports = function(app: Express){
-    app.post('/stop_campaign', async (req: Request, res: Response) => {
+    app.post('/stopCampaign', async (req: Request, res: Response) => {
         // Vérifie le corps
         let data = req.body;
         if (data.id == null || typeof data.id != "number") {
