@@ -21,7 +21,7 @@ try {
             throw new Exception("Le format de l'identifiant de la campagne renseigné est incorrect. Veuillez réessayer.");
         }
 
-        NodeJsPost("stop_campaign", array('id' => $id,'key' =>"I_do_believe_I_am_on_fire"));
+        NodeJsPost("stopCampaign", array('id' => $id));
 
         $reply->replySuccess();
     } else {
