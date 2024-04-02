@@ -52,16 +52,14 @@ try {
 
         $networkData = NodeJsGet("getAccessPoint")["data"];
         $setAccessPointArgs = array();
-        if ($arguments["ssid"]!=null) {
+        if ($arguments["ssid"] != null && $arguments["ssid"] != $networkData["ssid"]) {
             if(strlen($arguments["ssid"]) > 32 || strlen($arguments["ssid"]) < 2){
                 throw new Exception("Le nouveau nom du réseau doit contenir entre 2 et 32 caractères.");
             }
             if(!preg_match('/^[a-zA-Z0-9\s\-_]+$/', $arguments["ssid"])){
                 throw new Exception("Des caractères spéciaux et interdits sont utilisés pour le nouveau nom du réseau. Veuillez renseigner un nom de réseau conforme (caractères autorisés : a à z, A à Z, 0 à 9, -, _ et espaces).");
             }
-            if ($arguments["ssid"] != $networkData["ssid"]) {
-                $setAccessPointArgs["ssid"] = $arguments["ssid"];
-            }
+            $setAccessPointArgs["ssid"] = $arguments["ssid"];
         }
         if ($arguments["password"] != null && $arguments["password"] != $networkData["password"]) {
             if(strlen($arguments["password"]) > 63 || strlen($arguments["password"]) < 8){
