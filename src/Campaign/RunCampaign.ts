@@ -129,8 +129,9 @@ export default class RunCampaign {
     }
 
     /**
-     * update the parameters of the campaign to make it stop depending of the parameters given.
-     * @param isError boolean - if true planned ending else emergency stop
+     * update the parameters of the campaign to make it stop. The method of stopping change
+     * with the parameters given.
+     * @param isError boolean - if true : planned ending else emergency stop
      * @param message string - the message to insert in logs
      * @returns Promise<void>
      */
@@ -155,7 +156,7 @@ export default class RunCampaign {
     }
 
     /**
-     * Start an existing campagn by updating it's parameter and launching runCampaign()
+     * Start an existing campagn by updating the parameters and launching runCampaign()
      * @param campaignId number -  id of the campaign to restart in the database
      * @returns Promise <boolean>
      */
@@ -218,7 +219,7 @@ export default class RunCampaign {
     }
 
     /**
-     * Update the parameter of a campaign already running. 
+     * Update the parameters of a campaign already running to make it stop.
      * @param idCampaign number - id of the campaign which was deleted from the database
      */
     removeCampaign(idCampaign:number){
