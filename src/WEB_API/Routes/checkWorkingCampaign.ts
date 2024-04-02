@@ -16,7 +16,7 @@ module.exports = function(app: Express){
         try {
             // data.server_id must be send as string or else it will not work
             let result = null;
-            if (!campaignRunner.isRunning()) {
+            if (campaignRunner.isRunning()) {
                 result = campaignRunner.getCurrentCampaignId();
             } 
 
