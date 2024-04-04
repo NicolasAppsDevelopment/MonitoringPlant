@@ -167,6 +167,8 @@ export default class RunCampaign {
         await sqlConnections.setAlertLevel(this.currentCampaignId, logLevel);
         await sqlConnections.setFinished(this.currentCampaignId, true);
         await sqlConnections.insertLogs(this.currentCampaignId, logLevel, logTitle, message);
+        await sqlConnections.queryData("UPDATE Campaigns set endingDate=NOW() where id = ?", [this.currentCampaignId]);
+
         this.currentCampaignId = -1;
         this.isCampaignRunning = false;
 
@@ -188,6 +190,7 @@ export default class RunCampaign {
         try {
             await this.stopCampaign(campaignId);
             await this.initCampaign(campaignId);
+            await sqlConnections.queryData("UPDATE Campaigns set beginDate=NOW() where id = ?", [this.currentCampaignId]);
         } catch (error) {
             return false;
         }
