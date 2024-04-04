@@ -32,7 +32,7 @@ try {
         }
 
         // Deletes all data of the campaign whose id is entered as a parameter.
-        NodeJsPost("removeCampaign", $args["id"]);
+        NodeJsPost("stopCampaign", ["id" => $args["id"]]);
         $campaignsManager->supprCampaign($id);
 
         $reply->replySuccess();
