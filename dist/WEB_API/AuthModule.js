@@ -10,7 +10,8 @@ if (!process?.env?.API_TOKEN) {
 }
 const AUTHORIZED_PATHS_WITOUT_TOKEN = [
     '/storage',
-    '/getQRCode'
+    '/getQRCode',
+    '/checkWorkingCampaign'
 ];
 async function isAuth(req, res, next) {
     // Vérifie le corps pour les requêtes POST
