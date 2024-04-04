@@ -4,7 +4,8 @@ import { logger } from "../Logger/LoggerManager";
 import { sleep, sleepUntil } from "../Helper/sleep";
 import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
 import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
-
+import Calibration from './Calibration';
+import { nanoid } from 'nanoid';
 
  
 export default class RunCampaign {
@@ -48,24 +49,42 @@ export default class RunCampaign {
         this.luminositySensorState = false;
         this.temperature2SensorState = false;
     }
-/**
- * Initialiaze the parameters of the class
- * @param currentCampaignId : number 
- * @param duration : number
- * @param interval : number
- * @param sensorState : a JSON that contains the used data about the 5 sensors. The json contains booleans.
- */
-    initCampaign(currentCampaignId:number,duration:number,interval:number,sensorState:any){
-        this.currentCampaignId = currentCampaignId;
-        this.numberOfMeasureLeft = duration / interval;
-        this.o2SensorState = sensorState.o2;
-        this.co2SensorState = sensorState.co2;
-        this.humiditySensorState = sensorState.humidity;
-        this.luminositySensorState = sensorState.luminosity;
-        this.temperature2SensorState = sensorState.temperature;
-        this.interval = interval * 1000;
+
+    /**
+     * Initialiaze the parameters of the class
+     * @param currentCampaignId : number 
+     */
+    async initCampaign(campaignId:number){
+        if(this.isCampaignRunning){
+            throw new Error("Une campagne est déjà en cours d'éxecution.");
+        }
+
+        const campaignsData = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [campaignId]);
+        if(campaignsData.length == 0){
+            throw new Error("La campagne n'existe pas.");
+        }
+
+        const campaignData = campaignsData[0];
+
+        // set the configuration of the module
+        let calibration = await new Calibration(campaignData.idConfig, campaignId);
+        await tcpConnection.calibrateModule(calibration);
+
+        await sqlConnections.setAlertLevel(campaignId, 0);
+        await sqlConnections.setFinished(campaignId, false);
+                
+        this.o2SensorState = campaignData.O2SensorState;
+        this.co2SensorState = campaignData.CO2SensorState;
+        this.luminositySensorState = campaignData.luminositySensorState;
+        this.humiditySensorState = campaignData.humiditySensorState;
+        this.temperature2SensorState = campaignData.temperatureSensorState;
+
+        this.currentCampaignId = campaignId;
+        this.numberOfMeasureLeft = campaignData.duration / campaignData.interval_;
+        this.interval = campaignData.interval_ * 1000;
         this.nbReset = 0;
         this.isCampaignRunning = true;
+
         this.runCampaign();
     }
 
@@ -81,10 +100,10 @@ export default class RunCampaign {
      * Run a loop where the campaign will register the sensor data in the database and handle potential error.
      */
     async runCampaign(){
-        await sqlConnections.insertLogs(this.currentCampaignId, 0,"Campagne démarrée","La campagne a été démarrée avec succès.");
+        await sqlConnections.insertLogs(this.currentCampaignId, 0, "Campagne démarrée", "La campagne a été démarrée avec succès.");
 
         let nextLoopMillis: number = new Date().getTime();
-        while(this.numberOfMeasureLeft > 0 && this.isCampaignRunning){
+        while (this.numberOfMeasureLeft >= 0 && this.isCampaignRunning) {
             nextLoopMillis += this.interval;
             this.numberOfMeasureLeft--;
 
@@ -92,7 +111,7 @@ export default class RunCampaign {
                 const measures = await tcpConnection.getMeasure();
                 const insertDataRequest = this.buildInsertSensorDataRequest(measures);
                 await sqlConnections.queryData(insertDataRequest);
-                this.nbReset=0;
+                this.nbReset = 0;
             } catch (error) {
                 logger.error("runCampaign: error while getting measure. " + error);
 
@@ -104,7 +123,7 @@ export default class RunCampaign {
 
                         case 2: // Sensor module initialization/processing error
                             const warnings = await tcpConnection.getErrors();
-                            await sqlConnections.insertLogs(this.currentCampaignId,3,"Erreur du module de mesure", warnings[0].message, warnings[1].date);
+                            await sqlConnections.insertLogs(this.currentCampaignId, 3, "Erreur du module de mesure", warnings[0].message, warnings[0].date);
                             
                             if(this.nbReset >= 2){
                                 await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
@@ -118,11 +137,12 @@ export default class RunCampaign {
                             break;
 
                         default:
-                            logger.warn("Erreur inconnue du module de mesure. Code non répertorié.");
+                            logger.warn("Erreur inconnue du module de mesure. Code d'erreur non répertorié.");
                     }
                 }
                 nextLoopMillis = new Date().getTime() + 2500;
             }
+
             await sleepUntil(nextLoopMillis);
         }
         await this.endCampaign(false, "La campagne s\'est terminé avec succès.");
@@ -145,14 +165,18 @@ export default class RunCampaign {
         const logLevel: number = isError ? 2 : 1;
 
         await sqlConnections.setAlertLevel(this.currentCampaignId, logLevel);
-        await sqlConnections.setFinished(this.currentCampaignId);
+        await sqlConnections.setFinished(this.currentCampaignId, true);
         await sqlConnections.insertLogs(this.currentCampaignId, logLevel, logTitle, message);
         this.currentCampaignId = -1;
         this.isCampaignRunning = false;
+
+        await sleep(1000); // wait for the runningCampaign state to be updated
     }
 
-    async stopCampaign(){
-        this.endCampaign(false, "La campagne a bien été stoppé suite à votre demande.");
+    async stopCampaign(campaignId:number){
+        if(this.isRunning() && this.currentCampaignId == campaignId){
+            await this.endCampaign(false, "La campagne a bien été stoppé suite à votre demande.");
+        }
     }
 
     /**
@@ -161,71 +185,11 @@ export default class RunCampaign {
      * @returns Promise <boolean>
      */
     async restartCampaign(campaignId:number){
-        try{
-            const campaignData = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [campaignId]);
-            if(!this.isCampaignRunning){
-                
-                let o2:boolean;
-                let co2:boolean;
-                let luminosity:boolean;
-                let humidity:boolean;
-                let temperature:boolean;
-    
-                if(campaignData[0].O2SensorState == 1){
-                    o2 = true;
-                }else{
-                     o2 = false;
-                }
-                if(campaignData[0].CO2SensorState == 1){
-                    co2 = true;
-                }else{
-                     co2 = false;
-                }
-                if(campaignData[0].humiditySensorState == 1){
-                    luminosity = true;
-                }else{
-                    luminosity = false;
-                }
-                if(campaignData[0].luminositySensorState == 1){
-                    humidity = true;
-                }else{
-                    humidity = false;
-                }
-                if(campaignData[0].temperatureSensorState == 1){
-                    temperature = true;
-                }else{
-                    temperature = false;
-                }
-    
-                const sensorSelected={
-                    "O2":o2,
-                    "CO2":co2,
-                    "humidity":humidity,
-                    "light":luminosity,
-                    "temperature":temperature
-                };
-
-                await sqlConnections.queryData("update Campaigns set finished = 0 where idCampaign= ? ", [campaignId]);
-                await sqlConnections.queryData("update Campaigns set alertLevel = 0 where idCampaign= ? ", [campaignId]);
-
-                this.initCampaign(campaignId, campaignData[0].duration, campaignData[0].duration, sensorSelected);
-
-                return true;
-            }
-        }catch(error){
+        try {
+            await this.stopCampaign(campaignId);
+            await this.initCampaign(campaignId);
+        } catch (error) {
             return false;
-        }
-
-    }
-
-    /**
-     * Update the parameters of a campaign already running to make it stop.
-     * @param idCampaign number - id of the campaign which was deleted from the database
-     */
-    removeCampaign(idCampaign:number){
-        if(this.isRunning() && this.currentCampaignId == idCampaign ){
-            this.currentCampaignId = -1;
-            this.isCampaignRunning = false;
         }
     }
 

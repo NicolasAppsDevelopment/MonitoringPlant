@@ -11,25 +11,14 @@ import { campaignRunner } from '../../Campaign/RunCampaign';
 */
 module.exports = function(app: Express){
     app.post('/stopCampaign', async (req: Request, res: Response) => {
-        // Vérifie le corps
-        let data = req.body;
-        if (data.id == null || typeof data.id != "number") {
-            res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
-            return;
-        }
-
-        // Traite la requête
         try {
-            // data.server_id must be send as string or else it will not work
-            const sid = data.id;
-            if (sid == campaignRunner.getCurrentCampaignId){
-                campaignRunner.stopCampaign();
-            }else{
-                res.status(400).send({"error": "wrong campaign number"});
+            let data = req.body;
+            if (data.id == null || typeof data.id != "number") {
+                throw new Error("Des arguments sont manquants et/ou incorrectes dans le corps de la requête.");
             }
             
-            const response: any[] = ["coucou"];
-            res.send({"success": response});
+            await campaignRunner.stopCampaign(data.id);
+            res.send({"success": true});
         } catch (error) {
             let message = 'Erreur inconnue'
             if (error instanceof Error) message = error.message

@@ -74,7 +74,7 @@ class Database {
         }
     }
     async setAlertLevel(idCampaign, alertLevel) {
-        let query = "update Campaigns set alertLevel= ? where idCampaign=?;";
+        let query = "update Campaigns set alertLevel=? where idCampaign=?;";
         try {
             await this.queryData(query, [alertLevel, idCampaign]);
         }
@@ -82,11 +82,11 @@ class Database {
             LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
         }
     }
-    async setFinished(idCampaign) {
+    async setFinished(idCampaign, finished) {
         let now = new Date();
-        let query = "update Campaigns set finished=1,endingDate= ? where idCampaign=?;";
+        let query = "update Campaigns set finished=?, endingDate=? where idCampaign=?;";
         try {
-            await this.queryData(query, [now, idCampaign]);
+            await this.queryData(query, [+finished, now, idCampaign]);
         }
         catch (error) {
             LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);

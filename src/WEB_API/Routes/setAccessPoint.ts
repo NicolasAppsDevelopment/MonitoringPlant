@@ -12,27 +12,25 @@ import * as fs from 'fs';
 */
 module.exports = function(app: Express){
     app.post('/setAccessPoint', async (req: Request, res: Response) => {
-        let data = req.body;
-        
-        if ((data.ssid == null || typeof data.ssid != "string") && (data.password == null || typeof data.password != "string")) {
-            res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
-            return;
-        }
-
-        const ssid = data.ssid;
-        const password = data.password;
-
-        // Traite la requête
         try {
+            let data = req.body;
+        
+            if ((data.ssid == null || typeof data.ssid != "string") && (data.password == null || typeof data.password != "string")) {
+                throw new Error("Des arguments sont manquants et/ou incorrectes dans le corps de la requête.");
+            }
+    
+            const ssid = data.ssid;
+            const password = data.password;
+
             // set the password and ssid of the current access point by reading/writing to the hostapd file for ssid and wpa_passphrase
             fs.readFile('/etc/hostapd/hostapd.conf', 'utf8', (err, data) => {
                 if (err) {
-                    res.status(400).send({"error": "Erreur lors de la lecture du fichier de configuration du point d'accès."});
-                    return;
+                    throw new Error("Erreur lors de la lecture du fichier de configuration du point d'accès.");
                 }
 
                 let lines = data.split('\n');
                 let newLines: string[] = [];
+                
                 lines.forEach((line) => {
                     if (line.startsWith('ssid=') && ssid != null) {
                         newLines.push('ssid=' + ssid);
@@ -42,10 +40,10 @@ module.exports = function(app: Express){
                         newLines.push(line);
                     }
                 });
+
                 fs.writeFile('/etc/hostapd/hostapd.conf', newLines.join('\n'), (err) => {
                     if (err) {
-                        res.status(400).send({"error": "Erreur lors de l'écriture du fichier de configuration du point d'accès."});
-                        return;
+                        throw new Error("Erreur lors de l'écriture du fichier de configuration du point d'accès.");
                     }
                     res.send({"success": true});
                 });

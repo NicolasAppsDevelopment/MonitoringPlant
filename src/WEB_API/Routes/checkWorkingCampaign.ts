@@ -1,5 +1,4 @@
 import { Express, Request, Response } from 'express';
-import { sqlConnections } from '../../Database/DatabaseManager';
 import { campaignRunner } from '../../Campaign/RunCampaign';
 /*
     URL : /check_working_campaign
@@ -10,9 +9,6 @@ import { campaignRunner } from '../../Campaign/RunCampaign';
 */
 module.exports = function(app: Express){
     app.get('/checkWorkingCampaign', async (req: Request, res: Response) => {
-        // Vérifie le corps
-        
-        // Traite la requête
         try {
             let currentCampaignId = null;
             if (campaignRunner.isRunning() && campaignRunner.getCurrentCampaignId() != -1) {
