@@ -19,6 +19,55 @@ document.addEventListener("DOMContentLoaded", () => {
     getConfigurations();
 });
 
+let checkboxProcessing = document.querySelector("input[id=processing]");
+let checkboxSuccess = document.querySelector("input[id=success]");
+let checkboxError = document.querySelector("input[id=error]");
+let checkboxWarn = document.querySelector("input[id=warn]");
+
+/**
+ * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they are in progress is changed.
+ */
+checkboxProcessing.addEventListener('change', function() {
+  if (this.checked) {
+    console.log("checkboxSuccess is checked..");
+  } else {
+    console.log("checkboxSuccess is not checked..");
+  }
+});
+
+/**
+ * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in success is changed.
+ */
+checkboxSuccess.addEventListener('change', function() {
+    if (this.checked) {
+      console.log("checkboxSuccess is checked..");
+    } else {
+      console.log("checkboxSuccess is not checked..");
+    }
+  });
+
+/**
+ * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in an error is changed.
+ */
+checkboxError.addEventListener('change', function() {
+    if (this.checked) {
+      console.log("checkboxError is checked..");
+    } else {
+      console.log("checkboxError is not checked..");
+    }
+  });
+
+/**
+ * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they contain one or more warnings is changed.
+ */
+checkboxWarn.addEventListener('change', function() {
+    if (this.checked) {
+      console.log("checkboxWarn is checked..");
+    } else {
+      console.log("checkboxWarn is not checked..");
+    }
+  });
+
 /**
  * Automatic refresh of the list of measurement campaigns.
  */
@@ -144,6 +193,9 @@ async function filterCampaigns() {
     const endDate = document.getElementById("datefin_choice");
     const endTime = document.getElementById("heurefin_choice");
     const processing = document.getElementById("processing").checked;
+    const success = document.getElementById("success").checked;
+    const error = document.getElementById("error").checked;
+    const warn = document.getElementById("warn").checked;
 
     if (startDate.validity.badInput === true) {
         hideLoading();
@@ -170,7 +222,7 @@ async function filterCampaigns() {
     closePopup("filter-popup");
 
     //Recovery Recovery all measurement campaigns according to filter's parameters.
-    getListCampaignJS({"name": name.toLowerCase(), "startDate": startDate.value, "startTime": startTime.value, "endDate": endDate.value, "endTime": endTime.value, "processing": processing});
+    getListCampaignJS({"name": name.toLowerCase(), "startDate": startDate.value, "startTime": startTime.value, "endDate": endDate.value, "endTime": endTime.value, "processing": processing, "success": success, "error": error, "warn": warn});
 }
 
 /**
@@ -197,6 +249,7 @@ async function resetFilter(){
     error.checked=false;
     warn.checked=false;
 
+    window.location.reload();
 } 
 
 const MEASUREMENTS_SIZE_PER_HOUR = 1497.6; // In KB

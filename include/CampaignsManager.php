@@ -87,7 +87,16 @@ class CampaignsManager {
                 }
         
                 if ($filter["processing"] == true) {
-                    array_push($whereClauses, "finished = 0");
+                    array_push($whereClauses, "alertLevel = 0");
+                }
+                if ($filter["success"] == true) {
+                    array_push($whereClauses, "alertLevel = 1");
+                }
+                if ($filter["error"] == true) {
+                    array_push($whereClauses, "alertLevel = 2");
+                }
+                if ($filter["warn"] == true) {
+                    array_push($whereClauses, "alertLevel = 3");
                 }
             
                 if (!empty($filter["startDate"])) {

@@ -37,6 +37,7 @@
                         <label for="filter-popup" class="round_btn transparent small close"></label>
                     </div>
                     <div class="popup-content">
+
                         <div class="label_img_input">
                             <label class="label_field" for="datetime">Date de la campagne de mesure</label>
                             <div class="row_fields gap with_subtitle">
@@ -95,7 +96,7 @@
                                 <span>Filtrer par campagnes avec un/des avertissements</span>
                             </label>
                         </div>
-
+                        
                         <button class="rect_round_btn gray bottom_gap" type="button" onclick="resetFilter()">Réinitialiser le filtre</button>
                         <button class="rect_round_btn gray" type="button" onclick="filterCampaigns()">Filtrer</button>
                     </div>
