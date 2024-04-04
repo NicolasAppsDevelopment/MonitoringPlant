@@ -13,7 +13,7 @@ module.exports = function(app: Express){
             let currentCampaignId = null;
             if (campaignRunner.isRunning() && campaignRunner.getCurrentCampaignId() != -1) {
                 currentCampaignId = campaignRunner.getCurrentCampaignId();
-            } 
+            }
             
             res.send({"success": true,"idCurrent":currentCampaignId});
         } catch (error) {
