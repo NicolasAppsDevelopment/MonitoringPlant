@@ -178,7 +178,7 @@ try {
         // Creation of the new measurement campaign.
         $id = $campaignsManager->addCampaign($configId, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
 
-        NodeJsPost("createCampaign", array('id' => $id, 'key' => 'I_do_believe_I_am_on_fire'));
+        NodeJsPost("createCampaign", array('id' => $id));
 
         $reply->replyData([
             "id" => $id
