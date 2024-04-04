@@ -11,16 +11,16 @@ import * as fs from 'fs';
 */
 module.exports = function(app: Express){
     app.get('/getAccessPoint', async (req: Request, res: Response) => {
-        // Traite la requête
         try {
             // get the password and ssid of the current access point by reading the hostapd file
             fs.readFile('/etc/hostapd/hostapd.conf', 'utf8', (err, data) => {
                 if (err) {
-                    res.status(400).send({"error": "Erreur lors de la lecture du fichier de configuration du point d'accès."});
-                    return;
+                    throw new Error("Erreur lors de la lecture du fichier de configuration du point d'accès.");
                 }
+
                 let ssid = '';
                 let password = '';
+                
                 data.split('\n').forEach((line) => {
                     if (line.startsWith('ssid=')) {
                         ssid = line.split('=')[1];
@@ -28,8 +28,8 @@ module.exports = function(app: Express){
                         password = line.split('=')[1];
                     }
                 });
-                const result = {"ssid": ssid, "password": password};
-                res.send({"success": true, "data": result});
+
+                res.send({"success": true, "data": {"ssid": ssid, "password": password}});
             });
         } catch (error) {
             let message = 'Erreur inconnue'

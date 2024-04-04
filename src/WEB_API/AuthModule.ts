@@ -10,7 +10,8 @@ if (!process?.env?.API_TOKEN) {
 
 const AUTHORIZED_PATHS_WITOUT_TOKEN = [
     '/storage',
-    '/getQRCode'
+    '/getQRCode',
+    '/checkWorkingCampaign'
 ];
 
 export async function isAuth(req: Request, res: Response, next: NextFunction) {

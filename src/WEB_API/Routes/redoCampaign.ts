@@ -1,5 +1,4 @@
 import { Express, Request, Response } from 'express';
-import { sqlConnections } from '../../Database/DatabaseManager';
 import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
 
 /*
@@ -12,16 +11,18 @@ import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
 */
 module.exports = function(app: Express){
     app.post('/redoCampaign', async (req: Request, res: Response) => {
-        let data = req.body;
-        if (data.id == null || typeof data.id != "number") {
-            res.status(400).send({"error": "Des arguments sont manquants et/ou incorrectes dans le corps de la requête."});
-            return;
-        }
         try {
-            const currentCampaignId = data.id;
-            let result = await campaignRunner.restartCampaign(data.id);
+            let data = req.body;
+            if (data.id == null || typeof data.id != "number") {
+                throw new Error("Des arguments sont manquants et/ou incorrectes dans le corps de la requête."); 
+            }
 
-            res.send({"success": result});
+            if (campaignRunner.isRunning() && campaignRunner.getCurrentCampaignId() != data.id){
+                throw new Error("Une autre campagne est déjà en cours d'éxecution.");
+            }
+
+            await campaignRunner.restartCampaign(data.id);
+            res.send({"success": true});
         } catch (error) {
             let message = 'Erreur inconnue'
             if (error instanceof Error) message = error.message

@@ -11,18 +11,16 @@ import { logger } from "../../Logger/LoggerManager";
 */
 module.exports = function(app: Express){
     app.get('/storage', async (req: Request, res: Response) => {
-        
         try {
             exec('df --block-size=KB --output=size --output=used /root', (error, stdout, stderr) => {
                 if (error) {
                     logger.error(`error: ${error.message}`);
-                    res.send({ "error":`${error.message}` });
-                    return;
+                    throw new Error("Erreur lors de la récupération de l'espace de stockage. " + error.message);
                 }
+                
                 if (stderr) {
                     logger.error(`stderr: ${stderr}`);
-                    res.send({ "error":`${stderr}` });
-                    return;
+                    throw new Error("Erreur lors de la récupération de l'espace de stockage. " + stderr);
                 }
 
                 let split= stdout.split("\n");
@@ -30,6 +28,7 @@ module.exports = function(app: Express){
                 let total= parseInt(data[1].replace("kB", ""));
                 const used = parseInt(data[2].replace("kB", ""));
                 const maxHours = Math.floor((total - used) / 1497.6);
+
                 res.send({"success": true, "data": {"used": used, "total": total, "maxHours": maxHours}});
             });
         } catch (error) {

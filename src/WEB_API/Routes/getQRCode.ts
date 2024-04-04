@@ -12,16 +12,16 @@ import * as qr from 'qr-image';
 */
 module.exports = function(app: Express){
     app.get('/getQRCode', async (req: Request, res: Response) => {
-        // Traite la requête
         try {
             // get the password and ssid of the current access point by reading the hostapd file
             fs.readFile('/etc/hostapd/hostapd.conf', 'utf8', (err, data) => {
                 if (err) {
-                    res.status(400).send({"error": "Erreur lors de la lecture du fichier de configuration du point d'accès."});
-                    return;
+                    throw new Error("Erreur lors de la lecture du fichier de configuration du point d'accès.");
                 }
+                
                 let ssid = '';
                 let password = '';
+
                 data.split('\n').forEach((line) => {
                     if (line.startsWith('ssid=')) {
                         ssid = line.split('=')[1];
