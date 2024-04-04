@@ -86,16 +86,16 @@ class CampaignsManager {
                     $parameters["varName"] = "%" . htmlspecialchars($filter["name"]) . "%";
                 }
         
-                if ($filter["processing"] == true) {
+                if ($filter["processing"]) {
                     array_push($whereClauses, "alertLevel = 0");
                 }
-                if ($filter["success"] == true) {
+                if ($filter["success"]) {
                     array_push($whereClauses, "alertLevel = 1");
                 }
-                if ($filter["error"] == true) {
+                if ($filter["error"]) {
                     array_push($whereClauses, "alertLevel = 2");
                 }
-                if ($filter["warn"] == true) {
+                if ($filter["warn"]) {
                     array_push($whereClauses, "alertLevel = 3");
                 }
             

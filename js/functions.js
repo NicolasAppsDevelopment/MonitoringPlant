@@ -210,7 +210,6 @@ async function hideLoading() {
  */
 async function closePopup(id) {
     document.getElementById(id).checked = false;
-    console.log("function closePopup");
 }
 
 /**
