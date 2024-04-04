@@ -1,6 +1,7 @@
 import { Express, Request, Response } from 'express';
 import { sqlConnections } from '../../Database/DatabaseManager';
 import { campaignRunner } from '../../Campaign/RunCampaign';
+import { logger } from '../../Logger/LoggerManager';
 /*
     URL : /stop_campaign
     METHODE : POST
@@ -20,6 +21,7 @@ module.exports = function(app: Express){
             await campaignRunner.stopCampaign(data.id);
             res.send({"success": true});
         } catch (error) {
+            logger.error("Error while stopping campaign: " + error);
             let message = 'Erreur inconnue'
             if (error instanceof Error) message = error.message
             res.status(400).send({"error": message});

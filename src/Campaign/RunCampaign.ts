@@ -1,7 +1,7 @@
 import { sqlConnections } from '../Database/DatabaseManager';
 import {tcpConnection} from "../Tcp/TcpManager";
 import { logger } from "../Logger/LoggerManager";
-import { sleep, sleepUntil } from "../Helper/sleep";
+import { sleep, sleepUntil, sleepUntilWhileRunning } from "../Helper/sleep";
 import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
 import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 import Calibration from './Calibration';
@@ -115,6 +115,11 @@ export default class RunCampaign {
             } catch (error) {
                 logger.error("runCampaign: error while getting measure. " + error);
 
+                if(this.nbReset >= 2){
+                    await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
+                    return;
+                }
+
                 if (error instanceof TcpDaemonAnswerError) {
                     switch (error.code) {
                         case 1: // Driver module initialization error
@@ -124,16 +129,10 @@ export default class RunCampaign {
                         case 2: // Sensor module initialization/processing error
                             const warnings = await tcpConnection.getErrors();
                             await sqlConnections.insertLogs(this.currentCampaignId, 3, "Erreur du module de mesure", warnings[0].message, warnings[0].date);
-                            
-                            if(this.nbReset >= 2){
-                                await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
-                                return;
-                            }
-        
                             await tcpConnection.resetModule();
                             this.nbReset++;
         
-                            await sqlConnections.insertLogs(this.currentCampaignId,3,"Réinitilisation du module de mesure","Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
+                            await sqlConnections.insertLogs(this.currentCampaignId, 0, "Réinitilisation du module de mesure", "Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
                             break;
 
                         default:
@@ -143,7 +142,10 @@ export default class RunCampaign {
                 nextLoopMillis = new Date().getTime() + 2500;
             }
 
-            await sleepUntil(nextLoopMillis);
+            if (this.numberOfMeasureLeft < 0) {
+                break;
+            }
+            await sleepUntilWhileRunning(nextLoopMillis);
         }
         await this.endCampaign(false, "La campagne s\'est terminé avec succès.");
     }
@@ -160,17 +162,19 @@ export default class RunCampaign {
             logger.warn("endCampaign function fired without any campaign running!");
             return;
         }
+        
+        this.isCampaignRunning = false;
 
         const logTitle: string = isError ? "Arrêt imprévu" : "Arrêt prévu";
         const logLevel: number = isError ? 2 : 1;
+        const campaignAlertLevel: number = isError ? 2 : (this.nbReset == 0) ? 0 : 1;
 
-        await sqlConnections.setAlertLevel(this.currentCampaignId, logLevel);
+        await sqlConnections.setAlertLevel(this.currentCampaignId, campaignAlertLevel);
         await sqlConnections.setFinished(this.currentCampaignId, true);
         await sqlConnections.insertLogs(this.currentCampaignId, logLevel, logTitle, message);
-        await sqlConnections.queryData("UPDATE Campaigns set endingDate=NOW() where id = ?", [this.currentCampaignId]);
+        await sqlConnections.queryData("UPDATE Campaigns SET endingDate=NOW() WHERE idCampaign = ?", [this.currentCampaignId]);
 
         this.currentCampaignId = -1;
-        this.isCampaignRunning = false;
 
         await sleep(1000); // wait for the runningCampaign state to be updated
     }
@@ -190,7 +194,7 @@ export default class RunCampaign {
         try {
             await this.stopCampaign(campaignId);
             await this.initCampaign(campaignId);
-            await sqlConnections.queryData("UPDATE Campaigns set beginDate=NOW() where id = ?", [this.currentCampaignId]);
+            await sqlConnections.queryData("UPDATE Campaigns set beginDate=NOW() where idCampaign = ?", [this.currentCampaignId]);
         } catch (error) {
             return false;
         }

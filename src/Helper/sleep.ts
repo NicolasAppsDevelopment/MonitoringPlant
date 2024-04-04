@@ -1,3 +1,4 @@
+import { logger } from '../Logger/LoggerManager';
 import { campaignRunner } from '../Campaign/RunCampaign';
 
 export async function sleep(millis:number) {
@@ -11,7 +12,7 @@ export async function sleepUntil(millis:number) {
 }
 
 export async function sleepUntilWhileRunning(millis:number) {
-    await await Promise.race([
+    await Promise.race([
         sleepUntil(millis),
         new Promise<void>(resolve => {
             const checkInterval = setInterval(() => {

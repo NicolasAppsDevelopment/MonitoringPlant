@@ -58,7 +58,7 @@ class Database {
             }
             this.connection.query(sql, params || [], (error, results) => {
                 if (error) {
-                    return reject("Oups ! La requête avec la base de données à échouée : " + error + "\nSQL demandé: " + sql + "\nParam: " + params);
+                    return reject(new Error("Oups ! La requête avec la base de données à échouée : " + error + "\nSQL demandé: " + sql + "\nParam: " + params));
                 }
                 return resolve(results || []);
             });
