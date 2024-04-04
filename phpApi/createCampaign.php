@@ -158,7 +158,7 @@ try {
         }
 
         // check if there is enough space on the device
-        $storage=NodeJsGet("storage");
+        $storage=NodeJsGet("storage")["data"];
 
         $lines = $duration / $interval;
         $size = $lines * MEASUREMENTS_SIZE_PER_LINE;
