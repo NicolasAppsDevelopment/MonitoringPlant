@@ -1,6 +1,11 @@
 let currentFilter = null;
 let refreshRepeat = true;
 
+let checkboxProcessing;
+let checkboxSuccess;
+let checkboxError;
+let checkboxWarn;
+
 /**
  * Executes each of the following functions when all html code is loaded.
  */
@@ -17,56 +22,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Recovery of all configurations.
     getConfigurations();
+
+    checkboxProcessing = document.getElementById("processing");
+    checkboxSuccess = document.getElementById("success");
+    checkboxError = document.getElementById("error");
+    checkboxWarn = document.getElementById("warn");
+
+    /**
+     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they are in progress is changed.
+     */
+    checkboxProcessing.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxSuccess.checked=false;
+            checkboxError.checked=false;
+            checkboxWarn.checked=false;
+        }
+    });
+    
+    /**
+     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in success is changed.
+     */
+    checkboxSuccess.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxProcessing.checked=false;
+            checkboxError.checked=false;
+            checkboxWarn.checked=false;
+        }
+    });
+    
+    /**
+     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in an error is changed.
+     */
+    checkboxError.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxSuccess.checked=false;
+            checkboxProcessing.checked=false;
+            checkboxWarn.checked=false;
+        }
+    });
+    
+    /**
+     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they contain one or more warnings is changed.
+     */
+    checkboxWarn.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxSuccess.checked=false;
+            checkboxError.checked=false;
+            checkboxProcessing.checked=false;
+        }
+    });
 });
 
-let checkboxProcessing = document.querySelector("input[id=processing]");
-let checkboxSuccess = document.querySelector("input[id=success]");
-let checkboxError = document.querySelector("input[id=error]");
-let checkboxWarn = document.querySelector("input[id=warn]");
 
-/**
- * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they are in progress is changed.
- */
-checkboxProcessing.addEventListener('change', function() {
-  if (this.checked) {
-    console.log("checkboxSuccess is checked..");
-  } else {
-    console.log("checkboxSuccess is not checked..");
-  }
-});
 
-/**
- * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in success is changed.
- */
-checkboxSuccess.addEventListener('change', function() {
-    if (this.checked) {
-      console.log("checkboxSuccess is checked..");
-    } else {
-      console.log("checkboxSuccess is not checked..");
-    }
-  });
 
-/**
- * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in an error is changed.
- */
-checkboxError.addEventListener('change', function() {
-    if (this.checked) {
-      console.log("checkboxError is checked..");
-    } else {
-      console.log("checkboxError is not checked..");
-    }
-  });
-
-/**
- * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they contain one or more warnings is changed.
- */
-checkboxWarn.addEventListener('change', function() {
-    if (this.checked) {
-      console.log("checkboxWarn is checked..");
-    } else {
-      console.log("checkboxWarn is not checked..");
-    }
-  });
 
 /**
  * Automatic refresh of the list of measurement campaigns.
