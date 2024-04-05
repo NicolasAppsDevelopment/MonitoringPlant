@@ -435,7 +435,7 @@ async function addCampaign() {
 
 /**
  * Deletes all data of the measurement campaign whose id is entered as a parameter.
- * @param {integer} id id of the campaing that we want to remove
+ * @param {Number} id id of the campaing that we want to remove
  */
 async function tryRemoveCampaign(id) {
     event.stopPropagation();

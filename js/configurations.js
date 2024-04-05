@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * Saves the configuration.
  * @param {boolean} editMode Influences the visual aspect of the recovery
- * @param {integer} id Configuration id
+ * @param {Number} id Configuration id
  */
 async function saveConfiguration(editMode = false, id = null) {
     let actionVerb = "d'ajouter";
@@ -174,7 +174,7 @@ async function saveConfiguration(editMode = false, id = null) {
 
 /**
  * Recovery and diplay of the configuration whose id corresponds to the parameter
- * @param {integer} id Configuration id
+ * @param {Number} id Configuration id
  */
 async function loadConfiguration(id) {
     displayLoading("Récupération de la configuration...");
@@ -260,7 +260,7 @@ async function prepareAddPopup() {
 /**
  * Displays a message asking if the user wants to modify the configuration whose id is in the parameter.
  * If the user answers yes, it is modified, if he answers no, it is not modified.
- * @param {integer} id Configuration id
+ * @param {Number} id Configuration id
  */
 async function editConfiguration(id) {
     if (await displayConfirm('Voulez-vous vraiment modifier cette configuration de mesure ?', 'Cette configuration sera modifiée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière également modifié (si vous changez le nom de la configuration, ce dernier sera aussi modifié sur chaque campagne concerné). Cette action est irréversible.', 'Modifier', true) == true) {
@@ -270,7 +270,7 @@ async function editConfiguration(id) {
 
 /**
  * Removes the configuration whose id is in the parameter.
- * @param {integer} id Configuration id
+ * @param {Number} id Configuration id
  */
 async function removeConfig(id) {
     event.stopPropagation();

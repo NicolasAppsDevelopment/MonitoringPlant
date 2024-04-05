@@ -60,7 +60,7 @@ async function displayConfirm(title, msg, confirmBtnTitle, destructive = false, 
  
 /**
  * Hides the confirmation popup whose id is in the parameter.
- * @param {integer} id id of the popup that will be hidden
+ * @param {Number} id id of the popup that will be hidden
  */
 async function hideConfirm(id) {
     const popupContainer = document.getElementById("confirm_popup_container" + id);
@@ -113,7 +113,7 @@ async function displayError(title, msg) {
 
 /**
  * Hides the error report popup whose id is in the parameter.
- * @param {integer} id id of the popup that will be hidden
+ * @param {Number} id id of the popup that will be hidden
  */
 async function hideError(id) {
     const popupContainer = document.getElementById("error_popup_container" + id);
@@ -166,7 +166,7 @@ async function displaySuccess(title, msg) {
 
 /**
  * Hides the success report popup whose id is in the parameter.
- * @param {integer} id id of the popup that will be hidden
+ * @param {Number} id id of the popup that will be hidden
  */
 async function hideSuccess(id) {
     const popupContainer = document.getElementById("success_popup_container" + id);
@@ -206,7 +206,7 @@ async function hideLoading() {
 
 /**
  * Closes the popup whose id is in parameter
- * @param {integer} id id of the popup that will be closed
+ * @param {Number} id id of the popup that will be closed
  */
 async function closePopup(id) {
     document.getElementById(id).checked = false;
@@ -214,7 +214,7 @@ async function closePopup(id) {
 
 /**
  * Opens the popup whose id is in parameter
- * @param {integer} id id of the popup that will be opened
+ * @param {Number} id id of the popup that will be opened
  */
 async function openPopup(id) {
     document.getElementById(id).checked = true;
@@ -450,8 +450,8 @@ function dateToRemainingString(date) {
 }
 
 /**
- * Transforms a integer into a string with the format : "x month x day x minute x sscond" where x are different numbers
- * @param {integer} seconds number of seconds
+ * Transforms a number into a string with the format : "x month x day x minute x sscond" where x are different numbers
+ * @param {Number} seconds number of seconds
  * @returns {String} date with the format : "x month x day x minute x sscond" where x are different numbers
  */
 function getReadableTime(seconds) {
@@ -495,8 +495,8 @@ function getReadableTime(seconds) {
 
 
 /**
- * Transforms a integer into a Object with two sections : "value" and "unit"
- * @param {integer} seconds a number of seconds
+ * Transforms a number into a Object with two sections : "value" and "unit"
+ * @param {Number} seconds a number of seconds
  * @returns {Object} the "value" section contains a number in a string, the "unit" section contains the time unit in a string
  */
 function getReadableTimeAndUnit(seconds) {
@@ -542,7 +542,7 @@ async function checkTime() {
 
 /**
  * Set refresh delay
- * @param {integer} milliSeconds Time of delay
+ * @param {Number} milliSeconds Time of delay
  */
 async function delay(milliSeconds) {
     // return await for better async stack trace support in case of errors.
