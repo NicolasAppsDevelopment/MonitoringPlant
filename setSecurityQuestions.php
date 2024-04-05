@@ -23,11 +23,11 @@
                 <div class="popup_contenu" id="div_page1">
                     <h2>Pense-bête ! 1/3</h2>
                     <p>
-                        Afin que puissiez vous connectez en administrateur même si vous avez oublié votre mot de passe, veuillez défénir vos questions de sécurité et leurs réponses.
+                        Afin que puissiez-vous connecter en administrateur même si vous avez oublié votre mot de passe, veuillez définir vos questions de sécurité et leurs réponses.
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top ">
-                            <input class="input_field btn-show edit" id="question1" name="question1" type="text" placeholder="Quelle est le nom de votre premier animale de compagnie ?" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="question1" name="question1" type="text" placeholder="Quel est le nom de votre premier animal de compagnie ?" autocomplete="off" minlength="1">
                         </div>
                         <div class="label_img_input no-margin-top">
                             <input class="input_field btn-show edit" id="response1" name="response1" type="text" placeholder="Médor" autocomplete="off" minlength="1">
