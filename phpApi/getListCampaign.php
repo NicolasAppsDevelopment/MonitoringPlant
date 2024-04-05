@@ -46,6 +46,18 @@ try {
         if (!isset($args["processing"]) || !is_bool($args["processing"])){
             throw new Exception("Erreur lors du filtrage. Paramètre \"processing\" manquant/invalide dans la requête.");
         }
+
+        if (!isset($args["success"]) || !is_bool($args["success"])){
+            throw new Exception("Erreur lors du filtrage. Paramètre \"success\" manquant/invalide dans la requête.");
+        }
+
+        if (!isset($args["error"]) || !is_bool($args["error"])){
+            throw new Exception("Erreur lors du filtrage. Paramètre \"error\" manquant/invalide dans la requête.");
+        }
+
+        if (!isset($args["warn"]) || !is_bool($args["warn"])){
+            throw new Exception("Erreur lors du filtrage. Paramètre \"warn\" manquant/invalide dans la requête.");
+        }
         
         // Recovery and transmission of measurement campaigns according to filter.
         $reply->replyData($campaignsManager->getListCampaign([
@@ -54,7 +66,10 @@ try {
                 "startDate"=>$args["startDate"],
                 "endTime"=>$args["endTime"],
                 "endDate"=>$args["endDate"],
-                "processing"=>$args["processing"]
+                "processing"=>$args["processing"],
+                "success"=>$args["success"],
+                "error"=>$args["error"],
+                "warn"=>$args["warn"]
             ])
         );
     } else {

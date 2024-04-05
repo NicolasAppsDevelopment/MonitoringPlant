@@ -21,9 +21,9 @@
                     <div class="progression_bar"></div>
                 </div>
                 <div class="popup_contenu" id="div_page1">
-                    <h2>Sécurisons ça !</h2>
+                    <h2>Sécurisons ça ! 1/2</h2>
                     <p>
-                        Afin que vous seul puissiez modifier les paramètres, créer les configurations et supprimer les campagnes ; veuillez défénir votre mot de passe d'administrateur.
+                        Afin que vous seul puissiez modifier les paramètres, créer les configurations et supprimer les campagnes, veuillez définir votre mot de passe d'administrateur.
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top password-input">
@@ -38,9 +38,9 @@
                     </div>
                 </div>
                 <div class="popup_contenu hidden" id="div_page2">
-                    <h2>Sécurisons ça !</h2>
+                    <h2>Sécurisons ça ! 2/2</h2>
                     <p>
-                        Assurons-nous que le mot de passe soit bien correcte, veuillez confirmer votre mot de passe.
+                        Assurons-nous que le mot de passe soit bien correct, veuillez confirmer votre mot de passe.
                     </p>
                     <form>
                         <div class="label_img_input no-margin-top password-input">
@@ -49,9 +49,14 @@
                             </span>
                             <input class="input_field btn-show key" id="confirm_password" name="confirm_password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
                         </div>
-                        <button class="rect_round_btn" type="button" onclick="setPassword()">
-                            Continuer
-                        </button>
+                        <div class="two_buttons">
+                            <button class="rect_round_btn" type="button" onclick="previous()">
+                                Précédent
+                            </button>
+                            <button class="rect_round_btn" type="button" onclick="setPassword()">
+                                Continuer
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

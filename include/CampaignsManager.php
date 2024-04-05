@@ -86,8 +86,17 @@ class CampaignsManager {
                     $parameters["varName"] = "%" . htmlspecialchars($filter["name"]) . "%";
                 }
         
-                if ($filter["processing"] == true) {
-                    array_push($whereClauses, "finished = 0");
+                if ($filter["processing"]) {
+                    array_push($whereClauses, "alertLevel = 0");
+                }
+                if ($filter["success"]) {
+                    array_push($whereClauses, "alertLevel = 1");
+                }
+                if ($filter["error"]) {
+                    array_push($whereClauses, "alertLevel = 2");
+                }
+                if ($filter["warn"]) {
+                    array_push($whereClauses, "alertLevel = 3");
                 }
             
                 if (!empty($filter["startDate"])) {
