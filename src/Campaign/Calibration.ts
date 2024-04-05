@@ -28,7 +28,7 @@ export default class Calibration {
     enableFiboxTemp:number=0;
 
     /*constructor(idConfig:number, idCampaign:number){
-        this.initCalibration(idConfig,idCampaign);
+        //this.initCalibration(idConfig,idCampaign);
     }*/
 
     
@@ -38,30 +38,31 @@ export default class Calibration {
         const queryCalibrate = "SELECT * from Configurations where idConfig= ? ;"
         const queryCampaign = "SELECT humidMode,enableFiboxTemp from Campaigns where idCampaign= ? ;"
 
-        let calibrateData: any | null = null;
-        let campaignData: any | null = null;
+        let calibrateData = await sqlConnections.queryData(queryCalibrate, [idConfig]);
+        let campaignData = await sqlConnections.queryData(queryCampaign,[idCampaign]);
 
-        try {
-            calibrateData = await sqlConnections.queryData(queryCalibrate, [idConfig]);
-            campaignData = await sqlConnections.queryData(queryCampaign,[idCampaign])
-        } catch (error) {
-            logger.error("Error init calibration: " + error);
+        if(calibrateData.length == 0){
+            throw new Error("Impossible d'initialiser la calibration : la configuration de calibrtion n'existe pas.");
+        }
+
+        if(campaignData.length == 0){
+            throw new Error("Impossible d'initialiser la calibration : la campagne n'existe pas.");
         }
 
         this.altitude=calibrateData[0].altitude;
         this.f1=calibrateData[0].f1;
         this.m=calibrateData[0].m;
-        this.dphi1=calibrateData[0].dphi1;
-        this.dphi2=calibrateData[0].dphi2;
-        this.dksv1=calibrateData[0].dksv1;
-        this.dksv2=calibrateData[0].dksv2;
+        this.dphi1=calibrateData[0].dPhi1;
+        this.dphi2=calibrateData[0].dPhi2;
+        this.dksv1=calibrateData[0].dKSV1;
+        this.dksv2=calibrateData[0].dKSV2;
         this.pressure=calibrateData[0].pressure;
         this.cal0=calibrateData[0].cal0;
         this.cal2nd=calibrateData[0].cal2nd;
         this.t0=calibrateData[0].t0;
         this.t2nd=calibrateData[0].t2nd;
         this.o2cal2nd=calibrateData[0].o2cal2nd;
-        this.calib_is_humid=calibrateData[0].calib_is_humid;
+        this.calib_is_humid=calibrateData[0].calibIsHumid;
 
         this.humidMode=campaignData[0].humidMode;
         this.enableFiboxTemp=campaignData[0].enableFiboxTemp;
@@ -75,7 +76,6 @@ export default class Calibration {
         let args: string = " "+this.altitude+" "+this.f1+" "+this.m+" "+this.dphi1+" "+this.dphi2+" "+this.dksv1+" "+this.dksv2;
         args += " " + this.pressure + " " + this.cal0 + " " + this.cal2nd+" "+this.t0+" "+this.t2nd+" "+this.o2cal2nd+" "+this.calib_is_humid;
         args += " " + this.humidMode + " " + this.enableFiboxTemp;
-
         return args;
     }
 

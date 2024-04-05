@@ -71,7 +71,7 @@ export default class RunCampaign {
 
         // set the configuration of the module
         let calibration = new Calibration();
-        await calibration.initCalibration(campaignData.idConfig, campaignData.idCampaign);
+        await calibration.initCalibration(campaignData.idConfig, campaignId);
         await tcpConnection.calibrateModule(calibration);
 
         await sqlConnections.setAlertLevel(campaignId, 0);
@@ -201,14 +201,10 @@ export default class RunCampaign {
      * @returns Promise <boolean>
      */
     async restartCampaign(campaignId:number){
-        try {
-            await this.stopCampaign(campaignId);
-            await this.initCampaign(campaignId);
-            await sqlConnections.queryData("UPDATE Campaigns set beginDate=NOW() where idCampaign = ?", [this.currentCampaignId]);
-            await sqlConnections.queryData("UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE idCampaign = ?", [this.duration, campaignId]);
-        } catch (error) {
-            return false;
-        }
+        await this.stopCampaign(campaignId);
+        await this.initCampaign(campaignId);
+        await sqlConnections.queryData("UPDATE Campaigns SET beginDate=NOW() WHERE idCampaign = ?", [this.currentCampaignId]);
+        await sqlConnections.queryData("UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE idCampaign = ?", [this.duration, campaignId]);
     }
 
     async insertData(){
