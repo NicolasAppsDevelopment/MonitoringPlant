@@ -24,7 +24,7 @@
 
             <!-- Grid of Helps -->
             <div class="grid">
-                <div class="helpSummary" onclick="deroule('helpCampaign')">
+                <div class="helpSummary" onclick="unrolle('helpCampaign')">
                     <div class="preview">
                         <h4>Fonctionnalités Campagnes</h4>
                         <span>4 Articles</span>
@@ -36,7 +36,7 @@
                         <li onclick="goToHelpPage(3)">Comment redémmarer ma campagne ?</label>
                     </ul>
                 </div>
-                <div class="helpSummary" onclick="deroule('helpSettings')">
+                <div class="helpSummary" onclick="unrolle('helpSettings')">
                     <div class="preview">
                         <h4>Fonctionnalités Paramètres</h4>
                         <span>2 Articles</span>
@@ -46,7 +46,7 @@
                         <li onclick="goToHelpPage(5)">Comment changer le nom du Wifi ?</label>
                     </ul>
                 </div>
-                <div  class="helpSummary" onclick="deroule('helpCalibrate')">
+                <div  class="helpSummary" onclick="unrolle('helpCalibrate')">
                     <div class="preview">
                         <h4>Fonctionnalités Calibrations</h4>
                         <span>1 Article</span>
@@ -54,8 +54,8 @@
                     <ul class="summaryElement" id="helpCalibrate">
                         <li onclick="goToHelpPage(6)">Comment enregistrer une nouvelle calibration ?</label>
                     </ul>
-                </div>
-                <div  class="helpSummary" onclick="deroule('helpConnexion')">
+                </div>  
+                <div  class="helpSummary" onclick="unrolle('helpConnexion')">
                     <div class="preview">
                         <h4>Fonctionnalités Connexion</h4>
                         <span>1 Article</span>

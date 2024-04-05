@@ -1,4 +1,8 @@
-async function deroule(id, e) {
+/**
+ * Displays the content of the pop-up whose id is in parameter
+ * @param {Number} id id of the pop-up that we want to unrolled (display its content)
+ */
+async function unrolle(id, e) {
     e.stopPropagation();
 
     let clickedElement= document.getElementById(id);
