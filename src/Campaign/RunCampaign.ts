@@ -177,7 +177,7 @@ export default class RunCampaign {
 
         const logTitle: string = isError ? "Arrêt imprévu" : "Arrêt prévu";
         const logLevel: number = isError ? 2 : 1;
-        const campaignAlertLevel: number = isError ? 2 : (this.nbReset == 0 ? 0 : 1);
+        const campaignAlertLevel: number = isError ? 2 : (this.nbReset == 0 ? 1 : 3);
 
         await sqlConnections.setAlertLevel(this.currentCampaignId, campaignAlertLevel);
         await sqlConnections.setFinished(this.currentCampaignId, true);
