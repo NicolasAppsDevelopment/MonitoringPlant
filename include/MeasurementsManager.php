@@ -8,7 +8,7 @@ class MeasurementsManager {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var Database
@@ -19,7 +19,6 @@ class MeasurementsManager {
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -30,16 +29,15 @@ class MeasurementsManager {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return MeasurementsManager
      */
     public static function getInstance() {
     
-        if(is_null(self::$_instance)) {
-            self::$_instance = new MeasurementsManager();
+        if(is_null(self::$instance)) {
+            self::$instance = new MeasurementsManager();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -49,14 +47,14 @@ class MeasurementsManager {
      * @return {string}
      */
     //Recovery of measurements of the campaign whose id is entered as a parameter
-    public function getMeasurements(int $id, ?string $sinceDatetime = NULL) : array {
+    public function getMeasurements(int $id, ?string $sinceDatetime = null) : array {
         try {
             $query = "SELECT * FROM Measurements WHERE idCampaign = :id";
             $parameters = [
                 'id' => $id
             ];
 
-            if ($sinceDatetime != NULL){
+            if ($sinceDatetime != null){
                 $query .= " AND date > :fromDate";
                 $parameters["fromDate"] = $sinceDatetime;
             }

@@ -1,4 +1,5 @@
 <?php
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/Session.php';
 include_once '../include/RequestReplySender.php';
@@ -15,7 +16,7 @@ try {
             throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
         }
 
-        NodeJsPost('restart',array('key' =>"I_do_believe_I_am_on_fire"));
+        nodeJsPost('restart', []);
 
         $reply->replySuccess();
     } else {

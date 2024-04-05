@@ -10,9 +10,9 @@ $NODE_JS_API_TOKEN = "KwY7dqKSFAf0EkzBPwt6x9eTDAEiM8Ul0OQDMqGJLTKBli4qceJQlAMtir
  * This function send a post request to Node JS and Node JS reply with a sucess or a failure.
  * @param  string $name the name of the Node JS request will receive. This string must not contains any special characters.
  * @param array $array the parameters that you want to transmir to Node JS
- * @return values  $res is the data that NodeJS send back, it can be a interger, string, etc... 
+ * @return mixed $res is the data that NodeJS send back, it can be a interger, string, etc...
  */
-function NodeJsPost(string $name, array $array)
+function nodeJsPost(string $name, array $array)
 {
     global $NODE_JS_API_URL, $NODE_JS_API_TOKEN;
     $url = "$NODE_JS_API_URL/$name";
@@ -32,7 +32,7 @@ function NodeJsPost(string $name, array $array)
 
     if (curl_errno($curl)) {
         $returnedError .= curl_error($curl); // error message from curl
-    } else if ($httpCode !== 200) {
+    } elseif ($httpCode !== 200) {
         $returnedError .= json_decode($res, true)["error"]; // error message from server response
     } else {
         curl_close($curl);
@@ -45,9 +45,9 @@ function NodeJsPost(string $name, array $array)
 /**
  * This function send a get request to Node JS which reply.
  * @param  string $name the name of the Node JS request will receive. This string must not contains any special characters.
- * @return array  $res is the data that NodeJS send back, it can be a interger, string, etc... 
+ * @return mixed $res is the data that NodeJS send back, it can be a interger, string, etc...
  */
-function NodeJsGet(string $name)
+function nodeJsGet(string $name)
 {
     global $NODE_JS_API_URL, $NODE_JS_API_TOKEN;
     $url = "$NODE_JS_API_URL/$name";
@@ -65,7 +65,7 @@ function NodeJsGet(string $name)
 
     if (curl_errno($curl)) {
         $returnedError .= curl_error($curl); // error message from curl
-    } else if ($httpCode !== 200) {
+    } elseif ($httpCode !== 200) {
         $returnedError .= json_decode($res, true)["error"]; // error message from server response
     } else {
         curl_close($curl);

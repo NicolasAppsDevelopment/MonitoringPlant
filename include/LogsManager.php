@@ -8,7 +8,7 @@ class LogsManager {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var Database
@@ -19,7 +19,6 @@ class LogsManager {
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -30,33 +29,32 @@ class LogsManager {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return LogsManager
      */
     public static function getInstance() {
     
-        if(is_null(self::$_instance)) {
-            self::$_instance = new LogsManager();
+        if(is_null(self::$instance)) {
+            self::$instance = new LogsManager();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
      * Description.
-     * 
+     *
      * @param {string} message
      * @return {string}
      */
     //Recovery of logs of the campaign whose id is entered as a parameter
-    public function getLogs(int $id, ?string $sinceDatetime = NULL) : array {
+    public function getLogs(int $id, ?string $sinceDatetime = null) : array {
         try {
             $query = "SELECT * FROM Logs WHERE idCampaign = :varId";
             $parameters = [
                 'varId' => $id
             ];
 
-            if ($sinceDatetime != NULL){
+            if ($sinceDatetime != null){
                 $query .= " AND occuredDate > :fromDate";
                 $parameters["fromDate"] = $sinceDatetime;
             }
@@ -70,7 +68,7 @@ class LogsManager {
     /**
      * Deletes logs from the campaign whose id is entered as a parameter
      * Returns true if the logs are deleted.
-     * 
+     *
      * @param int $id Id of the campaign
      * @return bool
      */
@@ -85,5 +83,5 @@ class LogsManager {
         } catch (\Throwable $th) {
             throw new Exception("Impossible de supprimer les logs de la campagne. {$th->getMessage()}");
         }
-    } 
+    }
 }

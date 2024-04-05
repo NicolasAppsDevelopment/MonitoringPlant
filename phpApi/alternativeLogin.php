@@ -8,7 +8,7 @@ $reply = RequestReplySender::getInstance();
 $settingsManager = SettingsManager::getInstance();
 $errorTitle = "Impossible de se connecter avec les questions de sécurité.";
 
-try {    
+try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
 

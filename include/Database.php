@@ -6,7 +6,7 @@ class Database {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var PDO
@@ -17,7 +17,6 @@ class Database {
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -30,16 +29,15 @@ class Database {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return Database
      */
     public static function getInstance() {
     
-        if(is_null(self::$_instance)) {
-            self::$_instance = new Database();
+        if(is_null(self::$instance)) {
+            self::$instance = new Database();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -65,7 +63,7 @@ class Database {
      * Preparing and executing a SQL query.
      *
      * @param string $query Query who need to be execute
-     * @param string $parameters Parameter(s) of the query
+     * @param array $parameters Parameter(s) of the query
      * @return array
      */
     public function fetchAll(string $query, array $parameters = []) : array {
@@ -91,7 +89,7 @@ class Database {
      *
      * @return bool
      */
-    function resetAll() : bool
+    public function resetAll() : bool
     {
         //Deleting Raspbery Pi settings
         try {

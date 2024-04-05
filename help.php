@@ -54,7 +54,7 @@
                     <ul class="summaryElement" id="helpCalibrate">
                         <li onclick="goToHelpPage(6)">Comment enregistrer une nouvelle calibration ?</label>
                     </ul>
-                </div>  
+                </div>
                 <div  class="helpSummary" onclick="deroule('helpConnexion')">
                     <div class="preview">
                         <h4>Fonctionnalités Connexion</h4>

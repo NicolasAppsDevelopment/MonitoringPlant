@@ -9,7 +9,7 @@ class SettingsManager {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var Database
@@ -26,7 +26,6 @@ class SettingsManager {
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -38,16 +37,15 @@ class SettingsManager {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return SettingsManager
      */
     public static function getInstance() {
     
-        if(is_null(self::$_instance)) {
-            self::$_instance = new SettingsManager();
+        if(is_null(self::$instance)) {
+            self::$instance = new SettingsManager();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -59,7 +57,7 @@ class SettingsManager {
     {
         try {
             $data = $this->db->fetchAll("SELECT * , NOW() AS 'date' FROM Settings");
-            if (count($data) > 0) {
+            if (!empty($data)) {
                 return $data[0];
             } else {
                 header("Location: /beginning.php");
@@ -91,7 +89,7 @@ class SettingsManager {
     
     /**
      * Save recovery questions and answers for the admin
-     * 
+     *
      * @param string $question The question
      * @param string $response The response
      */
@@ -149,7 +147,7 @@ class SettingsManager {
 
     /**
      * Verify questions and aswers
-     * 
+     *
      * @param string $question1 The first question
      * @param string $response1 The first response
      * @param string $question2 The second question
@@ -159,7 +157,7 @@ class SettingsManager {
      * @return true if all is correct, false otherwise
      */
     public function checkAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3): bool
-    { 
+    {
         try {
             $results = $this->db->fetchAll("SELECT answer FROM Questions WHERE (question = :question1 AND answer = :answer1) OR (question = :question2 AND answer = :answer2) OR (question = :question3 AND answer = :answer3)", [
                 'question1' => $question1,
@@ -172,13 +170,13 @@ class SettingsManager {
 
             if (count($results) != 3) {
                 return false;
-            } 
+            }
         } catch (\Throwable $th) {
             throw new Exception("Impossible de récupérer la première question de sécurité et sa réponse {$th->getMessage()}");
         }
 
         return true;
-    } 
+    }
 
     /**
      * Modify the password of the admin into the database (the password will be stored hashed)
@@ -193,11 +191,7 @@ class SettingsManager {
                 'id' => $id
             ]);
         
-            if (count($results) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return !empty($results);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de déterminer si les questions de sécurités ont été définies. {$th->getMessage()}");
         }

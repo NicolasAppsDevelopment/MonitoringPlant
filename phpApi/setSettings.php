@@ -1,4 +1,5 @@
 <?php
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';
@@ -50,10 +51,9 @@ try {
                 break;
             default:
                 throw new Exception("L'unité de l'intervalle séléctionné est incorrecte.");
-                break;
         }
 
-        $networkData = NodeJsGet("getAccessPoint")["data"];
+        $networkData = nodeJsGet("getAccessPoint")["data"];
         $setAccessPointArgs = array();
         if (isset($arguments["ssid"]) && $arguments["ssid"] != $networkData["ssid"]) {
             if(strlen($arguments["ssid"]) > 32 || strlen($arguments["ssid"]) < 2){
@@ -76,7 +76,7 @@ try {
 
 
         if (!empty($setAccessPointArgs)) {
-            NodeJsPost("setAccessPoint", $setAccessPointArgs);
+            nodeJsPost("setAccessPoint", $setAccessPointArgs);
         }
 
         $settingsManager->setSettings($interval, $arguments["enableAutoRemove"]);

@@ -1,4 +1,5 @@
 <?php
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/RequestReplySender.php';
 
@@ -21,7 +22,7 @@ try {
             throw new Exception("Le format de l'identifiant de la campagne renseigné est incorrect. Veuillez réessayer.");
         }
 
-        NodeJsPost("stopCampaign", array('id' => $id));
+        nodeJsPost("stopCampaign", array('id' => $id));
 
         $reply->replySuccess();
     } else {

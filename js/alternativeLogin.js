@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     question2LabelComponent = document.getElementById("question2");
     question3LabelComponent = document.getElementById("question3");
 
-    bar=document.getElementsByClassName("progression_bar");
+    let bar = document.getElementsByClassName("progression_bar");
     bar[0].style.width="40%";
 
     const data = await phpGet("phpApi/getSecurityQuestions.php");
@@ -60,9 +60,9 @@ function goToForm3(){
 async function alternativeLogin(){
     displayLoading("Connexion...");
 
-    response1 = document.getElementById("response1").value;
-    response2 = document.getElementById("response2").value;
-    response3 = document.getElementById("response3").value;
+    let response1 = document.getElementById("response1").value;
+    let response2 = document.getElementById("response2").value;
+    let response3 = document.getElementById("response3").value;
     
     const data = await phpPost("phpApi/alternativeLogin.php", {
         "question1": question1LabelComponent.innerHTML,

@@ -32,7 +32,7 @@ async function subscribeRefresh() {
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
 async function getCampaignMeasurements(refreshMode = false) {
-    if (refreshMode == false){
+    if (!refreshMode){
         displayLoading("Récupération de la campagne...");
         id = document.getElementById("id").value;
     } else {
@@ -59,7 +59,7 @@ async function getCampaignMeasurements(refreshMode = false) {
             lastMeasureDatetime = data["lastMeasureDatetime"];
         }
 
-        if (refreshMode == false){
+        if (!refreshMode){
             const titleCampaign = document.getElementById("titleCampaign");
             titleCampaign.innerHTML = campaignInfo["name"];
             campaignName = campaignInfo["name"];
@@ -136,7 +136,7 @@ async function getCampaignMeasurements(refreshMode = false) {
                 `;
             });
             
-            if (refreshMode == true) {
+            if (refreshMode) {
                 logsContainer.innerHTML += logsContainerHTML;
             } else {
                 logsContainer.innerHTML = logsContainerHTML;
@@ -304,7 +304,7 @@ async function getCampaignMeasurements(refreshMode = false) {
             `;
         });
 
-        if (refreshMode == true) {
+        if (refreshMode) {
             if (rows <= 1000) {
                 if (tableContentHTML != "") {
                     tableContent.innerHTML += tableContentHTML;
@@ -321,23 +321,21 @@ async function getCampaignMeasurements(refreshMode = false) {
 
         if (campaignInfo["finished"] == 1) {
             document.getElementById("stop_btn").remove();
-            if (refreshMode == true){
+            if (refreshMode){
                 return;
             } 
-        } else {
-            if (refreshMode == false){
-                subscribeRefresh();
-            } 
+        } else if (!refreshMode){
+            subscribeRefresh();
         }
 
-        if (refreshMode == true) {
+        if (refreshMode) {
             refreshRepeat = true;
         }
     } else {
         refreshRepeat = false;
     }
     
-    if (refreshMode == false) {
+    if (!refreshMode) {
         hideLoading();
     }
 }
@@ -431,7 +429,7 @@ async function exportCampagne() {
  * Stop the selected measurement campaign.
  */
 async function stopCampagne() {
-    if (await displayConfirm('Voulez-vous vraiment arrêter cette campagne de mesure ?', 'La relève des données sera interrompu définitivement. Cette action est irréversible.', 'Arrêter', true) == true) {
+    if (await displayConfirm('Voulez-vous vraiment arrêter cette campagne de mesure ?', 'La relève des données sera interrompu définitivement. Cette action est irréversible.', 'Arrêter', true)) {
         displayLoading("Arrêt de la campagne...");
 
         // Setting to stop the measurement campaign.
@@ -452,7 +450,7 @@ async function stopCampagne() {
  * Restart the selected measurement campaign.
  */
 async function restartCampagne() {
-    if (await displayConfirm('Voulez-vous vraiment redémarrer cette campagne de mesure ?', 'La relève des données sera interrompu et le données déjà enregistrées de cette campagne seront supprimées définitivement. Cette action est irréversible.', 'Redémarrer', true) == true) {
+    if (await displayConfirm('Voulez-vous vraiment redémarrer cette campagne de mesure ?', 'La relève des données sera interrompu et le données déjà enregistrées de cette campagne seront supprimées définitivement. Cette action est irréversible.', 'Redémarrer', true)) {
         displayLoading("Redémarrage de la campagne...");
 
         // Setting to restart the measurement campaign.

@@ -98,7 +98,7 @@ async function subscribeRefresh() {
 async function getListCampaignJS(filter = null, refreshMode = false) {
     currentFilter = filter;
     const campagnesContainer = document.getElementById("CM_container");
-    if (refreshMode == false){
+    if (!refreshMode){
         campagnesContainer.innerHTML = `
         <div class="loading_popup" id="loading_div">
             <svg class="spinner" viewBox="0 0 50 50">
@@ -123,36 +123,36 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
 
         data.forEach(campagne => {
             let state = "";
-            let state_desc = "";
-            let state_ico = "";
+            let stateDescription = "";
+            let stateIcon = "";
             
             if (campagne["finished"] == 0) {
                 // la campagne n'est pas fini
                 state = "processing";
-                state_desc = `En cours (reste ${dateToRemainingString(new Date(campagne["endingDate"]))})...`;
-                state_ico = "working_status";
+                stateDescription = `En cours (reste ${dateToRemainingString(new Date(campagne["endingDate"]))})...`;
+                stateIcon = "working_status";
             } else {
                 // la campagne est fini
-                state_desc = `Terminé le ${dateToString(new Date(campagne["endingDate"]))}.`;
+                stateDescription = `Terminé le ${dateToString(new Date(campagne["endingDate"]))}.`;
             }
 
             switch (campagne["alertLevel"]) {
 
                 case 0: // Succès
                     if (campagne["finished"] == 1) {
-                        state_ico = "success_status";
+                        stateIcon = "success_status";
                     }
                     break;
 
                 case 1: // Danger
-                    state_desc += ` Contient un/des avertissement(s).`;
-                    state_ico = "warn_status";
+                    stateDescription += ` Contient un/des avertissement(s).`;
+                    stateIcon = "warn_status";
                     break;
 
                 case 2: // Erreur critique
                     state = "error";
-                    state_desc = `La campagne de mesure à rencontrer une erreur irrécupérable.`;
-                    state_ico = "error_status";
+                    stateDescription = `La campagne de mesure à rencontrer une erreur irrécupérable.`;
+                    stateIcon = "error_status";
                     break;
                 
                 default:
@@ -165,8 +165,8 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
                     <div class="title_detail_CM">
                         <p class="titre_CM">${campagne["name"]}</p>
                         <p class="detail_CM">
-                            <img class="etat_CM" src="./img/${state_ico}.svg">
-                            ${state_desc}
+                            <img class="etat_CM" src="./img/${stateIcon}.svg">
+                            ${stateDescription}
                         </p>
                     </div>
 
@@ -177,7 +177,7 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
 
         campagnesContainer.innerHTML = campagnesContainerHTML;
 
-        if (refreshMode == true) {
+        if (refreshMode) {
             refreshRepeat = true;
         } else {
             subscribeRefresh();
@@ -281,11 +281,11 @@ async function getStorageCapacity() {
         used = data["used"];
         total = data["total"];
 
-        usage_percent = (used / total) * 100;
-        let remaining_hours = data["maxHours"];
+        let usagePercent = (used / total) * 100;
+        let remainingHours = data["maxHours"];
 
-        storageTxt.innerHTML = Math.round(usage_percent) + "% utilisé(s) • " + Math.round(remaining_hours) + "h restantes";
-        usedStorageBar.style.width = usage_percent + "%";
+        storageTxt.innerHTML = Math.round(usagePercent) + "% utilisé(s) • " + Math.round(remainingHours) + "h restantes";
+        usedStorageBar.style.width = usagePercent + "%";
     }
 }
 
@@ -340,21 +340,20 @@ async function predictStoreUsage() {
     useStorageBar.style.width = percent + "%";
 
 
-    const space_taken_warning = document.getElementById("space_taken_warning");
-    space_taken_warning.innerHTML = "";
+    const spaceTakenWarning = document.getElementById("space_taken_warning");
+    spaceTakenWarning.innerHTML = "";
 
-    const percent_used = (size/total)*100;
+    const percentUsed = (size/total)*100;
 
-    if (interval!=0 && duration!=0 && Math.round(percent_used)>=5){
+    if (interval!=0 && duration!=0 && Math.round(percentUsed)>=5){
         hideLoading();
         
-        space_taken_warning.innerHTML = `
+        spaceTakenWarning.innerHTML = `
         <div class="warning_container">
             <div class="warning_ico"><span class="warn_ico"></span></div>
-            <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${(Math.round(percent_used))}%).</div>
+            <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${(Math.round(percentUsed))}%).</div>
         </div>
         `;
-        return;
     } 
  
 }
@@ -437,10 +436,10 @@ async function addCampaign() {
  * Deletes all data of the measurement campaign whose id is entered as a parameter.
  * @param {integer} id id of the campaing that we want to remove
  */
-async function tryRemoveCampaign(id) {
-    event.stopPropagation();
+async function tryRemoveCampaign(id, e) {
+    e.stopPropagation();
 
-    if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true) == true) {
+    if (await displayConfirm('Voulez-vous vraiment supprimer cette campagne de mesure ?', 'Cette campagne et ses mesures seront supprimées définitivement. Cette action est irréversible.', 'Supprimer', true)) {
         document.getElementById("campagne_" + id).remove();
         //Deletes all data of the campaign whose id is entered as a parameter.
         phpPost("phpApi/removeCampaign.php", {

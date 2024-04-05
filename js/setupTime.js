@@ -39,14 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (seconds >= 60) {
             seconds = 0;
 
-            const now_ = new Date(document.getElementById("date").value + " " + document.getElementById("heure").value);
-            now_.setMinutes(now_.getMinutes() + 1);
+            const selectedDateTime = new Date(document.getElementById("date").value + " " + document.getElementById("heure").value);
+            selectedDateTime.setMinutes(selectedDateTime.getMinutes() + 1);
 
-            const datetime_ = dateToStandardString(now_);
-            const date_ = datetime_["date"];
-            const time_ = datetime_["time"];
-            document.getElementById("heure").value = time_;
-            document.getElementById("date").value = date_;
+            const selectedDateTimeStandardString = dateToStandardString(selectedDateTime);
+            const selectedDateStandardString = selectedDateTimeStandardString["date"];
+            const selectedTimeStandardString = selectedDateTimeStandardString["time"];
+            document.getElementById("heure").value = selectedTimeStandardString;
+            document.getElementById("date").value = selectedDateStandardString;
         }
     }, 1000);
 });

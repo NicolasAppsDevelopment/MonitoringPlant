@@ -1,5 +1,5 @@
-async function deroule(id) {
-    event.stopPropagation();
+async function deroule(id, e) {
+    e.stopPropagation();
 
     let clickedElement= document.getElementById(id);
     if ( clickedElement.style.display == 'flex') {
@@ -9,8 +9,8 @@ async function deroule(id) {
     }
 }
 
-async function goToHelpPage(pageNumber){
-    event.stopPropagation();
+async function goToHelpPage(pageNumber, e){
+    e.stopPropagation();
 
     window.location = "doc.pdf#page=" + pageNumber;
 }

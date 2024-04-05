@@ -28,7 +28,7 @@
                     Veuillez répondre à cette première question :
                 </p>
                 <div>
-                    <p id="question1"> 
+                    <p id="question1">
                         question 1
                     </p>
                     <div class="label_img_input no-margin-top">
@@ -45,7 +45,7 @@
                     Veuillez répondre à cette deuxième question :
                 </p>
                 <div>
-                    <p id="question2"> 
+                    <p id="question2">
                         question 2
                     </p>
                     <div class="label_img_input no-margin-top">
@@ -67,7 +67,7 @@
                     Veuillez répondre à cette troisième question :
                 </p>
                 <div>
-                    <p id="question3"> 
+                    <p id="question3">
                         question 3
                     </p>
                     <div class="label_img_input no-margin-top">

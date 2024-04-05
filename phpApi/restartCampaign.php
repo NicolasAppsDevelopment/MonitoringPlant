@@ -1,13 +1,16 @@
 <?php
+
 include_once '../include/ConfigManager.php';
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 include_once '../include/NodeJsApi.php';
+include_once '../include/Session.php';
 
 $reply = RequestReplySender::getInstance();
 $errorTitle = "Impossible de redémarrer la campagne";
 
 try {
+    $session = Session::getInstance();
     $campaignsManager = CampaignsManager::getInstance();
     $configManager = ConfigurationsManager::getInstance();
 
@@ -26,7 +29,7 @@ try {
         }
 
         // check if a campaign is already running
-        $data = NodeJsGet("checkWorkingCampaign");
+        $data = nodeJsGet("checkWorkingCampaign");
         
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -44,8 +47,13 @@ try {
             throw new Exception("La configuration de calibration de la campagne n'existe plus.");
         }
 
+        // check permissions
+        if ($campaign["finished"] && !$session->isAdmin()){
+            throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
+        }
+
         $campaignsManager->restartCampaign($id);
-        NodeJsPost("redoCampaign",array("id" => $id));
+        nodeJsPost("redoCampaign",array("id" => $id));
 
         $reply->replySuccess();
     } else {

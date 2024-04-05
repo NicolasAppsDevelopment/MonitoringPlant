@@ -4,7 +4,7 @@ const NODEJS_API_PORT = "32881";
 
 let blurCompatibility = true;
 
-if (navigator.appVersion.indexOf("Chrome/") != -1) {
+if (navigator.userAgent.includes("Chrome/")) {
     blurCompatibility = false;
 }
 
@@ -107,7 +107,6 @@ async function displayError(title, msg) {
     return await promise
     .then(() => {
         hideError(id);
-        return;
     })
 }
 
@@ -160,7 +159,6 @@ async function displaySuccess(title, msg) {
     return await promise
     .then(() => {
         hideSuccess(id);
-        return;
     })
 }
 
@@ -241,7 +239,7 @@ async function post(url, settings, retrieveJSON = true) {
         if (response.status === 200) {
             if (retrieveJSON) {
                 let res = await response.json();
-                if (res["success"] == true) {
+                if (res["success"]) {
                     if (res["data"] != undefined) {
                         return res["data"];
                     }
@@ -282,7 +280,7 @@ async function get(url, retrieveJSON = true) {
         if (response.status === 200) {
             if (retrieveJSON) {
                 let res = await response.json();
-                if (res["success"] == true) {
+                if (res["success"]) {
                     if (res["data"] != undefined) {
                         return res["data"];
                     }
@@ -432,7 +430,9 @@ function dateToRemainingString(date) {
     const MILLISECONDS_PER_MINUTES = 1000 * 60;
     const minutes = Math.floor((date - now) / MILLISECONDS_PER_MINUTES);
 
-    if (minutes < 1) {
+    if (minutes <= 0) {
+        return "Terminé";
+    } else if (minutes < 1) {
         return "moins d'1 minute";
     } else if (minutes == 1) {
         return "1 minute";
@@ -532,7 +532,7 @@ async function checkTime() {
         "client_datetime": client_datetime
     });
 
-    if (data!=null && data["up_to_date"]==false){
+    if (data!=null && !data["up_to_date"]){
         if (await displayConfirm("Potentiel décalage d'heure détécté", "Il semblerait que la date et l'heure de la cellule de mesure soit décalé par rapport à votre appareil. Voulez-vous mettre à jour la date et l'heure de la cellule ?", 'Changer la date & heure', false) == true) {
             // redirect
             window.location = "/setupTime.php"

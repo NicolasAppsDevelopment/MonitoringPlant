@@ -94,7 +94,7 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
   const tooltipLine =  {
     id: 'tooltipLine',
     afterDraw: chart => {
-      if (chart.tooltip._active && chart.tooltip._active.length) {
+      if (chart.tooltip._active?.length) {
         const ctx = chart.ctx;
         ctx.save();
         

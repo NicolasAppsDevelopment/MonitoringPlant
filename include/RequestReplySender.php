@@ -6,12 +6,11 @@ class RequestReplySender {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
     
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -21,17 +20,16 @@ class RequestReplySender {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return RequestReplySender
      */
     public static function getInstance() {
         header("Content-Type: application/json; charset=utf-8");
 
-        if(is_null(self::$_instance)) {
-            self::$_instance = new RequestReplySender();
+        if(is_null(self::$instance)) {
+            self::$instance = new RequestReplySender();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**

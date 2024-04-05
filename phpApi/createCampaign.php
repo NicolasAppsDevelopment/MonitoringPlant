@@ -1,4 +1,5 @@
 <?php
+
 include_once "../include/NodeJsApi.php";
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
@@ -33,7 +34,7 @@ try {
             throw new Exception("Le format de la liste des capteurs séléctionnés est incorrecte.");
         }
 
-        if ($arguments["co2Enabled"] == false && $arguments["o2Enabled"] == false && $arguments["temperatureEnabled"] == false && $arguments["luminosityEnabled"] == false && $arguments["humidityEnabled"] == false){
+        if (!$arguments["co2Enabled"] && !$arguments["o2Enabled"] && !$arguments["temperatureEnabled"] && !$arguments["luminosityEnabled"] && !$arguments["humidityEnabled"]){
             throw new Exception("Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
         }
 
@@ -77,7 +78,6 @@ try {
                     break;
                 default:
                     throw new Exception("L'unité du volume séléctionné est incorrecte.");
-                    break;
             }
         }
 
@@ -95,7 +95,6 @@ try {
                 break;
             default:
                 throw new Exception("L'unité de l'intervalle séléctionné est incorrecte.");
-                break;
         }
 
 
@@ -113,7 +112,6 @@ try {
                 break;
             default:
                 throw new Exception("L'unité de la durée séléctionné est incorrecte.");
-                break;
         }
 
         if ($interval > $duration) {
@@ -148,7 +146,7 @@ try {
         
         
         // Check if a campaign is already running
-        $data = NodeJsGet("checkWorkingCampaign");
+        $data = nodeJsGet("checkWorkingCampaign");
 
         if (!array_key_exists("idCurrent", $data)) {
             throw new Exception("Une erreur est survenue lors de la vérification de l'état de la campagne en cours d'exécution. Veuillez réessayer.");
@@ -158,7 +156,7 @@ try {
         }
 
         // check if there is enough space on the device
-        $storage=NodeJsGet("storage")["data"];
+        $storage = nodeJsGet("storage")["data"];
 
         $lines = $duration / $interval;
         $size = $lines * MEASUREMENTS_SIZE_PER_LINE;
@@ -178,7 +176,7 @@ try {
         // Creation of the new measurement campaign.
         $id = $campaignsManager->addCampaign($configId, $arguments["title"], $arguments["temperatureEnabled"], $arguments["co2Enabled"], $arguments["o2Enabled"], $arguments["luminosityEnabled"], $arguments["humidityEnabled"], $interval, $volume, $duration, $arguments["humidMode"], $arguments["enableFiboxTemp"]);
 
-        NodeJsPost("createCampaign", array('id' => $id));
+        nodeJsPost("createCampaign", array('id' => $id));
 
         $reply->replyData([
             "id" => $id

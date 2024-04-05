@@ -62,7 +62,7 @@
             <label class="label_field" for="network_password">Mot de passe du WIFI</label>
             <div class="label_img_input no-margin-top password-input">
                 <span class="btn-show-pass" id="btn-show-pass">
-                  <i class="btn-eye btn-eye-show" onclick="displayHide(this, 'network_password')"></i>
+                  <button class="btn-eye btn-eye-show" onclick="displayHide(this, 'network_password')"></button>
                 </span>
                 <input class="input_field btn-show key" id="network_password" name="network_password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="8" maxlength="63" pattern="[a-zA-Z0-9\s\-_]+" required>
             </div>

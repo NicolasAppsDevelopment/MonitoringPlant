@@ -8,7 +8,7 @@ class Session {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var Database
@@ -19,7 +19,6 @@ class Session {
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -30,17 +29,16 @@ class Session {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return Session
      */
     public static function getInstance() {
         self::initSession();
 
-        if(is_null(self::$_instance)) {
-            self::$_instance = new Session();
+        if(is_null(self::$instance)) {
+            self::$instance = new Session();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     private static function initSession(): void {
@@ -64,7 +62,7 @@ class Session {
                 'varUsername' => htmlspecialchars($username)
             ]);
 
-            if (count($hashData) > 0) {
+            if (!empty($hashData)) {
                 if (password_verify($password, $hashData[0]["password"])) {
                     $_SESSION['logged'] = true;
                     if ($username == "admin"){
@@ -156,11 +154,7 @@ class Session {
         try {
             $results = $this->db->fetchAll("SELECT user FROM Users WHERE user = 'admin'");
         
-            if (count($results) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return !empty($results);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de vérifier si l'administrateur a déjà un compte. {$th->getMessage()}");
         }
@@ -172,7 +166,7 @@ class Session {
      * @return bool
      */
     public function isLogged(): bool {
-        return isset($_SESSION["logged"]) && $_SESSION["logged"] == true;
+        return isset($_SESSION["logged"]) && $_SESSION["logged"];
     }
 
     /**
@@ -181,7 +175,7 @@ class Session {
      * @return bool
      */
     public function isAdmin(): bool {
-        return self::isLogged() && $_SESSION["admin"] && $_SESSION["admin"] == true;
+        return self::isLogged() && $_SESSION["admin"] && $_SESSION["admin"];
     }
 
     /**

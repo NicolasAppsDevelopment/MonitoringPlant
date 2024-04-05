@@ -132,7 +132,7 @@
                         <input id="CO2_checkbox" type="checkbox" class="checkbox-input" hidden />
                         <span class="checkbox-tile">
                             <span class="checkbox-icon">
-                                <img src="./img/CO2.svg">
+                                <img src="./img/CO2.svg" alt="CO2 icone">
                             </span>
                             <span class="checkbox-label">CO2</span>
                         </span>
@@ -141,7 +141,7 @@
                         <input id="O2_checkbox" type="checkbox" class="checkbox-input" hidden />
                         <span class="checkbox-tile">
                             <span class="checkbox-icon">
-                                <img src="./img/O2.svg">
+                                <img src="./img/O2.svg" alt="O2 icone">
                             </span>
                             <span class="checkbox-label">O2</span>
                         </span>
@@ -150,7 +150,7 @@
                         <input id="temperature_checkbox" type="checkbox" class="checkbox-input" hidden />
                         <span class="checkbox-tile">
                             <span class="checkbox-icon">
-                                <img src="./img/tempeture.svg">
+                                <img src="./img/tempeture.svg" alt="Température icone">
                             </span>
                             <span class="checkbox-label">Température</span>
                         </span>
@@ -159,7 +159,7 @@
                         <input id="humidity_checkbox" type="checkbox" class="checkbox-input" hidden />
                         <span class="checkbox-tile">
                             <span class="checkbox-icon">
-                                <img src="./img/humidity.svg">
+                                <img src="./img/humidity.svg" alt="Humidité icone">
                             </span>
                             <span class="checkbox-label">Humidité</span>
                         </span>
@@ -168,7 +168,7 @@
                         <input id="luminosity_checkbox" type="checkbox" class="checkbox-input" hidden />
                         <span class="checkbox-tile">
                             <span class="checkbox-icon">
-                                <img src="./img/luminosity.svg">
+                                <img src="./img/luminosity.svg" alt="Luminosité icone">
                             </span>
                             <span class="checkbox-label">Luminosité</span>
                         </span>

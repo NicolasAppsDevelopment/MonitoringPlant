@@ -20,7 +20,7 @@
                 <div class="popup_contenu">
                     <h2>Bienvenu(e) !</h2>
                     <p>
-                        Bienvenu(e) dans l’assistant de configuration de votre système de mesure. 
+                        Bienvenu(e) dans l’assistant de configuration de votre système de mesure.
                         Il semblerait que ça soit la première fois que le système démarre ou qu’il a été réinitialisé.
                         Avant de commencer à pouvoir l’utiliser, nous devons d’abord vous demander quelques informations.
                     </p>

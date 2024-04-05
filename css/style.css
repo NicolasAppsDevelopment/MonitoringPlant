@@ -1886,6 +1886,9 @@ video{
     color: #c9d0d7;
     height: 16px;
     cursor: pointer;
+    border: none;
+    background: transparent;
+    margin: 0;
 }
 @media (min-width: 768px) {
     .status-action-container {
@@ -2078,6 +2081,11 @@ input:invalid::placeholder {
     transition: all 0.4s;
     height: 16px;
     width: 16px;
+    border: none;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    display: flex;
 }
 .btn-eye-show::before {
     background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16px" height="16px" viewBox="0,0,256,256"><g fill="gray" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M12,4c-8,0 -11,8 -11,8c0,0 3,8 11,8c8,0 11,-8 11,-8c0,0 -3,-8 -11,-8zM12,7c2.761,0 5,2.239 5,5c0,2.761 -2.239,5 -5,5c-2.761,0 -5,-2.239 -5,-5c0,-2.761 2.239,-5 5,-5zM12,9c-1.65685,0 -3,1.34315 -3,3c0,1.65685 1.34315,3 3,3c1.65685,0 3,-1.34315 3,-3c0,-1.65685 -1.34315,-3 -3,-3z"></path></g></g></svg>');

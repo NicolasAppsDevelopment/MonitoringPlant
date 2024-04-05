@@ -8,7 +8,7 @@ class ConfigurationsManager {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var Database
@@ -19,7 +19,6 @@ class ConfigurationsManager {
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -30,16 +29,15 @@ class ConfigurationsManager {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return ConfigurationsManager
      */
     public static function getInstance() {
     
-        if(is_null(self::$_instance)) {
-            self::$_instance = new ConfigurationsManager();
+        if(is_null(self::$instance)) {
+            self::$instance = new ConfigurationsManager();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -84,7 +82,7 @@ class ConfigurationsManager {
                 'varName' => htmlspecialchars($name)
             ]);
         
-            if (count($results) > 0) {
+            if (!empty($results)) {
                 return $results[0]["idConfig"];
             } else {
                 throw new Exception("Le nom de la configuration est introuvable.");
@@ -106,7 +104,7 @@ class ConfigurationsManager {
                 'varId' => $id
             ]);
         
-            if (count($results) > 0) {
+            if (!empty($results)) {
                 return $results[0]["name"];
             } else {
                 throw new Exception("L'identifiant de la configuration est introuvable.");
@@ -124,17 +122,13 @@ class ConfigurationsManager {
      */
     public function existConfigurationById(int $id): bool {
         try {
-            $results = $this->db->fetchAll("SELECT idConfig FROM Configurations WHERE idConfig = :varId ORDER BY 1 DESC", [
+            $results = $this->db->fetchAll("SELECT idConfig FROM Configurations WHERE idConfig = :varId", [
                 'varId' => $id
             ]);
         
-            if (count($results) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return count($results) > 0;
         } catch (\Throwable $th) {
-            throw new Exception("Impossible de vérifier l'existance d'une configuration par son nom. {$th->getMessage()}");
+            throw new Exception("Impossible de vérifier l'existance d'une configuration par son identifiant. {$th->getMessage()}");
         }
     }
 
@@ -158,11 +152,7 @@ class ConfigurationsManager {
                 ]);
             }
         
-            if (count($results) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return !empty($results);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de vérifier l'existance d'une configuration par son nom. {$th->getMessage()}");
         }
@@ -313,7 +303,7 @@ class ConfigurationsManager {
                 'varId' => $id
             ]);
 
-            if (count($results) > 0) {
+            if (!empty($results)) {
                 return $results[0];
             } else {
                 throw new Exception("La configuration associé à l'identifiant donné est introuvable.");

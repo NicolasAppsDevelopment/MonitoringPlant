@@ -24,7 +24,7 @@ function getIndexFromKeyName(array $arr, string $keyName) : int {
         $i++;
     }
 
-    return null;
+    return -1;
 }
 
 try {
@@ -54,7 +54,7 @@ try {
             throw new Exception("Le format de la liste des capteurs séléctionnés est incorrecte.");
         }
 
-        if ($args["co2Enabled"] == false && $args["o2Enabled"] == false && $args["temperatureEnabled"] == false && $args["luminosityEnabled"] == false && $args["humidityEnabled"] == false){
+        if (!$args["co2Enabled"] && !$args["o2Enabled"] && !$args["temperatureEnabled"] && !$args["luminosityEnabled"] && !$args["humidityEnabled"]){
             throw new Exception("Aucun capteur n'a été séléctionné. Veillez séléctionner au moins un capteur puis réessayer.");
         }
 
@@ -84,7 +84,6 @@ try {
                     break;
                 default:
                     throw new Exception("L'unité de l'intervalle séléctionné est incorrecte.");
-                    break;
             }
         }
 
@@ -92,7 +91,7 @@ try {
             throw new Exception("Le format du bouton 'moyennage' est incorrecte.");
         }
 
-        if ($args["averaging"]==true && !isset($interval)){
+        if ($args["averaging"] && !isset($interval)){
             throw new Exception("Vous avez demandé la moyennage des valeurs sans définir un interval");
         }
 
@@ -136,26 +135,26 @@ try {
 
     
         $measurements = $campaignsManager->exportCampaign($id, $args["temperatureEnabled"], $args["co2Enabled"], $args["o2Enabled"], $args["luminosityEnabled"], $args["humidityEnabled"], $start, $end);
-        if (count($measurements) == 0){
+        if (empty($measurements)){
             throw new Exception("Aucune mesure ne correspond aux critères que vous avez demandé.");
         }
         
         $info = $campaignsManager->getInfoCampaign($id);
-        if ($args["volume"] == true && is_null($info["volume"])){
+        if ($args["volume"] && is_null($info["volume"])){
             throw new Exception("Aucun volume n'a été renseigné lors du démarrage de la campagne");
         }
 
         $nbcolmum = $nbcolmum = (int)(count($measurements[0]) / 2);
         $indexC02=null;
         $index02=null;
-        if ($args["co2Enabled"] == true){
+        if ($args["co2Enabled"]){
             $indexC02=getIndexFromKeyName($measurements[0], "CO2");
         }
-        if ($args["o2Enabled"] == true){
+        if ($args["o2Enabled"]){
             $index02=getIndexFromKeyName($measurements[0], "O2");
         }
 
-        if (isset($args["volume"]) && $args["volume"]==true){
+        if (isset($args["volume"]) && $args["volume"]){
             for ($i=0;$i<count($measurements)-1;$i++){
                 if (isset($measurements[$i]["CO2"])){
                     $measurements[$i][$indexC02]*=($info["volume"]/1000);
@@ -170,7 +169,7 @@ try {
         
         $f=0;
         $indexLastAccepted=0;
-        if(isset($interval) && isset($args["averaging"]) && $args["averaging"]==false){
+        if(isset($interval) && isset($args["averaging"]) && !$args["averaging"]){
             $measurementsWithInterval[$f]=$measurements[0];
             for ($i=1;$i<count($measurements)-1;$i++){
                 $date1=DateTime::createFromFormat('Y-m-d H:i:s', $measurements[$indexLastAccepted][$nbcolmum-1]);
@@ -186,7 +185,7 @@ try {
             $measurements=$measurementsWithInterval;
         }
 
-        if(isset($interval) && isset($args["averaging"]) && $args["averaging"]==true){
+        if(isset($interval) && isset($args["averaging"]) && $args["averaging"]){
             $notTakenMeasurements=[];
             for ($i=0; $i <$nbcolmum-1 ; $i++) {
                 array_push($notTakenMeasurements, 0);
@@ -247,7 +246,7 @@ try {
                         $unit = "°C";
                         break;
                     case 'CO2':
-                        if ($args["volume"] == true){
+                        if ($args["volume"]){
                             $unit = "vol";
                         } else {
                             $unit = "vol%";

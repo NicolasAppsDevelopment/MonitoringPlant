@@ -263,7 +263,7 @@ async function prepareAddPopup() {
  * @param {integer} id Configuration id
  */
 async function editConfiguration(id) {
-    if (await displayConfirm('Voulez-vous vraiment modifier cette configuration de mesure ?', 'Cette configuration sera modifiée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière également modifié (si vous changez le nom de la configuration, ce dernier sera aussi modifié sur chaque campagne concerné). Cette action est irréversible.', 'Modifier', true) == true) {
+    if (await displayConfirm('Voulez-vous vraiment modifier cette configuration de mesure ?', 'Cette configuration sera modifiée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière également modifié (si vous changez le nom de la configuration, ce dernier sera aussi modifié sur chaque campagne concerné). Cette action est irréversible.', 'Modifier', true)) {
         saveConfiguration(true, id);
     }
 }
@@ -272,10 +272,10 @@ async function editConfiguration(id) {
  * Removes the configuration whose id is in the parameter.
  * @param {integer} id Configuration id
  */
-async function removeConfig(id) {
-    event.stopPropagation();
+async function removeConfig(id, e) {
+    e.stopPropagation();
 
-    if (await displayConfirm('Voulez-vous vraiment supprimer cette configuration de mesure ?', 'Cette configuration est supprimée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière supprimé (vous ne pourrez plus voir le nom de la configuration utilisé par la campagne concerné). Cette action est irréversible.', 'Supprimer', true) == true) {
+    if (await displayConfirm('Voulez-vous vraiment supprimer cette configuration de mesure ?', 'Cette configuration est supprimée définitivement. Les campagnes ayant utilisées cette configuration veront leurs références vers cette dernière supprimé (vous ne pourrez plus voir le nom de la configuration utilisé par la campagne concerné). Cette action est irréversible.', 'Supprimer', true)) {
         document.getElementById("config_" + id).remove();
         phpPost("phpApi/removeConfiguration.php", {
             "id": id

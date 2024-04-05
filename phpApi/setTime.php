@@ -1,4 +1,5 @@
 <?php
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/RequestReplySender.php';
 
@@ -20,7 +21,7 @@ try {
             throw new Exception("Le format de la date renseignée est incorrect. Veuillez réessayer.");
         }
 
-        NodeJsPost("setDatetime", array('datetime' => $arguments["datetime"],'key' =>"I_do_believe_I_am_on_fire"));
+        nodeJsPost("setDatetime", array('datetime' => $arguments["datetime"],'key' =>"I_do_believe_I_am_on_fire"));
 
         $reply->replySuccess();
     } else {

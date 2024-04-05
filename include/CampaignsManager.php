@@ -1,5 +1,4 @@
 <?php
-
 require_once 'Database.php';
 require_once 'MeasurementsManager.php';
 require_once 'LogsManager.php';
@@ -11,7 +10,7 @@ class CampaignsManager {
      * @access private
      * @static
      */
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var Database
@@ -40,7 +39,6 @@ class CampaignsManager {
     /**
      * Default constructor
      *
-     * @param void
      * @return void
      */
     private function __construct() {
@@ -54,16 +52,15 @@ class CampaignsManager {
      * Create unique instance of the class
      * if it doesn't exists then return it
      *
-     * @param void
      * @return CampaignsManager
      */
     public static function getInstance() {
     
-        if(is_null(self::$_instance)) {
-            self::$_instance = new CampaignsManager();
+        if(is_null(self::$instance)) {
+            self::$instance = new CampaignsManager();
         }
     
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -142,7 +139,7 @@ class CampaignsManager {
                 'varName' => htmlspecialchars($name)
             ]);
         
-            if (count($results) > 0) {
+            if (!empty($results)) {
                 return $results[0]["idCampaign"];
             } else {
                 throw new Exception("Le nom de la campagne de mesure est introuvable.");
@@ -164,11 +161,7 @@ class CampaignsManager {
                 'varName' => htmlspecialchars($name)
             ]);
         
-            if (count($results) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return !empty($results);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de vérifier l'existance d'une campagne par son nom. {$th->getMessage()}");
         }
@@ -270,8 +263,6 @@ class CampaignsManager {
         } catch (\Throwable $th) {
             throw new Exception("Impossible de redémarrer la campagne. {$th->getMessage()}");
         }
-
-        return true;
     }
 
     /**
@@ -336,7 +327,7 @@ class CampaignsManager {
      * @return array
      */
     //Recovery of all the data of the campaign whose id is entered as a parameter
-    public function getCampaign(int $id, ?string $logSinceDatetime = NULL, ?string $measureSinceDatetime = NULL) : array {
+    public function getCampaign(int $id, ?string $logSinceDatetime = null, ?string $measureSinceDatetime = null) : array {
         try {
             $campaignInfo = self::getInfoCampaign($id);
             try {
@@ -367,7 +358,7 @@ class CampaignsManager {
                 'varId' => $id
             ]);
 
-            if (count($results) > 0) {
+            if (!empty($results)) {
                 return $results[0];
             } else {
                 throw new Exception("La campagne de mesure associé à l'identifiant donné est introuvable.");
