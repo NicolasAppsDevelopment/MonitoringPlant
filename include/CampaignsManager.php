@@ -87,17 +87,18 @@ class CampaignsManager {
                 }
         
                 if ($filter["processing"]) {
-                    array_push($whereClauses, "alertLevel = 0");
+                    array_push($whereClauses, "finished = 0");
                 }
                 if ($filter["success"]) {
+                    array_push($whereClauses, "finished = 1 and alertLevel = 0");
+                }
+                if ($filter["warn"]) {
                     array_push($whereClauses, "alertLevel = 1");
                 }
                 if ($filter["error"]) {
-                    array_push($whereClauses, "alertLevel = 2");
+                    array_push($whereClauses, "finished = 1 and alertLevel = 2");
                 }
-                if ($filter["warn"]) {
-                    array_push($whereClauses, "alertLevel = 3");
-                }
+                
             
                 if (!empty($filter["startDate"])) {
                     array_push($whereClauses, "DATE_FORMAT(beginDate, '%Y-%m-%d') >= :varStartDate");
