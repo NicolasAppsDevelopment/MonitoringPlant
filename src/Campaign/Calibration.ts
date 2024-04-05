@@ -27,9 +27,9 @@ export default class Calibration {
     humidMode:number = 0;
     enableFiboxTemp:number=0;
 
-    constructor(idConfig:number, idCampaign:number){
+    /*constructor(idConfig:number, idCampaign:number){
         this.initCalibration(idConfig,idCampaign);
-    }
+    }*/
 
     
     async initCalibration(idConfig:number, idCampaign:number){

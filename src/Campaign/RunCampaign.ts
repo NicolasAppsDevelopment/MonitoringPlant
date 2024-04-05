@@ -1,11 +1,10 @@
 import { sqlConnections } from '../Database/DatabaseManager';
 import {tcpConnection} from "../Tcp/TcpManager";
 import { logger } from "../Logger/LoggerManager";
-import { sleep, sleepUntil, sleepUntilWhileRunning } from "../Helper/sleep";
+import { sleep, sleepUntilWhileRunning } from "../Helper/sleep";
 import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
 import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 import Calibration from './Calibration';
-import { nanoid } from 'nanoid';
 
  
 export default class RunCampaign {
@@ -27,6 +26,7 @@ export default class RunCampaign {
     private currentCampaignId: number;
     private numberOfMeasureLeft: number;
     private interval: number;
+    private duration: number;
     private nbReset: number;
     private isCampaignRunning: boolean;
 
@@ -40,6 +40,7 @@ export default class RunCampaign {
         this.currentCampaignId = -1;
         this.numberOfMeasureLeft = -1;
         this.interval = -1;
+        this.duration = -1;
         this.nbReset = 0;
         this.isCampaignRunning = false;
     
@@ -48,6 +49,8 @@ export default class RunCampaign {
         this.humiditySensorState = false;
         this.luminositySensorState = false;
         this.temperature2SensorState = false;
+
+        this.stopAllCampaigns();
     }
 
     /**
@@ -67,7 +70,8 @@ export default class RunCampaign {
         const campaignData = campaignsData[0];
 
         // set the configuration of the module
-        let calibration = await new Calibration(campaignData.idConfig, campaignId);
+        let calibration = new Calibration();
+        await calibration.initCalibration(campaignData.idConfig, campaignData.idCampaign);
         await tcpConnection.calibrateModule(calibration);
 
         await sqlConnections.setAlertLevel(campaignId, 0);
@@ -82,6 +86,7 @@ export default class RunCampaign {
         this.currentCampaignId = campaignId;
         this.numberOfMeasureLeft = campaignData.duration / campaignData.interval_;
         this.interval = campaignData.interval_ * 1000;
+        this.duration = campaignData.duration;
         this.nbReset = 0;
         this.isCampaignRunning = true;
 
@@ -123,11 +128,11 @@ export default class RunCampaign {
 
                     if (error instanceof TcpDaemonAnswerError) {
                         switch (error.code) {
-                            case 1: // Driver module initialization error
+                            case 1: { // Driver module initialization error
                                 logger.warn("Init not finished.");
                                 break;
-
-                            case 2: // Sensor module initialization/processing error
+                            }
+                            case 2: { // Sensor module initialization/processing error
                                 const warnings = await tcpConnection.getErrors();
                                 await sqlConnections.insertLogs(this.currentCampaignId, 3, "Erreur du module de mesure", warnings[0].message, warnings[0].date);
                                 await tcpConnection.resetModule();
@@ -135,9 +140,10 @@ export default class RunCampaign {
             
                                 await sqlConnections.insertLogs(this.currentCampaignId, 0, "Réinitilisation du module de mesure", "Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
                                 break;
-
-                            default:
+                            }
+                            default: {
                                 logger.warn("Erreur inconnue du module de mesure. Code d'erreur non répertorié.");
+                            }
                         }
                     }
                     nextLoopMillis = new Date().getTime() + 2500;
@@ -148,7 +154,7 @@ export default class RunCampaign {
                 }
                 await sleepUntilWhileRunning(nextLoopMillis);
             }
-            await this.endCampaign(false, "La campagne s\'est terminé avec succès.");
+            await this.endCampaign(false, "La campagne s'est terminé avec succès.");
         } catch (error) {
             logger.error("runCampaign: unhandled error while running campaign. " + error);
         }
@@ -171,7 +177,7 @@ export default class RunCampaign {
 
         const logTitle: string = isError ? "Arrêt imprévu" : "Arrêt prévu";
         const logLevel: number = isError ? 2 : 1;
-        const campaignAlertLevel: number = isError ? 2 : (this.nbReset == 0) ? 0 : 1;
+        const campaignAlertLevel: number = isError ? 2 : (this.nbReset == 0 ? 0 : 1);
 
         await sqlConnections.setAlertLevel(this.currentCampaignId, campaignAlertLevel);
         await sqlConnections.setFinished(this.currentCampaignId, true);
@@ -180,7 +186,7 @@ export default class RunCampaign {
 
         this.currentCampaignId = -1;
 
-        await sleep(1000); // wait for the runningCampaign state to be updated
+        await sleep(1000); // wait for the runningCampaign state to be updated (sleepUntilWhileRunning exited)
     }
 
     async stopCampaign(campaignId:number){
@@ -199,6 +205,7 @@ export default class RunCampaign {
             await this.stopCampaign(campaignId);
             await this.initCampaign(campaignId);
             await sqlConnections.queryData("UPDATE Campaigns set beginDate=NOW() where idCampaign = ?", [this.currentCampaignId]);
+            await sqlConnections.queryData("UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE idCampaign = ?", [this.duration, campaignId]);
         } catch (error) {
             return false;
         }
@@ -250,6 +257,20 @@ export default class RunCampaign {
         }
         let query="INSERT INTO Measurements values("+this.currentCampaignId+","+values+",NOW());"
         return query;
+    }
+
+    /**
+     * Stop all running campaigns in the database
+     */
+    private async stopAllCampaigns() {
+        // stop all running campaign in DB
+        const campaigns = await sqlConnections.queryData("SELECT idCampaign FROM Campaigns WHERE finished = 0;");
+        campaigns.forEach(async (campaign: { idCampaign: number; }) => {
+            await sqlConnections.setAlertLevel(campaign.idCampaign, 2);
+            await sqlConnections.setFinished(campaign.idCampaign, true);
+            await sqlConnections.insertLogs(campaign.idCampaign, 2, "Arrêt imprévu", "La campagne a été arrêté suite à un redémarrage de l'appareil.");
+            await sqlConnections.queryData("UPDATE Campaigns SET endingDate=NOW() WHERE idCampaign = ?;", [campaign.idCampaign]);
+        });
     }
 }
 
