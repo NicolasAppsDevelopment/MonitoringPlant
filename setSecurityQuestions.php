@@ -40,11 +40,11 @@
                 <div class="popup_contenu hidden" id="div_page2">
                     <h2>Pense-bête ! 2/3</h2>
                     <p>
-                        Afin que puissiez vous connectez en administrateur même si vous avez oublié votre mot de passe, veuillez défénir vos questions de sécurité et leurs réponses.
+                        Afin que puissiez-vous connecter en administrateur même si vous avez oublié votre mot de passe, veuillez définir vos questions de sécurité et leurs réponses.
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top ">
-                            <input class="input_field btn-show edit" id="question2" name="question2" type="text" placeholder="Quelle est le nom de votre mère ?" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="question2" name="question2" type="text" placeholder="Quel est le nom de votre mère ?" autocomplete="off" minlength="1">
                         </div>
                         <div class="label_img_input no-margin-top">
                             <input class="input_field btn-show edit" id="response2" name="response2" type="text" placeholder="Sarah" autocomplete="off" minlength="1">
@@ -62,11 +62,11 @@
                 <div class="popup_contenu hidden" id="div_page3">
                     <h2>Pense-bête ! 3/3</h2>
                     <p>
-                        Afin que puissiez vous connectez en administrateur même si vous avez oublié votre mot de passe, veuillez défénir vos questions de sécurité et leurs réponses.
+                        Afin que puissiez-vous connecter en administrateur même si vous avez oublié votre mot de passe, veuillez définir vos questions de sécurité et leurs réponses.
                     </p>
                     <form>
                     <div class="label_img_input no-margin-top ">
-                            <input class="input_field btn-show edit" id="question3" name="question3" type="text" placeholder="Quelle est le nom de votre meilleur(e) ami(e) ?" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="question3" name="question3" type="text" placeholder="Quel est le nom de votre meilleur(e) ami(e) ?" autocomplete="off" minlength="1">
                         </div>
                         <div class="label_img_input no-margin-top">
                             <input class="input_field btn-show edit" id="response3" name="response3" type="text" placeholder="Martin" autocomplete="off" minlength="1">

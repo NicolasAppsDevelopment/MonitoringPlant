@@ -9,6 +9,16 @@ function next(){
 }
 
 /**
+ * Displays the first form to define the administrator password.
+ */
+function previous(){
+    document.getElementById("div_page2").classList.add("hidden");
+    let bar=document.getElementsByClassName("progression_bar");
+    bar[0].style.width="00%";
+    document.getElementById("div_page1").classList.remove("hidden");
+}
+
+/**
  * Sets the administrator password.
  */
 async function setPassword(){
