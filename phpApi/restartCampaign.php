@@ -40,7 +40,7 @@ try {
         if ($campaign == null) {
             throw new Exception("La campagne n'existe pas. Veuillez rafraîchir la page puis réessayer.");
         }
-        if ($campaign["idConfig"] == null && !$configManager->existConfigurationById($campaign["idConfig"])) {
+        if ($campaign["idConfig"] == null || !$configManager->existConfigurationById($campaign["idConfig"])) {
             throw new Exception("La configuration de calibration de la campagne n'existe plus.");
         }
 
