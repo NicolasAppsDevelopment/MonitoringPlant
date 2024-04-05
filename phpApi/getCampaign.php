@@ -22,7 +22,7 @@ try {
         }
         $id = filter_var($args["id"], FILTER_VALIDATE_INT);
         if ($id === false) {
-            throw new Exception("Le format de l'identifiaant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
+            throw new Exception("Le format de l'identifiant de la campagne est incorrecte. Veuillez rafraîchir la page puis réessayer.");
         }
 
         if (isset($args["lastLogDatetime"]) && !is_string($args["lastLogDatetime"])){

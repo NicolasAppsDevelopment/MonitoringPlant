@@ -1,4 +1,5 @@
 <?php
+include_once '../include/ConfigManager.php';
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 include_once '../include/NodeJsApi.php';
@@ -8,6 +9,7 @@ $errorTitle = "Impossible de redémarrer la campagne";
 
 try {
     $campaignsManager = CampaignsManager::getInstance();
+    $configManager = ConfigurationsManager::getInstance();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // handle POST request
@@ -31,6 +33,15 @@ try {
         }
         if ($data["idCurrent"] != null && $data["idCurrent"] != $id) {
             throw new Exception("Une campagne est déjà en cours d'exécution. Veuillez attendre la fin de celle-ci ou arrêtez la puis réessayer.");
+        }
+
+        // check if the configuration of the campaign still exists
+        $campaign = $campaignsManager->getCampaign($id);
+        if ($campaign == null) {
+            throw new Exception("La campagne n'existe pas. Veuillez rafraîchir la page puis réessayer.");
+        }
+        if (!$configManager->existConfigurationById($campaign["idConfig"])) {
+            throw new Exception("La configuration de calibration de la campagne n'existe plus.");
         }
 
         $campaignsManager->restartCampaign($id);

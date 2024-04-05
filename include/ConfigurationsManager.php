@@ -120,6 +120,28 @@ class ConfigurationsManager {
      * Returns true if the name entered in parameter corresponds to an existing configuration.
      *
      * @param string $name Name of a configuration
+     * @return bool
+     */
+    public function existConfigurationById(int $id): bool {
+        try {
+            $results = $this->db->fetchAll("SELECT idConfig FROM Configurations WHERE idConfig = :varId ORDER BY 1 DESC", [
+                'varId' => $id
+            ]);
+        
+            if (count($results) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Throwable $th) {
+            throw new Exception("Impossible de vérifier l'existance d'une configuration par son nom. {$th->getMessage()}");
+        }
+    }
+
+    /**
+     * Returns true if the name entered in parameter corresponds to an existing configuration.
+     *
+     * @param string $name Name of a configuration
      * @param int $id Id of a configuration (optional, if provided, the public function wiil exclude the configuration with this id from the check)
      * @return bool
      */
