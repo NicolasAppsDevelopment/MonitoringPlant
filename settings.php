@@ -55,11 +55,11 @@
             </div>
 
             <div class="label_img_input no-margin-top">
-                <label class="label_field" for="network_ssid">Nom du WIFI</label>
+                <label class="label_field" for="network_ssid">Nom du Wi-Fi</label>
                 <input class="input_field edit" id="network_ssid" name="network_ssid" type="text" placeholder="Nom" autocomplete="off" minlength="2" maxlength="32" pattern="[a-zA-Z0-9\s\-_]+" required>
             </div>
 
-            <label class="label_field" for="network_password">Mot de passe du WIFI</label>
+            <label class="label_field" for="network_password">Mot de passe du Wi-Fi</label>
             <div class="label_img_input no-margin-top password-input">
                 <span class="btn-show-pass" id="btn-show-pass">
                   <button class="btn-eye btn-eye-show" onclick="displayHide(this, 'network_password')"></button>
