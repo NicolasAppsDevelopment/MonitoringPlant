@@ -91,7 +91,7 @@ export default class RunCampaign {
         this.duration = campaignData.duration;
         this.nbReset = 0;
         this.isCampaignRunning = true;
-        
+
         this.runCampaign();
     }
 
@@ -204,6 +204,11 @@ export default class RunCampaign {
      */
     async restartCampaign(campaignId:number){
         await this.stopCampaign(campaignId);
+
+        await sqlConnections.clearLogs(campaignId);
+        await sqlConnections.clearMeasurements(campaignId);
+        await sqlConnections.updateEndingDatePrediction(campaignId);
+
         await this.initCampaign(campaignId);
     }
 

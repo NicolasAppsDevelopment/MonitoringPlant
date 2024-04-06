@@ -129,18 +129,33 @@ export default class Database {
         let updateDateQuery: string;
         if (finished) {
             updateDateQuery = ", endingDate=NOW()";
-            console.log("Campaign finished");
         } else {
             updateDateQuery = ", beginDate=NOW()";
         }
 
-        let query="UPDATE Campaigns SET finished=?" + updateDateQuery + " WHERE idCampaign=?;";
+        const query="UPDATE Campaigns SET finished=?" + updateDateQuery + " WHERE idCampaign=?;";
         try {
             await this.queryData(query, [+finished, idCampaign]);
+            logger.info("endingDate NOW(): " + finished);
         } catch (error) {
             logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
         }
     }
+
+    /**
+     * Update the ending date of the campaign in the database
+     * @param idCampaign The id of the campaign to update
+     * @param duration In how many seconds the campaign will end
+     */
+    async updateEndingDatePrediction(idCampaign:number){
+        const query = "UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL duration SECOND) WHERE idCampaign = ?;";
+        try {
+            await this.queryData(query, [idCampaign]);
+        } catch (error) {
+            logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
+        }
+    }
+    
 
     /**
      * Insert a new measure in the database
@@ -231,6 +246,22 @@ export default class Database {
     }
 
     /**
+     * Clear all the logs of a campaign
+     * @param idCampaign The id of the campaign to clear the logs
+     */
+    async clearLogs(idCampaign:number){
+        await this.queryData("DELETE FROM Logs WHERE idCampaign = ?;",[idCampaign]);
+    }
+
+    /**
+     * Clear all the measurements of a campaign
+     * @param idCampaign The id of the campaign to clear the measurements
+     */
+    async clearMeasurements(idCampaign:number){
+        await this.queryData("DELETE FROM Measurements WHERE idCampaign = ?;",[idCampaign]);
+    }
+
+    /**
      * Remove all the campaigns that are finished and older than the removeInterval
      * @param removeInterval The interval in seconds to remove the campaigns
      */
@@ -238,8 +269,8 @@ export default class Database {
         const campainsToRemove: CampaignQueryAnswer[] = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ;",[removeInterval]);
         campainsToRemove.forEach(async (campaign) => {
             await campaignRunner.stopCampaign(campaign.idCampaign);
-            await sqlConnections.queryData("DELETE FROM Logs WHERE idCampaign = ?;",[campaign.idCampaign]);
-            await sqlConnections.queryData("DELETE FROM Measurements WHERE idCampaign = ?; ",[campaign.idCampaign]);
+            await sqlConnections.clearLogs(campaign.idCampaign);
+            await sqlConnections.clearMeasurements(campaign.idCampaign);
             await sqlConnections.queryData("DELETE FROM Campaigns WHERE idCampaign = ?; ",[campaign.idCampaign]);
         });
     }
