@@ -25,7 +25,7 @@
                     <p>
                         À present, nous avons besoins de savoir la date et l'heure qu'il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été feur démarré.
                     </p>
-                    <form>
+                    <div>
                         <div class="label_img_input">
                             <label class="label_field" for="interval">Date & heure actuelle</label>
                             <div class="row_fields gap">
@@ -36,7 +36,7 @@
                         <button class="rect_round_btn" type="button" onclick="setTime()">
                             Continuer
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </main>
