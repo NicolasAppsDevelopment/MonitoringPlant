@@ -251,9 +251,17 @@ class CampaignsManager {
 
         //Removal of logs
         $this->logsManager->supprLogs($id);
+        
+        //Update campaign start and end dates
+        try {
+            $this->db->fetchAll("UPDATE Campaigns SET beginDate=NOW(), endingDate=DATE_ADD(NOW(),INTERVAL duration SECOND) WHERE idCampaign = :varId", [
+                'varId' => $id
+            ]);
+            return true;
+        } catch (\Throwable $th) {
+            throw new Exception("Impossible de redémarrer la campagne. {$th->getMessage()}");
+        }
 
-        // Update ending date
-        // Managed by NodeJS
     }
 
     /**
