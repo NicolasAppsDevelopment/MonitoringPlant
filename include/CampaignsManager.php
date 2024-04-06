@@ -241,12 +241,10 @@ class CampaignsManager {
 
     /**
      * Restarts a campaign whose id is entered as a parameter
-     * Returns true if the campaign is restart.
      *
      * @param int $id Id of the campaign
-     * @return bool
      */
-    public function restartCampaign(int $id) : bool
+    public function restartCampaign(int $id)
     {
         //Removal of measurements
         $this->measuresManager->supprMeasurements($id);
@@ -256,10 +254,9 @@ class CampaignsManager {
 
         //Update campaign start and end dates
         try {
-            $this->db->fetchAll("UPDATE Campaigns SET beginDate=NOW(), endingDate=DATE_ADD(NOW(),INTERVAL duration SECOND) WHERE idCampaign = :varId", [
+            $this->db->fetchAll("UPDATE Campaigns SET beginDate = NOW(), endingDate = DATE_ADD(NOW(), INTERVAL duration SECOND) WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
-            return true;
         } catch (\Throwable $th) {
             throw new Exception("Impossible de redémarrer la campagne. {$th->getMessage()}");
         }
