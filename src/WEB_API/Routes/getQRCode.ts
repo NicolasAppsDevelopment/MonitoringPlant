@@ -3,12 +3,11 @@ import * as fs from 'fs';
 import * as qr from 'qr-image';
 
 /*
-    URL : /test
-    METHODE : POST
-    CORPS : {"id": 69}
-    CONTENT-TYPE : application/json
+    URL : /getQRCode
+    METHOD : GET
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : Return a QR code to connect to the current access point.
+    RETURN : Image (png)
 */
 module.exports = function(app: Express){
     app.get('/getQRCode', async (req: Request, res: Response) => {

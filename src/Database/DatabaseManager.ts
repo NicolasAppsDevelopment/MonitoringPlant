@@ -4,7 +4,11 @@ import { logger } from "../Logger/LoggerManager";
 import { TcpDaemonMeasurement } from "../Tcp/TcpCommandAnswerTypes";
 import { SensorStates } from "../Campaign/SensorStatesType";
 import { CampaignQueryAnswer, CalibrationQueryAnswer, SettingsQueryAnswer } from "./QueryAnswerTypes";
+import { CampaignStateLevelCode, LogLevelCode } from "./LevelCode";
 
+/**
+ * Class to manage the connection to the database.
+ */
 export default class Database {
     private connection: Pool | null;
 
@@ -60,10 +64,17 @@ export default class Database {
         this.open();
     }
 
+    /**
+     * Execute a SQL query on the database
+     * @param sql The SQL query to execute
+     * @param params Array of parameters to pass to the query
+     * @returns A promise that will resolve with the result of the query
+     * @note You must await this function to get the result of the query
+     */
     private queryData(sql: string, params?: (number | string | Date)[]): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.connection) {
-                return reject("connection n'est pas défini.");
+                return reject(new Error("connection n'est pas défini."));
             }
 
             this.connection.query(sql, params || [], (error, results) => {
@@ -76,7 +87,15 @@ export default class Database {
         });
     }
 
-    async insertLogs(idCampaign:number,state:number,title:string,msg:string, date: Date = new Date()) {
+    /**
+     * Insert a new log in the database
+     * @param idCampaign The id of the campaign where the log need to be inserted
+     * @param state The state of the log (see LogLevelCode for more information)
+     * @param title The title of the log
+     * @param msg The message of the log
+     * @param date The date of the log (default: now)
+     */
+    async insertLogs(idCampaign:number,state:LogLevelCode,title:string,msg:string, date: Date = new Date()) {
         let query:string = "insert into Logs values(?,?, ?,? ,?);";
         try {
             await this.queryData(query,[idCampaign,state,title,msg,date]);
@@ -85,7 +104,12 @@ export default class Database {
         }
     }
 
-    async setAlertLevel(idCampaign:number, alertLevel:number){
+    /**
+     * Update the campaign state in the database
+     * @param idCampaign The id of the campaign to update
+     * @param alertLevel The new state level of the campaign (see CampaignStateLevelCode for more information)
+     */
+    async setAlertLevel(idCampaign:number, alertLevel:CampaignStateLevelCode){
         let query="update Campaigns set alertLevel=? where idCampaign=?;";
         try {
             await this.queryData(query, [alertLevel,idCampaign]);
@@ -94,6 +118,12 @@ export default class Database {
         }
     }
 
+    /**
+     * Update the campaign finised state in the database.
+     * It will also update the ending or begining date in the corresponding case.
+     * @param idCampaign The id of the campaign to update
+     * @param finished True if the campaign is finished, else false
+     */
     async setFinished(idCampaign:number, finished:boolean){
         let updateDateQuery: string;
         if (finished) {
@@ -110,6 +140,11 @@ export default class Database {
         }
     }
 
+    /**
+     * Update the ending date of the campaign in the database
+     * @param idCampaign The id of the campaign to update
+     * @param duration In how many seconds the campaign will end
+     */
     async updateEndingDatePrediction(idCampaign:number, duration:number){
         let query="UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE idCampaign = ?;";
         try {
@@ -119,6 +154,12 @@ export default class Database {
         }
     }
 
+    /**
+     * Insert a new measure in the database
+     * @param idCampaign The id of the campaign where the measure need to be inserted
+     * @param sensorData The data to insert in the database (see TcpDaemonMeasurement for more information)
+     * @param sensorStates The state of the sensors (see SensorStates for more information)
+     */
     async insertMeasure(idCampaign:number, sensorData: TcpDaemonMeasurement, sensorStates: SensorStates) {
         let values:string="";
         if(sensorStates.temperature){
@@ -152,6 +193,11 @@ export default class Database {
         return query;
     }
 
+    /**
+     * Get the information of a campaign from the database
+     * @param idCampaign id of the campaign to get information
+     * @returns CampaignQueryAnswer object with the information of the campaign (see CampaignQueryAnswer for more information)
+     */
     async getCampaignInfo(idCampaign:number): Promise<CampaignQueryAnswer> {
         const campaignsData = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [idCampaign]);
         if(campaignsData.length == 0){
@@ -161,10 +207,19 @@ export default class Database {
         return campaignsData[0];
     }
 
+    /**
+     * Get all the campaigns that are currently running
+     * @returns An array of CampaignQueryAnswer with the information of the campaigns (see CampaignQueryAnswer for more information)
+     */
     async getRunningCampaigns(): Promise<CampaignQueryAnswer[]> {
         return await this.queryData("SELECT * FROM Campaigns WHERE finished = 0;");
     }
 
+    /**
+     * Get the calibration information from the database
+     * @param idConfig id of the configuration to get information
+     * @returns CalibrationQueryAnswer object with the information of the calibration (see CalibrationQueryAnswer for more information)
+     */
     async getCalibrationInfo(idConfig:number): Promise<CalibrationQueryAnswer> {
         const calibrationData = await this.queryData("SELECT * FROM Configurations WHERE idConfig = ? ;", [idConfig]);
         if(calibrationData.length == 0){
@@ -174,6 +229,10 @@ export default class Database {
         return calibrationData[0];
     }
 
+    /**
+     * Get the settings information from the database
+     * @returns SettingsQueryAnswer object with the information of the settings (see SettingsQueryAnswer for more information)
+     */
     async getSettings(): Promise<SettingsQueryAnswer> {
         const settingsData = await this.queryData("SELECT * FROM Settings;");
         if(settingsData.length == 0){
@@ -183,6 +242,10 @@ export default class Database {
         return settingsData[0];
     }
 
+    /**
+     * Remove all the campaigns that are finished and older than the removeInterval
+     * @param removeInterval The interval in seconds to remove the campaigns
+     */
     async removeOldCampaigns(removeInterval:number) {
         await sqlConnections.queryData("DELETE FROM Logs where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ",[removeInterval]);
         await sqlConnections.queryData("DELETE FROM Measurements where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ",[removeInterval]);
@@ -190,7 +253,9 @@ export default class Database {
     }
 }
 
-// gloabal declaration
+/**
+ * Global variable to access the database connection
+ */
 export declare var sqlConnections: Database;
 
 export function initSqlConnections() {

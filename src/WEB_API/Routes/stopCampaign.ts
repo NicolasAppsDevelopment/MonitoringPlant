@@ -1,14 +1,14 @@
 import { Express, Request, Response } from 'express';
-import { sqlConnections } from '../../Database/DatabaseManager';
 import { campaignRunner } from '../../Campaign/RunCampaign';
 import { logger } from '../../Logger/LoggerManager';
 /*
-    URL : /stop_campaign
-    METHODE : POST
+    URL : /stopCampaign
+    METHOD : POST
     CORPS : {"id": 69}
     CONTENT-TYPE : application/json
+    AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : stop a campaign currently running
+    DESCRIPTION : Stop a campaign currently running with the given id.
 */
 module.exports = function(app: Express){
     app.post('/stopCampaign', async (req: Request, res: Response) => {

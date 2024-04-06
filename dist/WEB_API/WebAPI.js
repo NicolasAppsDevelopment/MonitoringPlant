@@ -14,9 +14,7 @@ const node_path_1 = require("node:path");
 const loadConfig_1 = require("../Helper/loadConfig");
 const readdir = node_util_1.default.promisify(node_fs_1.default.readdir);
 const startAPI = async () => {
-    // start/config API web
     const app = (0, express_1.default)();
-    // Chargement des variables d'environnement
     (0, loadConfig_1.loadConfig)();
     const port = process?.env?.API_PORT;
     if (!port) {

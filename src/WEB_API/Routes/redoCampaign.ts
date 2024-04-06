@@ -1,13 +1,14 @@
 import { Express, Request, Response } from 'express';
-import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
+import { campaignRunner } from '../../Campaign/RunCampaign';
 
 /*
-    URL : /redo_campaign
-    METHODE : POST
+    URL : /redoCampaign
+    METHOD : POST
     CORPS : {"id": 69}
     CONTENT-TYPE : application/json
+    AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : Restart a campaign from the start.
+    DESCRIPTION : Restart a campaign specified with the given id.
 */
 module.exports = function(app: Express){
     app.post('/redoCampaign', async (req: Request, res: Response) => {

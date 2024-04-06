@@ -2,35 +2,36 @@ import { sqlConnections } from '../Database/DatabaseManager';
 import {tcpConnection} from "../Tcp/TcpManager";
 import { logger } from "../Logger/LoggerManager";
 import { sleep, sleepUntilWhileRunning } from "../Helper/sleep";
-import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
 import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 import Calibration from './Calibration';
 import { SensorStates } from './SensorStatesType';
+import { CampaignStateLevelCode, LogLevelCode } from '../Database/LevelCode';
 
  
 export default class RunCampaign {
-    /**
-  * @param currentCampaignId - id of the running campaign
-  * @param numberOfMeasureLeft - the number of measure to register in the campaign
-  * @param interval - the interval between two measurements in milliseconds
-  * @param duration - the total duration of the campaign in seconds
-  * @param isCampaignRunning - boolean that signal if a campaign is currently running
-  * 
-  * @param o2SensorState - is the o2 sensor used in this campaign
-  * @param co2SensorState - is the co2 sensor used in this campaign
-  * @param humiditySensorState - is the humidity sensor used in this campaign
-  * @param luminositySensorState - is the luminosity sensor used in this campaign
-  * @param temperature2SensorState - is the temperature sensor used in this campaign
-  * 
-  */
-
     private currentCampaignId: number;
+
+    /**
+     * @param numberOfMeasureLeft - the number of measure to register in the database before the end of the campaign
+     */
     private numberOfMeasureLeft: number;
+
+    /**
+     * @param interval - the interval between two measurements in milliseconds
+     */
     private interval: number;
+
+    /**
+     * @param duration - the total duration of the campaign in seconds
+     */
     private duration: number;
+
+    /**
+     * @param nbReset - number of reset of the module (max 2, if more, the campaign will stop)
+     * Incremented in case of error while getting measure
+     */
     private nbReset: number;
     private isCampaignRunning: boolean;
-
     private sensorStates: SensorStates;
 
     constructor() {
@@ -53,8 +54,8 @@ export default class RunCampaign {
     }
 
     /**
-     * Initialiaze the parameters of the class
-     * @param currentCampaignId : number 
+     * Initialiaze a campaign runner with parameters retrieved from the database from a specific id.
+     * @param currentCampaignId : number id of the campaign to start
      */
     async initCampaign(campaignId:number){
         if(this.isCampaignRunning){
@@ -72,7 +73,7 @@ export default class RunCampaign {
         await calibration.initCalibration(campaignData.idConfig, campaignId);
         await tcpConnection.calibrateModule(calibration);
 
-        await sqlConnections.setAlertLevel(campaignId, 0);
+        await sqlConnections.setAlertLevel(campaignId, CampaignStateLevelCode.SUCCESS);
         await sqlConnections.setFinished(campaignId, false);
 
         this.sensorStates = {
@@ -102,11 +103,11 @@ export default class RunCampaign {
     }
 
     /**
-     * Run a loop where the campaign will register the sensor data in the database and handle potential error.
+     * Loop where the campaign will register the sensor data in the database and handle potential error.
      */
-    async runCampaign(){
+    async runCampaign() {
         try {
-            await sqlConnections.insertLogs(this.currentCampaignId, 0, "Campagne démarrée", "La campagne a été démarrée avec succès.");
+            await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.SUCCESS, "Campagne démarrée", "La campagne a été démarrée avec succès.");
 
             let nextLoopMillis: number = new Date().getTime();
             while (this.numberOfMeasureLeft >= 0 && this.isCampaignRunning) {
@@ -133,11 +134,11 @@ export default class RunCampaign {
                             }
                             case 2: { // Sensor module initialization/processing error
                                 const warnings = await tcpConnection.getErrors();
-                                await sqlConnections.insertLogs(this.currentCampaignId, 3, "Erreur du module de mesure", warnings[0].message, warnings[0].date);
+                                await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.WARNING, "Erreur du module de mesure", warnings[0].message, warnings[0].date);
                                 await tcpConnection.resetModule();
                                 this.nbReset++;
             
-                                await sqlConnections.insertLogs(this.currentCampaignId, 0, "Réinitilisation du module de mesure", "Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
+                                await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.PROCESSING, "Réinitilisation du module de mesure", "Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
                                 break;
                             }
                             default: {
@@ -160,13 +161,11 @@ export default class RunCampaign {
     }
 
     /**
-     * update the parameters of the campaign to make it stop. The method of stopping change
-     * with the parameters given.
-     * @param isError boolean - if true : planned ending else emergency stop
-     * @param message string - the message to insert in logs
-     * @returns Promise<void>
+     * Update the parameters of the campaign to make it stop.
+     * @param isError boolean - if true, it indicate a normal ending, else unexpected stop
+     * @param message string - the stop message to insert in logs
      */
-    private async endCampaign(isError: boolean, message: string){
+    private async endCampaign(isError: boolean, message: string) {
         if (!this.isRunning()){
             logger.warn("endCampaign function fired without any campaign running!");
             return;
@@ -175,8 +174,8 @@ export default class RunCampaign {
         this.isCampaignRunning = false;
 
         const logTitle: string = isError ? "Arrêt imprévu" : "Arrêt prévu";
-        const logLevel: number = isError ? 2 : 1;
-        const campaignAlertLevel: number = isError ? 2 : (this.nbReset == 0 ? 0 : 1);
+        const logLevel: LogLevelCode = isError ? LogLevelCode.ERROR : LogLevelCode.SUCCESS;
+        const campaignAlertLevel: CampaignStateLevelCode = isError ? CampaignStateLevelCode.ERROR : (this.nbReset == 0 ? CampaignStateLevelCode.SUCCESS : CampaignStateLevelCode.WARNING);
 
         await sqlConnections.setAlertLevel(this.currentCampaignId, campaignAlertLevel);
         await sqlConnections.setFinished(this.currentCampaignId, true);
@@ -187,6 +186,10 @@ export default class RunCampaign {
         await sleep(1000); // wait for the runningCampaign state to be updated (sleepUntilWhileRunning exited)
     }
 
+    /**
+     * Stop the running campaign with a specific id
+     * @param campaignId number - id of the campaign to stop
+     */
     async stopCampaign(campaignId:number){
         if(this.isRunning() && this.currentCampaignId == campaignId){
             await this.endCampaign(false, "La campagne a bien été stoppé suite à votre demande.");
@@ -194,9 +197,8 @@ export default class RunCampaign {
     }
 
     /**
-     * Start an existing campagn by updating the parameters and launching runCampaign()
-     * @param campaignId number -  id of the campaign to restart in the database
-     * @returns Promise <boolean>
+     * Restart an existing campaign in the database (running or not)
+     * @param campaignId number - id of the campaign to restart in the database
      */
     async restartCampaign(campaignId:number){
         await this.stopCampaign(campaignId);
@@ -208,16 +210,18 @@ export default class RunCampaign {
      * Stop all running campaigns in the database
      */
     private async stopAllCampaigns() {
-        // stop all running campaign in DB
         const campaigns = await sqlConnections.getRunningCampaigns();
         campaigns.forEach(async (campaign) => {
-            await sqlConnections.setAlertLevel(campaign.idCampaign, 2);
+            await sqlConnections.setAlertLevel(campaign.idCampaign, CampaignStateLevelCode.ERROR);
             await sqlConnections.setFinished(campaign.idCampaign, true);
-            await sqlConnections.insertLogs(campaign.idCampaign, 2, "Arrêt imprévu", "La campagne a été arrêté suite à un redémarrage de l'appareil.");
+            await sqlConnections.insertLogs(campaign.idCampaign, LogLevelCode.ERROR, "Arrêt imprévu", "La campagne a été arrêté suite à un redémarrage de l'appareil.");
         });
     }
 }
 
+/**
+ * Global variable to access the campaign runner.
+ */
 export declare let campaignRunner: RunCampaign;
 
 export function initCampaignRunner() {

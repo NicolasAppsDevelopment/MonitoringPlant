@@ -3,7 +3,8 @@ import { logger } from "../Logger/LoggerManager";
 import { sleep } from "../Helper/sleep";
 
 /**
- * Remove old data in database every minute if autoRemove is activated.
+ * Check every minute if a campaign need to be removed.
+ * According settings it will remove them.
  */
 export async function startAutoRemoveLoop() {
     logger.info("Auto remove process loop started");

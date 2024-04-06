@@ -1,3 +1,6 @@
+/**
+ * Represents campaign informations stored to the database.
+ */
 export type CampaignQueryAnswer = {
     idCampaign: number,
     idConfig: number | null,
@@ -18,11 +21,25 @@ export type CampaignQueryAnswer = {
     endingDate: Date | null 
 }
 
+/**
+ * Represents the currently stored setting in the database.
+ * These settings are used to configure the measure device behavior.
+ */
 export type SettingsQueryAnswer = {
+    /**
+     * The interval (in seconds) where we remove campaigns.
+     */
     removeInterval: number | null,
+
+    /**
+     * If the auto remove process is enabled.
+     */
     autoRemove: boolean | null, 
 }
 
+/**
+ * Represents the calibration informations stored to the database.
+ */
 export type CalibrationQueryAnswer = {
     idConfig: number,
     name: string,

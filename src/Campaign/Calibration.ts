@@ -1,14 +1,11 @@
-import { logger } from '../Logger/LoggerManager';
 import { sqlConnections } from '../Database/DatabaseManager';
 
-export default class Calibration {
 /**
  * Calibration data necessary for having good value for the sensors.
  */
-
+export default class Calibration {
     idConfig:number=-1;
     idCampaign:number=-1;
-
     altitude:number=0;
     f1:number=0;
     m:number=0;
@@ -23,14 +20,8 @@ export default class Calibration {
     t2nd:number=0;
     o2cal2nd :number=0;
     calibIsHumid :boolean = false;
-    
     humidMode:boolean = false;
     enableFiboxTemp:boolean = false;
-
-    /*constructor(idConfig:number, idCampaign:number){
-        //this.initCalibration(idConfig,idCampaign);
-    }*/
-
     
     async initCalibration(idConfig:number, idCampaign:number){
         this.idCampaign=idCampaign;

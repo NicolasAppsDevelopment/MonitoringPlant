@@ -3,7 +3,7 @@ import DailyRotateFile from "winston-daily-rotate-file";
 import chalk from "chalk";
 
 // gloabal declaration for main process ONLY !
-export declare var logger: Logger;
+export declare let logger: Logger;
 
 export function initLogger() {
     logger = createAppLogger();

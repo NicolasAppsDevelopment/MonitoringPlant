@@ -1,14 +1,14 @@
 import { Express, Request, Response } from 'express';
-import RunCampaign, { campaignRunner } from '../../Campaign/RunCampaign';
-
+import { campaignRunner } from '../../Campaign/RunCampaign';
 
 /*
     URL : /createCampaign
-    METHODE : POST
-    CORPS : {"id": 69}
+    METHOD : POST
+    BODY : {"id": 69}
     CONTENT-TYPE : application/json
+    AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : initialise a campaign and run it
+    DESCRIPTION : initialise a campaign and run it for the given id.
 */
 module.exports = function(app: Express){
     app.post('/createCampaign', async (req: Request, res: Response) => {

@@ -1,11 +1,14 @@
 import { Express, Request, Response } from 'express';
 import { campaignRunner } from '../../Campaign/RunCampaign';
-/*
-    URL : /check_working_campaign
-    METHODE : GET
-    CONTENT-TYPE : application/json
 
-    DESCRIPTION : return the id of the campaign currently running or null if no campaign is running.
+/*
+    URL : /checkWorkingCampaign
+    METHOD : GET
+
+    DESCRIPTION : Return the current campaign id if a campaign is running (null otherwise).
+    RETURN :
+        - success : true if the campaign is running
+        - idCurrent : the id of the current campaign
 */
 module.exports = function(app: Express){
     app.get('/checkWorkingCampaign', async (req: Request, res: Response) => {

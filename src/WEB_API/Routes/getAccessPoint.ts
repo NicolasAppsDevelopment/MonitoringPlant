@@ -2,12 +2,14 @@ import { Express, Request, Response } from 'express';
 import * as fs from 'fs';
 
 /*
-    URL : /test
-    METHODE : POST
-    CORPS : {"id": 69}
-    CONTENT-TYPE : application/json
+    URL : /getAccessPoint
+    METHOD : GET
 
-    DESCRIPTION : test de la connexion
+    DESCRIPTION : Return the ssid and password of the current access point.
+    RETURN :
+        - success : true if the ssid and password were retrieved successfully
+        - ssid : the ssid of the current access point
+        - password : the password of the current access point
 */
 module.exports = function(app: Express){
     app.get('/getAccessPoint', async (req: Request, res: Response) => {

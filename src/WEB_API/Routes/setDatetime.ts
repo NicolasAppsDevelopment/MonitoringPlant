@@ -3,12 +3,13 @@ import { exec } from "child_process";
 import { logger } from "../../Logger/LoggerManager";
 
 /*
-    URL : /test
-    METHODE : POST
+    URL : /setDatetime
+    METHOD : POST
     CORPS : {"datetime": "1789-09-01 18:00"}
     CONTENT-TYPE : application/json
+    AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : set the time of the raspberry pi to the hour of the users device
+    DESCRIPTION : Set the time of the Raspberry Pi to the specified date and time.
 */
 module.exports = function(app: Express){
     app.post('/setDatetime', async (req: Request, res: Response) => {
@@ -17,7 +18,6 @@ module.exports = function(app: Express){
             throw new Error("Des arguments sont manquants et/ou incorrectes dans le corps de la requête.");
         }
 
-        // Traite la requête
         try {
             let date = " \"" + data.datetime + '"';
 

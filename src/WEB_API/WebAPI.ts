@@ -9,10 +9,8 @@ import { loadConfig } from "../Helper/loadConfig";
 const readdir = util.promisify(fs.readdir);
 
 export const startAPI = async () => {
-    // start/config API web
     const app: Express = express();
-
-    // Chargement des variables d'environnement
+    
     loadConfig();
 
     const port = process?.env?.API_PORT;

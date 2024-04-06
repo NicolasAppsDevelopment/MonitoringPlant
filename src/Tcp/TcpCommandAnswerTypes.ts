@@ -1,3 +1,6 @@
+/**
+ * Represents the answer of the TCP daemon to a GET_ERROR command.
+ */
 export class TcpDaemonGetError {
     date: Date;
     message: string;
@@ -8,6 +11,9 @@ export class TcpDaemonGetError {
     }
 }
 
+/**
+ * Represents the answer of the TCP daemon to a GET_MEASURE command.
+ */
 export class TcpDaemonMeasurement {
     temperature: number;
     luminosity: number;

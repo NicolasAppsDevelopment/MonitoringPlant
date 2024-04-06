@@ -6,7 +6,10 @@ import { TcpDaemonRequest, TcpDaemonAnswer } from "./TcpDaemonMessageTypes";
 import Calibration from "../Campaign/Calibration";
 import { TcpDaemonGetError, TcpDaemonMeasurement } from "./TcpCommandAnswerTypes";
 
-export default class TcpManager{
+/**
+ * Class to manage the TCP connection with the daemon
+ */
+export default class TcpManager {
     private answerListeners: Map<string, EventEmitter>;
     private client = new net.Socket();
     private timeout: number = 10000;
@@ -16,7 +19,6 @@ export default class TcpManager{
     }
 
     startconnection(){
-        // Chargement des variables d'environnement
         loadConfig();
 
         const port: string | undefined = process?.env?.DAEMON_PORT;
@@ -64,7 +66,13 @@ export default class TcpManager{
         return await this.sendCommand('GET_ERRORS');
     }
 
-    async sendCommand(query: string): Promise<any> {
+    /**
+     * Send a command to the TCP daemon and wait for the response.
+     * @param query String command to send to the daemon.
+     * @returns JSON like response object from the daemon.
+     * @note If no response is received within 10 seconds, the promise is rejected.
+     */
+    private async sendCommand(query: string): Promise<any> {
         return new Promise((resolve, reject) => {
             let request = new TcpDaemonRequest(query);
             let answerListener = new EventEmitter();
@@ -73,9 +81,8 @@ export default class TcpManager{
 
             // Set a timeout for 10 seconds
             const timeoutCallback = setTimeout(() => {
-                const errorMessage = "Timeout: No response received within 10 seconds";
                 this.answerListeners.delete(request.id);
-                reject(new Error(errorMessage));
+                reject(new Error("Timeout: No response received within 10 seconds"));
             }, this.timeout);
 
             answerListener.on("response", (answer: TcpDaemonAnswer) => {
@@ -90,8 +97,13 @@ export default class TcpManager{
         });
     }
 }
+
 export function initTcpConnection(){
     tcpConnection = new TcpManager();
     tcpConnection.startconnection();
 }
+
+/**
+ * Global variable to access the TCP connection.
+ */
 export declare var tcpConnection: TcpManager;

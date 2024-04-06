@@ -1,5 +1,8 @@
 import { nanoid } from 'nanoid';
 
+/**
+ * Error class for TcpDaemonAnswer
+ */
 export class TcpDaemonAnswerError extends Error {
     code: number;
     
@@ -9,7 +12,9 @@ export class TcpDaemonAnswerError extends Error {
     }
 }
 
-
+/**
+ * Represents the answer of the TCP daemon to a command.
+ */
 export class TcpDaemonAnswer {
     response: any;
     id: string;
@@ -30,6 +35,9 @@ export class TcpDaemonAnswer {
     }
 }
 
+/**
+ * Represents the request to send to the TCP daemon.
+ */
 export class TcpDaemonRequest {
     query: any;
     id: string;
