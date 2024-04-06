@@ -30,7 +30,7 @@
                             <span class="btn-show-pass" id="btn-show-pass">
                                 <button class="btn-eye btn-eye-show" onclick="displayHide(this, 'password')"></button>
                             </span>
-                            <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show key" id="password" name="password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="8" required>
                         </div>
                         <button class="rect_round_btn" type="button" onclick="next()">
                             Continuer
@@ -42,12 +42,12 @@
                     <p>
                         Assurons-nous que le mot de passe soit bien correct, veuillez confirmer votre mot de passe.
                     </p>
-                    <form>
+                    <div>
                         <div class="label_img_input no-margin-top password-input">
                             <span class="btn-show-pass" id="btn-show-pass">
                                 <button class="btn-eye btn-eye-show" onclick="displayHide(this, 'confirm_password')"></button>
                             </span>
-                            <input class="input_field btn-show key" id="confirm_password" name="confirm_password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show key" id="confirm_password" name="confirm_password" type="password" placeholder="Mot de passe" autocomplete="off" minlength="8"  required>
                         </div>
                         <div class="two_buttons">
                             <button class="rect_round_btn" type="button" onclick="previous()">
@@ -57,7 +57,7 @@
                                 Continuer
                             </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </main>
