@@ -39,16 +39,16 @@ try {
         }
 
         // check if the configuration of the campaign still exists
-        $campaign = $campaignsManager->getCampaign($id);
-        if ($campaign == null) {
+        $infoCampaign = $campaignsManager->getInfoCampaign($id);
+        if ($infoCampaign == null) {
             throw new Exception("La campagne n'existe pas. Veuillez rafraîchir la page puis réessayer.");
         }
-        if ($campaign["idConfig"] == null || !$configManager->existConfigurationById($campaign["idConfig"])) {
+        if ($infoCampaign["idConfig"] == null || !$configManager->existConfigurationById($infoCampaign["idConfig"])) {
             throw new Exception("La configuration de calibration de la campagne n'existe plus.");
         }
 
         // check permissions
-        if ($campaign["finished"] && !$session->isAdmin()){
+        if ($infoCampaign["finished"] && !$session->isAdmin()){
             throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
         }
 
