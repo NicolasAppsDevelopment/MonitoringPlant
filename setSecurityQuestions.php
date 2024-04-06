@@ -64,8 +64,8 @@
                     <p>
                         Afin que puissiez-vous connecter en administrateur même si vous avez oublié votre mot de passe, veuillez définir vos questions de sécurité et leurs réponses.
                     </p>
-                    <form>
-                    <div class="label_img_input no-margin-top ">
+                    <div>
+                        <div class="label_img_input no-margin-top ">
                             <input class="input_field btn-show edit" id="question3" name="question3" type="text" placeholder="Quel est le nom de votre meilleur(e) ami(e) ?" autocomplete="off" minlength="1" required>
                         </div>
                         <div class="label_img_input no-margin-top">
@@ -79,7 +79,7 @@
                                 Continuer
                             </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </main>
