@@ -6,10 +6,15 @@ let checkboxSuccess;
 let checkboxError;
 let checkboxWarn;
 
+let adminMode = false;
+
 /**
  * Executes each of the following functions when all html code is loaded.
  */
 document.addEventListener("DOMContentLoaded", () => {
+
+    // Checks if the user is an administrator.
+    adminMode = document.getElementById("isAdmin").value == "true";
 
     // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
@@ -169,9 +174,7 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
                             ${stateDescription}
                         </p>
                     </div>
-                    <?php if ($session->isAdmin()) { ?>
-                        <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]}, event)"></button>
-                    <?php } ?> 
+                    ${adminMode ? `<button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]}, event)"></button>` : ``}
                 </form>
             `;
         });

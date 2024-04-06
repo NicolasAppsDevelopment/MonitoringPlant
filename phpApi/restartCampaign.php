@@ -48,11 +48,9 @@ try {
         }
 
         // check permissions
-        if ($infoCampaign["finished"] && !$session->isAdmin()) {
+        if (!$session->isAdmin()) {
             throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
         }
-
-        //$campaignsManager->restartCampaign($id);
 
         nodeJsPost("redoCampaign",array("id" => $id));
 
