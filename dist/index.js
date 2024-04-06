@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const WebAPI_1 = require("./WEB_API/WebAPI");
+const WebApi_1 = require("./WEB_API/WebApi");
 const DatabaseManager_1 = require("./Database/DatabaseManager");
 const LoggerManager_1 = require("./Logger/LoggerManager");
 const TcpManager_1 = require("./Tcp/TcpManager");
@@ -9,7 +9,7 @@ const RunCampaign_1 = require("./Campaign/RunCampaign");
 (0, LoggerManager_1.initLogger)();
 (0, DatabaseManager_1.initSqlConnections)();
 (0, RunCampaign_1.initCampaignRunner)();
-(0, WebAPI_1.startAPI)();
+(0, WebApi_1.startWebApi)();
 (0, autoRemove_1.startAutoRemoveLoop)();
 (0, TcpManager_1.initTcpConnection)();
 process.on('unhandledRejection', reason => {

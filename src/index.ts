@@ -1,4 +1,4 @@
-import { startAPI } from "./WEB_API/WebAPI";
+import { startWebApi } from "./WEB_API/WebApi";
 import { initSqlConnections } from "./Database/DatabaseManager";
 import { initLogger, logger } from "./Logger/LoggerManager";
 import { initTcpConnection } from "./Tcp/TcpManager";
@@ -8,7 +8,7 @@ import { initCampaignRunner } from "./Campaign/RunCampaign";
 initLogger();
 initSqlConnections();
 initCampaignRunner();
-startAPI();
+startWebApi();
 startAutoRemoveLoop();
 initTcpConnection();
 

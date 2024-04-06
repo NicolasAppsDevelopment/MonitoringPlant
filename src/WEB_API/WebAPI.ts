@@ -8,7 +8,7 @@ import { join } from "node:path";
 import { loadConfig } from "../Helper/loadConfig";
 const readdir = util.promisify(fs.readdir);
 
-export const startAPI = async () => {
+export const startWebApi = async () => {
     const app: Express = express();
     
     loadConfig();
