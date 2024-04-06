@@ -5,7 +5,7 @@ import { TcpDaemonMeasurement } from "../Tcp/TcpCommandAnswerTypes";
 import { SensorStates } from "../Campaign/SensorStatesType";
 import { CampaignQueryAnswer, CalibrationQueryAnswer, SettingsQueryAnswer } from "./QueryAnswerTypes";
 import { CampaignStateLevelCode, LogLevelCode } from "./LevelCode";
-import { campaignRunner } from "src/Campaign/RunCampaign";
+import { campaignRunner } from "../Campaign/RunCampaign";
 
 /**
  * Class to manage the connection to the database.

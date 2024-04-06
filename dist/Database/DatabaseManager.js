@@ -7,6 +7,7 @@ exports.initSqlConnections = void 0;
 const loadConfig_1 = require("../Helper/loadConfig");
 const mysql2_1 = __importDefault(require("mysql2"));
 const LoggerManager_1 = require("../Logger/LoggerManager");
+const RunCampaign_1 = require("../Campaign/RunCampaign");
 /**
  * Class to manage the connection to the database.
  */
@@ -115,6 +116,7 @@ class Database {
         let updateDateQuery;
         if (finished) {
             updateDateQuery = ", endingDate=NOW()";
+            console.log("Campaign finished");
         }
         else {
             updateDateQuery = ", beginDate=NOW()";
@@ -215,9 +217,13 @@ class Database {
      * @param removeInterval The interval in seconds to remove the campaigns
      */
     async removeOldCampaigns(removeInterval) {
-        await exports.sqlConnections.queryData("DELETE FROM Logs where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ", [removeInterval]);
-        await exports.sqlConnections.queryData("DELETE FROM Measurements where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ", [removeInterval]);
-        await exports.sqlConnections.queryData("DELETE FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ; ", [removeInterval]);
+        const campainsToRemove = await exports.sqlConnections.queryData("SELECT * FROM Campaigns WHERE TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ;", [removeInterval]);
+        campainsToRemove.forEach(async (campaign) => {
+            await RunCampaign_1.campaignRunner.stopCampaign(campaign.idCampaign);
+            await exports.sqlConnections.queryData("DELETE FROM Logs WHERE idCampaign = ?;", [campaign.idCampaign]);
+            await exports.sqlConnections.queryData("DELETE FROM Measurements WHERE idCampaign = ?; ", [campaign.idCampaign]);
+            await exports.sqlConnections.queryData("DELETE FROM Campaigns WHERE idCampaign = ?; ", [campaign.idCampaign]);
+        });
     }
 }
 exports.default = Database;
