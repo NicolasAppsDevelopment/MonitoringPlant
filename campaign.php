@@ -372,7 +372,7 @@
 
 
                     <div class="label_img_input no_bottom_gap">
-                        <label class="label_field" for="interval">Redéfinir l'intervalle de la campagne de mesure</label>
+                        <label class="label_field" for="interval">Définir l'intervalle entre chaque mesure à exporter</label>
                         <div class="row_fields">
                             <input class="input_field timer" id="interval_choice" name="interval_choice" type="number" placeholder="Intervalle" min="0">
                             <select class="combo_box" id="intervalUnit">
@@ -396,7 +396,7 @@
                     </div>
 
                     <div class="label_img_input">
-                        <label class="label_field" for="datetime">Redéfinir la durée de la campagne de mesure</label>
+                        <label class="label_field" for="datetime">Définir la plage de temps dans laquelle les mesures prises seront exportées</label>
                         <div class="row_fields gap with_subtitle">
                             <p>De :</p>
                             <input class="input_field calendar" id="datedebut_choice" name="date" type="date"
