@@ -31,7 +31,7 @@ export async function sleepUntilWhileRunning(millis:number) {
                     clearInterval(checkInterval);
                     resolve();
                 }
-            }, 1000); // check every seconds
+            }, 500); // check every 0.5 seconds
         })
     ]);
 }

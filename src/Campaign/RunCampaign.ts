@@ -6,6 +6,7 @@ import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 import Calibration from './Calibration';
 import { SensorStates } from './SensorStatesType';
 import { CampaignStateLevelCode, LogLevelCode } from '../Database/LevelCode';
+import { log } from 'console';
 
  
 export default class RunCampaign {
@@ -91,6 +92,7 @@ export default class RunCampaign {
         this.nbReset = 0;
         this.isCampaignRunning = true;
 
+        await sqlConnections.updateEndingDatePrediction(this.duration, campaignId);
         this.runCampaign();
     }
 
@@ -152,6 +154,7 @@ export default class RunCampaign {
                 if (this.numberOfMeasureLeft < 0) {
                     break;
                 }
+                
                 await sleepUntilWhileRunning(nextLoopMillis);
             }
             await this.endCampaign(false, "La campagne s'est terminé avec succès.");
@@ -203,7 +206,6 @@ export default class RunCampaign {
     async restartCampaign(campaignId:number){
         await this.stopCampaign(campaignId);
         await this.initCampaign(campaignId);
-        await sqlConnections.updateEndingDatePrediction(this.duration, campaignId);
     }
 
     /**

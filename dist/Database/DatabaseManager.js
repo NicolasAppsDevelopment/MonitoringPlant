@@ -115,6 +115,7 @@ class Database {
         let updateDateQuery;
         if (finished) {
             updateDateQuery = ", endingDate=NOW()";
+            LoggerManager_1.logger.info("endingDate NOW()");
         }
         else {
             updateDateQuery = ", beginDate=NOW()";
@@ -133,9 +134,12 @@ class Database {
      * @param duration In how many seconds the campaign will end
      */
     async updateEndingDatePrediction(idCampaign, duration) {
-        let query = "UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE idCampaign = ?;";
+        LoggerManager_1.logger.info("endingDate DATE_ADD(...) " + duration + " " + idCampaign);
+        let predictedDate = new Date();
+        predictedDate.setTime(predictedDate.getTime() + (duration * 1000));
+        let query = "UPDATE Campaigns SET endingDate = ? WHERE idCampaign = ?;";
         try {
-            await this.queryData(query, [duration, idCampaign]);
+            await this.queryData(query, [predictedDate, idCampaign]);
         }
         catch (error) {
             LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
@@ -179,8 +183,8 @@ class Database {
         else {
             values += "NULL";
         }
-        let query = "INSERT INTO Measurements values(" + idCampaign + "," + values + ",NOW());";
-        return query;
+        let query = "INSERT INTO Measurements values(?," + values + ",NOW());";
+        await this.queryData(query, [idCampaign]);
     }
     /**
      * Get the information of a campaign from the database
