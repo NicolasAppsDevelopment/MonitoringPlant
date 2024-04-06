@@ -91,8 +91,7 @@ export default class RunCampaign {
         this.duration = campaignData.duration;
         this.nbReset = 0;
         this.isCampaignRunning = true;
-
-        await sqlConnections.updateEndingDatePrediction(this.duration, campaignId);
+        
         this.runCampaign();
     }
 
