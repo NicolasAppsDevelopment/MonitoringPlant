@@ -21,6 +21,8 @@
     <!-- Navigation -->
     <?php include "modules/header.php"; ?>
 
+    <input type="hidden" name="isAdmin" id="isAdmin" value="<?= $session->isAdmin() ? "true" : "false" ?>">
+
     <main>
         <div class="top_action_menu">
 
