@@ -271,6 +271,7 @@ async function editConfiguration(id) {
 /**
  * Removes the configuration whose id is in the parameter.
  * @param {Number} id Configuration id
+ * @param {Event} e event when the users press the button
  */
 async function removeConfig(id, e) {
     e.stopPropagation();
@@ -328,7 +329,7 @@ async function getListConfigJS(filter = null) {
                         <p class="titre_CM">${config["name"]}</p>
                     </div>
 
-                    <button type="button" id="removeConfiguration" class="square_btn destructive remove small" onclick="removeConfig(${config["idConfig"]})"></button>
+                    <button type="button" id="removeConfiguration" class="square_btn destructive remove small" onclick="removeConfig(${config["idConfig"]}, event)"></button>
                 </form>
             `;
         });

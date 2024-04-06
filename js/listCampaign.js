@@ -170,7 +170,7 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
                         </p>
                     </div>
 
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]})"></button>
+                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]}, event)"></button>
                 </form>
             `;
         });
@@ -435,6 +435,7 @@ async function addCampaign() {
 /**
  * Deletes all data of the measurement campaign whose id is entered as a parameter.
  * @param {Number} id id of the campaing that we want to remove
+ * @param {Event} e event when the users press the button
  */
 async function tryRemoveCampaign(id, e) {
     e.stopPropagation();
@@ -450,7 +451,7 @@ async function tryRemoveCampaign(id, e) {
 
 /**
  * Filters all measurement campaigns when the user presses the "enter" key in the search bar.
- * @param {event} e event when the users press a key
+ * @param {Event} e event when the users press a key
  */
 function handleKeyPressSearchBar(e){
     let key=e.keyCode || e.which;
