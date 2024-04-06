@@ -18,7 +18,7 @@ function next(){
  */
 function previous(){
     document.getElementById("div_page2").classList.add("hidden");
-    bar.style.width="00%";
+    bar.style.width="0%";
     document.getElementById("div_page1").classList.remove("hidden");
 }
 
