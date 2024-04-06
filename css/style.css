@@ -1909,6 +1909,7 @@ video{
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: auto;
 }
 @media (max-width: 925px) {
     .card .card-body.mini-padding {
