@@ -169,8 +169,9 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
                             ${stateDescription}
                         </p>
                     </div>
-
-                    <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]}, event)"></button>
+                    <?php if ($session->isAdmin()) { ?>
+                        <button type="button" id="removeCampaign" class="square_btn destructive remove small" onclick="tryRemoveCampaign(${campagne["idCampaign"]}, event)"></button>
+                    <?php } ?> 
                 </form>
             `;
         });

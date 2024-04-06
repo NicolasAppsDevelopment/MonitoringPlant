@@ -6,12 +6,28 @@ let lastLogDatetime = null;
 let rows = 0;
 let refreshRepeat = true;
 
+
+
 //Executes each of the following functions when all html code is loaded.
 document.addEventListener("DOMContentLoaded", () => {
     // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
     // Recovers and displays measurement campaign data.
     getCampaignMeasurements();
+
+    let data =  nodeJsGet("checkWorkingCampaign");
+    let data1 =  nodeJsGet("storage");
+
+    console.log(data1);
+    console.log(data1["used"]);
+    console.log(data);
+    console.log(data["idCurrent"]);
+
+    /*let data=nodeJsGet("checkWorkingCampaign");
+    let d=document.getElementById("id").value
+    console.log(data["idCurrent"]);
+    console.log(d);
+    console.log(data["idCurrent"]==d);*/
 });
 
 /**

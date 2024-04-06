@@ -318,14 +318,13 @@ class CampaignsManager {
     }
 
     /**
-     * Description.
+     * Recovery of all the data of the campaign whose id is entered as a parameter.
      *
      * @param int $id
      * @param ?string $logSinceDatetime
      * @param ?string $measureSinceDatetime
      * @return array
      */
-    //Recovery of all the data of the campaign whose id is entered as a parameter
     public function getCampaign(int $id, ?string $logSinceDatetime = null, ?string $measureSinceDatetime = null) : array {
         try {
             $campaignInfo = self::getInfoCampaign($id);

@@ -122,7 +122,7 @@ class Session {
         }
     }
 
-        /**
+    /**
      * Modify the password of the admin into the database (the password will be stored hashed)
      *
      * @param string $password The password (not hashed)
@@ -179,7 +179,7 @@ class Session {
     }
 
     /**
-     * Returns true if the logged user is an admin.
+     * Redirects the user to the login page if they are not logged in as admin and are on an admin-only page.
      *
      * @return bool
      */
