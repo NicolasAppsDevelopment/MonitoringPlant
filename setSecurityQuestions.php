@@ -27,10 +27,10 @@
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top ">
-                            <input class="input_field btn-show edit" id="question1" name="question1" type="text" placeholder="Quel est le nom de votre premier animal de compagnie ?" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="question1" name="question1" type="text" placeholder="Quel est le nom de votre premier animal de compagnie ?" autocomplete="off" minlength="1" required>
                         </div>
                         <div class="label_img_input no-margin-top">
-                            <input class="input_field btn-show edit" id="response1" name="response1" type="text" placeholder="Médor" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="response1" name="response1" type="text" placeholder="Médor" autocomplete="off" minlength="1" required>
                         </div>
                         <button class="rect_round_btn" type="button" onclick="goToForm2()">
                         Suivant
@@ -44,10 +44,10 @@
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top ">
-                            <input class="input_field btn-show edit" id="question2" name="question2" type="text" placeholder="Quel est le nom de votre mère ?" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="question2" name="question2" type="text" placeholder="Quel est le nom de votre mère ?" autocomplete="off" minlength="1" required>
                         </div>
                         <div class="label_img_input no-margin-top">
-                            <input class="input_field btn-show edit" id="response2" name="response2" type="text" placeholder="Sarah" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="response2" name="response2" type="text" placeholder="Sarah" autocomplete="off" minlength="1" required>
                         </div>
                         <div class="two_buttons">
                             <button class="rect_round_btn" type="button" onclick="goToForm1()">
@@ -66,10 +66,10 @@
                     </p>
                     <form>
                     <div class="label_img_input no-margin-top ">
-                            <input class="input_field btn-show edit" id="question3" name="question3" type="text" placeholder="Quel est le nom de votre meilleur(e) ami(e) ?" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="question3" name="question3" type="text" placeholder="Quel est le nom de votre meilleur(e) ami(e) ?" autocomplete="off" minlength="1" required>
                         </div>
                         <div class="label_img_input no-margin-top">
-                            <input class="input_field btn-show edit" id="response3" name="response3" type="text" placeholder="Martin" autocomplete="off" minlength="1">
+                            <input class="input_field btn-show edit" id="response3" name="response3" type="text" placeholder="Martin" autocomplete="off" minlength="1" required>
                         </div>
                         <div class="two_buttons">
                             <button class="rect_round_btn" type="button" onclick="goToForm2()">
