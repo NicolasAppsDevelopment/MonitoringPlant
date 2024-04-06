@@ -78,10 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
-
-
-
 /**
  * Automatic refresh of the list of measurement campaigns.
  */
