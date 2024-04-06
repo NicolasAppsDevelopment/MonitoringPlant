@@ -475,7 +475,7 @@ function getReadableTime(seconds) {
     let result = "";
 
     if (months > 0) {
-        result += months + "mois ";
+        result += months + " mois ";
     }
     if (days > 0) {
         result += days + (days === 1 ? " jour" : " jours") + " ";
