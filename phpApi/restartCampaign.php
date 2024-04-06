@@ -53,6 +53,7 @@ try {
         }
 
         $campaignsManager->restartCampaign($id);
+
         nodeJsPost("redoCampaign",array("id" => $id));
 
         $reply->replySuccess();

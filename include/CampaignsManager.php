@@ -170,7 +170,7 @@ class CampaignsManager {
     /**
      * Creates a campaign according to the parameters entered andd returns the id of the new campaign.
      *
-     * @param int $config_id  Id of the configuration of the new campaign
+     * @param int $configId  Id of the configuration of the new campaign
      * @param string $name  Name of the new campaign
      * @param bool $temperatureSensor  True if the new campaign take the temperature
      * @param bool $CO2Sensor  True if the new campaign take the CO2
@@ -180,11 +180,11 @@ class CampaignsManager {
      * @param int $interval  Interval between each measurements of the new campaign
      * @param ?float $volume  Volume in wich the new campaign take measurements
      * @param int $duration  Duration of the new campaign
-     * @param bool $humid_mode  True if the new campaign happened in a humid environment
-     * @param bool $enable_fibox_temp  True if the new campaign take the temperature of the fibox
+     * @param bool $humidMode  True if the new campaign happened in a humid environment
+     * @param bool $enableFiboxTemp  True if the new campaign take the temperature of the fibox
      * @return int
      */
-    public function addCampaign(int $config_id, string $name, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, int $interval, ?float $volume, int $duration, bool $humid_mode, bool $enable_fibox_temp) : int
+    public function addCampaign(int $configId, string $name, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, int $interval, ?float $volume, int $duration, bool $humidMode, bool $enableFiboxTemp) : int
     {
         try {
             if (self::existCampaign($name)) {
@@ -192,7 +192,7 @@ class CampaignsManager {
             }
 
             $this->db->fetchAll("INSERT INTO Campaigns VALUES (NULL, :varConfigId, :varName, NOW(), :varTemperatureSensor, :varCO2Sensor, :varO2Sensor, :varLuminositySensor, :varHumiditySensor, :varInterval, :varVolume, :varDuration, :varHumidMode, :varEnableFiboxTemp, 0, 0, DATE_ADD(NOW(), INTERVAL :varDuration2 SECOND))", [
-                'varConfigId' => $config_id,
+                'varConfigId' => $configId,
                 'varName' => htmlspecialchars($name),
                 'varTemperatureSensor' => (int)$temperatureSensor,
                 'varCO2Sensor' => (int)$CO2Sensor,
@@ -203,8 +203,8 @@ class CampaignsManager {
                 'varVolume' => $volume,
                 'varDuration' => $duration,
                 'varDuration2' => $duration, // PDO ne permet pas d'utiliser le même paramètre de liaison plus d'une fois dans une requête !
-                'varHumidMode' => (int)$humid_mode,
-                'varEnableFiboxTemp' => (int)$enable_fibox_temp
+                'varHumidMode' => (int)$humidMode,
+                'varEnableFiboxTemp' => (int)$enableFiboxTemp
             ]);
 
             return self::getIdCampaign($name);
@@ -252,14 +252,8 @@ class CampaignsManager {
         //Removal of logs
         $this->logsManager->supprLogs($id);
 
-        //Update campaign start and end dates
-        try {
-            $this->db->fetchAll("UPDATE Campaigns SET beginDate = NOW(), endingDate = DATE_ADD(NOW(), INTERVAL duration SECOND) WHERE idCampaign = :varId", [
-                'varId' => $id
-            ]);
-        } catch (\Throwable $th) {
-            throw new Exception("Impossible de redémarrer la campagne. {$th->getMessage()}");
-        }
+        // Update ending date
+        // Managed by NodeJS
     }
 
     /**
