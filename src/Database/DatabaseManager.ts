@@ -5,6 +5,7 @@ import { TcpDaemonMeasurement } from "../Tcp/TcpCommandAnswerTypes";
 import { SensorStates } from "../Campaign/SensorStatesType";
 import { CampaignQueryAnswer, CalibrationQueryAnswer, SettingsQueryAnswer } from "./QueryAnswerTypes";
 import { CampaignStateLevelCode, LogLevelCode } from "./LevelCode";
+import { campaignRunner } from "src/Campaign/RunCampaign";
 
 /**
  * Class to manage the connection to the database.
@@ -128,6 +129,7 @@ export default class Database {
         let updateDateQuery: string;
         if (finished) {
             updateDateQuery = ", endingDate=NOW()";
+            console.log("Campaign finished");
         } else {
             updateDateQuery = ", beginDate=NOW()";
         }
@@ -233,9 +235,13 @@ export default class Database {
      * @param removeInterval The interval in seconds to remove the campaigns
      */
     async removeOldCampaigns(removeInterval:number) {
-        await sqlConnections.queryData("DELETE FROM Logs where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ",[removeInterval]);
-        await sqlConnections.queryData("DELETE FROM Measurements where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ",[removeInterval]);
-        await sqlConnections.queryData("DELETE FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ; ",[removeInterval]);
+        const campainsToRemove: CampaignQueryAnswer[] = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ;",[removeInterval]);
+        campainsToRemove.forEach(async (campaign) => {
+            await campaignRunner.stopCampaign(campaign.idCampaign);
+            await sqlConnections.queryData("DELETE FROM Logs WHERE idCampaign = ?;",[campaign.idCampaign]);
+            await sqlConnections.queryData("DELETE FROM Measurements WHERE idCampaign = ?; ",[campaign.idCampaign]);
+            await sqlConnections.queryData("DELETE FROM Campaigns WHERE idCampaign = ?; ",[campaign.idCampaign]);
+        });
     }
 }
 

@@ -213,7 +213,6 @@ export default class RunCampaign {
     private async stopAllCampaigns() {
         const campaigns = await sqlConnections.getRunningCampaigns();
         campaigns.forEach(async (campaign) => {
-            await this.stopCampaign(campaign.idCampaign);
             await sqlConnections.setAlertLevel(campaign.idCampaign, CampaignStateLevelCode.ERROR);
             await sqlConnections.setFinished(campaign.idCampaign, true);
             await sqlConnections.insertLogs(campaign.idCampaign, LogLevelCode.ERROR, "Arrêt imprévu", "La campagne a été arrêté suite à un redémarrage de l'appareil.");
