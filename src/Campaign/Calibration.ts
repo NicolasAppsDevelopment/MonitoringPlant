@@ -22,10 +22,10 @@ export default class Calibration {
     t0:number=0;
     t2nd:number=0;
     o2cal2nd :number=0;
-    calib_is_humid :number=0;
+    calibIsHumid :boolean = false;
     
-    humidMode:number = 0;
-    enableFiboxTemp:number=0;
+    humidMode:boolean = false;
+    enableFiboxTemp:boolean = false;
 
     /*constructor(idConfig:number, idCampaign:number){
         //this.initCalibration(idConfig,idCampaign);
@@ -35,37 +35,27 @@ export default class Calibration {
     async initCalibration(idConfig:number, idCampaign:number){
         this.idCampaign=idCampaign;
         this.idConfig=idConfig;
-        const queryCalibrate = "SELECT * from Configurations where idConfig= ? ;"
-        const queryCampaign = "SELECT humidMode,enableFiboxTemp from Campaigns where idCampaign= ? ;"
 
-        let calibrateData = await sqlConnections.queryData(queryCalibrate, [idConfig]);
-        let campaignData = await sqlConnections.queryData(queryCampaign,[idCampaign]);
+        let calibrateData = await sqlConnections.getCalibrationInfo(idConfig);
+        let campaignData = await sqlConnections.getCampaignInfo(idCampaign);
 
-        if(calibrateData.length == 0){
-            throw new Error("Impossible d'initialiser la calibration : la configuration de calibrtion n'existe pas.");
-        }
+        this.altitude=calibrateData.altitude;
+        this.f1=calibrateData.f1;
+        this.m=calibrateData.m;
+        this.dphi1=calibrateData.dPhi1;
+        this.dphi2=calibrateData.dPhi2;
+        this.dksv1=calibrateData.dKSV1;
+        this.dksv2=calibrateData.dKSV2;
+        this.pressure=calibrateData.pressure;
+        this.cal0=calibrateData.cal0;
+        this.cal2nd=calibrateData.cal2nd;
+        this.t0=calibrateData.t0;
+        this.t2nd=calibrateData.t2nd;
+        this.o2cal2nd=calibrateData.o2cal2nd;
+        this.calibIsHumid=calibrateData.calibIsHumid;
 
-        if(campaignData.length == 0){
-            throw new Error("Impossible d'initialiser la calibration : la campagne n'existe pas.");
-        }
-
-        this.altitude=calibrateData[0].altitude;
-        this.f1=calibrateData[0].f1;
-        this.m=calibrateData[0].m;
-        this.dphi1=calibrateData[0].dPhi1;
-        this.dphi2=calibrateData[0].dPhi2;
-        this.dksv1=calibrateData[0].dKSV1;
-        this.dksv2=calibrateData[0].dKSV2;
-        this.pressure=calibrateData[0].pressure;
-        this.cal0=calibrateData[0].cal0;
-        this.cal2nd=calibrateData[0].cal2nd;
-        this.t0=calibrateData[0].t0;
-        this.t2nd=calibrateData[0].t2nd;
-        this.o2cal2nd=calibrateData[0].o2cal2nd;
-        this.calib_is_humid=calibrateData[0].calibIsHumid;
-
-        this.humidMode=campaignData[0].humidMode;
-        this.enableFiboxTemp=campaignData[0].enableFiboxTemp;
+        this.humidMode=campaignData.humidMode;
+        this.enableFiboxTemp=campaignData.enableFiboxTemp;
     }
 
     /**
@@ -74,7 +64,7 @@ export default class Calibration {
      */
     buildTCPCommandArgs(): string {
         let args: string = " "+this.altitude+" "+this.f1+" "+this.m+" "+this.dphi1+" "+this.dphi2+" "+this.dksv1+" "+this.dksv2;
-        args += " " + this.pressure + " " + this.cal0 + " " + this.cal2nd+" "+this.t0+" "+this.t2nd+" "+this.o2cal2nd+" "+this.calib_is_humid;
+        args += " " + this.pressure + " " + this.cal0 + " " + this.cal2nd+" "+this.t0+" "+this.t2nd+" "+this.o2cal2nd+" "+(+this.calibIsHumid);
         args += " " + this.humidMode + " " + this.enableFiboxTemp;
         return args;
     }

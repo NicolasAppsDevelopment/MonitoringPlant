@@ -5,6 +5,7 @@ import { sleep, sleepUntilWhileRunning } from "../Helper/sleep";
 import { TcpDaemonMeasurement } from '../Tcp/TcpCommandAnswerTypes';
 import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 import Calibration from './Calibration';
+import { SensorStates } from './SensorStatesType';
 
  
 export default class RunCampaign {
@@ -30,11 +31,7 @@ export default class RunCampaign {
     private nbReset: number;
     private isCampaignRunning: boolean;
 
-    private o2SensorState: boolean;
-    private co2SensorState: boolean;
-    private humiditySensorState: boolean;
-    private luminositySensorState: boolean;
-    private temperature2SensorState: boolean;
+    private sensorStates: SensorStates;
 
     constructor() {
         this.currentCampaignId = -1;
@@ -44,11 +41,13 @@ export default class RunCampaign {
         this.nbReset = 0;
         this.isCampaignRunning = false;
     
-        this.o2SensorState = false;
-        this.co2SensorState = false;
-        this.humiditySensorState = false;
-        this.luminositySensorState = false;
-        this.temperature2SensorState = false;
+        this.sensorStates = {
+            o2: false,
+            co2: false,
+            humidity: false,
+            luminosity: false,
+            temperature: false
+        };
 
         this.stopAllCampaigns();
     }
@@ -62,12 +61,11 @@ export default class RunCampaign {
             throw new Error("Une campagne est déjà en cours d'éxecution.");
         }
 
-        const campaignsData = await sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [campaignId]);
-        if(campaignsData.length == 0){
-            throw new Error("La campagne n'existe pas.");
-        }
+        const campaignData = await sqlConnections.getCampaignInfo(campaignId);
 
-        const campaignData = campaignsData[0];
+        if (campaignData.idConfig == null) {
+            throw new Error("La campagne n'a pas de configuration de calibration associée.")
+        }
 
         // set the configuration of the module
         let calibration = new Calibration();
@@ -76,12 +74,14 @@ export default class RunCampaign {
 
         await sqlConnections.setAlertLevel(campaignId, 0);
         await sqlConnections.setFinished(campaignId, false);
-                
-        this.o2SensorState = campaignData.O2SensorState;
-        this.co2SensorState = campaignData.CO2SensorState;
-        this.luminositySensorState = campaignData.luminositySensorState;
-        this.humiditySensorState = campaignData.humiditySensorState;
-        this.temperature2SensorState = campaignData.temperatureSensorState;
+
+        this.sensorStates = {
+            o2: campaignData.O2SensorState,
+            co2: campaignData.CO2SensorState,
+            humidity: campaignData.humiditySensorState,
+            luminosity: campaignData.luminositySensorState,
+            temperature: campaignData.temperatureSensorState
+        };
 
         this.currentCampaignId = campaignId;
         this.numberOfMeasureLeft = campaignData.duration / campaignData.interval_;
@@ -114,9 +114,8 @@ export default class RunCampaign {
                 this.numberOfMeasureLeft--;
 
                 try {
-                    const measures = await tcpConnection.getMeasure();
-                    const insertDataRequest = this.buildInsertSensorDataRequest(measures);
-                    await sqlConnections.queryData(insertDataRequest);
+                    const data = await tcpConnection.getMeasure();
+                    await sqlConnections.insertMeasure(this.currentCampaignId, data, this.sensorStates);
                     this.nbReset = 0;
                 } catch (error) {
                     logger.error("runCampaign: error while getting measure. " + error);
@@ -182,7 +181,6 @@ export default class RunCampaign {
         await sqlConnections.setAlertLevel(this.currentCampaignId, campaignAlertLevel);
         await sqlConnections.setFinished(this.currentCampaignId, true);
         await sqlConnections.insertLogs(this.currentCampaignId, logLevel, logTitle, message);
-        await sqlConnections.queryData("UPDATE Campaigns SET endingDate=NOW() WHERE idCampaign = ?", [this.currentCampaignId]);
 
         this.currentCampaignId = -1;
 
@@ -203,56 +201,7 @@ export default class RunCampaign {
     async restartCampaign(campaignId:number){
         await this.stopCampaign(campaignId);
         await this.initCampaign(campaignId);
-        await sqlConnections.queryData("UPDATE Campaigns SET beginDate=NOW() WHERE idCampaign = ?", [this.currentCampaignId]);
-        await sqlConnections.queryData("UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE idCampaign = ?", [this.duration, campaignId]);
-    }
-
-    async insertData(){
-        const data = await tcpConnection.getMeasure();
-        let request = this.buildInsertSensorDataRequest(data);
-        try {
-            await sqlConnections.queryData(request);
-        } catch (error) {
-            
-        }
-    }
-
-    /**
-     * Build a SQL request depending of the sensor needed for the campaign.
-     * @param sensorData TcpDaemonMeasurement - sensor data from the daemon driver
-     * @returns the command to insert into the database
-     */
-    buildInsertSensorDataRequest(sensorData: TcpDaemonMeasurement): string {
-        let values:string="";
-        if(this.temperature2SensorState){
-            values+=sensorData.temperature+",";
-        }else{
-            values+="NULL,";
-        }
-        if(this.co2SensorState){
-            values+=sensorData.CO2+",";
-        }else{
-            values+="NULL,"
-        }
-        if(this.o2SensorState){
-            values+=sensorData.O2+",";
-        }else{
-            values+="NULL,"
-        }
-
-        if(this.humiditySensorState){
-            values+=sensorData.humidity+",";
-        }else{
-            values+="NULL,"
-        }
-            
-        if(this.luminositySensorState){
-            values+=sensorData.luminosity;
-        }else{
-            values+="NULL"
-        }
-        let query="INSERT INTO Measurements values("+this.currentCampaignId+","+values+",NOW());"
-        return query;
+        await sqlConnections.updateEndingDatePrediction(this.duration, campaignId);
     }
 
     /**
@@ -260,12 +209,11 @@ export default class RunCampaign {
      */
     private async stopAllCampaigns() {
         // stop all running campaign in DB
-        const campaigns = await sqlConnections.queryData("SELECT idCampaign FROM Campaigns WHERE finished = 0;");
-        campaigns.forEach(async (campaign: { idCampaign: number; }) => {
+        const campaigns = await sqlConnections.getRunningCampaigns();
+        campaigns.forEach(async (campaign) => {
             await sqlConnections.setAlertLevel(campaign.idCampaign, 2);
             await sqlConnections.setFinished(campaign.idCampaign, true);
             await sqlConnections.insertLogs(campaign.idCampaign, 2, "Arrêt imprévu", "La campagne a été arrêté suite à un redémarrage de l'appareil.");
-            await sqlConnections.queryData("UPDATE Campaigns SET endingDate=NOW() WHERE idCampaign = ?;", [campaign.idCampaign]);
         });
     }
 }

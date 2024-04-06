@@ -83,14 +83,93 @@ class Database {
         }
     }
     async setFinished(idCampaign, finished) {
-        let now = new Date();
-        let query = "update Campaigns set finished=?, endingDate=? where idCampaign=?;";
+        let updateDateQuery;
+        if (finished) {
+            updateDateQuery = ", endingDate=NOW()";
+        }
+        else {
+            updateDateQuery = ", beginDate=NOW()";
+        }
+        let query = "UPDATE Campaigns SET finished=?" + updateDateQuery + " WHERE idCampaign=?;";
         try {
-            await this.queryData(query, [+finished, now, idCampaign]);
+            await this.queryData(query, [+finished, idCampaign]);
         }
         catch (error) {
             LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
         }
+    }
+    async updateEndingDatePrediction(idCampaign, duration) {
+        let query = "UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE idCampaign = ?;";
+        try {
+            await this.queryData(query, [duration, idCampaign]);
+        }
+        catch (error) {
+            LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
+        }
+    }
+    async insertMeasure(idCampaign, sensorData, sensorStates) {
+        let values = "";
+        if (sensorStates.temperature) {
+            values += sensorData.temperature + ",";
+        }
+        else {
+            values += "NULL,";
+        }
+        if (sensorStates.co2) {
+            values += sensorData.CO2 + ",";
+        }
+        else {
+            values += "NULL,";
+        }
+        if (sensorStates.o2) {
+            values += sensorData.O2 + ",";
+        }
+        else {
+            values += "NULL,";
+        }
+        if (sensorStates.humidity) {
+            values += sensorData.humidity + ",";
+        }
+        else {
+            values += "NULL,";
+        }
+        if (sensorStates.luminosity) {
+            values += sensorData.luminosity;
+        }
+        else {
+            values += "NULL";
+        }
+        let query = "INSERT INTO Measurements values(" + idCampaign + "," + values + ",NOW());";
+        return query;
+    }
+    async getCampaignInfo(idCampaign) {
+        const campaignsData = await exports.sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [idCampaign]);
+        if (campaignsData.length == 0) {
+            throw new Error("La campagne n'existe pas.");
+        }
+        return campaignsData[0];
+    }
+    async getRunningCampaigns() {
+        return await this.queryData("SELECT * FROM Campaigns WHERE finished = 0;");
+    }
+    async getCalibrationInfo(idConfig) {
+        const calibrationData = await this.queryData("SELECT * FROM Configurations WHERE idConfig = ? ;", [idConfig]);
+        if (calibrationData.length == 0) {
+            throw new Error("La configuration de calibration n'existe pas.");
+        }
+        return calibrationData[0];
+    }
+    async getSettings() {
+        const settingsData = await this.queryData("SELECT * FROM Settings;");
+        if (settingsData.length == 0) {
+            throw new Error("Les paramètres n'existent pas.");
+        }
+        return settingsData[0];
+    }
+    async removeOldCampaigns(removeInterval) {
+        await exports.sqlConnections.queryData("DELETE FROM Logs where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ", [removeInterval]);
+        await exports.sqlConnections.queryData("DELETE FROM Measurements where idCampaign in (Select idCampaign FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ); ", [removeInterval]);
+        await exports.sqlConnections.queryData("DELETE FROM Campaigns where TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ; ", [removeInterval]);
     }
 }
 exports.default = Database;
