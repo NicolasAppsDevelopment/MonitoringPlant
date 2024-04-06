@@ -4,10 +4,11 @@ let question2;
 let response2;
 let question3;
 let response3;
+let bar;
 
 document.addEventListener("DOMContentLoaded", () => {
-    let bar = document.getElementsByClassName("progression_bar");
-    bar[0].style.width="40%";
+    bar = document.getElementsByClassName("progression_bar")[0];
+    bar.style.width="40%";
 });
 
 /**
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function goToForm1(){
     document.getElementById("div_page3").classList.add("hidden");
     document.getElementById("div_page2").classList.add("hidden");
-    bar[0].style.width="40%";
+    bar.style.width="40%";
     document.getElementById("div_page1").classList.remove("hidden");
 }
 
@@ -26,7 +27,7 @@ function goToForm1(){
 function goToForm2(){
     document.getElementById("div_page3").classList.add("hidden");
     document.getElementById("div_page1").classList.add("hidden");
-    bar[0].style.width="60%";
+    bar.style.width="60%";
     document.getElementById("div_page2").classList.remove("hidden");
 }
 
@@ -48,7 +49,7 @@ function goToForm3(){
     if (question1!=question2 &&  response1!=response2){
         document.getElementById("div_page1").classList.add("hidden");
         document.getElementById("div_page2").classList.add("hidden");
-        bar[0].style.width="80%";
+        bar.style.width="80%";
         document.getElementById("div_page3").classList.remove("hidden");
     }   
 }

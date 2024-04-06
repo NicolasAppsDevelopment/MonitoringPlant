@@ -1,10 +1,15 @@
+let bar;
+
+document.addEventListener("DOMContentLoaded", () => {
+    bar = document.getElementsByClassName("progression_bar")[0];
+});
+
 /**
  * Displays the second form to define the administrator password.
  */
 function next(){
     document.getElementById("div_page1").classList.add("hidden");
-    let bar=document.getElementsByClassName("progression_bar");
-    bar[0].style.width="20%";
+    bar.style.width="20%";
     document.getElementById("div_page2").classList.remove("hidden");
 }
 
@@ -13,8 +18,7 @@ function next(){
  */
 function previous(){
     document.getElementById("div_page2").classList.add("hidden");
-    let bar=document.getElementsByClassName("progression_bar");
-    bar[0].style.width="00%";
+    bar.style.width="00%";
     document.getElementById("div_page1").classList.remove("hidden");
 }
 
