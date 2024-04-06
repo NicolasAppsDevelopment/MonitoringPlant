@@ -48,7 +48,7 @@ try {
         }
 
         // check permissions
-        if ($infoCampaign["finished"] && !$session->isAdmin()){
+        if ($infoCampaign["finished"] && !$session->isAdmin()) {
             throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
         }
 
