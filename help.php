@@ -30,10 +30,10 @@
                         <span>4 Articles</span>
                     </div>
                     <ul class="summaryElement" id="helpCampaign">
-                        <li onclick="goToHelpPage(0)">Comment créer une nouvelle campagne de mesure ?</label>
-                        <li onclick="goToHelpPage(1)">Comment filtrer une campagne de mesure ? </label>
-                        <li onclick="goToHelpPage(2)">Comment avoir mes mesures sur Excel ?</label>
-                        <li onclick="goToHelpPage(3)">Comment redémmarer ma campagne ?</label>
+                        <li onclick="goToHelpPage(0, event)">Comment créer une nouvelle campagne de mesure ?</label>
+                        <li onclick="goToHelpPage(1, event)">Comment filtrer une campagne de mesure ? </label>
+                        <li onclick="goToHelpPage(2, event)">Comment avoir mes mesures sur Excel ?</label>
+                        <li onclick="goToHelpPage(3, event)">Comment redémmarer ma campagne ?</label>
                     </ul>
                 </div>
                 <div class="helpSummary" onclick="unrolle('helpSettings', event)">
@@ -42,8 +42,8 @@
                         <span>2 Articles</span>
                     </div>
                     <ul class="summaryElement" id="helpSettings">
-                        <li onclick="goToHelpPage(4)" >Comment marche la Suppression automatique ?</label>
-                        <li onclick="goToHelpPage(5)">Comment changer le nom du Wifi ?</label>
+                        <li onclick="goToHelpPage(4, event)" >Comment marche la Suppression automatique ?</label>
+                        <li onclick="goToHelpPage(5, event)">Comment changer le nom du Wifi ?</label>
                     </ul>
                 </div>
                 <div  class="helpSummary" onclick="unrolle('helpCalibrate', event)">
@@ -52,7 +52,7 @@
                         <span>1 Article</span>
                     </div>
                     <ul class="summaryElement" id="helpCalibrate">
-                        <li onclick="goToHelpPage(6)">Comment enregistrer une nouvelle calibration ?</label>
+                        <li onclick="goToHelpPage(6, event)">Comment enregistrer une nouvelle calibration ?</label>
                     </ul>
                 </div>  
                 <div  class="helpSummary" onclick="unrolle('helpConnexion', event)">
@@ -61,7 +61,7 @@
                         <span>1 Article</span>
                     </div>
                     <ul class="summaryElement" id="helpConnexion">
-                        <li onclick="goToHelpPage(7)">Comment se connecter avec les questions de sécurité ?</label>
+                        <li onclick="goToHelpPage(7, event)">Comment se connecter avec les questions de sécurité ?</label>
                     </ul>
                 </div>
             </div>
