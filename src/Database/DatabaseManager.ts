@@ -128,7 +128,6 @@ export default class Database {
         let updateDateQuery: string;
         if (finished) {
             updateDateQuery = ", endingDate=NOW()";
-            logger.info("endingDate NOW()");
         } else {
             updateDateQuery = ", beginDate=NOW()";
         }
@@ -136,24 +135,6 @@ export default class Database {
         let query="UPDATE Campaigns SET finished=?" + updateDateQuery + " WHERE idCampaign=?;";
         try {
             await this.queryData(query, [+finished, idCampaign]);
-        } catch (error) {
-            logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
-        }
-    }
-
-    /**
-     * Update the ending date of the campaign in the database
-     * @param idCampaign The id of the campaign to update
-     * @param duration In how many seconds the campaign will end
-     */
-    async updateEndingDatePrediction(idCampaign:number, duration:number){
-        logger.info("endingDate DATE_ADD(...) " + duration + " " + idCampaign);
-        let predictedDate = new Date();
-        predictedDate.setTime(predictedDate.getTime() + (duration * 1000));
-        
-        let query="UPDATE Campaigns SET endingDate = ? WHERE idCampaign = ?;";
-        try {
-            await this.queryData(query, [predictedDate, idCampaign]);
         } catch (error) {
             logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
         }
