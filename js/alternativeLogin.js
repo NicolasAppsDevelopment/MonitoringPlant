@@ -1,6 +1,7 @@
 let question1LabelComponent;
 let question2LabelComponent;
 let question3LabelComponent;
+let bar;
 
 document.addEventListener("DOMContentLoaded", async () => {  
     displayLoading("Récupération des questions de sécurité...");
@@ -9,8 +10,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     question2LabelComponent = document.getElementById("question2");
     question3LabelComponent = document.getElementById("question3");
 
-    let bar = document.getElementsByClassName("progression_bar");
-    bar[0].style.width="40%";
+    bar = document.getElementsByClassName("progression_bar")[0];
+    bar.style.width="40%";
 
     const data = await phpGet("phpApi/getSecurityQuestions.php");
     if (data != null){
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 function goToForm1(){
     document.getElementById("div_page3").classList.add("hidden");
     document.getElementById("div_page2").classList.add("hidden");
-    bar[0].style.width="0%";
+    bar.style.width="0%";
     document.getElementById("div_page1").classList.remove("hidden");
 }
 
@@ -40,7 +41,7 @@ function goToForm1(){
 function goToForm2(){
     document.getElementById("div_page3").classList.add("hidden");
     document.getElementById("div_page1").classList.add("hidden");
-    bar[0].style.width="30%";
+    bar.style.width="30%";
     document.getElementById("div_page2").classList.remove("hidden");
 }
 
@@ -50,7 +51,7 @@ function goToForm2(){
 function goToForm3(){
     document.getElementById("div_page1").classList.add("hidden");
     document.getElementById("div_page2").classList.add("hidden");
-    bar[0].style.width="60%";
+    bar.style.width="60%";
     document.getElementById("div_page3").classList.remove("hidden");
 }
 
