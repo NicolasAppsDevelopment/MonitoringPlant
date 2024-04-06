@@ -21,6 +21,10 @@ try {
             throw new Exception("Le mot de passe n'a pas été renseigné ou son format est incorrect. Veuillez le renseigner.");
         }
 
+        if (strlen($arguments["password"]) < 8) {
+            throw new Exception("Le mot de passe doit contenir au moins 8 caractères.");
+        }
+
         if (!$session->isAdminDefined()) {
             // the first register for the admin
             $session->registerAdmin($arguments["password"]);
