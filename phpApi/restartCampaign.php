@@ -52,7 +52,7 @@ try {
             throw new Exception("Cette action nécessite d'abord d'être identifié en tant qu'administrateur.");
         }
 
-        $campaignsManager->restartCampaign($id);
+        //$campaignsManager->restartCampaign($id);
 
         nodeJsPost("redoCampaign",array("id" => $id));
 
