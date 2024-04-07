@@ -17,6 +17,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link href="./css/style.css" rel="stylesheet">
     <script src="./js/slider.js"></script>
     <link href="./css/slider.css" rel="stylesheet">

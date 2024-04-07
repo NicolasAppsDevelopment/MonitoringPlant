@@ -6,6 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/popup.js"></script>
         <script src="./js/request.js"></script>
