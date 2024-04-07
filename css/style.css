@@ -970,6 +970,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     border-radius: 0.375rem;
     cursor: pointer;
     width: 100%;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+.tablelist-item-btn:hover {
+    background-color: #b3b3b32e;
 }
 .tablelist-item-btn.active {
     background-color: var(--selected-background-color);
@@ -1096,6 +1100,10 @@ input[type="text"].custom_search_bar:focus, input[type="text"].custom_search_bar
     cursor: pointer;
     padding-left: 14px;
     padding-right: 32px;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+.help-question-card:hover {
+    background-color: #f0f0f0;
 }
 .help-question-card::after {
     content: "";
