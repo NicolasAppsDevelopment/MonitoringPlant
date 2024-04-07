@@ -1,5 +1,5 @@
 /**
- * Checks that the password entered by the user is the administrator password.
+ * Attempt to login the user (by sending a verification request to the server) with the password provided in the input field.
  */
 async function login(){
     displayLoading("Connexion...");
@@ -14,4 +14,4 @@ async function login(){
     }
     
     hideLoading();
-} 
+}

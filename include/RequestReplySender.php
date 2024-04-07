@@ -1,7 +1,11 @@
 <?php
 
+/**
+ * This class is a singleton that allows you to send a reply to the client in a standardized way.
+ */
 class RequestReplySender {
     /**
+     * RequestReplySender singleton class instance
      * @var RequestReplySender
      * @access private
      * @static
@@ -10,14 +14,12 @@ class RequestReplySender {
     
     /**
      * Default constructor
-     *
-     * @return void
      */
     private function __construct() {
     }
     
     /**
-     * Create unique instance of the class
+     * Creates unique instance of the class
      * if it doesn't exists then return it
      *
      * @return RequestReplySender
@@ -56,7 +58,7 @@ class RequestReplySender {
     }
 
     /**
-     * Reply to the client with a 500 error code and JSON data about the error
+     * Reply to the client with a 500 error code and JSON data about the error {"success": false, "error": {"title": "Error title", "message": "Error message"}}
      * @param string $title - Title of the exception
      * @param Throwable $ex - Throwable error object
      */

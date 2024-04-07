@@ -2,8 +2,12 @@
 
 require_once 'Database.php';
 
+/**
+ * This class is a singleton that allows you to manage campaign measurements stored in the database.
+ */
 class MeasurementsManager {
     /**
+     * MeasurementsManager singleton class instance
      * @var MeasurementsManager
      * @access private
      * @static
@@ -11,6 +15,7 @@ class MeasurementsManager {
     private static $instance = null;
 
     /**
+     * Database singleton class instance
      * @var Database
      * @access private
      */
@@ -18,8 +23,6 @@ class MeasurementsManager {
     
     /**
      * Default constructor
-     *
-     * @return void
      */
     private function __construct() {
         $this->db = Database::getInstance();
@@ -28,7 +31,6 @@ class MeasurementsManager {
     /**
      * Create unique instance of the class
      * if it doesn't exists then return it
-     *
      * @return MeasurementsManager
      */
     public static function getInstance() {
@@ -41,12 +43,13 @@ class MeasurementsManager {
     }
 
     /**
-     * Description.
+     * Recovery of measurements of the campaign whose id is entered in parameter.
      *
-     * @param {string} message
-     * @return {string}
+     * @param int $id Id of the campaign
+     * @param string|null $sinceDatetime Date from which the measurements are to be retrieved
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @return array
      */
-    //Recovery of measurements of the campaign whose id is entered as a parameter
     public function getMeasurements(int $id, ?string $sinceDatetime = null) : array {
         try {
             $query = "SELECT * FROM Measurements WHERE idCampaign = :id";
@@ -70,18 +73,16 @@ class MeasurementsManager {
     /**
      * Deletes measurements from the campaign whose id is entered as a parameter
      * Returns true if the measurements are deleted.
-     *
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @param int $id Id of the campaign
-     * @return bool
      */
-    public function supprMeasurements(int $id) : bool
+    public function supprMeasurements(int $id)
     {
         //Removal of measurements
         try {
             $this->db->fetchAll("DELETE FROM Measurements WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
-            return true;
         } catch (\Throwable $th) {
             throw new Exception("Impossible de supprimer les mesures de la campagne. {$th->getMessage()}");
         }

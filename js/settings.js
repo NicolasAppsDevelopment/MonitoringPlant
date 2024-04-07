@@ -2,7 +2,7 @@ let networkSsid;
 let networkPassword;
 
 /**
- * Recovering raspberry pi settings.
+ * Retrieves the settings from the server and displays them in the page.
  */
 async function getSettings()
 {
@@ -37,9 +37,10 @@ async function getSettings()
     hideLoading();
 }
 
-
 /**
- * Update raspberry pi settings.
+ * Sends a request to the server to update the settings.
+ * If the password or ssid has been changed, a confirmation message will be displayed to the user.
+ * @returns {Promise<void>}
  */
 async function setSettings()
 {
@@ -88,7 +89,8 @@ async function setSettings()
 }
 
 /**
- * Delete all data of the Raspberry pi
+ * Sends a request to the server to reset all the data of the device.
+ * If the user confirms the action, the user will be redirected to the beginning page.
  */
 async function reset()
 {
@@ -108,7 +110,7 @@ async function reset()
 }
 
 /**
- * Display QR Code to access the Raspi
+ * Download and displays QR Code to access the Wi-Fi of the Raspberry Pi
  */
 async function displayQRCode()
 {
@@ -137,13 +139,13 @@ async function displayQRCode()
 }
 
 /**
- * Download QR Code to access the Raspi
+ * Downloads the QR Code to access the Wi-Fi of the Raspberry Pi and transfers it to the browser.
  */
 async function downloadQRCode()
 {
     displayLoading("Génération du QR code...");
     
-    const success = await nodeJsDownload("Code QR wifi cellule mesure.png", "getQRCode");
+    const success = await nodeJsDownload("Code QR Wi-Fi cellule mesure.png", "getQRCode");
     if (success) {
         displaySuccess("Téléchargement réussi !", "Le code QR a été téléchargé avec succès. Vous pouvez le retrouver dans le dossier \"Téléchargement\" de votre appareil.");
         closePopup("qr-popup");

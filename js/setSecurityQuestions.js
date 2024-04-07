@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Display the first form to define the first question and its response.
+ * Displays the first form to define the first question and its response.
  */
 function goToForm1(){
     document.getElementById("div_page3").classList.add("hidden");
@@ -22,7 +22,7 @@ function goToForm1(){
 }
 
 /**
- * Display the second form to define the second question and its response.
+ * Displays the second form to define the second question and its response.
  */
 function goToForm2(){
     document.getElementById("div_page3").classList.add("hidden");
@@ -32,7 +32,7 @@ function goToForm2(){
 }
 
 /**
- * Display the third form to definie the third question and its response.
+ * Displays the third form to definie the third question and its response.
  */
 function goToForm3(){
     question1 = document.getElementById("question1").value;
@@ -55,7 +55,7 @@ function goToForm3(){
 }
 
 /**
- * Register the questions and their responses into the database.
+ * Sends a request to the server to set the security questions and redirect the user to the next page.
  */
 async function setSecurityQuestions(){
     question1 = document.getElementById("question1").value;

@@ -1,6 +1,6 @@
 /**
- * Displays the content of the pop-up whose id is in parameter
- * @param {Number} id id of the pop-up that we want to unrolled (display its content)
+ * Displays the content of the container whose id is in parameter
+ * @param {Number} id id of the container that we want to unrolled (display its content)
  * @param {Event} e event when the users press the button
  */
 async function unroll(id, e) {

@@ -8,24 +8,12 @@ let checkboxWarn;
 
 let adminMode = false;
 
-/**
- * Executes each of the following functions when all html code is loaded.
- */
 document.addEventListener("DOMContentLoaded", () => {
-
-    // Checks if the user is an administrator.
     adminMode = document.getElementById("isAdmin").value == "true";
 
-    // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
-
-    //Recovery of all measurement campaigns.
     getListCampaignJS();
-
-    //Recovery of raspberry pi storage capacity.
     getStorageCapacity();
-
-    //Recovery of all configurations.
     getConfigurations();
 
     checkboxProcessing = document.getElementById("processing");
@@ -33,9 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     checkboxError = document.getElementById("error");
     checkboxWarn = document.getElementById("warn");
 
-    /**
-     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they are in progress is changed.
-     */
+    // Listen for changes in the filter checkboxes to prevent user from selecting multiple filters at the same time.
     checkboxProcessing.addEventListener('change', function() {
         if (this.checked) {
             checkboxSuccess.checked=false;
@@ -43,10 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
             checkboxWarn.checked=false;
         }
     });
-    
-    /**
-     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in success is changed.
-     */
     checkboxSuccess.addEventListener('change', function() {
         if (this.checked) {
             checkboxProcessing.checked=false;
@@ -54,10 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
             checkboxWarn.checked=false;
         }
     });
-    
-    /**
-     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they ended in an error is changed.
-     */
     checkboxError.addEventListener('change', function() {
         if (this.checked) {
             checkboxSuccess.checked=false;
@@ -65,10 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
             checkboxWarn.checked=false;
         }
     });
-    
-    /**
-     * Executes the following function when the state of the checkbox used to filter campaigns according to whether or not they contain one or more warnings is changed.
-     */
     checkboxWarn.addEventListener('change', function() {
         if (this.checked) {
             checkboxSuccess.checked=false;
@@ -84,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
 async function subscribeRefresh() {
     do {
         if (refreshRepeat) {
-            // Recovery and display all measurement campaigns according to the current filter.
             getListCampaignJS(currentFilter, true);
         }
         await delay(10000);
@@ -92,8 +65,8 @@ async function subscribeRefresh() {
 }
 
 /**
- * Recovery and display of all measurement campaigns.
- * @param {array} filter Influences which campaigns the function recovers
+ * Sends a request to the server to get all measurement campaigns according to their current filter and display it.
+ * @param {any} filter Filter to apply to the list of measurement campaigns {name, startDate, startTime, endDate, endTime, processing, success, error, warn}
  * @param {boolean} refreshMode Influences the visual aspect of the recovery
  */
 async function getListCampaignJS(filter = null, refreshMode = false) {
@@ -128,12 +101,10 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
             let stateIcon = "";
             
             if (campagne["finished"] == 0) {
-                // la campagne n'est pas fini
                 state = "processing";
                 stateDescription = `En cours (reste ${dateToRemainingString(new Date(campagne["endingDate"]))})...`;
                 stateIcon = "working_status";
             } else {
-                // la campagne est fini
                 stateDescription = `Terminé le ${dateToString(new Date(campagne["endingDate"]))}.`;
             }
 
@@ -193,7 +164,7 @@ async function getListCampaignJS(filter = null, refreshMode = false) {
 }
 
 /**
- * Recovery of all measurement campaigns depending on the filter parameters recovered.
+ * Builds the filter parameters and execute the filter function.
  */
 async function filterCampaigns() {
     const name = document.getElementById("campaign_name_search_bar").value;
@@ -230,14 +201,13 @@ async function filterCampaigns() {
 
     closePopup("filter-popup");
 
-    //Recovery Recovery all measurement campaigns according to filter's parameters.
     getListCampaignJS({"name": name.toLowerCase(), "startDate": startDate.value, "startTime": startTime.value, "endDate": endDate.value, "endTime": endTime.value, "processing": processing, "success": success, "error": error, "warn": warn});
 }
 
 /**
  * Resets all filter parameters
  */
-async function resetFilter(){
+async function resetFilter() {
     let name = document.getElementById("campaign_name_search_bar");
     let startDate = document.getElementById("datedebut_choice");
     let startTime = document.getElementById("heuredebut_choice");
@@ -267,7 +237,7 @@ let used = 0; // In KB
 let total = 0; // In KB
 
 /**
- * Recovering raspberry pi storage capacity.
+ * Recovering raspberry pi storage capacity and displaying it.
  */
 async function getStorageCapacity() {
     const usedStorageBar = document.getElementById("used_storage_bar");
@@ -290,14 +260,14 @@ async function getStorageCapacity() {
 }
 
 /**
- * Predict and display the storage that will be used by the new measurement campaign.
+ * Predicts and displays the storage that will be used by the new measurement campaign.
  */
 async function predictStoreUsage() {
     const useStorageBar = document.getElementById("use_storage_bar");
     let duration = document.getElementById("duration_input").value;
-    const duration_unit = document.getElementById("duration_unit_combo_box").value;
+    const durationUnit = document.getElementById("duration_unit_combo_box").value;
 
-    switch (duration_unit) {
+    switch (durationUnit) {
         case "min":
             duration *= 60;
             break;
@@ -339,11 +309,10 @@ async function predictStoreUsage() {
     const percent = ((used + size) / total) * 100;
     useStorageBar.style.width = percent + "%";
 
-
     const spaceTakenWarning = document.getElementById("space_taken_warning");
     spaceTakenWarning.innerHTML = "";
 
-    const percentUsed = (size/total)*100;
+    const percentUsed = (size / total) * 100;
 
     if (interval!=0 && duration!=0 && Math.round(percentUsed)>=5){
         hideLoading();
@@ -354,12 +323,11 @@ async function predictStoreUsage() {
             <div class="warning_txt">Cette campagne va nécessiter un espace de stockage important (${(Math.round(percentUsed))}%).</div>
         </div>
         `;
-    } 
- 
+    }
 }
 
 /**
- * Creation of a new measurement campaign.
+ * Recovers all input settings for the new measurement campaign and send them to the server to create it.
  */
 async function addCampaign() {
     displayLoading("Ajout de la campagne...");
@@ -433,7 +401,7 @@ async function addCampaign() {
 }
 
 /**
- * Deletes all data of the measurement campaign whose id is entered as a parameter.
+ * Sends a request to the server to delete the campaign with a specific id after a confirmation from the user.
  * @param {Number} id id of the campaing that we want to remove
  * @param {Event} e event when the users press the button
  */
@@ -461,7 +429,7 @@ function handleKeyPressSearchBar(e){
 }
 
 /**
- * Recovery of all configurations.
+ * Recovery of all configurations and load them in the combo box.
  */
 async function getConfigurations() {
     let data = await phpGet("phpApi/getListConfiguration.php");

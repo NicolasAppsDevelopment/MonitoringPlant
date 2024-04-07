@@ -3,8 +3,12 @@
 require_once 'Database.php';
 require_once 'Session.php';
 
+/**
+ * This class is a singleton that allows you to manage the settings of the Raspberry Pi stored in the database.
+ */
 class SettingsManager {
     /**
+     * SettingsManager singleton class instance
      * @var SettingsManager
      * @access private
      * @static
@@ -12,6 +16,7 @@ class SettingsManager {
     private static $instance = null;
 
     /**
+     * Database singleton class instance
      * @var Database
      * @access private
      */
@@ -25,8 +30,6 @@ class SettingsManager {
     
     /**
      * Default constructor
-     *
-     * @return void
      */
     private function __construct() {
         $this->db = Database::getInstance();
@@ -34,7 +37,7 @@ class SettingsManager {
     }
     
     /**
-     * Create unique instance of the class
+     * Creates unique instance of the class
      * if it doesn't exists then return it
      *
      * @return SettingsManager
@@ -49,9 +52,9 @@ class SettingsManager {
     }
 
     /**
-     * Recovery of Raspbery Pi settings
-     *
-     * @return {array} Array of settings
+     * Recovery of Raspbery Pi settings or redirection to the beginning page if the settings are not defined
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @return array Array of settings
      */
     public function getSettings() : array
     {
@@ -73,6 +76,7 @@ class SettingsManager {
      *
      * @param int $supprInterval The interval of time to delete campaigns
      * @param bool $enabled The state of the automatic deletion
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
     public function setSettings(int $supprInterval, bool $enabled)
     {
@@ -88,10 +92,11 @@ class SettingsManager {
     }
     
     /**
-     * Save recovery questions and answers for the admin
+     * Saves security questions and answers for the admin
      *
-     * @param string $question The question
-     * @param string $response The response
+     * @param string $question
+     * @param string $response
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
     public function registerAdminQuestions(string $question,string $response)
     {
@@ -109,7 +114,7 @@ class SettingsManager {
     }
 
     /**
-     * Modify recovery questions and answers for the admin
+     * Modifies security questions and answers for the admin
      *
      * @param string $question1 The first question
      * @param string $response1 The first response
@@ -117,6 +122,7 @@ class SettingsManager {
      * @param string $response2 The second response
      * @param string $question3 The third question
      * @param string $response3 The third response
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
     public function updateAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3)
     {
@@ -146,7 +152,7 @@ class SettingsManager {
     }
 
     /**
-     * Verify questions and aswers
+     * Verifies security questions and answers
      *
      * @param string $question1 The first question
      * @param string $response1 The first response
@@ -154,6 +160,7 @@ class SettingsManager {
      * @param string $response2 The second response
      * @param string $question3 The third question
      * @param string $response3 The third response
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return true if all is correct, false otherwise
      */
     public function checkAdminQuestions(string $question1,string $response1,string $question2,string $response2,string $question3,string $response3): bool
@@ -179,11 +186,12 @@ class SettingsManager {
     }
 
     /**
-     * Modify the password of the admin into the database (the password will be stored hashed)
+     * Modifies the password of the admin into the database (the password will be stored hashed)
      *
-     * @param string $password The password (not hashed)
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @return bool returns true if the admin is registered in the database.
      */
-    public function areAdminQuestionsDefined()
+    public function areAdminQuestionsDefined() : bool
     {
         $id = $this->session->getAdminUserId();
         try {
@@ -199,9 +207,10 @@ class SettingsManager {
 
     /**
      * Returns the security questions
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @return array
      */
-    public function getSecurityQuestions()
-    {
+    public function getSecurityQuestions()    {
         try {
             return $this->db->fetchAll("SELECT question FROM Questions");
         } catch (\Throwable $th) {

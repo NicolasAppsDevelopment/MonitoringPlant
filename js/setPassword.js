@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Displays the second form to define the administrator password.
+ * Displays the second form to confirm the administrator password.
  */
 function next(){
     document.getElementById("div_page1").classList.add("hidden");
-    bar.style.width="20%";
+    bar.style.width = "20%";
     document.getElementById("div_page2").classList.remove("hidden");
 }
 
@@ -18,12 +18,12 @@ function next(){
  */
 function previous(){
     document.getElementById("div_page2").classList.add("hidden");
-    bar.style.width="0%";
+    bar.style.width = "0%";
     document.getElementById("div_page1").classList.remove("hidden");
 }
 
 /**
- * Sets the administrator password.
+ * Send a request to the server to set the password and redirect the user to the next page.
  */
 async function setPassword(){
     displayLoading("Mise à jour du mot de passe...");

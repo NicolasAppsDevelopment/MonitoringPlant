@@ -2,8 +2,12 @@
 
 require_once 'Database.php';
 
+/**
+ * This class is a singleton that allows you to manage user sessions.
+ */
 class Session {
     /**
+     * Session singleton class instance
      * @var Session
      * @access private
      * @static
@@ -11,6 +15,7 @@ class Session {
     private static $instance = null;
 
     /**
+     * Database singleton class instance
      * @var Database
      * @access private
      */
@@ -18,15 +23,13 @@ class Session {
     
     /**
      * Default constructor
-     *
-     * @return void
      */
     private function __construct() {
         $this->db = Database::getInstance();
     }
     
     /**
-     * Create unique instance of the class
+     * Creates unique instance of the class
      * if it doesn't exists then return it
      *
      * @return Session
@@ -41,6 +44,9 @@ class Session {
         return self::$instance;
     }
 
+    /**
+     * Initiates a session
+     */
     private static function initSession(): void {
         // always start the session when we need to access session data
         if (session_status() == PHP_SESSION_NONE) {
@@ -54,6 +60,7 @@ class Session {
      *
      * @param string $user The user name
      * @param string $password The password
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return bool
      */
     public function login(string $username, string $password): bool {
@@ -91,9 +98,9 @@ class Session {
     }
 
     /**
-     * Register the user with his password into the database (the password will be stored hashed)
-     *
+     * Registers the user with his password into the database (the password will be stored hashed)
      * @param string $password The password (not hashed)
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
     public function registerAdmin(string $password)
     {
@@ -107,9 +114,10 @@ class Session {
     }
 
     /**
-     * Modify the password of the admin into the database (the password will be stored hashed)
+     * Modifies the password of the admin into the database (the password will be stored hashed)
      *
      * @param string $password The password (not hashed)
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
     public function updateAdminPassword(string $password)
     {
@@ -123,9 +131,8 @@ class Session {
     }
 
     /**
-     * Modify the password of the admin into the database (the password will be stored hashed)
-     *
-     * @param string $password The password (not hashed)
+     * Returns the user id of the admin.
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
     public function getAdminUserId() : int
     {
@@ -147,7 +154,7 @@ class Session {
 
     /**
      * Returns true if the admin is registered in the database.
-     *
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return bool
      */
     public function isAdminDefined(): bool {
@@ -180,10 +187,8 @@ class Session {
 
     /**
      * Redirects the user to the login page if they are not logged in as admin and are on an admin-only page.
-     *
-     * @return bool
      */
-    public function checkPageAccess(): void {
+    public function checkPageAccess() {
         if (!self::isAdmin()) {
             header("Location: /login.php");
             exit;

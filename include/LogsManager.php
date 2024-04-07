@@ -2,8 +2,12 @@
 
 require_once 'Database.php';
 
+/**
+ * This class is a singleton that allows you to manage campaign logs stored in the database.
+ */
 class LogsManager {
     /**
+     * LogsManager singleton class instance
      * @var LogsManager
      * @access private
      * @static
@@ -11,6 +15,7 @@ class LogsManager {
     private static $instance = null;
 
     /**
+     * Database singleton class instance
      * @var Database
      * @access private
      */
@@ -18,8 +23,6 @@ class LogsManager {
     
     /**
      * Default constructor
-     *
-     * @return void
      */
     private function __construct() {
         $this->db = Database::getInstance();
@@ -41,12 +44,13 @@ class LogsManager {
     }
 
     /**
-     * Description.
+     * Recovery of logs of the campaign whose id is entered in parameter.
      *
-     * @param {string} message
-     * @return {string}
+     * @param int $id Id of the campaign
+     * @param string|null $sinceDatetime Date from which the logs are to be retrieved
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @return array
      */
-    //Recovery of logs of the campaign whose id is entered as a parameter
     public function getLogs(int $id, ?string $sinceDatetime = null) : array {
         try {
             $query = "SELECT * FROM Logs WHERE idCampaign = :varId";
@@ -66,20 +70,19 @@ class LogsManager {
     }
 
     /**
-     * Deletes logs from the campaign whose id is entered as a parameter
+     * Deletes logs from the campaign whose id is entered in parameter
      * Returns true if the logs are deleted.
      *
      * @param int $id Id of the campaign
-     * @return bool
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
-    public function supprLogs(int $id) : bool
+    public function supprLogs(int $id)
     {
         //Removal of logs
         try {
             $this->db->fetchAll("DELETE FROM Logs WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
-            return true;
         } catch (\Throwable $th) {
             throw new Exception("Impossible de supprimer les logs de la campagne. {$th->getMessage()}");
         }

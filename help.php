@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/style.css" rel="stylesheet">
         <title>Liste des campagnes</title>
-        <script src="./js/functions.js"></script>
         <script src="./js/help.js"></script>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
@@ -43,7 +42,7 @@
                     </div>
                     <ul class="summaryElement" id="helpSettings">
                         <li onclick="goToHelpPage(4, event)" >Comment marche la Suppression automatique ?</label>
-                        <li onclick="goToHelpPage(5, event)">Comment changer le nom du Wifi ?</label>
+                        <li onclick="goToHelpPage(5, event)">Comment changer le nom du Wi-Fi ?</label>
                     </ul>
                 </div>
                 <div  class="helpSummary" onclick="unroll('helpCalibrate', event)">

@@ -6,13 +6,8 @@ let lastLogDatetime = null;
 let rows = 0;
 let refreshRepeat = true;
 
-
-
-//Executes each of the following functions when all html code is loaded.
 document.addEventListener("DOMContentLoaded", () => {
-    // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
-    // Recovers and displays measurement campaign data.
     getCampaignMeasurements();
 });
 
@@ -22,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function subscribeRefresh() {
     do {
         if (refreshRepeat) {
-            // Recovery and display measurement campaign data.
+            // Recovery and display measurement campaign data in a refresh context.
             getCampaignMeasurements(true);
         }
         await delay(refreshDelay);
@@ -30,8 +25,8 @@ async function subscribeRefresh() {
 }
 
 /**
- * Recovery and display measurement campaign data.
- * @param {boolean} refreshMode Influences the visual aspect of the recovery
+ * Gets data of the campaigns then displays informations, logs and measurements
+ * @param {boolean} refreshMode True if the function is called in a refresh context, false otherwise.
  */
 async function getCampaignMeasurements(refreshMode = false) {
     if (!refreshMode){
@@ -343,9 +338,9 @@ async function getCampaignMeasurements(refreshMode = false) {
 }
 
 /**
- * Exports measurement campaign data.
+ * Exports measurement campaign data from settings selected in the UI.
  */
-async function exportCampagne() {
+async function exportCampaign() {
     displayLoading("Export de la campagne...");
 
     // Settings to export measurement campaign data.
@@ -429,8 +424,9 @@ async function exportCampagne() {
 
 /**
  * Stop the selected measurement campaign.
+ * Display a confirmation message before stopping the campaign.
  */
-async function stopCampagne() {
+async function stopCampaign() {
     if (await displayConfirm('Voulez-vous vraiment arrêter cette campagne de mesure ?', 'La relève des données sera interrompu définitivement. Cette action est irréversible.', 'Arrêter', true)) {
         displayLoading("Arrêt de la campagne...");
 
@@ -450,8 +446,9 @@ async function stopCampagne() {
 
 /**
  * Restart the selected measurement campaign.
+ * Display a confirmation message before restarting the campaign.
  */
-async function restartCampagne() {
+async function restartCampaign() {
     if (await displayConfirm('Voulez-vous vraiment redémarrer cette campagne de mesure ?', 'La relève des données sera interrompu et le données déjà enregistrées de cette campagne seront supprimées définitivement. Cette action est irréversible.', 'Redémarrer', true)) {
         displayLoading("Redémarrage de la campagne...");
 
@@ -464,8 +461,16 @@ async function restartCampagne() {
         if (data != null) {
             document.getElementById("refresh_form").submit();
         } 
-        
 
         hideLoading();
     }
+}
+
+/**
+ * Returns "Activé" or "Désactivé" according to bool
+ * @param {boolean} bool If true, the returned string will contain "Activé", "Désactivé" if not
+ * @returns {String} contains "Activé" or "Désactivé"
+ */
+function getReadableBool(bool) {
+    return bool ? "Activé" : "Désactivé";
 }

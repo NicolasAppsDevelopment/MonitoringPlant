@@ -57,6 +57,7 @@ function goToForm3(){
 
 /**
  * Verifies that the responses match those defined by the administrator.
+ * Redirects to the list of campaigns if the responses are correct.
  */
 async function alternativeLogin(){
     displayLoading("Connexion...");

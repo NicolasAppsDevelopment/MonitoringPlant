@@ -1,14 +1,11 @@
-//Executes each of the following functions when all html code is loaded.
 document.addEventListener("DOMContentLoaded", () => {
-    // Checks if the raspberry pi's time is the same as that of the device using the website.
     checkTime();
-    //
     getListConfigJS();
 });
 
 /**
- * Saves the configuration.
- * @param {boolean} editMode Influences the visual aspect of the recovery
+ * Send a request to the server to add or modify a configuration in the database.
+ * @param {boolean} editMode Indicates whether the configuration is being added or modified
  * @param {Number} id Configuration id
  */
 async function saveConfiguration(editMode = false, id = null) {
@@ -122,7 +119,7 @@ async function saveConfiguration(editMode = false, id = null) {
         return;
     }
 
-    // Register of the configuration
+    // Register the configuration
     let data = null;
     if (editMode === true) {
         data = await phpPost("phpApi/editConfiguration.php", {
@@ -173,7 +170,7 @@ async function saveConfiguration(editMode = false, id = null) {
 }
 
 /**
- * Recovery and diplay of the configuration whose id corresponds to the parameter
+ * Recovers and diplays the configuration whose id corresponds to the parameter
  * @param {Number} id Configuration id
  */
 async function loadConfiguration(id) {
@@ -232,7 +229,7 @@ async function loadConfiguration(id) {
 }
 
 /**
- * Prepare the popup to add a configuration
+ * Prepares the popup to add a configuration
  */
 async function prepareAddPopup() {
     document.getElementById("add-popup-title").innerText = "Ajouter une configuration";
@@ -258,8 +255,7 @@ async function prepareAddPopup() {
 }
 
 /**
- * Displays a message asking if the user wants to modify the configuration whose id is in the parameter.
- * If the user answers yes, it is modified, if he answers no, it is not modified.
+ * Save the configuration after the user has confirmed the modification.
  * @param {Number} id Configuration id
  */
 async function editConfiguration(id) {
@@ -269,7 +265,7 @@ async function editConfiguration(id) {
 }
 
 /**
- * Removes the configuration whose id is in the parameter.
+ * Send a request to the server to remove a configuration from the database after the user has confirmed the deletion.
  * @param {Number} id Configuration id
  * @param {Event} e event when the users press the button
  */
@@ -297,7 +293,7 @@ function handleKeyPressSearchBar(e){
 
 /**
  * Recovers and displays all configurations based on the filter in parameter.
- * @param {String} filter Sequence of characters searched for in configuration names
+ * @param {any} filter Array of filters to apply to the configurations (name): {"name": "..."}
  */
 async function getListConfigJS(filter = null) {
     const configurationsContainer = document.getElementById("config_container");
@@ -344,7 +340,7 @@ async function getListConfigJS(filter = null) {
 }
 
 /**
- * Displays all configurations based on the filter
+ * Displays all configurations depending on the filter input
  */
 async function filterConfigurations() {
     const name = document.getElementById("config_name_search_bar").value;

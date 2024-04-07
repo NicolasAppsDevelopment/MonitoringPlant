@@ -1,14 +1,18 @@
 <?php
 
+/**
+ * This class is a singleton that allows you to connect to the database.
+ */
 class Database {
-    /**
+/**
+     * Database singleton class instance
      * @var Database
      * @access private
-     * @static
      */
     private static $instance = null;
 
     /**
+     * Database connection object
      * @var PDO
      * @access private
      */
@@ -16,8 +20,6 @@ class Database {
     
     /**
      * Default constructor
-     *
-     * @return void
      */
     private function __construct() {
         $this->db = self::initDataBase();
@@ -26,7 +28,7 @@ class Database {
     }
     
     /**
-     * Create unique instance of the class
+     * Creates unique instance of the class
      * if it doesn't exists then return it
      *
      * @return Database
@@ -41,9 +43,10 @@ class Database {
     }
 
     /**
-     * Connection to database.
+     * Initiates a database connection.
      *
-     * @return PDO
+     * @throws Exception Can throw an exception if the connexion to the database has failed.
+     * @return PDO Database connection object
      */
     private function initDataBase() : PDO
     {
@@ -60,10 +63,14 @@ class Database {
 
 
     /**
-     * Preparing and executing a SQL query.
+     * Prepares and executes a SQL query.
      *
      * @param string $query Query who need to be execute
      * @param array $parameters Parameter(s) of the query
+     * @throws Exception Can throw an exception if the connexion to the database has failed.
+     * @throws Exception Can throw an exception if the request preparation has failed.
+     * @throws PDOException Can throw an exception if the request execution has failed.
+     *
      * @return array
      */
     public function fetchAll(string $query, array $parameters = []) : array {
@@ -85,11 +92,14 @@ class Database {
 
     /**
      * Deletes all data in the measurement cell (reset of the measurement cell)
-     * Returns true if all raspberry pi data are deleted.
      *
-     * @return bool
+     * @throws Exception Can throw an exception if the removal of all data from the Settings table has failed.
+     * @throws Exception Can throw an exception if the removal of all data from the Measurements table has failed.
+     * @throws Exception Can throw an exception if the removal of all data from the Logs table has failed.
+     * @throws Exception Can throw an exception if the removal of all data from the Campaigns table has failed.
+     * @throws Exception Can throw an exception if the removal of all data from the Configurations table has failed.
      */
-    public function resetAll() : bool
+    public function resetAll()
     {
         //Deleting Raspbery Pi settings
         try {
@@ -139,7 +149,5 @@ class Database {
         } catch (\Throwable $th) {
             throw new Exception("Impossible de supprimer les utilisateurs. {$th->getMessage()}");
         }
-
-        return true;
     }
 }

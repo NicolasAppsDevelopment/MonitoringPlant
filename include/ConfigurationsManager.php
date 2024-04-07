@@ -2,8 +2,13 @@
 
 require_once 'Database.php';
 
+/**
+ * This class is a singleton that allows you to manage the calibration configurations stored in the database.
+ */
 class ConfigurationsManager {
     /**
+     * ConfigurationsManager singleton class instance
+     *
      * @var ConfigurationsManager
      * @access private
      * @static
@@ -11,6 +16,8 @@ class ConfigurationsManager {
     private static $instance = null;
 
     /**
+     * Database singleton class instance
+     *
      * @var Database
      * @access private
      */
@@ -18,15 +25,13 @@ class ConfigurationsManager {
     
     /**
      * Default constructor
-     *
-     * @return void
      */
     private function __construct() {
         $this->db = Database::getInstance();
     }
     
     /**
-     * Create unique instance of the class
+     * Creates unique instance of the class
      * if it doesn't exists then return it
      *
      * @return ConfigurationsManager
@@ -41,9 +46,12 @@ class ConfigurationsManager {
     }
 
     /**
-     * Recovery of all configurations.
+     * Recovers a list of all configurations stored in the database.
      *
-     * @param array $filter Influence which configuration the public function recovers
+     * @param array $filter Array of filters to apply to the list (name)
+     * name: Name of the configuration
+     *
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return array
      */
     public function getListConfiguration(array $filter = null) : array
@@ -66,14 +74,16 @@ class ConfigurationsManager {
         try {
             return $this->db->fetchAll($query, $parameters);
         } catch (\Throwable $th) {
-            throw new Exception("Impossible de récupérer les campagnes. {$th->getMessage()}");
+            throw new Exception("Impossible de récupérer les configurations. {$th->getMessage()}");
         }
     }
 
     /**
-     * Returns the id of the configuration whose name entered in parameter matches
+     * Returns the id of the configuration whose name is entered in parameter.
      *
      * @param string $name Name of a configuration
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Throw exception if configuration name isn't found in the database
      * @return int
      */
     public function getIdConfiguration(string $name): int {
@@ -93,9 +103,11 @@ class ConfigurationsManager {
     }
 
     /**
-     * Return the name of the configuration with a given id
+     * Returns the name of the configuration whose id is entered in parameter.
      *
      * @param int $id Id of a configuration
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Throw exception if configuration id isn't found in the database
      * @return string
      */
     public function getNameConfiguration(int $id): string {
@@ -118,6 +130,7 @@ class ConfigurationsManager {
      * Returns true if the name entered in parameter corresponds to an existing configuration.
      *
      * @param string $name Name of a configuration
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return bool
      */
     public function existConfigurationById(int $id): bool {
@@ -126,7 +139,7 @@ class ConfigurationsManager {
                 'varId' => $id
             ]);
         
-            return count($results) > 0;
+            return !empty($results);
         } catch (\Throwable $th) {
             throw new Exception("Impossible de vérifier l'existance d'une configuration par son identifiant. {$th->getMessage()}");
         }
@@ -136,7 +149,8 @@ class ConfigurationsManager {
      * Returns true if the name entered in parameter corresponds to an existing configuration.
      *
      * @param string $name Name of a configuration
-     * @param int $id Id of a configuration (optional, if provided, the public function wiil exclude the configuration with this id from the check)
+     * @param int $id Id of a configuration (optional, if provided, this will exclude the configuration with this id from the check)
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return bool
      */
     public function existConfiguration(string $name, int $id = -1): bool {
@@ -159,13 +173,13 @@ class ConfigurationsManager {
     }
 
     /**
-     * Deletes all data of the campaign whose id is entered as a parameter
-     * Returns true if all data are deleted.
+     * Deletes all data of the configuration whose id is entered as a parameter
      *
-     * @param int $id Id of the campaign
-     * @return bool
+     * @param int $id Id of the configuration
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Can throw an exception if the deletion of the configuration references for the affected campaigns has failed.
      */
-    public function supprConfiguration(int $id) : bool
+    public function supprConfiguration(int $id)
     {
         //Update any campaign related
         try {
@@ -176,7 +190,7 @@ class ConfigurationsManager {
             throw new Exception("Impossible de supprimer les références de la configuration pour les campagnes concernées. {$th->getMessage()}");
         }
 
-        //Removal of the campaign
+        //Removal of the configuration
         try {
             $this->db->fetchAll("DELETE FROM Configurations WHERE idConfig = :varId", [
                 'varId' => $id
@@ -184,12 +198,10 @@ class ConfigurationsManager {
         } catch (\Throwable $th) {
             throw new Exception("Impossible de supprimer la configuration. {$th->getMessage()}");
         }
-
-        return true;
     }
 
     /**
-     * Add a configuration into the database
+     * Adds a configuration into the database
      * Returns true if no errors occured
      *
      * @param string name Name of the configuration
@@ -207,8 +219,10 @@ class ConfigurationsManager {
      * @param int o2cal2nd Constant
      * @param int altitude Altitude for the configuration
      * @param bool calibIsHumid If calib has been done in humid conditions
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Can throw an exception if a configuration with the same name already exists.
      */
-    public function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calibIsHumid) : bool
+    public function addConfiguration(string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calibIsHumid)
     {
         try {
             if (self::existConfiguration($name)) {
@@ -232,15 +246,13 @@ class ConfigurationsManager {
                 'varAltitude' => $altitude,
                 'varCalibIsHumid' => (int)$calibIsHumid
             ]);
-
-            return true;
         } catch (\Throwable $th) {
             throw new Exception("Impossible d'ajouter la configuration. {$th->getMessage()}");
         }
     }
 
     /**
-     * Add a configuration into the database
+     * Edits a configuration whose id is entered in parameters
      * Returns true if no errors occured
      *
      * @param string name Name of the configuration
@@ -258,8 +270,10 @@ class ConfigurationsManager {
      * @param int o2cal2nd Constant
      * @param int altitude Altitude for the configuration
      * @param bool calibIsHumid If calib has been done in humid conditions
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Can throw an exception if a configuration with the same name already exists.
      */
-    public function editConfiguration(int $id, string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calibIsHumid) : bool
+    public function editConfiguration(int $id, string $name, float $f1, float $m, float $dPhi1, float $dPhi2, float $dKSV1, float $dKSV2, float $cal0, float $cal2nd, float $t0, float $t2nd, int $pressure, int $o2cal2nd, int $altitude, bool $calibIsHumid)
     {
         try {
             if (self::existConfiguration($name, $id)) {
@@ -284,17 +298,17 @@ class ConfigurationsManager {
                 'varCalibIsHumid' => (int)$calibIsHumid,
                 'varId' => $id
             ]);
-            
-            return true;
         } catch (\Throwable $th) {
             throw new Exception("Impossible de modifier la configuration. {$th->getMessage()}");
         }
     }
 
     /**
-     * Get the configuration from the database with a given id
+     * Returns a configuration whose id is entered in parameters
      *
-     * @param int id
+     * @param int id of a configuration
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Can throw an exception if the configuration associated with the given identifier is not found.
      * @return array
      */
     public function getConfiguration(int $id) : array {

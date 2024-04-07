@@ -1,5 +1,5 @@
 <?php
-//Node-JS access configuration
+//Node-JS access configuration -- global variables
 global $NODE_JS_API_IP, $NODE_JS_API_PORT, $NODE_JS_API_URL, $NODE_JS_API_TOKEN;
 $NODE_JS_API_IP = "127.0.0.1";
 $NODE_JS_API_PORT = "1881";
@@ -8,9 +8,10 @@ $NODE_JS_API_TOKEN = "KwY7dqKSFAf0EkzBPwt6x9eTDAEiM8Ul0OQDMqGJLTKBli4qceJQlAMtir
 
 /**
  * This function send a post request to Node JS and Node JS reply with a sucess or a failure.
- * @param  string $name the name of the Node JS request will receive. This string must not contains any special characters.
+ * @param string $name the name of the Node JS request will receive. This string must not contains any special characters.
  * @param array $array the parameters that you want to transmir to Node JS
- * @return mixed $res is the data that NodeJS send back, it can be a interger, string, etc...
+ * @throws Exception if the request fail (or error message from the server), the function will throw an exception with the error message.
+ * @return mixed is the data that NodeJS send back, it can be a interger, string, etc...
  */
 function nodeJsPost(string $name, array $array)
 {
@@ -44,8 +45,9 @@ function nodeJsPost(string $name, array $array)
 
 /**
  * This function send a get request to Node JS which reply.
- * @param  string $name the name of the Node JS request will receive. This string must not contains any special characters.
- * @return mixed $res is the data that NodeJS send back, it can be a interger, string, etc...
+ * @param string $name the name of the Node JS request will receive. This string must not contains any special characters.
+ * @throws Exception if the request fail (or error message from the server), the function will throw an exception with the error message.
+ * @return mixed Data that NodeJS send back, it can be a interger, string, etc...
  */
 function nodeJsGet(string $name)
 {

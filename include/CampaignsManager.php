@@ -4,8 +4,13 @@ require_once 'MeasurementsManager.php';
 require_once 'LogsManager.php';
 require_once 'ConfigurationsManager.php';
 
+/**
+ * This class is a singleton that allows you to manage the campaigns stored in the database.
+ */
 class CampaignsManager {
     /**
+     * CampaignsManager singleton class instance
+     *
      * @var CampaignsManager
      * @access private
      * @static
@@ -13,33 +18,39 @@ class CampaignsManager {
     private static $instance = null;
 
     /**
+     * Database singleton class instance
+     *
      * @var Database
      * @access private
      */
     private $db = null;
 
     /**
+     * MeasurementsManager singleton class instance
+     *
      * @var MeasurementsManager
      * @access private
      */
     private $measuresManager = null;
 
     /**
+     * LogsManager singleton class instance
+     *
      * @var LogsManager
      * @access private
      */
     private $logsManager = null;
 
     /**
+     * ConfigurationsManager singleton class instance
+     *
      * @var ConfigurationsManager
      * @access private
      */
     private $configsManager = null;
     
     /**
-     * Default constructor
-     *
-     * @return void
+     * Constructor of the class
      */
     private function __construct() {
         $this->db = Database::getInstance();
@@ -49,8 +60,7 @@ class CampaignsManager {
     }
     
     /**
-     * Create unique instance of the class
-     * if it doesn't exists then return it
+     * Create unique instance of the class if it already exists then return it
      *
      * @return CampaignsManager
      */
@@ -64,9 +74,20 @@ class CampaignsManager {
     }
 
     /**
-     * Recovery of all measurement campaigns.
+     * Returns a list of all campaigns informations stored in the database according to the filter.
      *
-     * @param array $filter Influences which campaigns the public function recovers
+     * @param array $filter Array of filters to apply to the list (name, processing, success, warn, error, startDate, startTime, endDate, endTime).
+     * name: Name of the campaign.
+     * processing: True if the campaign is running.
+     * success: True if the campaign is finished and successful.
+     * warn: True if the campaign has a warning (still running or not).
+     * error: True if the campaign is finished with an unexpected error.
+     * startDate: Start date of the campaign.
+     * startTime: Start time of the campaign.
+     * endDate: End date of the campaign.
+     * endTime: End time of the campaign.
+     *
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return array
      */
     public function getListCampaign(array $filter = null) : array
@@ -128,9 +149,11 @@ class CampaignsManager {
     }
 
     /**
-     * Returns the id of the campaign whose name entered in parameter matches
+     * Returns the id of the campaign whose name  is entered in parameter
      *
      * @param string $name Name of a campaign
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Can throw an exception if the name of the campaign is not found.
      * @return int
      */
     public function getIdCampaign(string $name): int {
@@ -153,6 +176,7 @@ class CampaignsManager {
      * Returns true if the name entered in parameter corresponds to an existing campaign.
      *
      * @param string $name Name of a campaign
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return bool
      */
     public function existCampaign(string $name): bool {
@@ -168,7 +192,7 @@ class CampaignsManager {
     }
 
     /**
-     * Creates a campaign according to the parameters entered andd returns the id of the new campaign.
+     * Creates a campaign according to the parameters entered and returns the id of the new campaign.
      *
      * @param int $configId  Id of the configuration of the new campaign
      * @param string $name  Name of the new campaign
@@ -182,7 +206,9 @@ class CampaignsManager {
      * @param int $duration  Duration of the new campaign
      * @param bool $humidMode  True if the new campaign happened in a humid environment
      * @param bool $enableFiboxTemp  True if the new campaign take the temperature of the fibox
-     * @return int
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Can throw an exception if a campaign with the same name already exists.
+     * @return int id of the new campaign
      */
     public function addCampaign(int $configId, string $name, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, int $interval, ?float $volume, int $duration, bool $humidMode, bool $enableFiboxTemp) : int
     {
@@ -215,12 +241,11 @@ class CampaignsManager {
 
     /**
      * Deletes all data of the campaign whose id is entered as a parameter
-     * Returns true if all data are deleted.
      *
-     * @param int $id Id of the campaign
-     * @return bool
+     * @param int Id of the campaign to delete
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
-    public function supprCampaign(int $id) : bool
+    public function supprCampaign(int $id)
     {
         //Removal of measurements
         $this->measuresManager->supprMeasurements($id);
@@ -233,7 +258,6 @@ class CampaignsManager {
             $this->db->fetchAll("DELETE FROM Campaigns WHERE idCampaign = :varId", [
                 'varId' => $id
             ]);
-            return true;
         } catch (\Throwable $th) {
             throw new Exception("Impossible de supprimer la campagne. {$th->getMessage()}");
         }
@@ -242,7 +266,8 @@ class CampaignsManager {
     /**
      * Restarts a campaign whose id is entered as a parameter
      *
-     * @param int $id Id of the campaign
+     * @param int Id of the campaign to restart
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      */
     public function restartCampaign(int $id)
     {
@@ -264,7 +289,7 @@ class CampaignsManager {
     }
 
     /**
-     * Export of measurements from a campaign according to the parameters entered.
+     * Exports measurements from a campaign according to the parameters entered.
      *
      * @param string $id  Id of the new campaign
      * @param bool $temperatureSensor  True if the export take the temperature recorded by the campaign
@@ -274,7 +299,8 @@ class CampaignsManager {
      * @param bool $humiditySensor  True if the export take the humidity recorded by the campaign
      * @param string $beginDate     Date of begin of measurements recovery
      * @param string $endDate   Date of end of measurements recovery
-     * @return array
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @return array Array containing the measurements following the parameters entered
      */
     public function exportCampaign(int $id, bool $temperatureSensor, bool $CO2Sensor, bool $O2Sensor, bool $luminositySensor, bool $humiditySensor, string $beginDate, string $endDate) : array
     {
@@ -317,11 +343,13 @@ class CampaignsManager {
     }
 
     /**
-     * Recovery of all the data of the campaign whose id is entered as a parameter.
+     * Recovers all the data of the campaign whose id is entered as a parameter.
+     * It retrieves the general information of the campaign, the measurements and the logs.
      *
      * @param int $id
-     * @param ?string $logSinceDatetime
-     * @param ?string $measureSinceDatetime
+     * @param ?string $logSinceDatetime If not null, only logs after this date will be returned
+     * @param ?string $measureSinceDatetime If not null, only measurements after this date will be returned
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
      * @return array
      */
     public function getCampaign(int $id, ?string $logSinceDatetime = null, ?string $measureSinceDatetime = null) : array {
@@ -346,8 +374,10 @@ class CampaignsManager {
     /**
      * Recovery of general information about the campaign whose id is entered as a parameter.
      *
-     * @param {string} message
-     * @return {string}
+     * @param int $id Id of the campaign
+     * @throws Exception Can throw exceptions during the execution of the SQL query.
+     * @throws Exception Can throw an exception if the campaign is not found.
+     * @return array
      */
     public function getInfoCampaign(int $id) : array {
         try {

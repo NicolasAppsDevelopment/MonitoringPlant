@@ -1,7 +1,6 @@
 /**
- * Sets raspberry pi date and time.
+ * Send a request to the server to set the time.
  */
-
 async function setTime() {
     displayLoading("Mise à jour de l'heure...");
 

@@ -9,10 +9,6 @@ document.addEventListener('mousemove', (event) => {
   mouseX = event.clientX;
 });
 
-
-/**
- * Destroys the chart
- */
 function destroyChart() {
   if (chart != null || chart != undefined){
     chart.destroy();
@@ -20,13 +16,13 @@ function destroyChart() {
 }
 
 /**
- * Adds values to the chart of the selected measurement campaign.
- * @param {String array} dateArray All measurement dates of the selected measurement campaign
- * @param {String array} lumArray All luminosity values of the selected measurement campaign
- * @param {String array} humArray All humidity values of the selected measurement campaign
- * @param {String array} tempArray All temperature values of the selected measurement campaign
- * @param {String array} o2Array All O2 values of the selected measurement campaign
- * @param {String array} co2Array All CO2 values of the selected measurement campaign
+ * Adds values to the chart of the selected measurement campaign. Used to update the chart from a refresh context.
+ * @param {String[]} dateArray All measurement dates of the selected measurement campaign
+ * @param {String[]} lumArray All luminosity values of the selected measurement campaign
+ * @param {String[]} humArray All humidity values of the selected measurement campaign
+ * @param {String[]} tempArray All temperature values of the selected measurement campaign
+ * @param {String[]} o2Array All O2 values of the selected measurement campaign
+ * @param {String[]} co2Array All CO2 values of the selected measurement campaign
  */
 async function addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) { 
   if (dateArray.length == 0) {
@@ -80,12 +76,12 @@ async function addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array,
 
 /**
  * Setups the chart and adds values to the chart of the selected measurement campaign.
- * @param {String array} dateArray All measurement dates of the selected measurement campaign
- * @param {String array} lumArray All luminosity values of the selected measurement campaign
- * @param {String array} humArray All humidity values of the selected measurement campaign
- * @param {String array} tempArray All temperature values of the selected measurement campaign
- * @param {String array} o2Array All O2 values of the selected measurement campaign
- * @param {String array} co2Array All CO2 values of the selected measurement campaign
+ * @param {String[]} dateArray All measurement dates of the selected measurement campaign
+ * @param {String[]} lumArray All luminosity values of the selected measurement campaign
+ * @param {String[]} humArray All humidity values of the selected measurement campaign
+ * @param {String[]} tempArray All temperature values of the selected measurement campaign
+ * @param {String[]} o2Array All O2 values of the selected measurement campaign
+ * @param {String[]} co2Array All CO2 values of the selected measurement campaign
  * @returns {(Element|void)}  returns a html element, the tooltip
  */
 async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) {
@@ -133,17 +129,16 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
   };
   
   const externalTooltipHandler = (context) => {
-    // Tooltip Element
     const {chart, tooltip} = context;
     const tooltipEl = getOrCreateTooltip(chart);
   
-    // Hide if no tooltip
+    // Hides if no tooltip
     if (tooltip.opacity === 0) {
       tooltipEl.style.opacity = 0;
       return;
     }
   
-    // Set Text
+    // Sets tooltip Text
     if (tooltip.body) {
       const titleLines = tooltip.title || [];
       const bodyLines = tooltip.body.map(b => b.lines);
