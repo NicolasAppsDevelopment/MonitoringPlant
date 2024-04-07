@@ -52,7 +52,7 @@ const logFormat = printf(({ level, message, timestamp }) => {
 });
 
 export const createAppLogger = (): Logger => {
-    let logger_path = process.cwd() + '/logs/';
+    let loggerPath = process.cwd() + '/logs/';
     let logger = createLogger({
         format: format.combine(
             format.timestamp({
@@ -64,16 +64,16 @@ export const createAppLogger = (): Logger => {
         ),
         defaultMeta: { service: 'App' },
         transports: [
-            new transports.File({ filename: logger_path + 'error.log', level: 'error' }),
-            new transports.File({ filename: logger_path + 'combined.log' }),
+            new transports.File({ filename: loggerPath + 'error.log', level: 'error' }),
+            new transports.File({ filename: loggerPath + 'combined.log' }),
             new DailyRotateFile({
-                filename: logger_path + 'app-combined-%DATE%.log',
+                filename: loggerPath + 'app-combined-%DATE%.log',
                 datePattern: 'YYYY-MM-DD',
                 maxSize: '1m',
             }),
         ],
         exceptionHandlers: [
-            new transports.File({ filename: logger_path + 'exceptions.log' })
+            new transports.File({ filename: loggerPath + 'exceptions.log' })
         ]
     });
 

@@ -8,6 +8,9 @@ import { join } from "node:path";
 import { loadConfig } from "../Helper/loadConfig";
 const readdir = util.promisify(fs.readdir);
 
+/**
+ * Loads all the routes and starts the web API.
+ */
 export const startWebApi = async () => {
     const app: Express = express();
     

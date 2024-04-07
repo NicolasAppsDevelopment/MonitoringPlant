@@ -8,7 +8,7 @@ import { campaignRunner } from '../../Campaign/RunCampaign';
     CONTENT-TYPE : application/json
     AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : initialise a campaign and run it for the given id.
+    DESCRIPTION : Initialises a campaign and runs it with the given id reffering to an existing campaign stored in the database.
 */
 module.exports = function(app: Express){
     app.post('/createCampaign', async (req: Request, res: Response) => {

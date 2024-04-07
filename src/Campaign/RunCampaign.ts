@@ -6,9 +6,10 @@ import { TcpDaemonAnswerError } from '../Tcp/TcpDaemonMessageTypes';
 import Calibration from './Calibration';
 import { SensorStates } from './SensorStatesType';
 import { CampaignStateLevelCode, LogLevelCode } from '../Database/LevelCode';
-import { log } from 'console';
 
- 
+/**
+ * Class that handle the running of a campaign.
+ */
 export default class RunCampaign {
     private currentCampaignId: number;
 
@@ -23,11 +24,6 @@ export default class RunCampaign {
     private interval: number;
 
     /**
-     * @param duration - the total duration of the campaign in seconds
-     */
-    private duration: number;
-
-    /**
      * @param nbReset - number of reset of the module (max 2, if more, the campaign will stop)
      * Incremented in case of error while getting measure
      */
@@ -39,7 +35,6 @@ export default class RunCampaign {
         this.currentCampaignId = -1;
         this.numberOfMeasureLeft = -1;
         this.interval = -1;
-        this.duration = -1;
         this.nbReset = 0;
         this.isCampaignRunning = false;
     
@@ -55,8 +50,8 @@ export default class RunCampaign {
     }
 
     /**
-     * Initialiaze a campaign runner with parameters retrieved from the database from a specific id.
-     * @param currentCampaignId : number id of the campaign to start
+     * Initialises and starts a campaign runner with parameters retrieved from the database from a specific campaign id.
+     * @param currentCampaignId number - id of the campaign to start
      */
     async initCampaign(campaignId:number){
         if(this.isCampaignRunning){
@@ -88,7 +83,6 @@ export default class RunCampaign {
         this.currentCampaignId = campaignId;
         this.numberOfMeasureLeft = campaignData.duration / campaignData.interval_;
         this.interval = campaignData.interval_ * 1000;
-        this.duration = campaignData.duration;
         this.nbReset = 0;
         this.isCampaignRunning = true;
 
@@ -104,7 +98,7 @@ export default class RunCampaign {
     }
 
     /**
-     * Loop where the campaign will register the sensor data in the database and handle potential error.
+     * Loop where the campaign will register the sensor data in the database and handle potential errors.
      */
     async runCampaign() {
         try {
@@ -163,7 +157,7 @@ export default class RunCampaign {
     }
 
     /**
-     * Update the parameters of the campaign to make it stop.
+     * Updates the parameters of the campaign to make it stop.
      * @param isError boolean - if true, it indicate a normal ending, else unexpected stop
      * @param message string - the stop message to insert in logs
      */
@@ -189,7 +183,7 @@ export default class RunCampaign {
     }
 
     /**
-     * Stop the running campaign with a specific id
+     * Stops the running campaign with a specific id
      * @param campaignId number - id of the campaign to stop
      */
     async stopCampaign(campaignId:number){
@@ -199,8 +193,8 @@ export default class RunCampaign {
     }
 
     /**
-     * Restart an existing campaign in the database (running or not)
-     * @param campaignId number - id of the campaign to restart in the database
+     * Restarts an existing campaign in the database (running or not)
+     * @param campaignId number - id of the campaign to restart
      */
     async restartCampaign(campaignId:number){
         await this.stopCampaign(campaignId);
@@ -213,7 +207,7 @@ export default class RunCampaign {
     }
 
     /**
-     * Stop all running campaigns in the database
+     * Stops all running campaigns in the database
      */
     private async stopAllCampaigns() {
         const campaigns = await sqlConnections.getRunningCampaigns();

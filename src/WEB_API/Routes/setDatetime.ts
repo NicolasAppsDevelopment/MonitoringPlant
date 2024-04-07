@@ -5,11 +5,11 @@ import { logger } from "../../Logger/LoggerManager";
 /*
     URL : /setDatetime
     METHOD : POST
-    CORPS : {"datetime": "1789-09-01 18:00"}
+    CORPS : {"datetime": "1789-09-01 18:00:00"}
     CONTENT-TYPE : application/json
     AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : Set the time of the Raspberry Pi to the specified date and time.
+    DESCRIPTION : Sets the time of the Raspberry Pi to the specified date and time.
 */
 module.exports = function(app: Express){
     app.post('/setDatetime', async (req: Request, res: Response) => {

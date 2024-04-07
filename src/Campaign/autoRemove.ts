@@ -3,7 +3,7 @@ import { logger } from "../Logger/LoggerManager";
 import { sleep } from "../Helper/sleep";
 
 /**
- * Check every minute if a campaign need to be removed.
+ * Checks every minute if a campaign need to be removed.
  * According settings it will remove them.
  */
 export async function startAutoRemoveLoop() {

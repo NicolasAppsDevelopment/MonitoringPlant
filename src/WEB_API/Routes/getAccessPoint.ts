@@ -5,8 +5,8 @@ import * as fs from 'fs';
     URL : /getAccessPoint
     METHOD : GET
 
-    DESCRIPTION : Return the ssid and password of the current access point.
-    RETURN :
+    DESCRIPTION : Returns the ssid and password of the current access point.
+    RETURNS :
         - success : true if the ssid and password were retrieved successfully
         - ssid : the ssid of the current access point
         - password : the password of the current access point

@@ -50,7 +50,7 @@ export default class Calibration {
     }
 
     /**
-     * Build a command with all parameters to pass to the driver.
+     * Builds a command with all parameters to pass to the driver.
      * @returns command to pass to the driver that setup and get the sensor data
      */
     buildTCPCommandArgs(): string {
@@ -63,6 +63,4 @@ export default class Calibration {
     getCalibNumber():number{
         return this.idConfig;
     }
-    
-
 }

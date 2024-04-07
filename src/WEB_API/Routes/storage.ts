@@ -7,7 +7,7 @@ import { logger } from "../../Logger/LoggerManager";
     METHODE : GET
 
     DESCRIPTION : getting total storage and storage left from the Raspberry Pi.
-    RETURN : 
+    RETURNS : 
         - success : true if the storage was retrieved successfully
         - data : 
             - used : the storage used in KB

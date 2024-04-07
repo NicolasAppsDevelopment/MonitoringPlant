@@ -5,8 +5,8 @@ import { campaignRunner } from '../../Campaign/RunCampaign';
     URL : /checkWorkingCampaign
     METHOD : GET
 
-    DESCRIPTION : Return the current campaign id if a campaign is running (null otherwise).
-    RETURN :
+    DESCRIPTION : Returns the current campaign id if a campaign is running (null otherwise).
+    RETURNS :
         - success : true if the campaign is running
         - idCurrent : the id of the current campaign
 */

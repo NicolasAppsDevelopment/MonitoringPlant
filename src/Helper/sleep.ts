@@ -1,7 +1,7 @@
 import { campaignRunner } from '../Campaign/RunCampaign';
 
 /**
- * Sleep for a specific amount of time.
+ * Sleeps for a specific amount of time.
  * @param millis - the time to sleep in milliseconds
  */
 export async function sleep(millis:number) {
@@ -11,7 +11,7 @@ export async function sleep(millis:number) {
 }
 
 /**
- * Sleep until a specific date.
+ * Sleeps until a specific date.
  * @param millis - the date to sleep until
  */
 export async function sleepUntil(millis:number) {
@@ -19,7 +19,7 @@ export async function sleepUntil(millis:number) {
 }
 
 /**
- * Sleep until a specific date or until the campaign is not running anymore.
+ * Sleeps until a specific date or until the campaign is not running anymore.
  * @param millis - the date to sleep until
  */
 export async function sleepUntilWhileRunning(millis:number) {

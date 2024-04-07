@@ -8,7 +8,7 @@ import { campaignRunner } from '../../Campaign/RunCampaign';
     CONTENT-TYPE : application/json
     AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : Restart a campaign specified with the given id.
+    DESCRIPTION : Restarts a campaign specified with the given id reffering to an existing campaign stored in the database.
 */
 module.exports = function(app: Express){
     app.post('/redoCampaign', async (req: Request, res: Response) => {

@@ -6,8 +6,8 @@ import * as qr from 'qr-image';
     URL : /getQRCode
     METHOD : GET
 
-    DESCRIPTION : Return a QR code to connect to the current access point.
-    RETURN : Image (png)
+    DESCRIPTION : Returns a QR code to connect to the current access point.
+    RETURNS : Image (png)
 */
 module.exports = function(app: Express){
     app.get('/getQRCode', async (req: Request, res: Response) => {

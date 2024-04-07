@@ -67,10 +67,11 @@ export default class TcpManager {
     }
 
     /**
-     * Send a command to the TCP daemon and wait for the response.
+     * Sends a command to the TCP daemon and wait for the response.
      * @param query String command to send to the daemon.
      * @returns JSON like response object from the daemon.
-     * @note If no response is received within 10 seconds, the promise is rejected.
+     * @throws Error if no response is received within 10 seconds, the promise is rejected.
+     * @throws TcpDaemonAnswerError if the daemon returns an error.
      */
     private async sendCommand(query: string): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -79,14 +80,14 @@ export default class TcpManager {
             this.answerListeners.set(request.id, answerListener);
             this.client.write(request.toString());
 
-            // Set a timeout for 10 seconds
+            // Sets a timeout for 10 seconds
             const timeoutCallback = setTimeout(() => {
                 this.answerListeners.delete(request.id);
                 reject(new Error("Timeout: No response received within 10 seconds"));
             }, this.timeout);
 
             answerListener.on("response", (answer: TcpDaemonAnswer) => {
-                clearTimeout(timeoutCallback); // Clear the timeout if a response is received
+                clearTimeout(timeoutCallback); // Clears the timeout if a response is received
                 if (answer.success) {
                     this.answerListeners.delete(answer.id);
                     resolve(answer.response);

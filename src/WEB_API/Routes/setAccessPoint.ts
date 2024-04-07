@@ -8,7 +8,7 @@ import * as fs from 'fs';
     CONTENT-TYPE : application/json
     AUTHORIZATION : API_TOKEN (defined in the .env file)
 
-    DESCRIPTION : Set the ssid and/or password of the current access point.
+    DESCRIPTION : Sets the ssid and/or password of the current access point.
 */
 module.exports = function(app: Express){
     app.post('/setAccessPoint', async (req: Request, res: Response) => {
