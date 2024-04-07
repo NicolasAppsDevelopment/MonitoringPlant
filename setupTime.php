@@ -14,7 +14,7 @@
         <script src="./js/functions.js"></script>
         <script src="./js/setupTime.js"></script>
 
-        <title>Définition de l'heure et de la date</title>
+        <title>Définition date et heure</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
     </head>

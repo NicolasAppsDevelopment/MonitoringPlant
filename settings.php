@@ -14,7 +14,7 @@
         <script src="/js/functions.js"></script>
         <script src="/js/settings.js"></script>
 
-        <title>Page Paramètre</title>
+        <title>Paramètres</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
         <link rel="preload" href="./img/success_ico.svg" as="image"/>

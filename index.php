@@ -12,7 +12,7 @@
         <script src="./js/request.js"></script>
         <script src="./js/functions.js"></script>
 
-        <title>Connexion</title>
+        <title>Mode de connexion</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
     </head>

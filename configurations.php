@@ -10,6 +10,7 @@
         <link href="./css/style.css" rel="stylesheet">
         <script src="./js/popup.js"></script>
         <script src="./js/request.js"></script>
+        <script src="./js/functions.js"></script>
         <script src="./js/configurations.js"></script>
         <title>Liste des configurations</title>
 

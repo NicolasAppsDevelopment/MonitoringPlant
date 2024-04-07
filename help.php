@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
         <link href="./css/style.css" rel="stylesheet">
-        <title>Liste des campagnes</title>
+        <title>Aide</title>
         <script src="./js/help.js"></script>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>

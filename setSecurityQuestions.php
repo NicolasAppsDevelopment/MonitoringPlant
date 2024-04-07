@@ -13,7 +13,7 @@
         <script src="./js/functions.js"></script>
         <script src="./js/setSecurityQuestions.js"></script>
 
-        <title>Définition du mot de passe</title>
+        <title>Définition questions de sécurité</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
     </head>

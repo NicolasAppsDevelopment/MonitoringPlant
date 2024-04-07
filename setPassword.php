@@ -13,7 +13,7 @@
         <script src="./js/functions.js"></script>
         <script src="./js/setPassword.js"></script>
 
-        <title>Définition du mot de passe</title>
+        <title>Définition mot de passe</title>
 
         <link rel="preload" href="./img/error_ico.svg" as="image"/>
     </head>

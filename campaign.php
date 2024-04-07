@@ -29,7 +29,7 @@
     <script src="./js/functions.js"></script>
     <script src="./js/campaign.js"></script>
 
-    <title>Voir Releve</title>
+    <title>Voir la campagne</title>
 
     <link rel="preload" href="./img/error_ico.svg" as="image"/>
     <link rel="preload" href="./img/warning_ico.svg" as="image"/>
