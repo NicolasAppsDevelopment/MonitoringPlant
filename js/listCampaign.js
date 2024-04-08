@@ -201,8 +201,13 @@ async function filterCampaigns() {
 
     closePopup("filter-popup");
 
-    getListCampaignJS({"name": name.toLowerCase(), "startDate": startDate.value, "startTime": startTime.value, "endDate": endDate.value, "endTime": endTime.value, "processing": processing, "success": success, "error": error, "warn": warn});
+    if (!name && !startDate.value && !startTime.value && !endDate.value && !endTime.value && !processing && !success && !error && !warn){
+        getListCampaignJS();
+    }else{
+        getListCampaignJS({"name": name.toLowerCase(), "startDate": startDate.value, "startTime": startTime.value, "endDate": endDate.value, "endTime": endTime.value, "processing": processing, "success": success, "error": error, "warn": warn});
+    }
 }
+    
 
 /**
  * Resets all filter parameters

@@ -97,45 +97,45 @@ class CampaignsManager {
         $parameters = [];
 
         if (isset($filter) && !empty($filter)) {
-                $query .= "WHERE ";
+            $query .= "WHERE ";
 
-                if (!empty($filter["name"])) {
-                    array_push($whereClauses, "LOWER(name) LIKE :varName");
-                    $parameters["varName"] = "%" . htmlspecialchars($filter["name"]) . "%";
-                }
+            if (!empty($filter["name"])) {
+                array_push($whereClauses, "LOWER(name) LIKE :varName");
+                $parameters["varName"] = "%" . htmlspecialchars($filter["name"]) . "%";
+            }
+    
+            if (!empty($filter["processing"]) && $filter["processing"]) {
+                array_push($whereClauses, "finished = 0");
+            }
+            if (!empty($filter["success"]) && $filter["success"]) {
+                array_push($whereClauses, "finished = 1 and alertLevel = 0");
+            }
+            if (!empty($filter["warn"]) && $filter["warn"]) {
+                array_push($whereClauses, "alertLevel = 1");
+            }
+            if (!empty($filter["error"]) && $filter["error"]) {
+                array_push($whereClauses, "finished = 1 and alertLevel = 2");
+            }
+            
+            if (!empty($filter["startDate"]) && $filter["processing"]) {
+                array_push($whereClauses, "DATE_FORMAT(beginDate, '%Y-%m-%d') >= :varStartDate");
+                $parameters["varStartDate"] = $filter["startDate"];
+            }
         
-                if (!empty($filter["processing"]) && $filter["processing"]) {
-                    array_push($whereClauses, "finished = 0");
-                }
-                if (!empty($filter["success"]) && $filter["success"]) {
-                    array_push($whereClauses, "finished = 1 and alertLevel = 0");
-                }
-                if (!empty($filter["warn"]) && $filter["warn"]) {
-                    array_push($whereClauses, "alertLevel = 1");
-                }
-                if (!empty($filter["error"]) && $filter["error"]) {
-                    array_push($whereClauses, "finished = 1 and alertLevel = 2");
-                }
-                
-                if (!empty($filter["startDate"]) && $filter["processing"]) {
-                    array_push($whereClauses, "DATE_FORMAT(beginDate, '%Y-%m-%d') >= :varStartDate");
-                    $parameters["varStartDate"] = $filter["startDate"];
-                }
-            
-                if (!empty($filter["startTime"])) {
-                    array_push($whereClauses, "DATE_FORMAT(beginDate, '%k:%i') >= :varStartTime");
-                    $parameters["varStartTime"] = $filter["startTime"];
-                }
+            if (!empty($filter["startTime"])) {
+                array_push($whereClauses, "DATE_FORMAT(beginDate, '%k:%i') >= :varStartTime");
+                $parameters["varStartTime"] = $filter["startTime"];
+            }
 
-                if (!empty($filter["endDate"])) {
-                    array_push($whereClauses, "DATE_FORMAT(endingDate, '%Y-%m-%d') <= :varEndDate");
-                    $parameters["varEndDate"] = $filter["endDate"];
-                }
-            
-                if (!empty($filter["endTime"])) {
-                    array_push($whereClauses, "DATE_FORMAT(endingDate, '%k:%i') <= :varEndTime");
-                    $parameters["varEndTime"] = $filter["endTime"];
-                }
+            if (!empty($filter["endDate"])) {
+                array_push($whereClauses, "DATE_FORMAT(endingDate, '%Y-%m-%d') <= :varEndDate");
+                $parameters["varEndDate"] = $filter["endDate"];
+            }
+        
+            if (!empty($filter["endTime"])) {
+                array_push($whereClauses, "DATE_FORMAT(endingDate, '%k:%i') <= :varEndTime");
+                $parameters["varEndTime"] = $filter["endTime"];
+            }
         }
 
         $query .= join(" AND ", $whereClauses) . " ORDER BY beginDate DESC";
