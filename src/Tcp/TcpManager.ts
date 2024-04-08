@@ -83,7 +83,7 @@ export default class TcpManager {
             // Sets a timeout for 10 seconds
             const timeoutCallback = setTimeout(() => {
                 this.answerListeners.delete(request.id);
-                reject(new Error("Timeout: No response received within 10 seconds"));
+                reject(new Error("Le module de mesure n'a pas répondu dans le temps imparti. Songez à redémarrer l'appareil si le problème persiste."));
             }, this.timeout);
 
             answerListener.on("response", (answer: TcpDaemonAnswer) => {
