@@ -64,11 +64,6 @@ export default class RunCampaign {
             throw new Error("La campagne n'a pas de configuration de calibration associée.")
         }
 
-        // set the configuration of the module
-        let calibration = new Calibration();
-        await calibration.initCalibration(campaignData.idConfig, campaignId);
-        await tcpConnection.calibrateModule(calibration);
-
         await sqlConnections.setAlertLevel(campaignId, CampaignStateLevelCode.SUCCESS);
         await sqlConnections.setFinished(campaignId, false);
 
@@ -86,6 +81,12 @@ export default class RunCampaign {
         this.nbReset = 0;
         this.isCampaignRunning = true;
 
+        // set the configuration of the module and reset it
+        let calibration = new Calibration();
+        await calibration.initCalibration(campaignData.idConfig, campaignId);
+        await tcpConnection.calibrateModule(calibration);
+        await tcpConnection.resetModule();
+
         this.runCampaign();
     }
 
@@ -102,7 +103,11 @@ export default class RunCampaign {
      */
     async runCampaign() {
         try {
-            await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.SUCCESS, "Campagne démarrée", "La campagne a été démarrée avec succès.");
+            await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.PROCESSING, "Initialisation", "Le module de mesure est en cours d'initialisation... Cette opération prend entre 20 et 40 secondes.");
+
+            if (await this.waitUntilReady()) {
+                await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.SUCCESS, "Campagne démarrée", "Le module de mesure a bien été initialisé et la campagne a été démarrée avec succès.");
+            }
 
             let nextLoopMillis: number = new Date().getTime();
             while (this.numberOfMeasureLeft >= 0 && this.isCampaignRunning) {
@@ -117,8 +122,7 @@ export default class RunCampaign {
                     logger.error("runCampaign: error while getting measure. " + error);
 
                     if(this.nbReset >= 2){
-                        await this.endCampaign(true, "La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
-                        return;
+                        throw new Error("La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
                     }
 
                     if (error instanceof TcpDaemonAnswerError) {
@@ -131,15 +135,21 @@ export default class RunCampaign {
                                 const warnings = await tcpConnection.getErrors();
                                 await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.WARNING, "Erreur du module de mesure", warnings[0].message, warnings[0].date);
                                 await tcpConnection.resetModule();
+                                await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.PROCESSING, "Réinitilisation", "Le module de mesure est en cours de réinitilisation... Cette opération prend entre 20 et 40 secondes.");
+                                if (await this.waitUntilReady()) {
+                                    await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.SUCCESS, "Réinitilisation", "Le module de mesure a bien été réinitialisé, la campagne reprend.");
+                                }
+                                
                                 this.nbReset++;
-            
-                                await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.PROCESSING, "Réinitilisation du module de mesure", "Le module de mesure a bien été réinitilisé avec succès. La campagne va reprendre sous peu.");
                                 break;
                             }
                             default: {
                                 logger.warn("Erreur inconnue du module de mesure. Code d'erreur non répertorié.");
                             }
                         }
+                    } else if (error instanceof Error) {
+                        await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.WARNING, "Erreur dans le processus de mesure", error.message);
+                        this.nbReset++;
                     }
                     nextLoopMillis = new Date().getTime() + 2500;
                 }
@@ -150,9 +160,43 @@ export default class RunCampaign {
                 
                 await sleepUntilWhileRunning(nextLoopMillis);
             }
+
             await this.endCampaign(false, "La campagne s'est terminé avec succès.");
         } catch (error) {
+            let message = "La campagne a été arrêté suite à une erreur. ";
+            if (error instanceof Error) {
+                message += error.message;
+            } else {
+                message += "Erreur inconnue.";
+            }
+            await this.endCampaign(true, message);
             logger.error("runCampaign: unhandled error while running campaign. " + error);
+        }
+    }
+
+    /**
+     * Waits until the daemon driver is ready to response the measurements.
+     * @returns boolean - true if the daemon driver is ready, false if an error occured while waiting
+     * @note You need to call this function with "await".
+     */
+    async waitUntilReady(): Promise<boolean> {
+        // wait for the daemon driver to be ready
+        while (true) {
+            try {
+                await tcpConnection.getMeasure();
+                return true;
+            } catch (error) {
+                if (error instanceof TcpDaemonAnswerError) {
+                    if (error.code == 1) {
+                        // driver module initialization error (not ready)
+                        await sleep(2500);
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
         }
     }
 

@@ -21,12 +21,12 @@ const AUTHORIZED_PATHS_WITOUT_TOKEN = [
  * @param next NextFunction
  */
 async function isAuth(req, res, next) {
-    // Check the content type if it's not a GET request
+    // Checks the content type if it's not a GET request
     if (req.method !== 'GET' && !req.is('application/json')) {
         res.status(500).send({ "error": "L'en-tête \"Content-Type\" doit être défini sur \"application/json\"." });
         return;
     }
-    // Check if the path is authorized without token
+    // Checks if the path is authorized without token
     if (AUTHORIZED_PATHS_WITOUT_TOKEN.includes(req.path)) {
         next();
         return;
@@ -37,7 +37,7 @@ async function isAuth(req, res, next) {
         res.status(401).send({ "error": "L'en-tête \"Authorization\" est manquante/vide." });
         return;
     }
-    // Check the token
+    // Checks the token
     try {
         if (tokenCredential === process.env.API_TOKEN) {
             // All good

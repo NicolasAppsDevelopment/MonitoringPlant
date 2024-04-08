@@ -7,6 +7,7 @@ exports.initSqlConnections = void 0;
 const loadConfig_1 = require("../Helper/loadConfig");
 const mysql2_1 = __importDefault(require("mysql2"));
 const LoggerManager_1 = require("../Logger/LoggerManager");
+const LevelCode_1 = require("./LevelCode");
 const RunCampaign_1 = require("../Campaign/RunCampaign");
 /**
  * Class to manage the connection to the database.
@@ -56,11 +57,12 @@ class Database {
         this.open();
     }
     /**
-     * Execute a SQL query on the database
+     * Executes a SQL query into the database
      * @param sql The SQL query to execute
      * @param params Array of parameters to pass to the query
      * @returns A promise that will resolve with the result of the query
      * @note You must await this function to get the result of the query
+     * @throws Error if the connection is not defined or if the query failed
      */
     queryData(sql, params) {
         return new Promise((resolve, reject) => {
@@ -76,41 +78,37 @@ class Database {
         });
     }
     /**
-     * Insert a new log in the database
+     * Inserts a new log in the database
      * @param idCampaign The id of the campaign where the log need to be inserted
      * @param state The state of the log (see LogLevelCode for more information)
      * @param title The title of the log
      * @param msg The message of the log
      * @param date The date of the log (default: now)
+     * @throws Error if the connection is not defined or if the query failed
      */
     async insertLogs(idCampaign, state, title, msg, date = new Date()) {
         let query = "insert into Logs values(?,?, ?,? ,?);";
-        try {
-            await this.queryData(query, [idCampaign, state, title, msg, date]);
-        }
-        catch (error) {
-            LoggerManager_1.logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
+        await this.queryData(query, [idCampaign, state, title, msg, date]);
+        if (state == LevelCode_1.LogLevelCode.WARNING) {
+            await this.setAlertLevel(idCampaign, LevelCode_1.CampaignStateLevelCode.WARNING);
         }
     }
     /**
-     * Update the campaign state in the database
+     * Updates the campaign state in the database
      * @param idCampaign The id of the campaign to update
      * @param alertLevel The new state level of the campaign (see CampaignStateLevelCode for more information)
+     * @throws Error if the connection is not defined or if the query failed
      */
     async setAlertLevel(idCampaign, alertLevel) {
         let query = "update Campaigns set alertLevel=? where idCampaign=?;";
-        try {
-            await this.queryData(query, [alertLevel, idCampaign]);
-        }
-        catch (error) {
-            LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
-        }
+        await this.queryData(query, [alertLevel, idCampaign]);
     }
     /**
-     * Update the campaign finised state in the database.
+     * Updates the campaign finished state in the database.
      * It will also update the ending or begining date in the corresponding case.
      * @param idCampaign The id of the campaign to update
      * @param finished True if the campaign is finished, else false
+     * @throws Error if the connection is not defined or if the query failed
      */
     async setFinished(idCampaign, finished) {
         let updateDateQuery;
@@ -121,33 +119,24 @@ class Database {
             updateDateQuery = ", beginDate=NOW()";
         }
         const query = "UPDATE Campaigns SET finished=?" + updateDateQuery + " WHERE idCampaign=?;";
-        try {
-            await this.queryData(query, [+finished, idCampaign]);
-            LoggerManager_1.logger.info("endingDate NOW(): " + finished);
-        }
-        catch (error) {
-            LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
-        }
+        await this.queryData(query, [+finished, idCampaign]);
     }
     /**
-     * Update the ending date of the campaign in the database
+     * Updates the ending date of the campaign in the database
      * @param idCampaign The id of the campaign to update
      * @param duration In how many seconds the campaign will end
+     * @throws Error if the connection is not defined or if the query failed
      */
     async updateEndingDatePrediction(idCampaign) {
         const query = "UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL duration SECOND) WHERE idCampaign = ?;";
-        try {
-            await this.queryData(query, [idCampaign]);
-        }
-        catch (error) {
-            LoggerManager_1.logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
-        }
+        await this.queryData(query, [idCampaign]);
     }
     /**
-     * Insert a new measure in the database
+     * Inserts a new measure in the database
      * @param idCampaign The id of the campaign where the measure need to be inserted
      * @param sensorData The data to insert in the database (see TcpDaemonMeasurement for more information)
      * @param sensorStates The state of the sensors (see SensorStates for more information)
+     * @throws Error if the connection is not defined or if the query failed
      */
     async insertMeasure(idCampaign, sensorData, sensorStates) {
         let values = "";
@@ -169,14 +158,14 @@ class Database {
         else {
             values += "NULL,";
         }
-        if (sensorStates.humidity) {
-            values += sensorData.humidity + ",";
+        if (sensorStates.luminosity) {
+            values += sensorData.luminosity + ",";
         }
         else {
             values += "NULL,";
         }
-        if (sensorStates.luminosity) {
-            values += sensorData.luminosity;
+        if (sensorStates.humidity) {
+            values += sensorData.humidity;
         }
         else {
             values += "NULL";
@@ -185,9 +174,10 @@ class Database {
         await this.queryData(query, [idCampaign]);
     }
     /**
-     * Get the information of a campaign from the database
+     * Gets the information of a campaign from the database
      * @param idCampaign id of the campaign to get information
      * @returns CampaignQueryAnswer object with the information of the campaign (see CampaignQueryAnswer for more information)
+     * @throws Error if the connection is not defined or if the query failed
      */
     async getCampaignInfo(idCampaign) {
         const campaignsData = await exports.sqlConnections.queryData("SELECT * FROM Campaigns WHERE idCampaign = ? ;", [idCampaign]);
@@ -197,16 +187,18 @@ class Database {
         return campaignsData[0];
     }
     /**
-     * Get all the campaigns that are currently running
+     * Gets all the campaigns that are currently running
      * @returns An array of CampaignQueryAnswer with the information of the campaigns (see CampaignQueryAnswer for more information)
+     * @throws Error if the connection is not defined or if the query failed
      */
     async getRunningCampaigns() {
         return await this.queryData("SELECT * FROM Campaigns WHERE finished = 0;");
     }
     /**
-     * Get the calibration information from the database
+     * Gets the calibration information from the database
      * @param idConfig id of the configuration to get information
      * @returns CalibrationQueryAnswer object with the information of the calibration (see CalibrationQueryAnswer for more information)
+     * @throws Error if the connection is not defined or if the query failed
      */
     async getCalibrationInfo(idConfig) {
         const calibrationData = await this.queryData("SELECT * FROM Configurations WHERE idConfig = ? ;", [idConfig]);
@@ -216,8 +208,9 @@ class Database {
         return calibrationData[0];
     }
     /**
-     * Get the settings information from the database
+     * Gets the settings information from the database
      * @returns SettingsQueryAnswer object with the information of the settings (see SettingsQueryAnswer for more information)
+     * @throws Error if the connection is not defined, if the query failed or if the settings do not exist
      */
     async getSettings() {
         const settingsData = await this.queryData("SELECT * FROM Settings;");
@@ -227,22 +220,25 @@ class Database {
         return settingsData[0];
     }
     /**
-     * Clear all the logs of a campaign
+     * Clears all the logs of a campaign
      * @param idCampaign The id of the campaign to clear the logs
+     * @throws Error if the connection is not defined or if the query failed
      */
     async clearLogs(idCampaign) {
         await this.queryData("DELETE FROM Logs WHERE idCampaign = ?;", [idCampaign]);
     }
     /**
-     * Clear all the measurements of a campaign
+     * Clears all the measurements of a campaign
      * @param idCampaign The id of the campaign to clear the measurements
+     * @throws Error if the connection is not defined or if the query failed
      */
     async clearMeasurements(idCampaign) {
         await this.queryData("DELETE FROM Measurements WHERE idCampaign = ?;", [idCampaign]);
     }
     /**
-     * Remove all the campaigns that are finished and older than the removeInterval
+     * Removes all the campaigns that are finished and older than the removeInterval
      * @param removeInterval The interval in seconds to remove the campaigns
+     * @throws Error if the connection is not defined or if the query failed
      */
     async removeOldCampaigns(removeInterval) {
         const campainsToRemove = await exports.sqlConnections.queryData("SELECT * FROM Campaigns WHERE TIMESTAMPDIFF(SECOND,endingDate, NOW()) > ? ;", [removeInterval]);

@@ -100,10 +100,9 @@ export default class Database {
      */
     async insertLogs(idCampaign:number,state:LogLevelCode,title:string,msg:string, date: Date = new Date()) {
         let query:string = "insert into Logs values(?,?, ?,? ,?);";
-        try {
-            await this.queryData(query,[idCampaign,state,title,msg,date]);
-        } catch (error) {
-            logger.error("Erreur lors de l'insertion des logs dans la base de données : " + error);
+        await this.queryData(query,[idCampaign,state,title,msg,date]);
+        if (state == LogLevelCode.WARNING) {
+            await this.setAlertLevel(idCampaign, CampaignStateLevelCode.WARNING);
         }
     }
 
@@ -115,11 +114,7 @@ export default class Database {
      */
     async setAlertLevel(idCampaign:number, alertLevel:CampaignStateLevelCode){
         let query="update Campaigns set alertLevel=? where idCampaign=?;";
-        try {
-            await this.queryData(query, [alertLevel,idCampaign]);
-        } catch (error) {
-            logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
-        }
+        await this.queryData(query, [alertLevel,idCampaign]);
     }
 
     /**
@@ -138,12 +133,7 @@ export default class Database {
         }
 
         const query="UPDATE Campaigns SET finished=?" + updateDateQuery + " WHERE idCampaign=?;";
-        try {
-            await this.queryData(query, [+finished, idCampaign]);
-            logger.info("endingDate NOW(): " + finished);
-        } catch (error) {
-            logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
-        }
+        await this.queryData(query, [+finished, idCampaign]);
     }
 
     /**
@@ -154,13 +144,8 @@ export default class Database {
      */
     async updateEndingDatePrediction(idCampaign:number){
         const query = "UPDATE Campaigns SET endingDate=DATE_ADD(NOW(), INTERVAL duration SECOND) WHERE idCampaign = ?;";
-        try {
-            await this.queryData(query, [idCampaign]);
-        } catch (error) {
-            logger.error("Erreur lors de la mise à jour de la campagne dans la base de données : " + error);
-        }
+        await this.queryData(query, [idCampaign]);
     }
-    
 
     /**
      * Inserts a new measure in the database
@@ -171,33 +156,37 @@ export default class Database {
      */
     async insertMeasure(idCampaign:number, sensorData: TcpDaemonMeasurement, sensorStates: SensorStates) {
         let values:string="";
+
         if(sensorStates.temperature){
             values+=sensorData.temperature+",";
         }else{
             values+="NULL,";
         }
+
         if(sensorStates.co2){
             values+=sensorData.CO2+",";
         }else{
             values+="NULL,"
         }
+
         if(sensorStates.o2){
             values+=sensorData.O2+",";
         }else{
             values+="NULL,"
         }
 
-        if(sensorStates.humidity){
-            values+=sensorData.humidity+",";
+        if(sensorStates.luminosity){
+            values+=sensorData.luminosity+",";
         }else{
             values+="NULL,"
         }
-            
-        if(sensorStates.luminosity){
-            values+=sensorData.luminosity;
+        
+        if(sensorStates.humidity){
+            values+=sensorData.humidity;
         }else{
             values+="NULL"
         }
+
         let query="INSERT INTO Measurements values(?,"+values+",NOW());"
         await this.queryData(query, [idCampaign]);
     }

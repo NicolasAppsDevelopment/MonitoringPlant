@@ -13,6 +13,9 @@ const node_fs_1 = __importDefault(require("node:fs"));
 const node_path_1 = require("node:path");
 const loadConfig_1 = require("../Helper/loadConfig");
 const readdir = node_util_1.default.promisify(node_fs_1.default.readdir);
+/**
+ * Loads all the routes and starts the web API.
+ */
 const startWebApi = async () => {
     const app = (0, express_1.default)();
     (0, loadConfig_1.loadConfig)();
