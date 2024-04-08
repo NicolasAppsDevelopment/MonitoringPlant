@@ -284,7 +284,6 @@ class CampaignsManager {
         } catch (\Throwable $th) {
             throw new Exception("Impossible de redémarrer la campagne. {$th->getMessage()}");
         }
-
     }
 
     /**

@@ -155,7 +155,7 @@ try {
         }
 
         if (isset($args["volume"]) && $args["volume"]){
-            for ($i=0;$i<count($measurements)-1;$i++){
+            for ($i=0;$i<count($measurements);$i++){
                 if (isset($measurements[$i]["CO2"])){
                     $measurements[$i][$indexC02]*=($info["volume"]/100);
                 }
