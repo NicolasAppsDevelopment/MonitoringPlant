@@ -175,29 +175,44 @@ export default class RunCampaign {
     }
 
     /**
-     * Waits until the daemon driver is ready to response the measurements.
-     * @returns boolean - true if the daemon driver is ready, false if an error occured while waiting
+     * Waits until the daemon driver is ready to response the measurements. The function will exit if the campaign is stopped.
+     * @returns boolean - true if the daemon driver is ready, false if an error occured while waiting (or the campaign is stopped)
      * @note You need to call this function with "await".
      */
     async waitUntilReady(): Promise<boolean> {
-        // wait for the daemon driver to be ready
-        while (true) {
-            try {
-                await tcpConnection.getMeasure();
-                return true;
-            } catch (error) {
-                if (error instanceof TcpDaemonAnswerError) {
-                    if (error.code == 1) {
-                        // driver module initialization error (not ready)
-                        await sleep(2500);
-                    } else {
-                        return false;
+        return await Promise.race([
+            new Promise<boolean>(resolve => {
+                // wait for the campaign to be stopped
+                const checkInterval = setInterval(() => {
+                    if (!campaignRunner.isRunning()) {
+                        clearInterval(checkInterval);
+                        resolve(false);
                     }
-                } else {
-                    return false;
-                }
-            }
-        }
+                }, 500); // check every 0.5 seconds
+            }),
+            new Promise<boolean>(resolve => {
+                // wait for the daemon driver to be ready
+                const checkInterval = setInterval(async () => {
+                    try {
+                        await tcpConnection.getMeasure();
+                        clearInterval(checkInterval);
+                        resolve(true);
+                    } catch (error) {
+                        if (error instanceof TcpDaemonAnswerError) {
+                            if (error.code == 1) {
+                                // driver module initialization error (not ready)
+                            } else {
+                                clearInterval(checkInterval);
+                                resolve(false);
+                            }
+                        } else {
+                            clearInterval(checkInterval);
+                            resolve(false);
+                        }
+                    }
+                }, 2500); // check every 2.5 seconds
+            })
+        ]);
     }
 
     /**

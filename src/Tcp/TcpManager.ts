@@ -41,8 +41,6 @@ export default class TcpManager {
             logger.info('Connxion TCP établi.');
         });
         this.client.on('data', (message:string) => {
-            console.log(message.toString());
-
             // handle case where several JSON messages are received in the same buffer
             // for example: {"id":"XW7sIe_tQ9WDEULFEAVvF", "success":true,"data":[]}{"id":"JvpPHW7qvDJs9I1F9UeO2", "success":true,"data":[]}
             const messages = message.toString().split('}{');
