@@ -45,7 +45,7 @@
             <div class="label_img_input">
                 <label class="label_field" for="conserv">Durée de conservation d'une campagne</label>
                 <div class="row_fields">
-                    <input class="input_field clock" id="conserv" name="conserv" type="number" placeholder="Durée" min="0" autocomplete="off" required>
+                    <input class="input_field clock" id="conserv" name="conserv" type="number" placeholder="Durée" min="1" autocomplete="off" required>
                     <select id="comboBoxTpsSuppr" class="combo_box">
                         <option selected value="h">h</option>
                         <option value="j">j</option>

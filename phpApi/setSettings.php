@@ -19,7 +19,10 @@ try {
         $arguments = json_decode($data, true);
 
         if (!isset($arguments["timeConservation"])){
-            throw new Exception("L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez la renseigner.");
+            throw new Exception("L'intervalle de suppression des campagnes n'a pas été renseigné. Veuillez le renseigner.");
+        }
+        if ($arguments["timeConservation"] == 0){
+            throw new Exception("L'intervalle de suppression des campagnes ne peux être égale à 0. Veuillez le modifier.");
         }
         if (!isset($arguments["timeConservationUnit"]) || !is_string($arguments["timeConservationUnit"])){
             throw new Exception("L'unité de l'intervalle de suppression des campagnes n'a pas été renseigné ou son format est incorrect. Veuillez la renseigner.");

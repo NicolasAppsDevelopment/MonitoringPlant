@@ -104,21 +104,20 @@ class CampaignsManager {
                     $parameters["varName"] = "%" . htmlspecialchars($filter["name"]) . "%";
                 }
         
-                if ($filter["processing"]) {
+                if (!empty($filter["processing"]) && $filter["processing"]) {
                     array_push($whereClauses, "finished = 0");
                 }
-                if ($filter["success"]) {
+                if (!empty($filter["success"]) && $filter["success"]) {
                     array_push($whereClauses, "finished = 1 and alertLevel = 0");
                 }
-                if ($filter["warn"]) {
+                if (!empty($filter["warn"]) && $filter["warn"]) {
                     array_push($whereClauses, "alertLevel = 1");
                 }
-                if ($filter["error"]) {
+                if (!empty($filter["error"]) && $filter["error"]) {
                     array_push($whereClauses, "finished = 1 and alertLevel = 2");
                 }
                 
-            
-                if (!empty($filter["startDate"])) {
+                if (!empty($filter["startDate"]) && $filter["processing"]) {
                     array_push($whereClauses, "DATE_FORMAT(beginDate, '%Y-%m-%d') >= :varStartDate");
                     $parameters["varStartDate"] = $filter["startDate"];
                 }
@@ -139,7 +138,7 @@ class CampaignsManager {
                 }
         }
 
-        $query .= join(" AND ", $whereClauses) . " ORDER BY finished ASC, beginDate DESC";
+        $query .= join(" AND ", $whereClauses) . " ORDER BY beginDate DESC";
 
         try {
             return $this->db->fetchAll($query, $parameters);
