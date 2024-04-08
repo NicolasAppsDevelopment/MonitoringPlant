@@ -157,10 +157,10 @@ try {
         if (isset($args["volume"]) && $args["volume"]){
             for ($i=0;$i<count($measurements)-1;$i++){
                 if (isset($measurements[$i]["CO2"])){
-                    $measurements[$i][$indexC02]*=($info["volume"]/1000);
+                    $measurements[$i][$indexC02]*=($info["volume"]/100);
                 }
                 if (isset($measurements[$i]["O2"])){
-                    $measurements[$i][$index02]*=($info["volume"]/1000);
+                    $measurements[$i][$index02]*=($info["volume"]/100);
                 }
             }
         }
@@ -247,13 +247,17 @@ try {
                         break;
                     case 'CO2':
                         if ($args["volume"]){
-                            $unit = "vol";
+                            $unit = "mL";
                         } else {
                             $unit = "vol%";
                         }
                         break;
                     case 'O2':
-                        $unit = "%";
+                        if ($args["volume"]){
+                            $unit = "mL";
+                        } else {
+                            $unit = "%";
+                        }
                         break;
                     case 'luminosity':
                         $unit = "%";
