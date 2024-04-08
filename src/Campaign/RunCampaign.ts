@@ -121,7 +121,7 @@ export default class RunCampaign {
                 } catch (error) {
                     logger.error("runCampaign: error while getting measure. " + error);
 
-                    if(this.nbReset >= 2){
+                    if(this.nbReset >= 3){
                         throw new Error("La campagne a été intérrompu après l'échec de plusieurs tentatives de réinitialisation du module de mesure. Vérifiez le branchement des capteurs et/ou redémarrez l'appareil de mesure puis réessayez.");
                     }
 
@@ -151,7 +151,7 @@ export default class RunCampaign {
                         await sqlConnections.insertLogs(this.currentCampaignId, LogLevelCode.WARNING, "Erreur dans le processus de mesure", error.message);
                         this.nbReset++;
                     }
-                    nextLoopMillis = new Date().getTime() + 2500;
+                    nextLoopMillis = new Date().getTime() + 3000;
                 }
 
                 if (this.numberOfMeasureLeft < 0) {

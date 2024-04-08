@@ -41,8 +41,28 @@ export default class TcpManager {
             logger.info('Connxion TCP établi.');
         });
         this.client.on('data', (message:string) => {
-            let answer = new TcpDaemonAnswer(message);
-            this.answerListeners.get(answer.id)?.emit("response", answer);
+            console.log(message.toString());
+
+            // handle case where several JSON messages are received in the same buffer
+            // for example: {"id":"XW7sIe_tQ9WDEULFEAVvF", "success":true,"data":[]}{"id":"JvpPHW7qvDJs9I1F9UeO2", "success":true,"data":[]}
+            const messages = message.toString().split('}{');
+
+            if (messages.length > 1) {
+                for (let i = 0; i < messages.length; i++) {
+                    if (i === 0) {
+                        messages[i] = messages[i] + '}';
+                    } else if (i === messages.length - 1) {
+                        messages[i] = '{' + messages[i];
+                    } else {
+                        messages[i] = '{' + messages[i] + '}';
+                    }
+                }
+            }
+
+            messages.forEach((msg) => {
+                let answer = new TcpDaemonAnswer(msg);
+                this.answerListeners.get(answer.id)?.emit("response", answer);
+            });
         });
     }
 
