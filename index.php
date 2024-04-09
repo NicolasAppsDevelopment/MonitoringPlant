@@ -31,7 +31,7 @@
                                 </div>
                                 <div>
                                     <h3 class="log_btn_title">Un(e) élève</h3>
-                                    <p class="log_btn_desc">Accédez directement à la liste des campagnes</p>
+                                    <p class="log_btn_desc">Accédez directement à la liste des campagnes.</p>
                                 </div>
                             </div>
                         </a>
