@@ -1,8 +1,8 @@
 // You must include popup.js file in the page if you want to use this file
 
-const API_IP_ADDRESS = "91.160.147.139";
-const PHP_API_PORT = "38080";
-const NODEJS_API_PORT = "32881";
+const API_IP_ADDRESS = "192.168.4.1";
+const PHP_API_PORT = "80";
+const NODEJS_API_PORT = "1881";
 
 /**
  * Sends a POST request to retrieve data from an URL address and the data retrieval depends on the settings.
