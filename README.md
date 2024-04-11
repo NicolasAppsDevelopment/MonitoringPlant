@@ -5,17 +5,17 @@
 
 Notre projet est divisé en 4 parties :
 
-- L'API NodeRED
+- L'API NodeJS
 - Le daemon driver
 - Le site web
 - La base de données
 
 Chaque parties se trouvent sur sa branche correspondante.
 
-## L'API NodeRED
+## L'API NodeJS
 
-Hébergé par Node-RED sur le Raspberry Pi, l'API sert d'interface entre le site web et le daemon driver.
-Les fichiers de sauvegarde se trouvent dans la branche [API-NodeRED](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/API-NodeRED).
+Hébergé par Node.JS sur le Raspberry Pi, l'API sert d'interface entre le site web et le daemon driver.
+Les fichiers de sauvegarde se trouvent dans la branche [API-NodeJS](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/API-NodeJS).
 
 ## Le daemon driver
 
