@@ -26,7 +26,7 @@
                 <div class="popup_contenu" id="div_page1">
                     <h2>Pense-bête ! 1/3</h2>
                     <p>
-                        Afin que puissiez-vous connecter en administrateur même si vous avez oublié votre mot de passe, veuillez définir vos questions de sécurité et leurs réponses.
+                        Afin que vous puissiez vous connecter en tant qu'administrateur même si vous avez oublié votre mot de passe, veuillez définir vos questions de sécurité et leurs réponses.
                     </p>
                     <div>
                         <div class="label_img_input no-margin-top ">
