@@ -27,7 +27,7 @@
                 <div class="popup_contenu">
                     <h2>Quelle heure est-il ?</h2>
                     <p>
-                        À present, nous avons besoins de savoir la date et l'heure qu'il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été feur démarré.
+                        À présent, nous avons besoins de savoir la date et l'heure qu'il est actuellement afin que vous puissez par exemple savoir quand une campagne de mesure a été démarré.
                     </p>
                     <div>
                         <div class="label_img_input">
