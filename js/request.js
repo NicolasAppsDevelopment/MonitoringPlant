@@ -8,7 +8,7 @@ const NODEJS_API_PORT = "1881";
  * Sends a POST request to retrieve data from an URL address and the data retrieval depends on the settings.
  * @param {string} url Where the data are
  * @param {any} settings Data recovery settings
- * @param {boolean} retrieveJSON If true, the returned data will be in json format. If false, the returned data will be in Blob format.
+ * @param {boolean} [retrieveJSON=true] If true, the returned data will be in json format. If false, the returned data will be in Blob format.
  * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
  */
 async function post(url, settings, retrieveJSON = true) {
@@ -51,7 +51,7 @@ async function post(url, settings, retrieveJSON = true) {
 /**
  * Sends a GET request to retrieve data from an url address.
  * @param {string} url Where the data are
- * @param {boolean} retrieveJSON If true, the returned data will be in json format. If false, the returned data will be a Blob object.
+ * @param {boolean} [retrieveJSON=true] If true, the returned data will be in json format. If false, the returned data will be a Blob object.
  * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
  */
 async function get(url, retrieveJSON = true) {
@@ -93,7 +93,7 @@ async function get(url, retrieveJSON = true) {
  * Download a file from an url address linked to an URL (with POST settings if provided).
  * @param {string} filename Name of the file to download
  * @param {string} url Where the data are
- * @param {any} settings POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @param {any} [settings=null] POST settings (if provided it will be a POST request, if not it will be a GET request)
  * @returns {boolean} True if the download has been launched, false in case of error
  */
 async function downloadFile(filename, url, settings = null) {
@@ -141,7 +141,7 @@ async function phpGet(url) {
 /**
  * Sends a request to retrieve JSON data from an url address linked to a NodeJS WEB API path.
  * @param {string} url Where the data are
- * @param {boolean} retrieveJSON If true, the returned data will be in json format. If false, the returned data will be a Blob object.
+ * @param {boolean} [retrieveJSON=true] If true, the returned data will be in json format. If false, the returned data will be a Blob object.
  * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
  */
 async function nodeJsGet(url, retrieveJSON = true) { 
@@ -152,7 +152,7 @@ async function nodeJsGet(url, retrieveJSON = true) {
  * Download a file from an url address linked to a php file.
  * @param {string} filename Name of the file to download
  * @param {string} url Where the data are
- * @param {any} settings POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @param {any} [settings=null] POST settings (if provided it will be a POST request, if not it will be a GET request)
  * @returns {boolean} True if the download has been launched, false in case of error
  */
 async function phpDownload(filename, url, settings = null) {
@@ -163,7 +163,7 @@ async function phpDownload(filename, url, settings = null) {
  * Download a file from an url address linked to a NodeJS WEB API path.
  * @param {string} filename Name of the file to download
  * @param {string} url Where the data are
- * @param {any} settings POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @param {any} [settings=null] POST settings (if provided it will be a POST request, if not it will be a GET request)
  * @returns {boolean} True if the download has been launched, false in case of error
  */
 async function nodeJsDownload(filename, url, settings = null) {

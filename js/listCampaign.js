@@ -66,8 +66,8 @@ async function subscribeRefresh() {
 
 /**
  * Sends a request to the server to get all measurement campaigns according to their current filter and display it.
- * @param {any} filter Filter to apply to the list of measurement campaigns {name, startDate, startTime, endDate, endTime, processing, success, error, warn}
- * @param {boolean} refreshMode Influences the visual aspect of the recovery
+ * @param {any} [filter=null] Filter to apply to the list of measurement campaigns {name, startDate, startTime, endDate, endTime, processing, success, error, warn}
+ * @param {boolean} [refreshMode=false] Influences the visual aspect of the recovery
  */
 async function getListCampaignJS(filter = null, refreshMode = false) {
     currentFilter = filter;

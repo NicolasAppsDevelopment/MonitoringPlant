@@ -26,7 +26,7 @@ async function subscribeRefresh() {
 
 /**
  * Gets data of the campaigns then displays informations, logs and measurements
- * @param {boolean} refreshMode True if the function is called in a refresh context, false otherwise.
+ * @param {boolean} [refreshMode=false] - True if we want to refresh the data, false for the first get.
  */
 async function getCampaignMeasurements(refreshMode = false) {
     if (!refreshMode){

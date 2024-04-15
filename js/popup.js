@@ -11,8 +11,8 @@ let idMessage = 0;
  * @param {String} title Title of the popup
  * @param {String} msg Message of the popup
  * @param {String} confirmBtnTitle Title of the button of confirmation
- * @param {boolean} destructive True if there is a risk of data loss or if there is a suppression of data. False otherwise.
- * @param {String} cancelBtnTitle Title of the button to cancel the action
+ * @param {boolean} [destructive=false] True if there is a risk of data loss or if there is a suppression of data. False otherwise.
+ * @param {String} [cancelBtnTitle="Annuler"] Title of the button to cancel the action
  * @returns {boolean} True if the user confirms the action and false if he cancels it
  */
 async function displayConfirm(title, msg, confirmBtnTitle, destructive = false, cancelBtnTitle = "Annuler") {
@@ -175,7 +175,7 @@ async function hideSuccess(id) {
 
 /**
  * Displays a loading popup with a custom message.
- * @param {String} msg Message of the popup (default: "Chargement...")
+ * @param {String} [msg="Chargement..."] Message of the popup (default: "Chargement...")
  */
 async function displayLoading(msg = "Chargement...") {
     const popupContainer = document.getElementById("loading_popup_container");

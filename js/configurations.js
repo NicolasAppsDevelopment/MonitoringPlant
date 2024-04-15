@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Send a request to the server to add or modify a configuration in the database.
- * @param {boolean} editMode Indicates whether the configuration is being added or modified
- * @param {Number} id Configuration id
+ * @param {boolean} [editMode=false] Indicates whether the configuration is being added or modified
+ * @param {Number} [id=null] Configuration id
  */
 async function saveConfiguration(editMode = false, id = null) {
     let actionVerb = "d'ajouter";
