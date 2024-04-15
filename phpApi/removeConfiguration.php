@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * @file
+ * Remove a configuration from the database.
+ * Client must be an admin to perform this action.
+ *
+ * @URL /phpApi/removeConfiguration.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "id": int }
+ *     - id : the identifier of the configuration to remove.
+ * @RETURNS { "success": true } with 200 error code if the configuration has been removed successfully.
+ */
+
 include_once '../include/Session.php';
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';

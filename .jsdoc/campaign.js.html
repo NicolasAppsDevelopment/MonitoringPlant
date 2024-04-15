@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: campaign.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: campaign.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let id = -1;
+let campaignName = "";
+let refreshDelay = 5000;
+let lastMeasureDatetime = null;
+let lastLogDatetime = null;
+let rows = 0;
+let refreshRepeat = true;
+
+document.addEventListener("DOMContentLoaded", () => {
+    checkTime();
+    getCampaignMeasurements();
+});
+
+/**
+ * Automatic refresh of measurement campaign data.
+ */
+async function subscribeRefresh() {
+    do {
+        if (refreshRepeat) {
+            // Recovery and display measurement campaign data in a refresh context.
+            getCampaignMeasurements(true);
+        }
+        await delay(refreshDelay);
+    } while (refreshRepeat);
+}
+
+/**
+ * Gets data of the campaigns then displays informations, logs and measurements
+ * @param {boolean} [refreshMode=false] - True if we want to refresh the data, false for the first get.
+ */
+async function getCampaignMeasurements(refreshMode = false) {
+    if (!refreshMode){
+        displayLoading("Récupération de la campagne...");
+        id = document.getElementById("id").value;
+    } else {
+        refreshRepeat = false;
+    }
+
+    // Recovery measurement campaign data.
+    let data = await phpPost("phpApi/getCampaign.php", {
+        "id": id,
+        "lastLogDatetime": lastLogDatetime,
+        "lastMeasureDatetime": lastMeasureDatetime
+    });
+
+    // Displays measurement campaign data and controls access to admin functions.
+    if (data != null){
+        let campaignInfo = data["campaignInfo"];
+        let mesurements = data["measurements"];
+        let logs = data["logs"];
+
+        if (lastLogDatetime == null || data["lastLogDatetime"] != null){
+            lastLogDatetime = data["lastLogDatetime"];
+        }
+        if (lastMeasureDatetime == null || data["lastMeasureDatetime"] != null){
+            lastMeasureDatetime = data["lastMeasureDatetime"];
+        }
+
+        if (!refreshMode){
+            const titleCampaign = document.getElementById("titleCampaign");
+            titleCampaign.innerHTML = campaignInfo["name"];
+            campaignName = campaignInfo["name"];
+
+            const beginDate = document.getElementById("start_date");
+            beginDate.innerHTML = dateToString(new Date(campaignInfo["beginDate"]), true, true);
+
+            const duration = document.getElementById("duration");
+            duration.innerHTML = getReadableTime(campaignInfo["duration"]);
+
+            const interval = document.getElementById("interval");
+            interval.innerHTML = getReadableTime(campaignInfo["interval_"]);
+
+            const volume = document.getElementById("volume");
+            if (campaignInfo["volume"] != null) {
+                volume.innerHTML = campaignInfo["volume"] + " mL";
+            } else {
+                volume.innerHTML = "N/A";
+            }
+
+            const configName = document.getElementById("config_name");
+            configName.innerHTML = campaignInfo["nameConfig"];
+
+            const humidMode = document.getElementById("humid_mode");
+            humidMode.innerHTML = getReadableBool(campaignInfo["humidMode"]);
+
+            const enableFiboxTemp = document.getElementById("enable_fibox_temp");
+            enableFiboxTemp.innerHTML = getReadableBool(campaignInfo["enableFiboxTemp"]);
+        }
+
+        let dateFin = new Date(campaignInfo["beginDate"]);
+        dateFin.setSeconds(dateFin.getSeconds() + campaignInfo["duration"]);
+
+        const remainingDuration = document.getElementById("remaining_duration");
+        remainingDuration.innerHTML = dateToRemainingString(dateFin);
+
+        const logsContainer = document.getElementById("logs_container");
+        if (logs != null){
+            let logsContainerHTML = "";
+
+            logs.forEach(log => {
+                let iconName = "";
+                switch (log["state"]) {
+                    case 0: // En cours
+                        iconName = "working_status";
+                        break;
+                        
+                    case 1: // Terminé
+                        iconName = "success_status";
+                        break;
+
+                    case 2: // Erreur
+                        iconName = "error_status";
+                        break;
+
+                    case 3: // Danger
+                        iconName = "warn_status";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                logsContainerHTML += `
+                &lt;div class="status-row">
+                    &lt;div class="status-title">
+                        &lt;img style="width: 16px;" class="status-icon" src="./img/${iconName}.svg">
+                        ${log["title"]}
+                    &lt;/div>
+                    &lt;span class="status-message">
+                        &lt;strong>${log["occuredDate"]}&lt;/strong> : ${log["message"]}
+                    &lt;/span>
+                &lt;/div>
+                `;
+            });
+            
+            if (refreshMode) {
+                logsContainer.innerHTML += logsContainerHTML;
+            } else {
+                logsContainer.innerHTML = logsContainerHTML;
+            }
+            
+        }
+
+        const co2State = document.getElementById("state_CO2");        
+        switch (campaignInfo["CO2SensorState"]) {
+            case 0:
+                co2State.classList.add("unselected");
+                break;
+            case 1:
+                co2State.classList.add("ok");
+                break;
+
+            case 2:
+                co2State.classList.add("error");
+                break;
+
+            default:
+                break;
+        }
+
+        const o2State = document.getElementById("state_O2");
+        switch (campaignInfo["O2SensorState"]) {
+            case 0:
+                o2State.classList.add("unselected");
+                break;
+            case 1:
+                o2State.classList.add("ok");
+                break;
+
+            case 2:
+                o2State.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+
+        const tempState = document.getElementById("state_temp");
+        switch (campaignInfo["temperatureSensorState"]) {
+            case 0:
+                tempState.classList.add("unselected");
+                break;
+            case 1:
+                tempState.classList.add("ok");
+                break;
+
+            case 2:
+                tempState.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+
+        const humState = document.getElementById("state_hum");
+        switch (campaignInfo["humiditySensorState"]) {
+            case 0:
+                humState.classList.add("unselected");
+                break;
+            case 1:
+                humState.classList.add("ok");
+                break;
+
+            case 2:
+                humState.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+
+        const lumState = document.getElementById("state_lum");
+        switch (campaignInfo["luminositySensorState"]) {
+            case 0:
+                lumState.classList.add("unselected");
+                break;
+            case 1:
+                lumState.classList.add("ok");
+                break;
+
+            case 2:
+                lumState.classList.add("error");
+                break;
+            
+            default:
+                break;
+        }
+    
+        let dateArray = [];
+        let lumArray = [];
+        let humArray = [];
+        let tempArray = [];
+        let o2Array = [];
+        let co2Array = [];
+
+        rows += mesurements.length;
+        refreshDelay = 5000 + rows;
+
+        const tableContent = document.getElementById("tableContent");
+        let tableContentHTML = "";
+
+        mesurements.forEach(mesure => {
+            let date = new Date(mesure["date"]);
+            date = dateToString(date, false, true);
+            dateArray.push(date);
+
+            let lum = mesure["luminosity"];
+            if (lum == null || lum == undefined) {
+                lum = "";
+                lumArray.push(null);
+            } else {
+                lum += " %";
+                lumArray.push(parseFloat(lum));
+            }
+
+            let hum = mesure["humidity"];
+            if (hum == null || hum == undefined) {
+                hum = "";
+                humArray.push(null);
+            } else {
+                hum += " %";
+                humArray.push(parseFloat(hum));
+            }
+
+            let temp = mesure["temperature"];
+            if (temp == null || temp == undefined) {
+                temp = "";
+                tempArray.push(null);
+            } else {
+                temp += " °C";
+                tempArray.push(parseFloat(temp));
+            }
+
+            let o2 = mesure["O2"];
+            if (o2 == null || o2 == undefined) {
+                o2 = "";
+                o2Array.push(null);
+            } else {
+                o2 += " %";
+                o2Array.push(parseFloat(o2));
+            }
+
+            let co2 = mesure["CO2"];
+            if (co2 == null || co2 == undefined) {
+                co2 = "";
+                co2Array.push(null);
+            } else {
+                co2 += " vol%";
+                co2Array.push(parseFloat(co2));
+            }
+
+            tableContentHTML += `
+                &lt;tr>
+                    &lt;td>${date}&lt;/td>
+                    &lt;td>${lum}&lt;/td>
+                    &lt;td>${hum}&lt;/td>
+                    &lt;td>${temp}&lt;/td>
+                    &lt;td>${o2}&lt;/td>
+                    &lt;td>${co2}&lt;/td>
+                &lt;/tr>
+            `;
+        });
+
+        if (refreshMode) {
+            if (rows &lt;= 1000) {
+                if (tableContentHTML != "") {
+                    tableContent.innerHTML += tableContentHTML;
+                }
+            } else {
+                document.getElementById("refreshTableDisabled").style.display = "flex";
+            } 
+            
+            addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array);
+        } else {
+            tableContent.innerHTML = tableContentHTML;
+            initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array);
+        } 
+
+        if (campaignInfo["finished"] == 1) {
+            document.getElementById("stop_btn").remove();
+            if (refreshMode){
+                return;
+            } 
+        } else if (!refreshMode){
+            subscribeRefresh();
+        }
+
+        if (refreshMode) {
+            refreshRepeat = true;
+        }
+    } else {
+        refreshRepeat = false;
+    }
+    
+    if (!refreshMode) {
+        hideLoading();
+    }
+}
+
+/**
+ * Exports measurement campaign data from settings selected in the UI.
+ */
+async function exportCampaign() {
+    displayLoading("Export de la campagne...");
+
+    // Settings to export measurement campaign data.
+    const id = document.getElementById("id").value;
+    const co2Enabled = document.getElementById("CO2_checkbox").checked;
+    const o2Enabled = document.getElementById("O2_checkbox").checked;
+    const temperatureEnabled = document.getElementById("temperature_checkbox").checked;
+    const luminosityEnabled = document.getElementById("luminosity_checkbox").checked;
+    const humidityEnabled = document.getElementById("humidity_checkbox").checked;
+    
+    const interval = document.getElementById("interval_choice");
+    const intervalUnit = document.getElementById("intervalUnit").value;
+    const averaging = document.getElementById("moyennage").checked;
+    const dateStart = document.getElementById("datedebut_choice");
+    const timeStart = document.getElementById("heuredebut_choice");
+    const dateEnd = document.getElementById("datefin_choice");
+    const timeEnd = document.getElementById("heurefin_choice");
+    const volume = document.getElementById("calc_volume").checked;
+    const exportConfig = document.getElementById("export_config").checked;
+
+
+    // Checking export settings.
+    if (interval.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de l'interval de récupération des mesures de la campagne est incorrecte. Veuillez renseigner un interval puis réessayez.");
+        return;
+    }
+
+    if (dateStart.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de la date de début est incorrecte. Veuillez renseigner une date puis réessayez.");
+        return;
+    }
+
+    if (timeStart.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de l'heure de début est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        return;
+    }
+
+    if (dateEnd.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de la date de fin est incorrecte. Veuillez renseigner une date puis réessayez.");
+        return;
+    }
+
+    if (timeEnd.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible d'exporter la campagne", "Le format de l'heure de fin est incorrecte. Veuillez renseigner une heure puis réessayez.");
+        return;
+    }
+
+
+    //Exports measurement campaign data.
+    const success = await phpDownload(campaignName + ".csv", "phpApi/exportCampaign.php", {
+        "id": id,
+        "co2Enabled": co2Enabled,
+        "o2Enabled": o2Enabled,
+        "temperatureEnabled": temperatureEnabled,
+        "luminosityEnabled": luminosityEnabled,
+        "humidityEnabled": humidityEnabled,
+        "interval": interval.value,
+        "intervalUnit": intervalUnit,
+        "averaging":averaging,
+        "startDate": dateStart.value,
+        "startTime": timeStart.value,
+        "endDate": dateEnd.value,
+        "endTime": timeEnd.value,
+        "volume": volume,
+        "exportConfig": exportConfig
+    });
+
+    // Creation and download of the csv file
+    if (success) {
+        closePopup("export-popup");
+        displaySuccess("Données de mesure exportées !", "Les données de mesure ont été exportées avec succès. Vous pouvez les retrouver dans le dossier \"Téléchargement\" de votre appareil.");
+    }
+
+    hideLoading();
+}
+
+/**
+ * Stop the selected measurement campaign.
+ * Display a confirmation message before stopping the campaign.
+ */
+async function stopCampaign() {
+    if (await displayConfirm('Voulez-vous vraiment arrêter cette campagne de mesure ?', 'La relève des données sera interrompu définitivement. Cette action est irréversible.', 'Arrêter', true)) {
+        displayLoading("Arrêt de la campagne...");
+
+        // Setting to stop the measurement campaign.
+        const id = document.getElementById("id").value;
+        const data = await phpPost("phpApi/stopCampaign.php", {
+            "id": id
+        });
+
+        if (data != null) {
+            document.getElementById("refresh_form").submit();
+        }
+
+        hideLoading();
+    }
+}
+
+/**
+ * Restart the selected measurement campaign.
+ * Display a confirmation message before restarting the campaign.
+ */
+async function restartCampaign() {
+    if (await displayConfirm('Voulez-vous vraiment redémarrer cette campagne de mesure ?', 'La relève des données sera interrompu et le données déjà enregistrées de cette campagne seront supprimées définitivement. Cette action est irréversible.', 'Redémarrer', true)) {
+        displayLoading("Redémarrage de la campagne...");
+
+        // Setting to restart the measurement campaign.
+        const id = document.getElementById("id").value;
+        const data = await phpPost("phpApi/restartCampaign.php", {
+            "id": id
+        });
+
+        if (data != null) {
+            document.getElementById("refresh_form").submit();
+        } 
+
+        hideLoading();
+    }
+}
+
+/**
+ * Returns "Activé" or "Désactivé" according to bool
+ * @param {boolean} bool If true, the returned string will contain "Activé", "Désactivé" if not
+ * @returns {String} contains "Activé" or "Désactivé"
+ */
+function getReadableBool(bool) {
+    return bool ? "Activé" : "Désactivé";
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCampaign">addCampaign</a></li><li><a href="global.html#addValuesChart">addValuesChart</a></li><li><a href="global.html#alternativeLogin">alternativeLogin</a></li><li><a href="global.html#checkTime">checkTime</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#dateToRemainingString">dateToRemainingString</a></li><li><a href="global.html#dateToStandardString">dateToStandardString</a></li><li><a href="global.html#dateToString">dateToString</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#displayConfirm">displayConfirm</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayHide">displayHide</a></li><li><a href="global.html#displayLoading">displayLoading</a></li><li><a href="global.html#displayQRCode">displayQRCode</a></li><li><a href="global.html#displaySuccess">displaySuccess</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadQRCode">downloadQRCode</a></li><li><a href="global.html#editConfiguration">editConfiguration</a></li><li><a href="global.html#exportCampaign">exportCampaign</a></li><li><a href="global.html#filterCampaigns">filterCampaigns</a></li><li><a href="global.html#filterConfigurations">filterConfigurations</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getCampaignMeasurements">getCampaignMeasurements</a></li><li><a href="global.html#getConfigurations">getConfigurations</a></li><li><a href="global.html#getListCampaignJS">getListCampaignJS</a></li><li><a href="global.html#getListConfigJS">getListConfigJS</a></li><li><a href="global.html#getReadableBool">getReadableBool</a></li><li><a href="global.html#getReadableTime">getReadableTime</a></li><li><a href="global.html#getReadableTimeAndUnit">getReadableTimeAndUnit</a></li><li><a href="global.html#getSettings">getSettings</a></li><li><a href="global.html#getStorageCapacity">getStorageCapacity</a></li><li><a href="global.html#goToForm1">goToForm1</a></li><li><a href="global.html#goToForm2">goToForm2</a></li><li><a href="global.html#goToForm3">goToForm3</a></li><li><a href="global.html#goToHelpPage">goToHelpPage</a></li><li><a href="global.html#handleKeyPressSearchBar">handleKeyPressSearchBar</a></li><li><a href="global.html#hideConfirm">hideConfirm</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#hideLoading">hideLoading</a></li><li><a href="global.html#hideSuccess">hideSuccess</a></li><li><a href="global.html#initChart">initChart</a></li><li><a href="global.html#loadConfiguration">loadConfiguration</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#next">next</a></li><li><a href="global.html#nodeJsDownload">nodeJsDownload</a></li><li><a href="global.html#nodeJsGet">nodeJsGet</a></li><li><a href="global.html#openPopup">openPopup</a></li><li><a href="global.html#phpDownload">phpDownload</a></li><li><a href="global.html#phpGet">phpGet</a></li><li><a href="global.html#phpPost">phpPost</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#predictStoreUsage">predictStoreUsage</a></li><li><a href="global.html#prepareAddPopup">prepareAddPopup</a></li><li><a href="global.html#previous">previous</a></li><li><a href="global.html#removeConfig">removeConfig</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetFilter">resetFilter</a></li><li><a href="global.html#restartCampaign">restartCampaign</a></li><li><a href="global.html#saveConfiguration">saveConfiguration</a></li><li><a href="global.html#setPassword">setPassword</a></li><li><a href="global.html#setSecurityQuestions">setSecurityQuestions</a></li><li><a href="global.html#setSettings">setSettings</a></li><li><a href="global.html#setTime">setTime</a></li><li><a href="global.html#showHelpPanel">showHelpPanel</a></li><li><a href="global.html#stopCampaign">stopCampaign</a></li><li><a href="global.html#subscribeRefresh">subscribeRefresh</a></li><li><a href="global.html#swiffyslider">swiffyslider</a></li><li><a href="global.html#tryRemoveCampaign">tryRemoveCampaign</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Apr 15 2024 22:19:11 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,5 +1,32 @@
 <?php
 
+/**
+ * @file
+ * Add a new measurement campaign.
+ *
+ * @URL /phpApi/createCampaign.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "title" : string, "co2Enabled" : bool, "o2Enabled" : bool, "temperatureEnabled" : bool, "luminosityEnabled" : bool, "humidityEnabled" : bool, "duration" : int, "interval" : int, "volume" : float, "volumeUnit" : string, "intervalUnit" : string, "durationUnit" : string, "configId" : int, "humidMode" : bool, "enableFiboxTemp" : bool }
+ *     - title : The name of the new campaign.
+ *     - co2Enabled : True if the CO2 sensor is enabled.
+ *     - o2Enabled : True if the O2 sensor is enabled.
+ *     - temperatureEnabled : True if the temperature sensor is enabled.
+ *     - luminosityEnabled : True if the luminosity sensor is enabled.
+ *     - humidityEnabled : True if the humidity sensor is enabled.
+ *     - duration : The duration of the campaign.
+ *     - interval : The interval between each measurement.
+ *     - volume : The volume of the campaign.
+ *     - volumeUnit : The unit of the volume of the campaign.
+ *     - intervalUnit : The unit of the interval of the campaign.
+ *     - durationUnit : The unit of the duration of the campaign.
+ *     - configId : The id of the configuration of the campaign.
+ *     - humidMode : The mode of the humidity sensor.
+ *     - enableFiboxTemp : True if the Fibox temperature sensor is enabled.
+ * @RETURNS { "id": int } with 200 error code if the campaign has been added successfully.
+ *     - id : The id of the created campaign.
+ */
+
 include_once "../include/NodeJsApi.php";
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';

@@ -1,5 +1,25 @@
 <?php
 
+/**
+ * @file
+ * List all measurement campaigns (with a filter if needed use a POST request with the specific body).
+ *
+ * @URL /phpApi/getListCampaign.php
+ * @METHOD GET or POST
+ * @CONTENT-TYPE application/json
+ * BODY (only for a POST request) : { "name" : string, "startTime" : string, "startDate" : string, "endTime" : string, "endDate" : string, "processing" : bool, "success" : bool, "error" : bool, "warn" : bool }
+ *    - name : The name of the searched campaign.
+ *    - startTime : The start time of the campaign.
+ *    - startDate : The start date of the campaign.
+ *    - endTime : The end time of the campaign.
+ *    - endDate : The end date of the campaign.
+ *    - processing : True to return processing campaigns.
+ *    - success : True to return successful finished campaigns.
+ *    - error : True to return failed campaigns (finished).
+ *    - warn : True to return campaigns with warnings (finised or not).
+ * @RETURNS { "id": int, "name": string, "startDate": string, "endDate": string, "processing": bool, "success": bool, "error": bool, "warn": bool }[] with 200 error code if the campaigns have been listed successfully.
+ */
+
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 

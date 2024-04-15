@@ -1,5 +1,33 @@
 <?php
 
+/**
+ * @file
+ * Modify a configuration.
+ * Client needs to be looged as an admin.
+ *
+ * @URL /phpApi/editConfiguration.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "id" : int, "name" : string, "f1" : float, "m" : float, "dPhi1" : float, "dPhi2" : float, "dKSV1" : float, "dKSV2" : float, "cal0" : float, "cal2nd" : float, "t0" : float, "t2nd" : float, "pressure" : int, "o2cal2nd" : int, "altitude" : int, "calibIsHumid" : bool }
+ *     - id : the id of the configuration
+ *     - name : the name of the configuration
+ *     - f1 : the float constant f1
+ *     - m : the float constant m
+ *     - dPhi1 : the float constant dPhi1
+ *     - dPhi2 : the float constant dPhi2
+ *     - dKSV1 : the float constant dKSV1
+ *     - dKSV2 : the float constant dKSV2
+ *     - cal0 : the float constant cal0
+ *     - cal2nd : the float constant cal2nd
+ *     - t0 : the float constant t0
+ *     - t2nd : the float constant t2nd
+ *     - pressure : the int constant pressure
+ *     - o2cal2nd : the int constant o2cal2nd
+ *     - altitude : the altitude where the configuration is used
+ *     - calibIsHumid : if the clibration is humid or not
+ * @RETURNS { "success": true } with 200 error code if the configuration has been modified successfully.
+ */
+
 include_once '../include/Session.php';
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: popup.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: popup.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let blurCompatibility = true;
+
+if (navigator.userAgent.includes("Chrome/")) {
+    blurCompatibility = false;
+}
+
+let idMessage = 0;
+
+/**
+ * Creates and displays a popup to confirm or cancel an important action.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ * @param {String} confirmBtnTitle Title of the button of confirmation
+ * @param {boolean} [destructive=false] True if there is a risk of data loss or if there is a suppression of data. False otherwise.
+ * @param {String} [cancelBtnTitle="Annuler"] Title of the button to cancel the action
+ * @returns {boolean} True if the user confirms the action and false if he cancels it
+ */
+async function displayConfirm(title, msg, confirmBtnTitle, destructive = false, cancelBtnTitle = "Annuler") {
+    const id = idMessage;
+    idMessage++;
+
+    const htmlPopup = `
+        &lt;div class="popup open_anim" id="confirm_popup_container${id}">
+            &lt;div id="confirm_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">
+                &lt;div class="popup-content center">
+                    &lt;img src="./img/warning_ico.svg" class="ico_msgbox">
+                    &lt;p class="title_msgbox">${title}&lt;/p>
+                    &lt;p class="msg_msgbox">${msg}&lt;/p>
+                    
+                    &lt;div class="actions_msgbox">
+                        &lt;button id="confirm${id}" class="shadow_btn rect_round_btn ${destructive ? "destructive" : "gray"}" type="button">${confirmBtnTitle}&lt;/button>
+                        &lt;button id="cancel${id}" class="rect_round_btn gray shadow_btn" type="button">${cancelBtnTitle}&lt;/button>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
+
+    const promise = new Promise((resolve, reject) => {
+        document.getElementById("confirm" + id).addEventListener('click', resolve)
+        document.getElementById("cancel" + id).addEventListener('click', reject)
+    });
+
+
+    return await promise
+    .then(() => {
+        hideConfirm(id);
+        return true;
+    })
+    .catch(() => {
+        hideConfirm(id);
+        return false;
+    })
+}
+ 
+/**
+ * Hides the confirmation popup whose id is in the parameter.
+ * @param {Number} id id of the popup that will be hidden
+ */
+async function hideConfirm(id) {
+    const popupContainer = document.getElementById("confirm_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
+
+    setTimeout(function() {
+        popupContainer.remove();
+    }, 300);
+}
+
+/**
+ * Creates and displays an error report popup.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ */
+async function displayError(title, msg) {
+    const id = idMessage;
+    idMessage++;
+
+    const htmlPopup = `
+        &lt;div class="popup open_anim" id="error_popup_container${id}">
+            &lt;div id="error_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">    
+                &lt;div class="popup-content center">
+                    &lt;img src="./img/error_ico.svg" class="ico_msgbox">
+                    &lt;p class="title_msgbox">${title}&lt;/p>
+                    &lt;p class="msg_msgbox">${msg}&lt;/p>
+                    
+                    &lt;div class="actions_msgbox">
+                        &lt;button id="close${id}" class="rect_round_btn gray shadow_btn" type="button">OK&lt;/button>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
+
+    const promise = new Promise((resolve) => {
+        document.getElementById("close" + id).addEventListener('click', resolve)
+    });
+
+
+    return await promise
+    .then(() => {
+        hideError(id);
+    })
+}
+
+/**
+ * Hides the error report popup whose id is in the parameter.
+ * @param {Number} id id of the popup that will be hidden
+ */
+async function hideError(id) {
+    const popupContainer = document.getElementById("error_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
+
+    setTimeout(function() {
+        popupContainer.remove();
+    }, 300);
+}
+
+/**
+ * Creates and displays a success report popup.
+ * @param {String} title Title of the popup
+ * @param {String} msg Message of the popup
+ */
+async function displaySuccess(title, msg) {
+    const id = idMessage;
+    idMessage++;
+
+    const htmlPopup = `
+        &lt;div class="popup open_anim" id="success_popup_container${id}">
+            &lt;div id="success_popup${id}" class="msgbox-popup-inner ${blurCompatibility ? "backdrop-blur" : "backdrop-color"}">    
+                &lt;div class="popup-content center">
+                    &lt;img src="./img/success_ico.svg" class="ico_msgbox">
+                    &lt;p class="title_msgbox">${title}&lt;/p>
+                    &lt;p class="msg_msgbox">${msg}&lt;/p>
+                    
+                    &lt;div class="actions_msgbox">
+                        &lt;button id="close${id}" class="rect_round_btn gray shadow_btn" type="button">OK&lt;/button>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", htmlPopup);
+
+    const promise = new Promise((resolve) => {
+        document.getElementById("close" + id).addEventListener('click', resolve)
+    });
+
+
+    return await promise
+    .then(() => {
+        hideSuccess(id);
+    })
+}
+
+/**
+ * Hides the success report popup whose id is in the parameter.
+ * @param {Number} id id of the popup that will be hidden
+ */
+async function hideSuccess(id) {
+    const popupContainer = document.getElementById("success_popup_container" + id);
+    popupContainer.classList.remove("open_anim");
+    popupContainer.classList.add("close_anim");
+
+    setTimeout(function() {
+        popupContainer.remove();
+    }, 300);
+}
+
+/**
+ * Displays a loading popup with a custom message.
+ * @param {String} [msg="Chargement..."] Message of the popup (default: "Chargement...")
+ */
+async function displayLoading(msg = "Chargement...") {
+    const popupContainer = document.getElementById("loading_popup_container");
+    const popup = document.getElementById("loading_popup");
+    popup.style.transform = "scale(1)";
+
+    document.getElementById("loading_msg").innerHTML = msg.replace("\n", "&lt;br>");
+    
+    popupContainer.style.opacity = 1;
+    popupContainer.style.visibility = "inherit";
+}
+
+/**
+ * Hides the loading popup.
+ */
+async function hideLoading() {
+    const popupContainer = document.getElementById("loading_popup_container");
+    popupContainer.classList.remove("displayed");
+    const popup = document.getElementById("loading_popup");
+    popup.removeAttribute("style");
+    popupContainer.removeAttribute("style");
+}
+
+/**
+ * Closes the popup whose id is in parameter
+ * @param {Number} id id of the popup that will be closed
+ */
+async function closePopup(id) {
+    document.getElementById(id).checked = false;
+}
+
+/**
+ * Opens the popup whose id is in parameter
+ * @param {Number} id id of the popup that will be opened
+ */
+async function openPopup(id) {
+    document.getElementById(id).checked = true;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCampaign">addCampaign</a></li><li><a href="global.html#addValuesChart">addValuesChart</a></li><li><a href="global.html#alternativeLogin">alternativeLogin</a></li><li><a href="global.html#checkTime">checkTime</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#dateToRemainingString">dateToRemainingString</a></li><li><a href="global.html#dateToStandardString">dateToStandardString</a></li><li><a href="global.html#dateToString">dateToString</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#displayConfirm">displayConfirm</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayHide">displayHide</a></li><li><a href="global.html#displayLoading">displayLoading</a></li><li><a href="global.html#displayQRCode">displayQRCode</a></li><li><a href="global.html#displaySuccess">displaySuccess</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadQRCode">downloadQRCode</a></li><li><a href="global.html#editConfiguration">editConfiguration</a></li><li><a href="global.html#exportCampaign">exportCampaign</a></li><li><a href="global.html#filterCampaigns">filterCampaigns</a></li><li><a href="global.html#filterConfigurations">filterConfigurations</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getCampaignMeasurements">getCampaignMeasurements</a></li><li><a href="global.html#getConfigurations">getConfigurations</a></li><li><a href="global.html#getListCampaignJS">getListCampaignJS</a></li><li><a href="global.html#getListConfigJS">getListConfigJS</a></li><li><a href="global.html#getReadableBool">getReadableBool</a></li><li><a href="global.html#getReadableTime">getReadableTime</a></li><li><a href="global.html#getReadableTimeAndUnit">getReadableTimeAndUnit</a></li><li><a href="global.html#getSettings">getSettings</a></li><li><a href="global.html#getStorageCapacity">getStorageCapacity</a></li><li><a href="global.html#goToForm1">goToForm1</a></li><li><a href="global.html#goToForm2">goToForm2</a></li><li><a href="global.html#goToForm3">goToForm3</a></li><li><a href="global.html#goToHelpPage">goToHelpPage</a></li><li><a href="global.html#handleKeyPressSearchBar">handleKeyPressSearchBar</a></li><li><a href="global.html#hideConfirm">hideConfirm</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#hideLoading">hideLoading</a></li><li><a href="global.html#hideSuccess">hideSuccess</a></li><li><a href="global.html#initChart">initChart</a></li><li><a href="global.html#loadConfiguration">loadConfiguration</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#next">next</a></li><li><a href="global.html#nodeJsDownload">nodeJsDownload</a></li><li><a href="global.html#nodeJsGet">nodeJsGet</a></li><li><a href="global.html#openPopup">openPopup</a></li><li><a href="global.html#phpDownload">phpDownload</a></li><li><a href="global.html#phpGet">phpGet</a></li><li><a href="global.html#phpPost">phpPost</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#predictStoreUsage">predictStoreUsage</a></li><li><a href="global.html#prepareAddPopup">prepareAddPopup</a></li><li><a href="global.html#previous">previous</a></li><li><a href="global.html#removeConfig">removeConfig</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetFilter">resetFilter</a></li><li><a href="global.html#restartCampaign">restartCampaign</a></li><li><a href="global.html#saveConfiguration">saveConfiguration</a></li><li><a href="global.html#setPassword">setPassword</a></li><li><a href="global.html#setSecurityQuestions">setSecurityQuestions</a></li><li><a href="global.html#setSettings">setSettings</a></li><li><a href="global.html#setTime">setTime</a></li><li><a href="global.html#showHelpPanel">showHelpPanel</a></li><li><a href="global.html#stopCampaign">stopCampaign</a></li><li><a href="global.html#subscribeRefresh">subscribeRefresh</a></li><li><a href="global.html#swiffyslider">swiffyslider</a></li><li><a href="global.html#tryRemoveCampaign">tryRemoveCampaign</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Apr 15 2024 22:19:11 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

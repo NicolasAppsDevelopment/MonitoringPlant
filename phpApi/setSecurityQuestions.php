@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * @file
+ * Define the security questions.
+ * Client must be an admin to perform this action.
+ * If the admin questions are not defined, this action will register them.
+ *
+ * @URL /phpApi/setSecurityQuestions.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "question1": string, "response1": string, "question2": string, "response2": string, "question3": string, "response3": string }
+ * @RETURNS { "success" : true, data: { "redirect": string }} with 200 error code if the security questions have been defined successfully.
+ *       - redirect : the page to redirect to after the security questions are defined.
+ */
+
 include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';

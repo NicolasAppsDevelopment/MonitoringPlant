@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: settings.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: settings.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let networkSsid;
+let networkPassword;
+
+/**
+ * Retrieves the settings from the server and displays them in the page.
+ */
+async function getSettings()
+{
+    displayLoading("Récupération des paramètres...");
+
+    const settings = await phpGet("phpApi/getSettings.php");
+    if (settings != null){
+        if (settings["autoRemove"]){
+            document.getElementById("auto_suppr").checked=true;
+        }else{
+            document.getElementById("auto_suppr").checked=false;
+        }
+        
+        const timeSettings = getReadableTimeAndUnit(settings["removeInterval"]);
+        let timeConservation = document.getElementById("conserv");
+        timeConservation.setAttribute('value',timeSettings["value"]);
+
+        let timeConservationUnit = document.querySelector('#comboBoxTpsSuppr option[value="' + timeSettings["unit"] + '"]');
+        if(timeConservationUnit){
+            timeConservationUnit.setAttribute('selected','selected');
+        }
+
+        let networkSsidInput = document.getElementById("network_ssid");
+        networkSsidInput.value=settings["ssid"];
+        networkSsid=settings["ssid"];
+
+        let networkPasswordInput = document.getElementById("network_password");
+        networkPasswordInput.value=settings["password"];
+        networkPassword=settings["password"];
+    }
+
+    hideLoading();
+}
+
+/**
+ * Sends a request to the server to update the settings.
+ * If the password or ssid has been changed, a confirmation message will be displayed to the user.
+ */
+async function setSettings()
+{
+    displayLoading("Mise à jour des paramètres...");
+
+    const enableAutoRemove = document.getElementById("auto_suppr");
+    const timeConservation = document.getElementById("conserv");
+    const timeConservationUnit = document.getElementById("comboBoxTpsSuppr");
+    const ssid = document.getElementById("network_ssid");
+    const password = document.getElementById("network_password");
+
+
+    if (timeConservation.validity.badInput === true) {
+        hideLoading();
+        displayError("Impossible de sauvegarder les paramètres", "L'intervalle de relevé de suppression des campagnes n'a pas été renseigné ou son format est incorrecte. Veuillez renseigner un nombre entier positif puis réessayez.");
+        return;
+    } 
+    
+    let data = await phpPost("phpApi/setSettings.php", {
+        "timeConservation": timeConservation.value,
+        "timeConservationUnit": timeConservationUnit.value,
+        "enableAutoRemove": enableAutoRemove.checked,
+        "ssid": ssid.value,
+        "password": password.value
+    });
+
+    if (data != null) {
+        if (password.value != null &amp;&amp; password.value != networkPassword) {
+            if (!await displayConfirm("Risque de perte d'accès", "ATTENTION : Vous venez de modifier le mot de passe du Wi-Fi de la cellule de mesure. Cela signifie que si vous n'entrez pas correctement le nouveau mot de passe, vous ne pourrez plus accéder à votre cellule de mesure. Nous vous conseillons vivement de télécharger le nouveau QR code d'accès au Wi-Fi afin d'éviter tout problème d'oubli/mot de passe mal copié !", 'Ne pas télécharger', true, "Télécharger le nouveau code QR")) {
+                downloadQRCode();
+            } else if (!await displayConfirm("Risque de perte d'accès", "Êtes vous certains de continuer sans télécharger le nouveau code QR ?", 'Oui', true, "Télécharger le nouveau code QR")) {
+                downloadQRCode();
+            }
+        }
+    
+        if((password.value != null &amp;&amp; password.value != networkPassword) || (ssid.value != null &amp;&amp; ssid.value != networkSsid)) {   
+            if (await displayConfirm("Information de connexion Wi-Fi modifié", "Vous avez changer les informations de connexion au réseau Wi-Fi de la cellule de mesure, cependant pour que ce changement soit visible il faut redémarrer l'appareil. Cela entraînera l'arrêt de campagne en cours. Voulez-vous redémarrer maintenant ?", 'Redémarrer la cellule', true, "Non")) {
+                await phpGet("phpApi/restart.php");
+            }            
+        }
+
+        displaySuccess("Paramètres mis à jour !", "Les paramètres ont été mis à jour avec succès.");
+    }
+    
+    hideLoading();
+}
+
+/**
+ * Sends a request to the server to reset all the data of the device.
+ * If the user confirms the action, the user will be redirected to the beginning page.
+ */
+async function reset()
+{
+    if (await displayConfirm('Voulez-vous vraiment supprimer toutes les données de cet appareil ?', 'Toutes les campagnes, les mesures, les paramètres et les configurations seront supprimées définitivement. Cette action est irréversible.', 'Effacer', true)) {
+        displayLoading("Suppression des données...");
+        
+        const data = await phpPost("phpApi/reset.php");
+
+        hideLoading();
+
+        if(data != null){
+            await displaySuccess("Données supprimées !", "Toutes les campagnes, les mesures, les logs, les paramètres et les configurations ont été supprimées avec succès. Vous allez être redirigés sur la page de première configuration de l'appareil.");
+            // redirect
+            window.location = "/beginning.php"
+        }        
+    }
+}
+
+/**
+ * Download and displays QR Code to access the Wi-Fi of the Raspberry Pi
+ */
+async function displayQRCode()
+{
+    const ssid = document.getElementById("network_ssid");
+    const password = document.getElementById("network_password");
+
+    // Check password/ssid was edited from IU. If so, ask user to save first or refresh page to discard changes.
+    if ((password.value != null &amp;&amp; password.value != networkPassword) || (ssid.value != null &amp;&amp; ssid.value != networkSsid)) {
+        if (!await displayConfirm('Modification non sauvegardée', "Le nom et/ou le mot de passe du réseau Wi-Fi a été modifié sur cette page et les chagements n'ont pas été sauvegardés. Le code QR généré ne prendra pas en compte ces modifications. Voulez-vous tout de même voir le code QR ?", 'Voir', false)) {
+            return;
+        }
+    } 
+
+    displayLoading("Génération du QR code...");
+    
+    let img = document.getElementById("qr_code_viewer");
+
+    const blob = await nodeJsGet("getQRCode", false);
+    if (blob != null) {
+        img.src = window.URL.createObjectURL(blob);
+        openPopup("qr-popup");
+    }
+
+
+    hideLoading();
+}
+
+/**
+ * Downloads the QR Code to access the Wi-Fi of the Raspberry Pi and transfers it to the browser.
+ */
+async function downloadQRCode()
+{
+    displayLoading("Génération du QR code...");
+    
+    const success = await nodeJsDownload("Code QR Wi-Fi cellule mesure.png", "getQRCode");
+    if (success) {
+        displaySuccess("Téléchargement réussi !", "Le code QR a été téléchargé avec succès. Vous pouvez le retrouver dans le dossier \"Téléchargement\" de votre appareil.");
+        closePopup("qr-popup");
+    }
+
+    hideLoading();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    getSettings();
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCampaign">addCampaign</a></li><li><a href="global.html#addValuesChart">addValuesChart</a></li><li><a href="global.html#alternativeLogin">alternativeLogin</a></li><li><a href="global.html#checkTime">checkTime</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#dateToRemainingString">dateToRemainingString</a></li><li><a href="global.html#dateToStandardString">dateToStandardString</a></li><li><a href="global.html#dateToString">dateToString</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#displayConfirm">displayConfirm</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayHide">displayHide</a></li><li><a href="global.html#displayLoading">displayLoading</a></li><li><a href="global.html#displayQRCode">displayQRCode</a></li><li><a href="global.html#displaySuccess">displaySuccess</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadQRCode">downloadQRCode</a></li><li><a href="global.html#editConfiguration">editConfiguration</a></li><li><a href="global.html#exportCampaign">exportCampaign</a></li><li><a href="global.html#filterCampaigns">filterCampaigns</a></li><li><a href="global.html#filterConfigurations">filterConfigurations</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getCampaignMeasurements">getCampaignMeasurements</a></li><li><a href="global.html#getConfigurations">getConfigurations</a></li><li><a href="global.html#getListCampaignJS">getListCampaignJS</a></li><li><a href="global.html#getListConfigJS">getListConfigJS</a></li><li><a href="global.html#getReadableBool">getReadableBool</a></li><li><a href="global.html#getReadableTime">getReadableTime</a></li><li><a href="global.html#getReadableTimeAndUnit">getReadableTimeAndUnit</a></li><li><a href="global.html#getSettings">getSettings</a></li><li><a href="global.html#getStorageCapacity">getStorageCapacity</a></li><li><a href="global.html#goToForm1">goToForm1</a></li><li><a href="global.html#goToForm2">goToForm2</a></li><li><a href="global.html#goToForm3">goToForm3</a></li><li><a href="global.html#goToHelpPage">goToHelpPage</a></li><li><a href="global.html#handleKeyPressSearchBar">handleKeyPressSearchBar</a></li><li><a href="global.html#hideConfirm">hideConfirm</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#hideLoading">hideLoading</a></li><li><a href="global.html#hideSuccess">hideSuccess</a></li><li><a href="global.html#initChart">initChart</a></li><li><a href="global.html#loadConfiguration">loadConfiguration</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#next">next</a></li><li><a href="global.html#nodeJsDownload">nodeJsDownload</a></li><li><a href="global.html#nodeJsGet">nodeJsGet</a></li><li><a href="global.html#openPopup">openPopup</a></li><li><a href="global.html#phpDownload">phpDownload</a></li><li><a href="global.html#phpGet">phpGet</a></li><li><a href="global.html#phpPost">phpPost</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#predictStoreUsage">predictStoreUsage</a></li><li><a href="global.html#prepareAddPopup">prepareAddPopup</a></li><li><a href="global.html#previous">previous</a></li><li><a href="global.html#removeConfig">removeConfig</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetFilter">resetFilter</a></li><li><a href="global.html#restartCampaign">restartCampaign</a></li><li><a href="global.html#saveConfiguration">saveConfiguration</a></li><li><a href="global.html#setPassword">setPassword</a></li><li><a href="global.html#setSecurityQuestions">setSecurityQuestions</a></li><li><a href="global.html#setSettings">setSettings</a></li><li><a href="global.html#setTime">setTime</a></li><li><a href="global.html#showHelpPanel">showHelpPanel</a></li><li><a href="global.html#stopCampaign">stopCampaign</a></li><li><a href="global.html#subscribeRefresh">subscribeRefresh</a></li><li><a href="global.html#swiffyslider">swiffyslider</a></li><li><a href="global.html#tryRemoveCampaign">tryRemoveCampaign</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Apr 15 2024 22:19:11 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

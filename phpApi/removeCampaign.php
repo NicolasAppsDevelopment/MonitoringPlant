@@ -1,4 +1,17 @@
 <?php
+
+/**
+ * @file
+ * Remove a measurement campaign.
+ * Client must be logged as an admin.
+ *
+ * @URL /phpApi/removeCampaign.php
+ * @METHOD POST
+ * @BODY { "id": int }
+ *   - id : The id of the campaign to remove.
+ * @RETURNS { "success": true } with 200 error code if the campaign has been removed successfully.
+ */
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/CampaignsManager.php';
 include_once '../include/Session.php';

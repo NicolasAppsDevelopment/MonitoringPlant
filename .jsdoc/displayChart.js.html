@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: displayChart.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: displayChart.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let chart;
+let mouseX = 0;
+
+/**
+ * Mouse mouve listener to track the mouse X position.
+ * In order to display correctly the tooltip.
+ */
+document.addEventListener('mousemove', (event) => {
+  mouseX = event.clientX;
+});
+
+function destroyChart() {
+  if (chart != null || chart != undefined){
+    chart.destroy();
+  }
+}
+
+/**
+ * Adds values to the chart of the selected measurement campaign. Used to update the chart from a refresh context.
+ * @param {String[]} dateArray All measurement dates of the selected measurement campaign
+ * @param {String[]} lumArray All luminosity values of the selected measurement campaign
+ * @param {String[]} humArray All humidity values of the selected measurement campaign
+ * @param {String[]} tempArray All temperature values of the selected measurement campaign
+ * @param {String[]} o2Array All O2 values of the selected measurement campaign
+ * @param {String[]} co2Array All CO2 values of the selected measurement campaign
+ */
+async function addValuesChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) { 
+  if (dateArray.length == 0) {
+    return;
+  } 
+
+  dateArray.forEach(date => {
+    chart.data.labels.push(date);
+  });
+  
+  chart.data.datasets.forEach((dataset) => {
+    switch (dataset.label) {
+      case "O2":
+        o2Array.forEach(o2 => {
+          dataset.data.push(o2);
+        });
+        break;
+
+      case "CO2":
+        co2Array.forEach(co2 => {
+          dataset.data.push(co2);
+        });
+        break;
+
+
+      case "Température":
+        tempArray.forEach(temp => {
+          dataset.data.push(temp);
+        });
+        break;
+
+      case "Humidité":
+        humArray.forEach(hum => {
+          dataset.data.push(hum);
+        });
+        break;
+
+      case "Luminosité":
+        lumArray.forEach(lum => {
+          dataset.data.push(lum);
+        });
+        break;
+    
+      default:
+        break;
+    }
+  });
+
+  chart.update('none');
+} 
+
+/**
+ * Setups the chart and adds values to the chart of the selected measurement campaign.
+ * @param {String[]} dateArray All measurement dates of the selected measurement campaign
+ * @param {String[]} lumArray All luminosity values of the selected measurement campaign
+ * @param {String[]} humArray All humidity values of the selected measurement campaign
+ * @param {String[]} tempArray All temperature values of the selected measurement campaign
+ * @param {String[]} o2Array All O2 values of the selected measurement campaign
+ * @param {String[]} co2Array All CO2 values of the selected measurement campaign
+ * @returns {(Element|void)}  returns a html element, the tooltip
+ */
+async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2Array) {
+  const myChart = document.getElementById('ChartCanvas');
+
+  const tooltipLine =  {
+    id: 'tooltipLine',
+    afterDraw: chart => {
+      if (chart.tooltip._active?.length) {
+        const ctx = chart.ctx;
+        ctx.save();
+        
+        const activePoint = chart.tooltip._active[0];
+        ctx.beginPath();
+        ctx.setLineDash([7, 7]);
+        ctx.moveTo(activePoint.element.x, chart.chartArea.top);
+        ctx.lineTo(activePoint.element.x, chart.chartArea.bottom);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "gray";
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
+
+  const getOrCreateTooltip = (chart) => {
+    let tooltipEl = chart.canvas.parentNode.querySelector('div');
+  
+    if (!tooltipEl) {
+      tooltipEl = document.createElement('div');
+      tooltipEl.classList.add("tooltipChart_container");
+
+      document.getElementById('ChartCanvas').addEventListener('touchstart', (ev) => {
+        tooltipEl.style.opacity = 0;
+      }, false);
+  
+      const table = document.createElement('table');
+      table.style.margin = '0px';
+  
+      tooltipEl.appendChild(table);
+      chart.canvas.parentNode.appendChild(tooltipEl);
+    }
+  
+    return tooltipEl;
+  };
+  
+  /**
+   * Handler for the measure detail tooltip displayed when the mouse is over the graph
+   */
+  const externalTooltipHandler = (context) => {
+    const {chart, tooltip} = context;
+    const tooltipEl = getOrCreateTooltip(chart);
+  
+    // Hides if no tooltip
+    if (tooltip.opacity === 0) {
+      tooltipEl.style.opacity = 0;
+      return;
+    }
+  
+    // Sets tooltip Text
+    if (tooltip.body) {
+      const titleLines = tooltip.title || [];
+      const bodyLines = tooltip.body.map(b => b.lines);
+  
+      const tableHead = document.createElement('thead');
+  
+      titleLines.forEach(title => {
+        const tr = document.createElement('tr');
+  
+        const th = document.createElement('th');
+        const text = document.createTextNode(title);
+  
+        th.appendChild(text);
+        tr.appendChild(th);
+        tableHead.appendChild(tr);
+      });
+  
+      const tableBody = document.createElement('tbody');
+      bodyLines.forEach((body, i) => {
+        const colors = tooltip.labelColors[i];
+  
+        const span = document.createElement('span');
+        span.style.background = colors.backgroundColor;
+  
+        const tr = document.createElement('tr');
+        tr.style.backgroundColor = 'inherit';
+  
+        const tdMesureType = document.createElement('td');
+        const tdMesureValue = document.createElement('td');
+        
+        const data = body[0].split(" ");
+        let dataName = data[0].replace(":", "");
+        let dataValue = data[1];
+
+        switch (dataName) {
+          case "O2":
+            dataValue += " %";
+            break;
+          case "CO2":
+            dataValue += " vol%";
+            break;
+          case "Température":
+            dataValue += " °C";
+            break;
+          case "Luminosité":
+            dataValue += " %";
+            break;
+          case "Humidité":
+            dataValue += " %";
+            break;
+        
+          default:
+            break;
+        }
+
+        const textMesureType = document.createTextNode(dataName);
+        const textMesureValue = document.createTextNode(dataValue);
+  
+        tdMesureType.appendChild(span);
+        tdMesureType.appendChild(textMesureType);
+        tdMesureValue.appendChild(textMesureValue);
+        tr.appendChild(tdMesureType);
+        tr.appendChild(tdMesureValue);
+        tableBody.appendChild(tr);
+      });
+  
+      const tableRoot = tooltipEl.querySelector('table');
+  
+      // Remove old children
+      while (tableRoot.firstChild) {
+        tableRoot.firstChild.remove();
+      }
+  
+      // Add new children
+      tableRoot.appendChild(tableHead);
+      tableRoot.appendChild(tableBody);
+    }
+  
+    const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
+  
+    // Display, position, and set styles for font
+    tooltipEl.style.opacity = 1;
+
+    if (mouseX + 12 + tooltipEl.offsetWidth > document.body.clientWidth - 12) {
+      tooltipEl.style.left = positionX + tooltip.caretX - 12 - tooltipEl.offsetWidth + 'px';
+    } else {
+      tooltipEl.style.left = positionX + tooltip.caretX + 12 + 'px';
+    }
+    
+    tooltipEl.style.top = positionY + 48 + 'px';
+    tooltipEl.style.font = tooltip.options.bodyFont.string;
+  };
+
+  myChart.innerHTML = "";
+  chart = new Chart(myChart, {
+    type: 'line',
+    data: {
+      labels: dateArray,
+      datasets: [{
+        label: 'CO2',
+        data: co2Array,
+        borderWidth: 3,
+        pointStyle: 'dot',
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        borderColor: "gray",
+        backgroundColor: "gray",
+      },{
+        label: 'O2',
+        data: o2Array,
+        borderWidth: 3,
+        pointStyle: 'dot',
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        borderColor: "#eb1e4b",
+        backgroundColor: "#eb1e4b",
+      },{
+        label: 'Température',
+        data: tempArray,
+        borderWidth: 3,
+        pointStyle: 'dot',
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        borderColor: "#f06937",
+        backgroundColor: "#f06937",
+      },{
+        label: 'Humidité',
+        data: humArray,
+        borderWidth: 3,
+        pointStyle: 'dot',
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        borderColor: "#2d969b",
+        backgroundColor: "#2d969b",
+      },{
+        label: 'Luminosité',
+        data: lumArray,
+        borderWidth: 3,
+        pointStyle: 'dot',
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        borderColor: "#f5dc50",
+        backgroundColor: "#f5dc50",
+      }]
+    },
+    options: {
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        axis: 'x'
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        },
+      },
+      plugins: {
+        tooltipLine,
+        tooltip: {
+          enabled: false,
+          position: 'average',
+          external: externalTooltipHandler
+        },
+      }
+    },
+    plugins: [tooltipLine],
+  });
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCampaign">addCampaign</a></li><li><a href="global.html#addValuesChart">addValuesChart</a></li><li><a href="global.html#alternativeLogin">alternativeLogin</a></li><li><a href="global.html#checkTime">checkTime</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#dateToRemainingString">dateToRemainingString</a></li><li><a href="global.html#dateToStandardString">dateToStandardString</a></li><li><a href="global.html#dateToString">dateToString</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#displayConfirm">displayConfirm</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayHide">displayHide</a></li><li><a href="global.html#displayLoading">displayLoading</a></li><li><a href="global.html#displayQRCode">displayQRCode</a></li><li><a href="global.html#displaySuccess">displaySuccess</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadQRCode">downloadQRCode</a></li><li><a href="global.html#editConfiguration">editConfiguration</a></li><li><a href="global.html#exportCampaign">exportCampaign</a></li><li><a href="global.html#filterCampaigns">filterCampaigns</a></li><li><a href="global.html#filterConfigurations">filterConfigurations</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getCampaignMeasurements">getCampaignMeasurements</a></li><li><a href="global.html#getConfigurations">getConfigurations</a></li><li><a href="global.html#getListCampaignJS">getListCampaignJS</a></li><li><a href="global.html#getListConfigJS">getListConfigJS</a></li><li><a href="global.html#getReadableBool">getReadableBool</a></li><li><a href="global.html#getReadableTime">getReadableTime</a></li><li><a href="global.html#getReadableTimeAndUnit">getReadableTimeAndUnit</a></li><li><a href="global.html#getSettings">getSettings</a></li><li><a href="global.html#getStorageCapacity">getStorageCapacity</a></li><li><a href="global.html#goToForm1">goToForm1</a></li><li><a href="global.html#goToForm2">goToForm2</a></li><li><a href="global.html#goToForm3">goToForm3</a></li><li><a href="global.html#goToHelpPage">goToHelpPage</a></li><li><a href="global.html#handleKeyPressSearchBar">handleKeyPressSearchBar</a></li><li><a href="global.html#hideConfirm">hideConfirm</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#hideLoading">hideLoading</a></li><li><a href="global.html#hideSuccess">hideSuccess</a></li><li><a href="global.html#initChart">initChart</a></li><li><a href="global.html#loadConfiguration">loadConfiguration</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#next">next</a></li><li><a href="global.html#nodeJsDownload">nodeJsDownload</a></li><li><a href="global.html#nodeJsGet">nodeJsGet</a></li><li><a href="global.html#openPopup">openPopup</a></li><li><a href="global.html#phpDownload">phpDownload</a></li><li><a href="global.html#phpGet">phpGet</a></li><li><a href="global.html#phpPost">phpPost</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#predictStoreUsage">predictStoreUsage</a></li><li><a href="global.html#prepareAddPopup">prepareAddPopup</a></li><li><a href="global.html#previous">previous</a></li><li><a href="global.html#removeConfig">removeConfig</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetFilter">resetFilter</a></li><li><a href="global.html#restartCampaign">restartCampaign</a></li><li><a href="global.html#saveConfiguration">saveConfiguration</a></li><li><a href="global.html#setPassword">setPassword</a></li><li><a href="global.html#setSecurityQuestions">setSecurityQuestions</a></li><li><a href="global.html#setSettings">setSettings</a></li><li><a href="global.html#setTime">setTime</a></li><li><a href="global.html#showHelpPanel">showHelpPanel</a></li><li><a href="global.html#stopCampaign">stopCampaign</a></li><li><a href="global.html#subscribeRefresh">subscribeRefresh</a></li><li><a href="global.html#swiffyslider">swiffyslider</a></li><li><a href="global.html#tryRemoveCampaign">tryRemoveCampaign</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Apr 15 2024 22:19:11 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

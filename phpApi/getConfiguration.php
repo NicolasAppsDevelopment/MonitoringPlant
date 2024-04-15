@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * @file
+ * Get the configuration data.
+ *
+ * @URL /phpApi/getConfiguration.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "id" : int }
+ *     - id : The configuration identifier.
+ * @RETURNS { "id": int, "name": string, "f1": float, "m": float, "dPhi1": float, "dPhi2": float, "dKSV1": float, "dKSV2": float, "cal0": float, "cal2nd": float, "t0": float, "t2nd": float, "pressure": int, "o2cal2nd": int, "altitude": int, "calibIsHumid": bool } with 200 error code if the configuration has been added successfully.
+ */
+
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';
 

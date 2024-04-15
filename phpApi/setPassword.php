@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * @file
+ * Define the password for the admin.
+ * Client must be an admin to perform this action.
+ * If the admin is not defined, this action will register the admin.
+ *
+ * @URL /phpApi/setPassword.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "password": string }
+ * @RETURNS { "success" : true, data: { "redirect": string }} with 200 error code if the password is set.
+ *       - redirect : the page to redirect to after the password is set.
+ */
+
 include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';
 include_once '../include/RequestReplySender.php';

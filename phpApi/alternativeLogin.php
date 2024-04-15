@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Verify the answers to the security questions and log in as an administrator.
+ *
+ * @URL /phpApi/alternativeLogin.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "question1" : string, "response1" : string, "question2" : string, "response2" : string, "question3" : string, "response3" : string }
+ * @RETURNS { "success": true } in case of success
+ */
+
 include_once '../include/Session.php';
 include_once '../include/RequestReplySender.php';
 include_once '../include/SettingsManager.php';

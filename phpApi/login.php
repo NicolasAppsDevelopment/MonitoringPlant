@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Check and login a user to the application.
+ *
+ * @URL /phpApi/login.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "password": string }
+ * @RETURNS { "success": true } with 200 error code if the login is successful.
+ */
+
 include_once '../include/Session.php';
 include_once '../include/RequestReplySender.php';
 

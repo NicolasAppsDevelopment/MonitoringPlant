@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * @file
+ * Get all the data of a measurement campaign (log, measurements, config, ...).
+ *
+ * @URL /phpApi/getCampaign.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "id" : int, "lastLogDatetime" : string, "lastMeasureDatetime" : string }
+ *     - id : The identifier of the measurement campaign.
+ *     - lastLogDatetime : Date from where to get the logs. If not provided, all logs will be returned.
+ *     - lastMeasureDatetime : Date from where to get the measurements. If not provided, all measurements will be returned.
+ * @RETURNS { "id": int, "title": string, "description": string, "startDate": string, "endDate": string, "logs": [ { "id": int, "occuredDate": string, "message": string } ], "measurements": [ { "id": int, "date": string, "co2": float, "o2": float, "temperature": float, "luminosity": float, "humidity": float } ], "config": { "id": int, "name": string, "f1": float, "m": float, "dPhi1": float, "dPhi2": float, "dKSV1": float, "dKSV2": float, "cal0": float, "cal2nd": float, "t0": float, "t2nd": float, "pressure": int, "o2cal2nd": int, "altitude": int, "calibIsHumid": bool } } with 200 error code if the campaign has been added successfully.
+ */
+
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';
 

@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * @file
+ * Verify if the date of the measurement device is up to date regarding the client's device.
+ *
+ * @URL /phpApi/checkTime.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "client_datetime" : string }
+ *     - client_datetime : The date and time of the client's device in the format "YYYY-MM-DD HH:MM:SS".
+ * @RETURNS { "up_to_date": bool }
+ *     - up_to_date : True if the device's date is up to date with the client's date.
+ */
+
 include_once '../include/RequestReplySender.php';
 
 $reply = RequestReplySender::getInstance();
