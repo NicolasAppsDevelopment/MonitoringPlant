@@ -139,7 +139,6 @@ export default class Database {
     /**
      * Updates the ending date of the campaign in the database
      * @param idCampaign The id of the campaign to update
-     * @param duration In how many seconds the campaign will end
      * @throws Error if the connection is not defined or if the query failed
      */
     async updateEndingDatePrediction(idCampaign:number){

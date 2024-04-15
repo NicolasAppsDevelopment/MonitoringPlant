@@ -51,7 +51,7 @@ export default class RunCampaign {
 
     /**
      * Initialises and starts a campaign runner with parameters retrieved from the database from a specific campaign id.
-     * @param currentCampaignId number - id of the campaign to start
+     * @param campaignId number - id of the campaign to start
      */
     async initCampaign(campaignId:number){
         if(this.isCampaignRunning){

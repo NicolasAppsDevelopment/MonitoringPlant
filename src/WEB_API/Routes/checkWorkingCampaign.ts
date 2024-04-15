@@ -1,15 +1,16 @@
+/**
+ * Returns the current campaign id if a campaign is running (null otherwise).
+ * 
+ * URL : /checkWorkingCampaign
+ * METHOD : GET
+ * RETURNS :
+ *      - success : true if the campaign is running
+ *      - idCurrent : the id of the current campaign
+ */
+
 import { Express, Request, Response } from 'express';
 import { campaignRunner } from '../../Campaign/RunCampaign';
 
-/*
-    URL : /checkWorkingCampaign
-    METHOD : GET
-
-    DESCRIPTION : Returns the current campaign id if a campaign is running (null otherwise).
-    RETURNS :
-        - success : true if the campaign is running
-        - idCurrent : the id of the current campaign
-*/
 module.exports = function(app: Express){
     app.get('/checkWorkingCampaign', async (req: Request, res: Response) => {
         try {
