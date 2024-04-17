@@ -12,7 +12,7 @@ Notre projet est divisé en 4 parties :
 
 Chaque parties se trouvent sur sa branche correspondante.
 
-![Schéma du projet](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/)
+![Schéma du projet](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/blob/9202aca6f620f5be9e91dde6cf449de781c9efcf/schema.png)
 
 ## L'API NodeJS
 
