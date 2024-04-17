@@ -4,6 +4,7 @@ Ce programme est utilisé en tant qu'API REST pour faire fonctionner notre proje
 # Installer
 - Commencez par installer NPM et NODE.JS sur le Raspberry Pi.
 - Avant de lancer le programme, installer les librairies Node.JS avec `npm install` (à faire dans le répertoire du projet).
+- Vous devez executer le programme au démarrage du Raspberry Pi, vous pouvez faire cela en créant un nouveau service sur Linux.
 
 # Lancement/débuggage
 - `npm run dev` to compile and run the script
