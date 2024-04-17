@@ -7,9 +7,9 @@ Ce programme est utilisé en tant qu'API REST pour faire fonctionner notre proje
 - Vous devez executer le programme au démarrage du Raspberry Pi, vous pouvez faire cela en créant un nouveau service sur Linux.
 
 # Lancement/débuggage
-- `npm run dev` to compile and run the script
-- `npm run start` to start the script
-- `npm run build` to compile
+- `npm run dev` pour compiler et executer le script
+- `npm run start` pour executer le script
+- `npm run build` pour compiler le script
 
 # Documentation
 Pour retrouver la documentation générée dans des pages HTML, rendez-vous dans le dossier `docs`.
