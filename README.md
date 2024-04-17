@@ -6,8 +6,8 @@
 Notre projet est divisé en 4 parties :
 
 - L'API NodeJS
-- Le daemon driver
-- Le site web
+- Le daemon driver (module de mesure)
+- Le site web et l'API PHP
 - La base de données
 
 Chaque parties se trouvent sur sa branche correspondante.
@@ -24,7 +24,7 @@ Les fichiers de sauvegarde se trouvent dans la branche [API-NodeJS](https://iutb
 Service en C/C++ qui tourne sur le Raspberry Pi, il correspond à l'API de communication bas niveau avec les capteurs.
 Les fichiers de code se trouvent dans la branche [Daemon_driver](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/Daemon_driver).
 
-## Le site web
+## Le site web et API PHP
 
 Hébergé par Apache sur le Raspberry Pi, le site web fait office d'interface (graphique) entre les API et l'utilisateur.
 Les fichiers de code se trouvent dans la branche [Website](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/Website).
