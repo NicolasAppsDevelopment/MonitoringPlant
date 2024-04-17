@@ -1,15 +1,15 @@
 import { Express, Request, Response } from 'express';
 import * as fs from 'fs';
 
-/*
-    URL : /setAccessPoint
-    METHOD : POST
-    CORPS : {"ssid": "Cellule de mesure", "password": "test1234"} (ssid or password can be not defined)
-    CONTENT-TYPE : application/json
-    AUTHORIZATION : API_TOKEN (defined in the .env file)
-
-    DESCRIPTION : Sets the ssid and/or password of the current access point.
-*/
+/**
+ * URL : /setAccessPoint
+ * METHOD : POST
+ * CORPS : {"ssid": "Cellule de mesure", "password": "test1234"} (ssid or password can be not defined)
+ * CONTENT-TYPE : application/json
+ * AUTHORIZATION : API_TOKEN (defined in the .env file)
+ *
+ * DESCRIPTION : Sets the ssid and/or password of the current access point.
+ */
 module.exports = function(app: Express){
     app.post('/setAccessPoint', async (req: Request, res: Response) => {
         try {

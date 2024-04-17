@@ -1,16 +1,16 @@
 import { Express, Request, Response } from 'express';
 import * as fs from 'fs';
 
-/*
-    URL : /getAccessPoint
-    METHOD : GET
-
-    DESCRIPTION : Returns the ssid and password of the current access point.
-    RETURNS :
-        - success : true if the ssid and password were retrieved successfully
-        - ssid : the ssid of the current access point
-        - password : the password of the current access point
-*/
+/**
+ * URL : /getAccessPoint
+ * METHOD : GET
+ *
+ * DESCRIPTION : Returns the ssid and password of the current access point.
+ * RETURNS :
+ *      - success : true if the ssid and password were retrieved successfully
+ *      - ssid : the ssid of the current access point
+ *      - password : the password of the current access point
+ */
 module.exports = function(app: Express){
     app.get('/getAccessPoint', async (req: Request, res: Response) => {
         try {

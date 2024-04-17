@@ -1,15 +1,15 @@
 import { Express, Request, Response } from 'express';
 import { campaignRunner } from '../../Campaign/RunCampaign';
 
-/*
-    URL : /redoCampaign
-    METHOD : POST
-    CORPS : {"id": 69}
-    CONTENT-TYPE : application/json
-    AUTHORIZATION : API_TOKEN (defined in the .env file)
-
-    DESCRIPTION : Restarts a campaign specified with the given id reffering to an existing campaign stored in the database.
-*/
+/**
+ * URL : /redoCampaign
+ * METHOD : POST
+ * CORPS : {"id": 69}
+ * CONTENT-TYPE : application/json
+ * AUTHORIZATION : API_TOKEN (defined in the .env file)
+ *
+ * DESCRIPTION : Restarts a campaign specified with the given id reffering to an existing campaign stored in the database.
+ */
 module.exports = function(app: Express){
     app.post('/redoCampaign', async (req: Request, res: Response) => {
         try {

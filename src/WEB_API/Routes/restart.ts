@@ -2,15 +2,15 @@ import { Express, Request, Response } from 'express';
 import { exec } from "child_process";
 import { logger } from "../../Logger/LoggerManager";
 
-/*
-    URL : /restart
-    METHOD : POST
-    CORPS : {}
-    CONTENT-TYPE : application/json
-    AUTHORIZATION : API_TOKEN (defined in the .env file)
-
-    DESCRIPTION : Restarts the Raspberry Pi.
-*/
+/**
+ * URL : /restart
+ * METHOD : POST
+ * CORPS : {}
+ * CONTENT-TYPE : application/json
+ * AUTHORIZATION : API_TOKEN (defined in the .env file)
+ *
+ * DESCRIPTION : Restarts the Raspberry Pi.
+ */
 module.exports = function(app: Express){
     app.post('/restart', async (req: Request, res: Response) => {
         try {

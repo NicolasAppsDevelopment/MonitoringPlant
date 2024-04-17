@@ -1,15 +1,15 @@
 import { Express, Request, Response } from 'express';
 import { campaignRunner } from '../../Campaign/RunCampaign';
 import { logger } from '../../Logger/LoggerManager';
-/*
-    URL : /stopCampaign
-    METHOD : POST
-    CORPS : {"id": 69}
-    CONTENT-TYPE : application/json
-    AUTHORIZATION : API_TOKEN (defined in the .env file)
-
-    DESCRIPTION : Stops a campaign currently running with the given id reffering to an existing campaign stored in the database.
-*/
+/**
+ * URL : /stopCampaign
+ * METHOD : POST
+ * CORPS : {"id": 69}
+ * CONTENT-TYPE : application/json
+ * AUTHORIZATION : API_TOKEN (defined in the .env file)
+ *
+ * DESCRIPTION : Stops a campaign currently running with the given id reffering to an existing campaign stored in the database.
+ */
 module.exports = function(app: Express){
     app.post('/stopCampaign', async (req: Request, res: Response) => {
         try {

@@ -1,3 +1,6 @@
+import { Express, Request, Response } from 'express';
+import { campaignRunner } from '../../Campaign/RunCampaign';
+
 /**
  * Returns the current campaign id if a campaign is running (null otherwise).
  * 
@@ -7,10 +10,6 @@
  *      - success : true if the campaign is running
  *      - idCurrent : the id of the current campaign
  */
-
-import { Express, Request, Response } from 'express';
-import { campaignRunner } from '../../Campaign/RunCampaign';
-
 module.exports = function(app: Express){
     app.get('/checkWorkingCampaign', async (req: Request, res: Response) => {
         try {

@@ -2,18 +2,18 @@ import { Express, Request, Response } from 'express';
 import { exec } from "child_process";
 import { logger } from "../../Logger/LoggerManager";
 
-/*
-    URL : /storage
-    METHODE : GET
-
-    DESCRIPTION : getting total storage and storage left from the Raspberry Pi.
-    RETURNS : 
-        - success : true if the storage was retrieved successfully
-        - data : 
-            - used : the storage used in KB
-            - total : the total storage in KB
-            - maxHours : the maximum number of hours that can be recorded on the Raspberry P
-*/
+/**
+ * URL : /storage
+ * METHODE : GET
+ *
+ * DESCRIPTION : getting total storage and storage left from the Raspberry Pi.
+ * RETURNS : 
+ *      - success : true if the storage was retrieved successfully
+ *      - data : 
+ *          - used : the storage used in KB
+ *          - total : the total storage in KB
+ *          - maxHours : the maximum number of hours that can be recorded on the Raspberry P
+ */
 module.exports = function(app: Express){
     app.get('/storage', async (req: Request, res: Response) => {
         try {
