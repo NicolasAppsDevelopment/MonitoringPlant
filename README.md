@@ -3,7 +3,7 @@ Cette branche contient la partie API PHP du projet et le site web faisant office
 
 # Installer
 - Pensez à installer la librairie CURL de PHP : `sudo apt-get install php-curl`
-- Pensez à vérifier que les extentions PHP suivantes sont actives (dans le fichier `php.ini`) et installé :
+- Pensez à vérifier que les extensions PHP suivantes sont actives (dans le fichier `php.ini`) et installées :
     - `php_pdo`
     - `mbstring`
     - `iconv`
@@ -11,7 +11,7 @@ Cette branche contient la partie API PHP du projet et le site web faisant office
 
 # Documentation
 ## PHP
-Pour acceder à la documentation de la partie PHP, une version HTML de la documentation peut être trouvé dans le dossier `.phpdoc/build`
+Pour accéder à la documentation de la partie PHP, une version HTML de la documentation peut être trouvée dans le dossier `.phpdoc/build`
 
 ## JavaScript
-Pour acceder à la documentation de la partie JS, une version HTML de la documentation peut être trouvé dans le dossier `.jsdoc`
+Pour accéder à la documentation de la partie JS, une version HTML de la documentation peut être trouvée dans le dossier `.jsdoc`
