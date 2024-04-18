@@ -22,7 +22,7 @@ Les fichiers de sauvegarde se trouvent dans la branche [API-NodeJS](https://iutb
 ## Le daemon driver
 
 Service en C/C++ qui tourne sur le Raspberry Pi, il correspond à l'API de communication bas niveau avec les capteurs.
-Les fichiers de code se trouvent dans la branche [Daemon_driver](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/Daemon_driver).
+Les fichiers de codes se trouvent dans la branche [Daemon_driver](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/Daemon_driver).
 
 ## Le site web et API PHP
 
@@ -32,4 +32,4 @@ Les fichiers de code se trouvent dans la branche [Website](https://iutbg-gitlab.
 ## La base de données
 
 Hébergé par MariaDB sur le Raspberry Pi, utilisé dans le projet.
-Les fichiers de code SQL et diagramme de classe se trouvent dans la branche [BD](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/BD).
+Les fichiers de codes SQL et diagrammes de classe se trouvent dans la branche [BD](https://iutbg-gitlab.iutbourg.univ-lyon1.fr/2023-2024-sae-but2/monitoring-plante/-/tree/BD).
