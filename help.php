@@ -68,22 +68,22 @@
                     <div>
                         <a class="help-question-card" onclick="goToHelpPage(4, event)">
                             <h2 class="help-question-card-title">
-                                C'est quoi une campagne de mesure ?
+                                C'est quoi une campagne de mesures ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(6, event)">
                             <h2 class="help-question-card-title">
-                                Comment créer une nouvelle campagne de mesure ?
+                                Comment créer une nouvelle campagne de mesures ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(17, event)">
                             <h2 class="help-question-card-title">
-                                Comment supprimer une campagne de mesure ?
+                                Comment supprimer une campagne de mesures ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(9, event)">
                             <h2 class="help-question-card-title">
-                                Comment rechercher une campagne de mesure précise ?
+                                Comment rechercher une campagne de mesures précise ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(11, event)">
@@ -98,12 +98,12 @@
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(20, event)">
                             <h2 class="help-question-card-title">
-                                Comment redémmarer mes mesures ?
+                                Comment redémarrer mes mesures ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(22, event)">
                             <h2 class="help-question-card-title">
-                                Comment modifier les paramètres de ma campagne de mesure ?
+                                Comment modifier les paramètres de ma campagne de mesures ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(14, event)">
@@ -136,27 +136,27 @@
                     <div>
                         <a class="help-question-card" onclick="goToHelpPage(28, event)">
                             <h2 class="help-question-card-title">
-                                Comment je peux supprimer automatiquement les mesures après un certain temps ?
+                                Comment puis-je supprimer automatiquement les mesures après un certain temps ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(29, event)">
                             <h2 class="help-question-card-title">
-                                Comment je peux modifier le nom ou le mot de passe du Wi-Fi de l'appareil ?
+                                Comment puis-je modifier le nom ou le mot de passe du Wi-Fi de l'appareil ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(34, event)">
                             <h2 class="help-question-card-title">
-                                Comment je peux modifier le mot de passe de mon espace administrateur ?
+                                Comment puis-je modifier le mot de passe de mon espace administrateur ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(32, event)">
                             <h2 class="help-question-card-title">
-                                Comment je peux modifier les questions de sécurité de mon espace administrateur ?
+                                Comment puis-je modifier les questions de sécurité ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(35, event)">
                             <h2 class="help-question-card-title">
-                                Comment je peux supprimer toutes les données et paramètres de mon appareil de mesure ?
+                                Comment puis-je supprimer toutes les données et paramètres de mon appareil de mesure ?
                             </h2>
                         </a>
                     </div>
@@ -189,7 +189,7 @@
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(25, event)">
                             <h2 class="help-question-card-title">
-                                Comment mofifier une calibration ?
+                                Comment modifier une calibration ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(26, event)">
@@ -217,22 +217,22 @@
                     <div>
                     <a class="help-question-card" onclick="goToHelpPage(37, event)">
                             <h2 class="help-question-card-title">
-                                Comment je fais pour me connecter à mon espace administrateur ?
+                                Comment puis-je me connecter à mon espace administrateur ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(37, event)">
                             <h2 class="help-question-card-title">
-                                Comment je fais pour me connecter à mon espace administrateur si j'ai oublié mon mot de passe ?
+                                Comment puis-je pour me connecter à mon espace administrateur si j'ai oublié mon mot de passe ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(30, event)">
                             <h2 class="help-question-card-title">
-                                Comment je fais pour accéder à l'appareil de mesure ?
+                                Comment puis-je accéder à l'appareil de mesure ?
                             </h2>
                         </a>
                         <a class="help-question-card" onclick="goToHelpPage(30, event)">
                             <h2 class="help-question-card-title">
-                                Comment se connecter via une code QR à l'appareil de mesure ?
+                                Comment puis-je me connecter via un code QR à l'appareil de mesure ?
                             </h2>
                         </a>
                     </div>
