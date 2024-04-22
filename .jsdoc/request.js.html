@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: request.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: request.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// You must include popup.js file in the page if you want to use this file
+
+const API_IP_ADDRESS = "192.168.4.1";
+const PHP_API_PORT = "80";
+const NODEJS_API_PORT = "1881";
+
+/**
+ * Sends a POST request to retrieve data from an URL address and the data retrieval depends on the settings.
+ * @param {string} url Where the data are
+ * @param {any} settings Data recovery settings
+ * @param {boolean} [retrieveJSON=true] If true, the returned data will be in json format. If false, the returned data will be in Blob format.
+ * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
+ */
+async function post(url, settings, retrieveJSON = true) {
+    try {
+        const response = await fetch(url, {
+            method: 'post',
+            body: JSON.stringify(settings),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 200) {
+            if (retrieveJSON) {
+                let res = await response.json();
+                if (res["success"]) {
+                    if (res["data"] != undefined) {
+                        return res["data"];
+                    }
+                    return res;
+                } else {
+                    displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
+                }
+            } else {
+                let data = await response.blob();
+                return data;
+            }
+        } else {
+            let res = await response.json();
+            displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
+        }
+    } catch (e) {
+        displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
+    }
+
+    return null;
+}
+
+/**
+ * Sends a GET request to retrieve data from an url address.
+ * @param {string} url Where the data are
+ * @param {boolean} [retrieveJSON=true] If true, the returned data will be in json format. If false, the returned data will be a Blob object.
+ * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
+ */
+async function get(url, retrieveJSON = true) {
+    try {
+        const response = await fetch(url, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.status === 200) {
+            if (retrieveJSON) {
+                let res = await response.json();
+                if (res["success"]) {
+                    if (res["data"] != undefined) {
+                        return res["data"];
+                    }
+                    return res;
+                } else {
+                    displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
+                }
+            } else {
+                let data = await response.blob();
+                return data;
+            }
+        } else {
+            let res = await response.json();
+            displayError(res["error"]["title"], "La requête a retourné une erreur... " + res["error"]["message"]);
+        }
+    } catch (e) {
+        displayError("Erreur d'émission/réception de la requête", "La requête vers l'adresse \"" + url + "\" n'a pas pu être émise/reçu correctement... " + e.toString());
+    }
+
+    return null;
+}
+
+/**
+ * Download a file from an url address linked to an URL (with POST settings if provided).
+ * @param {string} filename Name of the file to download
+ * @param {string} url Where the data are
+ * @param {any} [settings=null] POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @returns {boolean} True if the download has been launched, false in case of error
+ */
+async function downloadFile(filename, url, settings = null) {
+    let data = null;
+    if (settings == null) {
+        data = await get(url, false);
+    } else {
+        data = await post(url, settings, false);
+    }
+
+    if (data != null) {
+        const url = window.URL.createObjectURL(data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Sends a request to retrieve JSON data from an url address linked to a php file and the data retrieval depends on the settings.
+ * @param {string} url Where the data are
+ * @param {any} settings Data recovery settings
+ * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function phpPost(url, settings) {
+    return await post("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + "/" + url, settings);
+}
+
+/**
+ * Sends a request to retrieve JSON data from an url address linked to a php file.
+ * @param {string} url Where the data are
+ * @returns {(any|null)} Response from the location where the data are. Null if the request is not sent or not received at the url address, json if the request is sent and received. Json contains data from the url address.
+ */
+async function phpGet(url) { 
+    return await get("http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + "/" + url);
+}
+
+/**
+ * Sends a request to retrieve JSON data from an url address linked to a NodeJS WEB API path.
+ * @param {string} url Where the data are
+ * @param {boolean} [retrieveJSON=true] If true, the returned data will be in json format. If false, the returned data will be a Blob object.
+ * @returns {(any|Blob|null)} Response from the location where the data are. Null if a communication error occurs, blob or json if the request is sent and received (even if the request is not successful the server reply a JSON error).
+ */
+async function nodeJsGet(url, retrieveJSON = true) { 
+    return await get("http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/" + url, retrieveJSON);
+}
+
+/**
+ * Download a file from an url address linked to a php file.
+ * @param {string} filename Name of the file to download
+ * @param {string} url Where the data are
+ * @param {any} [settings=null] POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @returns {boolean} True if the download has been launched, false in case of error
+ */
+async function phpDownload(filename, url, settings = null) {
+    return await downloadFile(filename, "http://" + API_IP_ADDRESS + ":" + PHP_API_PORT + "/" + url, settings);
+}
+
+/**
+ * Download a file from an url address linked to a NodeJS WEB API path.
+ * @param {string} filename Name of the file to download
+ * @param {string} url Where the data are
+ * @param {any} [settings=null] POST settings (if provided it will be a POST request, if not it will be a GET request)
+ * @returns {boolean} True if the download has been launched, false in case of error
+ */
+async function nodeJsDownload(filename, url, settings = null) {
+    return await downloadFile(filename, "http://" + API_IP_ADDRESS + ":" + NODEJS_API_PORT + "/" + url, settings);
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCampaign">addCampaign</a></li><li><a href="global.html#addValuesChart">addValuesChart</a></li><li><a href="global.html#alternativeLogin">alternativeLogin</a></li><li><a href="global.html#checkTime">checkTime</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#dateToRemainingString">dateToRemainingString</a></li><li><a href="global.html#dateToStandardString">dateToStandardString</a></li><li><a href="global.html#dateToString">dateToString</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#displayConfirm">displayConfirm</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayHide">displayHide</a></li><li><a href="global.html#displayLoading">displayLoading</a></li><li><a href="global.html#displayQRCode">displayQRCode</a></li><li><a href="global.html#displaySuccess">displaySuccess</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadQRCode">downloadQRCode</a></li><li><a href="global.html#editConfiguration">editConfiguration</a></li><li><a href="global.html#exportCampaign">exportCampaign</a></li><li><a href="global.html#filterCampaigns">filterCampaigns</a></li><li><a href="global.html#filterConfigurations">filterConfigurations</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getCampaignMeasurements">getCampaignMeasurements</a></li><li><a href="global.html#getConfigurations">getConfigurations</a></li><li><a href="global.html#getListCampaignJS">getListCampaignJS</a></li><li><a href="global.html#getListConfigJS">getListConfigJS</a></li><li><a href="global.html#getReadableBool">getReadableBool</a></li><li><a href="global.html#getReadableTime">getReadableTime</a></li><li><a href="global.html#getReadableTimeAndUnit">getReadableTimeAndUnit</a></li><li><a href="global.html#getSettings">getSettings</a></li><li><a href="global.html#getStorageCapacity">getStorageCapacity</a></li><li><a href="global.html#goToForm1">goToForm1</a></li><li><a href="global.html#goToForm2">goToForm2</a></li><li><a href="global.html#goToForm3">goToForm3</a></li><li><a href="global.html#goToHelpPage">goToHelpPage</a></li><li><a href="global.html#handleKeyPressSearchBar">handleKeyPressSearchBar</a></li><li><a href="global.html#hideConfirm">hideConfirm</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#hideLoading">hideLoading</a></li><li><a href="global.html#hideSuccess">hideSuccess</a></li><li><a href="global.html#initChart">initChart</a></li><li><a href="global.html#loadConfiguration">loadConfiguration</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#next">next</a></li><li><a href="global.html#nodeJsDownload">nodeJsDownload</a></li><li><a href="global.html#nodeJsGet">nodeJsGet</a></li><li><a href="global.html#openPopup">openPopup</a></li><li><a href="global.html#phpDownload">phpDownload</a></li><li><a href="global.html#phpGet">phpGet</a></li><li><a href="global.html#phpPost">phpPost</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#predictStoreUsage">predictStoreUsage</a></li><li><a href="global.html#prepareAddPopup">prepareAddPopup</a></li><li><a href="global.html#previous">previous</a></li><li><a href="global.html#removeConfig">removeConfig</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetFilter">resetFilter</a></li><li><a href="global.html#restartCampaign">restartCampaign</a></li><li><a href="global.html#saveConfiguration">saveConfiguration</a></li><li><a href="global.html#setPassword">setPassword</a></li><li><a href="global.html#setSecurityQuestions">setSecurityQuestions</a></li><li><a href="global.html#setSettings">setSettings</a></li><li><a href="global.html#setTime">setTime</a></li><li><a href="global.html#showHelpPanel">showHelpPanel</a></li><li><a href="global.html#stopCampaign">stopCampaign</a></li><li><a href="global.html#subscribeRefresh">subscribeRefresh</a></li><li><a href="global.html#swiffyslider">swiffyslider</a></li><li><a href="global.html#tryRemoveCampaign">tryRemoveCampaign</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Apr 15 2024 22:19:11 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

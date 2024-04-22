@@ -40,7 +40,6 @@ async function getSettings()
 /**
  * Sends a request to the server to update the settings.
  * If the password or ssid has been changed, a confirmation message will be displayed to the user.
- * @returns {Promise<void>}
  */
 async function setSettings()
 {

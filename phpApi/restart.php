@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Transmit a restart command to the microcontroller with the Node.JS/PHP token.
+ * Client must be an admin to perform this action.
+ *
+ * @URL /phpApi/restart.php
+ * @METHOD GET
+ * @CONTENT-TYPE application/json
+ * @RETURNS No reply from the microcontroller (it will restart). Only an error if the user is not an admin or restart command failed.
+ */
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/Session.php';
 include_once '../include/RequestReplySender.php';

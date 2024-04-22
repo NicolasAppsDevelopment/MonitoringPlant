@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * @file
+ * Save the measurement device settings in the database and apply network settings with Node.JS API.
+ *
+ * @URL /phpApi/setSettings.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "timeConservation": number, "timeConservationUnit": string, "enableAutoRemove": boolean, "ssid": string, "password": string }
+ *      - timeConservation : The time interval for deleting campaigns.
+ *      - timeConservationUnit : The unit of the time interval for deleting campaigns.
+ *      - enableAutoRemove : The state of automatic deletion.
+ *      - ssid : The name of the Wi-Fi network.
+ *      - password : The password of the Wi-Fi network.
+ * @RETURNS { "success": true } with 200 error code if the settings have been saved successfully.
+ */
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';

@@ -52,7 +52,7 @@ class Database {
     {
         $dsn = "mysql:dbname=phase1;host=localhost;port=3306";
         $user = "quentin";
-        $password = "password";
+        $password = "fleur12345@qtn!";
 
         try {
             return new PDO($dsn, $user, $password);

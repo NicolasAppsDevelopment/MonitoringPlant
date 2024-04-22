@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Disconnect a user from the application.
+ *
+ * @URL /phpApi/logout.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY {}
+ * @RETURNS { "success": true } with 200 error code if the disconnection is successful.
+ */
+
 include_once '../include/Session.php';
 include_once '../include/RequestReplySender.php';
 

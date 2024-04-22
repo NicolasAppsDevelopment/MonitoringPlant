@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Transmit the stop campaign request to the Node.JS API with the Node.JS/PHP token.
+ *
+ * @URL /phpApi/stopCampaign.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/json
+ * @BODY { "id": int }
+ * @RETURNS { "success": true } with 200 error code if the campaign has been stopped successfully.
+ */
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/RequestReplySender.php';
 

@@ -1,8 +1,8 @@
 /**
  * Transforms a Javascript Date into a string with the format : "day/month/year hour:minute:second" or "day/month/year à hour:minute:second" or "day/month/year hour:minute" or  "day/month/year à hour:minute"
  * @param {Date} date date in JavaScript format
- * @param {boolean} separatorDateTime If true, the returned string will contain the "à" character between the day/month/year and the hour:minute:second.
- * @param {boolean} display_seconds If true, the returned string will contain the seconds part.
+ * @param {boolean} [separatorDateTime=true] If true, the returned string will contain the "à" character between the day/month/year and the hour:minute:second.
+ * @param {boolean} [display_seconds=false] If true, the returned string will contain the seconds part.
  * @returns {String} date with the format : "day/month/year hour:minute:second" or "day/month/year à hour:minute:second" or "day/month/year hour:minute" or  "day/month/year à hour:minute"
  */
 function dateToString(date, separatorDateTime = true, display_seconds = false) {

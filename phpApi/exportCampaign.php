@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * @file
+ * Export a campaign's measurements to a CSV file.
+ *
+ * @URL /phpApi/exportCampaign.php
+ * @METHOD POST
+ * @CONTENT-TYPE application/csv
+ * @BODY { "id" : int, "co2Enabled" : bool, "o2Enabled" : bool, "temperatureEnabled" : bool, "luminosityEnabled" : bool, "humidityEnabled" : bool, "interval" : int, "intervalUnit" : string, "averaging" : bool, "startDate" : string, "endDate" : string, "startTime" : string, "endTime" : string, "volume" : bool, "exportConfig" : bool }
+ *    - id : the identifier of the campaign.
+ *    - co2Enabled : true if the CO2 sensor is enabled, false otherwise.
+ *    - o2Enabled : true if the O2 sensor is enabled, false otherwise.
+ *    - temperatureEnabled : true if the temperature sensor is enabled, false otherwise.
+ *    - luminosityEnabled : true if the luminosity sensor is enabled, false otherwise.
+ *    - humidityEnabled : true if the humidity sensor is enabled, false otherwise.
+ *    - interval : the interval between each measurement.
+ *    - intervalUnit : the unit of the interval (s, min, h, j).
+ *    - averaging : true if the values must be averaged, false otherwise.
+ *    - startDate : the start date of the measurements.
+ *    - endDate : the end date of the measurements.
+ *    - startTime : the start time of the measurements.
+ *    - endTime : the end time of the measurements.
+ *    - volume : true if the gas values must be converted to volume, false otherwise.
+ *    - exportConfig : true if the configuration must be exported in the CSV, false otherwise.
+ * @RETURNS a CSV file with the measurements of the campaign.
+ */
+
 include_once '../include/CampaignsManager.php';
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';

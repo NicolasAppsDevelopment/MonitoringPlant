@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * @file
+ * List all configurations (with a filter if needed use a POST request with the specific body).
+ *
+ * @URL /phpApi/getListConfiguration.php
+ * @METHOD GET or POST
+ * @CONTENT-TYPE application/json
+ * BODY (only for a POST request) : { "name" : string }
+ *   - name : The name of the searched configuration.
+ * @RETURNS { "id": int, "name": string, "f1": float, "m": float, "dPhi1": float, "dPhi2": float, "dKSV1": float, "dKSV2": float, "cal0": float, "cal2nd": float, "t0": float, "t2nd": float, "pressure": int, "o2cal2nd": int, "altitude": int, "calibIsHumid": bool }[] with 200 error code if the configurations have been listed successfully.
+ */
+
 include_once '../include/ConfigurationsManager.php';
 include_once '../include/RequestReplySender.php';
 

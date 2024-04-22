@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * @file
+ * Transmit the restart campaign request to the Node.JS API with the Node.JS/PHP token.
+ * Client must be an admin to perform this action.
+ *
+ * @URL /phpApi/restartCampaign.php
+ * @METHOD POST
+ * @BODY { "id": int }
+ *     - id : The identifier of the campaign to restart.
+ * @RETURNS { "success": true } with 200 error code if the campaign has been restarted successfully.
+ */
+
 include_once '../include/ConfigManager.php';
 include_once '../include/CampaignsManager.php';
 include_once '../include/RequestReplySender.php';

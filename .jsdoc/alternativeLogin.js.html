@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: alternativeLogin.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: alternativeLogin.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let question1LabelComponent;
+let question2LabelComponent;
+let question3LabelComponent;
+let bar;
+
+document.addEventListener("DOMContentLoaded", async () => {  
+    displayLoading("Récupération des questions de sécurité...");
+    
+    question1LabelComponent = document.getElementById("question1");
+    question2LabelComponent = document.getElementById("question2");
+    question3LabelComponent = document.getElementById("question3");
+
+    bar = document.getElementsByClassName("progression_bar")[0];
+    bar.style.width="40%";
+
+    const data = await phpGet("phpApi/getSecurityQuestions.php");
+    if (data != null){
+        question1LabelComponent.innerHTML=data[0]["question"];
+        question2LabelComponent.innerHTML=data[1]["question"];
+        question3LabelComponent.innerHTML=data[2]["question"];
+    }
+
+    hideLoading();
+});
+
+
+
+/**
+ * Display the first form to answer the first security question.
+ */
+function goToForm1(){
+    document.getElementById("div_page3").classList.add("hidden");
+    document.getElementById("div_page2").classList.add("hidden");
+    bar.style.width="0%";
+    document.getElementById("div_page1").classList.remove("hidden");
+}
+
+/**
+ * Display the second form to answer the second security question.
+ */
+function goToForm2(){
+    document.getElementById("div_page3").classList.add("hidden");
+    document.getElementById("div_page1").classList.add("hidden");
+    bar.style.width="30%";
+    document.getElementById("div_page2").classList.remove("hidden");
+}
+
+/**
+ * Display the third form to answer the third security question.
+ */
+function goToForm3(){
+    document.getElementById("div_page1").classList.add("hidden");
+    document.getElementById("div_page2").classList.add("hidden");
+    bar.style.width="60%";
+    document.getElementById("div_page3").classList.remove("hidden");
+}
+
+/**
+ * Verifies that the responses match those defined by the administrator.
+ * Redirects to the list of campaigns if the responses are correct.
+ */
+async function alternativeLogin(){
+    displayLoading("Connexion...");
+
+    let response1 = document.getElementById("response1").value;
+    let response2 = document.getElementById("response2").value;
+    let response3 = document.getElementById("response3").value;
+    
+    const data = await phpPost("phpApi/alternativeLogin.php", {
+        "question1": question1LabelComponent.innerHTML,
+        "response1": response1,
+        "question2": question2LabelComponent.innerHTML,
+        "response2": response2,
+        "question3": question3LabelComponent.innerHTML,
+        "response3": response3
+    });
+    
+    
+    if (data != null){
+        window.location.href = "./listCampaign.php";
+        return;
+    }
+    
+    hideLoading();
+} </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCampaign">addCampaign</a></li><li><a href="global.html#addValuesChart">addValuesChart</a></li><li><a href="global.html#alternativeLogin">alternativeLogin</a></li><li><a href="global.html#checkTime">checkTime</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#dateToRemainingString">dateToRemainingString</a></li><li><a href="global.html#dateToStandardString">dateToStandardString</a></li><li><a href="global.html#dateToString">dateToString</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#displayConfirm">displayConfirm</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayHide">displayHide</a></li><li><a href="global.html#displayLoading">displayLoading</a></li><li><a href="global.html#displayQRCode">displayQRCode</a></li><li><a href="global.html#displaySuccess">displaySuccess</a></li><li><a href="global.html#downloadFile">downloadFile</a></li><li><a href="global.html#downloadQRCode">downloadQRCode</a></li><li><a href="global.html#editConfiguration">editConfiguration</a></li><li><a href="global.html#exportCampaign">exportCampaign</a></li><li><a href="global.html#filterCampaigns">filterCampaigns</a></li><li><a href="global.html#filterConfigurations">filterConfigurations</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getCampaignMeasurements">getCampaignMeasurements</a></li><li><a href="global.html#getConfigurations">getConfigurations</a></li><li><a href="global.html#getListCampaignJS">getListCampaignJS</a></li><li><a href="global.html#getListConfigJS">getListConfigJS</a></li><li><a href="global.html#getReadableBool">getReadableBool</a></li><li><a href="global.html#getReadableTime">getReadableTime</a></li><li><a href="global.html#getReadableTimeAndUnit">getReadableTimeAndUnit</a></li><li><a href="global.html#getSettings">getSettings</a></li><li><a href="global.html#getStorageCapacity">getStorageCapacity</a></li><li><a href="global.html#goToForm1">goToForm1</a></li><li><a href="global.html#goToForm2">goToForm2</a></li><li><a href="global.html#goToForm3">goToForm3</a></li><li><a href="global.html#goToHelpPage">goToHelpPage</a></li><li><a href="global.html#handleKeyPressSearchBar">handleKeyPressSearchBar</a></li><li><a href="global.html#hideConfirm">hideConfirm</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#hideLoading">hideLoading</a></li><li><a href="global.html#hideSuccess">hideSuccess</a></li><li><a href="global.html#initChart">initChart</a></li><li><a href="global.html#loadConfiguration">loadConfiguration</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#next">next</a></li><li><a href="global.html#nodeJsDownload">nodeJsDownload</a></li><li><a href="global.html#nodeJsGet">nodeJsGet</a></li><li><a href="global.html#openPopup">openPopup</a></li><li><a href="global.html#phpDownload">phpDownload</a></li><li><a href="global.html#phpGet">phpGet</a></li><li><a href="global.html#phpPost">phpPost</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#predictStoreUsage">predictStoreUsage</a></li><li><a href="global.html#prepareAddPopup">prepareAddPopup</a></li><li><a href="global.html#previous">previous</a></li><li><a href="global.html#removeConfig">removeConfig</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetFilter">resetFilter</a></li><li><a href="global.html#restartCampaign">restartCampaign</a></li><li><a href="global.html#saveConfiguration">saveConfiguration</a></li><li><a href="global.html#setPassword">setPassword</a></li><li><a href="global.html#setSecurityQuestions">setSecurityQuestions</a></li><li><a href="global.html#setSettings">setSettings</a></li><li><a href="global.html#setTime">setTime</a></li><li><a href="global.html#showHelpPanel">showHelpPanel</a></li><li><a href="global.html#stopCampaign">stopCampaign</a></li><li><a href="global.html#subscribeRefresh">subscribeRefresh</a></li><li><a href="global.html#swiffyslider">swiffyslider</a></li><li><a href="global.html#tryRemoveCampaign">tryRemoveCampaign</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Apr 15 2024 22:19:11 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -25,13 +25,13 @@
                     <li class="tablelist-item-container">
                         <button id="btn-campaigns" class="tablelist-item-btn active" onclick="showHelpPanel('campaigns')">
                             <i class="tablelist-item-btn-ico campaign"></i>
-                            <span>Campagnes</span>
+                            <span>Mesurer</span>
                         </button>
                     </li>
                     <li class="tablelist-item-container">
                         <button id="btn-settigns" class="tablelist-item-btn" onclick="showHelpPanel('settigns')">
                             <i class="tablelist-item-btn-ico settings"></i>
-                            <span>Paramètres</span>
+                            <span>Paramètrer</span>
                         </button>
                     </li>
                     <li class="tablelist-item-container">
@@ -43,7 +43,7 @@
                     <li class="tablelist-item-container">
                         <button id="btn-login" class="tablelist-item-btn" onclick="showHelpPanel('login', this)">
                             <i class="tablelist-item-btn-ico login"></i>
-                            <span>Connexion</span>
+                            <span>Se connecter</span>
                         </button>
                     </li>
                 </ul>
@@ -60,30 +60,60 @@
                         </div>
                         <div>
                             <h4 class="tab-pane-header-title">
-                                Campagnes
+                                Mesurer
                             </h4>
-                            <span class="tab-pane-header-desc">Obtenez de l'aide sur la gestion des campagnes.</span>
+                            <span class="tab-pane-header-desc">Obtenez de l'aide sur la gestion des mesures.</span>
                         </div>
                     </div>
                     <div>
-                        <a class="help-question-card" onclick="goToHelpPage(0, event)">
+                        <a class="help-question-card" onclick="goToHelpPage(4, event)">
                             <h2 class="help-question-card-title">
-                                Comment créer une nouvelle campagne de mesure ?
+                                C'est quoi une campagne de mesures ?
                             </h2>
                         </a>
-                        <a class="help-question-card" onclick="goToHelpPage(1, event)">
+                        <a class="help-question-card" onclick="goToHelpPage(6, event)">
                             <h2 class="help-question-card-title">
-                            Comment filtrer une campagne de mesure ?
+                                Comment créer une nouvelle campagne de mesures ?
                             </h2>
                         </a>
-                        <a class="help-question-card" onclick="goToHelpPage(2, event)">
+                        <a class="help-question-card" onclick="goToHelpPage(17, event)">
                             <h2 class="help-question-card-title">
-                                Comment avoir mes mesures sur Excel ?
+                                Comment supprimer une campagne de mesures ?
                             </h2>
                         </a>
-                        <a class="help-question-card" onclick="goToHelpPage(3, event)">
+                        <a class="help-question-card" onclick="goToHelpPage(9, event)">
                             <h2 class="help-question-card-title">
-                                Comment redémmarer ma campagne ?
+                                Comment rechercher une campagne de mesures précise ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(11, event)">
+                            <h2 class="help-question-card-title">
+                                Comment télécharger mes mesures sur mon ordinateur ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(18, event)">
+                            <h2 class="help-question-card-title">
+                                Comment arrêter mes mesures ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(20, event)">
+                            <h2 class="help-question-card-title">
+                                Comment redémarrer mes mesures ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(22, event)">
+                            <h2 class="help-question-card-title">
+                                Comment modifier les paramètres de ma campagne de mesures ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(14, event)">
+                            <h2 class="help-question-card-title">
+                                Comment je peux voir les données (mesures, paramètres utilisés, ...) de ma campagne de mesures ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(39, event)">
+                            <h2 class="help-question-card-title">
+                                Que dois-je faire si je n'arrive pas à faire mes mesures (erreurs, ...) ?
                             </h2>
                         </a>
                     </div>
@@ -98,20 +128,35 @@
                         </div>
                         <div>
                             <h4 class="tab-pane-header-title">
-                                Paramètres
+                                Paramètrer
                             </h4>
                             <span class="tab-pane-header-desc">Obtenez de l'aide sur les paramètres de l'appareil.</span>
                         </div>
                     </div>
                     <div>
-                        <a class="help-question-card" onclick="goToHelpPage(4, event)">
+                        <a class="help-question-card" onclick="goToHelpPage(28, event)">
                             <h2 class="help-question-card-title">
-                                Comment marche la suppression automatique ?
+                                Comment puis-je supprimer automatiquement les mesures après un certain temps ?
                             </h2>
                         </a>
-                        <a class="help-question-card" onclick="goToHelpPage(5, event)">
+                        <a class="help-question-card" onclick="goToHelpPage(29, event)">
                             <h2 class="help-question-card-title">
-                                Comment changer le nom du Wi-Fi ?
+                                Comment puis-je modifier le nom ou le mot de passe du Wi-Fi de l'appareil ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(34, event)">
+                            <h2 class="help-question-card-title">
+                                Comment puis-je modifier le mot de passe de mon espace administrateur ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(32, event)">
+                            <h2 class="help-question-card-title">
+                                Comment puis-je modifier les questions de sécurité ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(35, event)">
+                            <h2 class="help-question-card-title">
+                                Comment puis-je supprimer toutes les données et paramètres de mon appareil de mesure ?
                             </h2>
                         </a>
                     </div>
@@ -132,9 +177,24 @@
                         </div>
                     </div>
                     <div>
-                        <a class="help-question-card" onclick="goToHelpPage(6, event)">
+                        <a class="help-question-card" onclick="goToHelpPage(4, event)">
+                            <h2 class="help-question-card-title">
+                                C'est quoi une calibration, configuration de calibration, configuration ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(25, event)">
                             <h2 class="help-question-card-title">
                                 Comment enregistrer une nouvelle calibration ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(25, event)">
+                            <h2 class="help-question-card-title">
+                                Comment modifier une calibration ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(26, event)">
+                            <h2 class="help-question-card-title">
+                                Comment supprimer une calibration ?
                             </h2>
                         </a>
                     </div>
@@ -149,15 +209,30 @@
                         </div>
                         <div>
                             <h4 class="tab-pane-header-title">
-                                Connexion
+                                Se connecter
                             </h4>
-                            <span class="tab-pane-header-desc">Obtenez de l'aide sur la connexion à votre espace administrateur.</span>
+                            <span class="tab-pane-header-desc">Obtenez de l'aide sur la connexion à votre espace administrateur ou à l'appareil de mesure.</span>
                         </div>
                     </div>
                     <div>
-                        <a class="help-question-card" onclick="goToHelpPage(7, event)">
+                    <a class="help-question-card" onclick="goToHelpPage(37, event)">
                             <h2 class="help-question-card-title">
-                                Comment se connecter avec les questions de sécurité ?
+                                Comment puis-je me connecter à mon espace administrateur ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(37, event)">
+                            <h2 class="help-question-card-title">
+                                Comment puis-je pour me connecter à mon espace administrateur si j'ai oublié mon mot de passe ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(30, event)">
+                            <h2 class="help-question-card-title">
+                                Comment puis-je accéder à l'appareil de mesure ?
+                            </h2>
+                        </a>
+                        <a class="help-question-card" onclick="goToHelpPage(30, event)">
+                            <h2 class="help-question-card-title">
+                                Comment puis-je me connecter via un code QR à l'appareil de mesure ?
                             </h2>
                         </a>
                     </div>

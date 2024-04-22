@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * @file
+ * Get the measurement device settings (with network settings from Node.JS API).
+ * Client needs to be looged as an admin.
+ *
+ * @URL /phpApi/getSettings.php
+ * @METHOD GET
+ * @CONTENT-TYPE application/json
+ * @RETURNS { "autoRemove": bool, "removeInterval": int, "ssid": string, "password": string } with 200 error code if the settings have been retrieved successfully.
+ *      - removeInterval : The time interval for deleting campaigns.
+ *      - autoRemove : The state of automatic deletion.
+ *      - ssid : The name of the Wi-Fi network.
+ *      - password : The password of the Wi-Fi network.
+ */
+
 include_once '../include/NodeJsApi.php';
 include_once '../include/Session.php';
 include_once '../include/SettingsManager.php';

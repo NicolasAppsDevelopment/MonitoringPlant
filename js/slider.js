@@ -1,5 +1,5 @@
 /**
- * Initialize Swiffy Slider
+ * Initialize Swiffy Slider (carrousel in campaign page)
  */
 const swiffyslider = function() {
     return {

@@ -128,6 +128,9 @@ async function initChart(dateArray, lumArray, humArray, tempArray, o2Array, co2A
     return tooltipEl;
   };
   
+  /**
+   * Handler for the measure detail tooltip displayed when the mouse is over the graph
+   */
   const externalTooltipHandler = (context) => {
     const {chart, tooltip} = context;
     const tooltipEl = getOrCreateTooltip(chart);
