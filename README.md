@@ -22,7 +22,7 @@ Les fichiers de code se trouvent dans la branche API-NodeJS.
 ## Le daemon driver
 
 Service en C/C++ qui tourne sur le Raspberry Pi, il correspond à l'API de communication bas niveau avec les capteurs.
-Les fichiers de code sont sur un dépôt privé car inclu du code obtenu par retro-ingenering.
+Les fichiers de code sont sur un dépôt privé car inclu du code obtenu par retro-engineering.
 
 ## Le site web et API PHP
 
