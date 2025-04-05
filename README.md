@@ -33,3 +33,5 @@ Les fichiers de code se trouvent dans la branche Website.
 
 Hébergé par MariaDB sur le Raspberry Pi, utilisé dans le projet.
 Les fichiers de codes SQL et diagrammes de classe se trouvent dans la branche BD.
+
+![Poster du projet](https://github.com/NicolasAppsDevelopment/MonitoringPlant/blob/0657e8024d43964476f697719ba68346789d8b66/poster.png)
